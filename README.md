@@ -1,2 +1,2 @@
-# shoc
-Serverless HPC Over Cloud
+# SHOC - Serverless HPC Over Cloud
+
