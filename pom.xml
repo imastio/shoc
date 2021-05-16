@@ -41,6 +41,7 @@
     </properties>
 
     <modules>
+        <module>shoc-containerize</module>
         <module>shocctl</module>
     </modules>
 
