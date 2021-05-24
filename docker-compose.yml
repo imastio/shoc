@@ -1,0 +1,22 @@
+version: '3.5'
+
+volumes: 
+  dind-data-volume: 
+
+networks:
+  shoc-network:
+    name: shoc-network
+
+services:   
+  dind:
+    image: shoc-dind:latest
+    build: ./dind
+    restart: always
+    container_name: shoc-dind
+    privileged: true
+    ports:
+      - '22000:2375'
+    networks:
+      - shoc-network
+    volumes:
+      - dind-data-volume:/var/lib/docker
