@@ -1,0 +1,4 @@
+PubkeyAuthentication yes
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+AuthorizedKeysFile %h/.ssh/authorized_keys

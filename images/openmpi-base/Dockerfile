@@ -2,7 +2,7 @@ FROM alpine:edge
 
 MAINTAINER Davit Petrosyan <davit.petrosyan@imast.io>
 
-#enable community repository
+# enable community repository
 RUN sed -i '/community/s/^#//' /etc/apk/repositories
 RUN apk --no-cache --update-cache --available upgrade
 
@@ -10,60 +10,65 @@ RUN apk --no-cache --update-cache --available upgrade
 RUN apk add --update --no-cache sudo openssh
 RUN apk add --update --no-cache openmpi 
 
+# generate ssh keys
+RUN ssh-keygen -A
+
 # user and group definition for communication
 ENV USR=shoc
-ENV GRP=shoc
 
 # user and group identifiers
 ENV USRID=1000
-ENV GRPID=1000
 
 # home and ssh root folders
-ENV HOME=/home/${USR}
-ENV SSHROOT=${HOME}/.ssh/
+ENV HOMEROOT=/home/${USR}
+ENV SSHROOT=${HOMEROOT}/.ssh
 
 # create a user/group for inter container communication and add to sudoers 
-RUN addgroup -S ${GRP} -g ${GRPID} --disabled-password --gecos "" && adduser -u ${USRID} -S ${USR} -G ${GRP}
+RUN addgroup -g ${USRID} ${USR} && adduser -u ${USRID} -G ${USR} -D -g ${USR} ${USR} 
 RUN echo "${USR} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# home folder ownership
-RUN chown -R ${USR}:${GRP} ${HOME}/
+# set root password
+RUN echo 'root:${USR}' | chpasswd 2> /dev/null 
 
 # assign ssh root folder for the user
-RUN mkdir -p ${SSHROOT}
+RUN mkdir -p ${SSHROOT}/
 
-# set root password
-RUN echo 'root:${USR}' | chpasswd
-
-# passwordless login
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# maybe not needed anymore. SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# home folder ownership
+RUN chown -R ${USR}:${USR} ${HOMEROOT}/
 
 # add configuration of ssh
-ADD ssh_default_config ${SSHDIR}/config
+ADD ssh/config ${SSHROOT}/config
+
+# add configuration of sshd
+ADD sshd/sshd_config /etc/ssh/sshd_config
+ADD sshd/ssh_config /etc/ssh/ssh_config
+
+# add keys to ssh root
+ADD keys/id_rsa ${SSHROOT}/id_rsa
+ADD keys/id_rsa.pub ${SSHROOT}/id_rsa.pub
+ADD keys/id_rsa.pub ${SSHROOT}/authorized_keys
 
 
 # fix ssh root permissions 
-RUN chmod -R 600 ${SSHROOT}* 
+#RUN chmod -R 600 ${SSHROOT}/ 
+
+# fix permission on keys
+#RUN chmod -R 700 ${SSHROOT}/authorized_keys
 
 # correct ssh root folder ownership
-RUN chown -R ${USR}:${GRP} ${SSHROOT}
-
-# do as root
-USER root
+RUN chown -R ${USR}:${USR} ${SSHROOT}/
 
 # remove openmpi folder and re-create
-RUN rm -fr ${HOME}/.openmpi && mkdir -p ${HOME}/.openmpi
+RUN rm -fr ${HOMEROOT}/.openmpi && mkdir -p ${HOMEROOT}/.openmpi
 
 # add parameters configuration
-ADD mca-params.conf ${HOME}/.openmpi/mca-params.conf
+ADD mca-params.conf ${HOMEROOT}/.openmpi/mca-params.conf
 
 # ownership of group
-RUN chown -R ${USR}:${GRP} ${HOME}/.openmpi/
+RUN chown -R ${USR}:${USR} ${HOMEROOT}/.openmpi/
 
 # expose ssh port
 EXPOSE 22
 
+# run ssh service
 CMD ["/usr/sbin/sshd", "-D"]

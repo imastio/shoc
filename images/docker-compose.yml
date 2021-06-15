@@ -1,0 +1,17 @@
+version: '3.5'
+
+networks:
+  shoc-test-network:
+    name: shoc-test-network
+
+services:   
+  openmpi-base:
+    image: openmpi-base:latest
+    build: ./openmpi-base
+    restart: always
+    container_name: openmpi-base
+    privileged: true
+    ports:
+      - '2222:22'
+    networks:
+      - shoc-test-network
