@@ -1,0 +1,31 @@
+management:
+  security:  
+    enabled: false  
+    
+spring:
+  application:
+    name: scheduler
+  
+  jackson:
+   serialization:
+     write_dates_as_timestamps: false   
+  
+  banner:
+    location: classpath:/banner.txt
+    
+imast:
+  data:
+    mongo:
+      uri: mongodb://username:password@work4j_sample_mongoctl:8809/?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin
+      db: scheduler_controller 
+          
+server:
+  port: 8801
+  connection-timeout: 900000
+  http2:
+      enabled: true
+  compression:
+      enabled: true
+      mime-types: application/json
+  
+
