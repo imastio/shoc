@@ -10,5 +10,10 @@ public enum EngineType {
     /**
      * The docker engine type
      */
-    DOCKER
+    DOCKER,
+    
+    /**
+     * The singularity container engine type
+     */
+    SINGULARITY
 }

@@ -4,7 +4,7 @@ management:
     
 spring:
   application:
-    name: scheduler
+    name: builder
   
   jackson:
    serialization:
@@ -14,13 +14,13 @@ spring:
     location: classpath:/banner.txt
     
 imast:
-  data:
-    mongo:
-      uri: mongodb://username:password@work4j_sample_mongoctl:8809/?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin
-      db: scheduler_controller 
+  shoc:
+    database:
+      uri: ${SHOCDB_URI:mongodb://shoc:shoc@localhost:11001/?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin}
+      db: ${SHOCDB_DB:shocdb}
           
 server:
-  port: 8801
+  port: 11002
   connection-timeout: 900000
   http2:
       enabled: true
@@ -28,4 +28,3 @@ server:
       enabled: true
       mime-types: application/json
   
-
