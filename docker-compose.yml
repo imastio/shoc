@@ -15,7 +15,7 @@ services:
     container_name: shoc-dind
     privileged: true
     ports:
-      - '22000:2375'
+      - '11003:2375'
     networks:
       - shoc-network
     volumes:

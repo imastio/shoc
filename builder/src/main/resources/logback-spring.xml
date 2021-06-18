@@ -63,7 +63,7 @@
     <logger name="sun.rmi" level="WARN"/>
     <logger name="sun.rmi.transport" level="WARN"/>
     
-    <logger name="am.wisdom" level="DEBUG" additivity="false">
+    <logger name="io.imast" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>
