@@ -1,3 +1,4 @@
 shocdb - 11001
 builder - 11002
 dind - 11003
+docker-registry - 11004

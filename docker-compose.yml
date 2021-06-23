@@ -3,7 +3,7 @@ version: '3.5'
 volumes: 
   dind-data-volume:
   shocdb-data-volume:
-  shocdb-logs-volume  
+  shocdb-logs-volume:  
 
 networks:
   shoc-network:
@@ -26,9 +26,9 @@ services:
       - shocdb-logs-volume:/data/logs
       
   registry:
-  image: registry:2
-  restart: always
-  ports:
+    image: registry:2
+    restart: always
+    ports:
     - 5000:5000
   environment:
     REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
@@ -43,10 +43,10 @@ services:
 
 
   dind:
-    image: shoc-dind:latest
+    image: dind:latest
     build: ./dind
     restart: always
-    container_name: shoc-dind
+    container_name: dind
     privileged: true
     ports:
       - '11003:2375'
