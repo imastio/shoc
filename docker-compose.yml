@@ -1,13 +1,47 @@
 version: '3.5'
 
 volumes: 
-  dind-data-volume: 
+  dind-data-volume:
+  shocdb-data-volume:
+  shocdb-logs-volume  
 
 networks:
   shoc-network:
     name: shoc-network
 
 services:   
+  
+  shocdb:
+    image: shocdb:latest
+    restart: always
+    build: ./shocdb
+    container_name: shocdb
+    env_file: ./env/mongo.env
+    ports:
+      - '11001:11001'
+    networks:
+      - shoc-network
+    volumes:
+      - shocdb-data-volume:/data/db
+      - shocdb-logs-volume:/data/logs
+      
+  registry:
+  image: registry:2
+  restart: always
+  ports:
+    - 5000:5000
+  environment:
+    REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+    REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+    REGISTRY_AUTH: htpasswd
+    REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+  volumes:
+    - /path/data:/var/lib/registry
+    - /path/certs:/certs
+    - /path/auth:/auth
+
+
   dind:
     image: shoc-dind:latest
     build: ./dind
