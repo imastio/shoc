@@ -3,7 +3,8 @@ version: '3.5'
 volumes: 
   dind-data-volume:
   shocdb-data-volume:
-  shocdb-logs-volume:  
+  shocdb-logs-volume:
+  docker-registry-volume:  
 
 networks:
   shoc-network:
@@ -25,22 +26,18 @@ services:
       - shocdb-data-volume:/data/db
       - shocdb-logs-volume:/data/logs
       
-  registry:
-    image: registry:2
+  docker-registry:
+    image: docker-registry:latest
     restart: always
+    build: ./docker-registry
+    container_name: docker-registry
+    env_file: ./env/docker-registry.env
     ports:
-    - 5000:5000
-  environment:
-    REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
-    REGISTRY_HTTP_TLS_KEY: /certs/domain.key
-    REGISTRY_AUTH: htpasswd
-    REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
-    REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
-  volumes:
-    - /path/data:/var/lib/registry
-    - /path/certs:/certs
-    - /path/auth:/auth
-
+      - '11004:11004'
+    networks:
+      - shoc-network
+    volumes:
+      - docker-registry-volume:/var/lib/registry
 
   dind:
     image: dind:latest
