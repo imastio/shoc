@@ -13,8 +13,8 @@ http:
     X-Content-Type-Options: [nosniff]
 auth:
   htpasswd:
-    realm: basic-realm
-    path: /etc/registry
+    realm: Registry Realm
+    path: /auth/htpasswd
 health:
   storagedriver:
     enabled: true
