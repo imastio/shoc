@@ -1,9 +1,9 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
-RUN mkdir -p /opt/imast/scheduler
+RUN mkdir -p /opt/imast/builder
 
-EXPOSE 8801
+EXPOSE 11002
 
-COPY target/scheduler.jar /opt/imast/scheduler
+COPY target/builder.jar /opt/imast/builder
 
-ENTRYPOINT exec java $JAVA_OPTS -jar /opt/imast/scheduler/scheduler.jar
+ENTRYPOINT exec java $JAVA_OPTS -jar /opt/imast/builder/builder.jar
 

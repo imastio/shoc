@@ -46,8 +46,20 @@ services:
     container_name: dind
     privileged: true
     ports:
-      - '11003:2375'
+      - '11003:11003'
     networks:
       - shoc-network
     volumes:
       - dind-data-volume:/var/lib/docker
+
+  builder:
+    image: builder:latest
+    restart: always
+    build: ./builder
+    container_name: builder
+    env_file: ./env/api.env
+    ports:
+      - '11002:11002'
+    networks:
+      - shoc-network
+   

@@ -15,9 +15,24 @@ spring:
     
 imast:
   shoc:
+      
     database:
       uri: ${SHOCDB_URI:mongodb://shoc:shoc@localhost:11001/?ssl=false&connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=100&maxIdleTimeMS=900000&authSource=admin}
       db: ${SHOCDB_DB:shocdb}
+      
+    engine:
+      address: ${SHOC_DOCKER_ENGINE_ADDRESS:tcp://localhost:11003}
+      version: ${SHOC_DOCKER_ENGINE_VERSION:1.41}
+      tlsVerify: ${SHOC_DOCKER_ENGINE_TLSVERIFY:false}
+      certPath: ${SHOC_DOCKER_ENGINE_CERTPATH:}
+      
+    registry:
+      registry: ${SHOC_DOCKER_REGISTRY_ADDRESS:localhost:11004}
+      repository: ${SHOC_DOCKER_REGISTRY_REPOSITORY:}
+      username: ${SHOC_DOCKER_REGISTRY_USERNAME:shoc}
+      password: ${SHOC_DOCKER_REGISTRY_PASSWORD:shoc}
+      email: ${SHOC_DOCKER_REGISTRY_EMAIL:shoc@imast.io}
+
           
 server:
   port: 11002

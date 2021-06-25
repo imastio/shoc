@@ -21,6 +21,12 @@
 
     <dependencies>  
         
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>0.10.3</version>
+        </dependency>
+        
         <!-- A dependency to docker client  -->
         <dependency>
             <groupId>com.github.docker-java</groupId>
