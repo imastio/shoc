@@ -1,11 +1,11 @@
 package io.imast.shoc.containerize;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -66,4 +66,32 @@ public class Containerize {
         
         this.client = DockerClientImpl.getInstance(config, this.httpClient);
     }    
+    
+    /**
+     * Get the engine instance info
+     * 
+     * @return Returns engine instance info
+     */
+    public EngineInstanceInfo getInfo(){
+        
+        // try get info or null
+        var info = Try.of(() -> this.client.infoCmd().exec())
+                .onFailure(ex -> log.error(String.format("Error while doing operation with message %s", ex.getMessage())))
+                .getOrNull();
+        
+        // no info so not running
+        if(info == null){
+            return EngineInstanceInfo.builder().running(false).build();
+        }
+        
+        
+        return EngineInstanceInfo.builder()
+                .running(true)
+                .id(info.getId())
+                .name(info.getName())
+                .images(info.getImages())
+                .containers(info.getContainers())
+                .driver(info.getDriver())
+                .build();
+    }
 }

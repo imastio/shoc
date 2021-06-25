@@ -44,6 +44,23 @@
         </dependency>
         
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>${mongodb.version}</version>
@@ -94,15 +111,15 @@
             <optional>true</optional>
         </dependency>   
         <dependency>
-           <groupId>org.springframework.security</groupId>
-           <artifactId>spring-security-oauth2-jose</artifactId>
-           <version>5.3.8.RELEASE</version>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.security</groupId>
-           <artifactId>spring-security-oauth2-resource-server</artifactId>
-           <version>5.3.8.RELEASE</version>
-       </dependency>  
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <version>5.3.8.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+            <version>5.3.8.RELEASE</version>
+        </dependency>  
       
         <dependency>
             <groupId>io.springfox</groupId>
@@ -117,6 +134,11 @@
             <scope>compile</scope>
         </dependency>
                 
+        <dependency>
+            <groupId>io.imast.shoc</groupId>
+            <artifactId>shoc-containerize</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
     
     <dependencyManagement>
