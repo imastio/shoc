@@ -9,3 +9,4 @@ ADD config.yml /etc/docker/registry/config.yml
 ADD docker-entrypoint.sh /entrypoint.sh
 
 
+
