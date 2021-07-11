@@ -1,13 +1,5 @@
-use std::env;
+mod fs;
 use clap::{ crate_version, App, Arg };
-
-fn current() -> Option<String> {
-    std::env::current_dir()
-        .ok()?
-        .to_str()?
-        .to_owned()
-        .into()
-}
 
 fn main() {
 
@@ -20,7 +12,7 @@ fn main() {
                 .long("context")
                 .about("the path to the project folder")
                 .value_name("FOLDER")
-                .default_value(&current().unwrap())
+                .default_value(&fs::cwd().unwrap())
                 .required(true)
         )
         .subcommand(
