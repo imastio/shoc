@@ -24,6 +24,7 @@ While running MPI job on a single machine is a trivial task, it becomes harder w
 
 Next, when it comes to workload orchestration, one will use a resource management and scheduling system to be able to queue tasks and allocate resources within given requirements and availability. This is, however, more than important especially when resources are limited and tasks are resource-intensive. So, based on above, it is clear that managing all this together without proper infrastructure is not an easy task. Usually it requires lots of manual effort to set this up even on a cluster with few nodes.  
 
+In this paper, we will define an architecture of a system, which is capable to schedule serverless HPC workloads on the cloud. We will use Kubernetes capabilities such as scheduling, scaling and various policies to enable Cloud platforms such as OpenStack, Azure or AWS to handle the whole life-cycle of the jobs.  
 
 
 
