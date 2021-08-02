@@ -17,7 +17,7 @@ services:
     restart: always
     build: ./shocdb
     container_name: shocdb
-    env_file: ./env/mongo.env
+    env_file: ./env/shocdb.env
     ports:
       - '11001:11001'
     networks:

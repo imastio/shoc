@@ -29,5 +29,4 @@ public class EngineService {
     public List<EngineInstanceInfo> getAll(){
         return Arrays.asList(this.dockerize.getInfo());
     }
-    
 }
