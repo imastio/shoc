@@ -41,9 +41,10 @@
     </properties>
 
     <modules>
+        <module>shoc-model</module>
         <module>shoc-containerize</module>
         <module>builder</module>
-		<module>shocctl</module>
+        <module>shocctl</module>
     </modules>
 
     <build>
