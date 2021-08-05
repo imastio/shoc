@@ -1,7 +1,9 @@
 package io.imast.shoc.shocctl;
 
 import io.imast.shoc.shocctl.cmd.ShocctlCommand;
+import io.imast.shoc.shocctl.cmd.ShocctlInitCommand;
 import picocli.CommandLine;
+import picocli.CommandLine.HelpCommand;
 
 /**
  * The CLI app for shocctl
@@ -16,6 +18,9 @@ public class ShocctlCli {
      * @param args The command line arguments
      */
     public static void main(String[] args) {
-        System.exit(new CommandLine(new ShocctlCommand()).execute(args)); 
+        System.exit(new CommandLine(new ShocctlCommand())
+                .addSubcommand(new ShocctlInitCommand())
+                .addSubcommand(new HelpCommand())
+                .execute(args)); 
     }
 }
