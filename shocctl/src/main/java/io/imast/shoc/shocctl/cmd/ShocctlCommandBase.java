@@ -12,7 +12,7 @@ public abstract class ShocctlCommandBase implements Callable<Integer> {
     /**
      * The manifest file name
      */
-    protected static final String SHOC_MANIFEST = "manifest.yml";
+    protected static final String SHOC_MANIFEST = "shoc-manifest.yml";
     
     /**
      * Override this to put logic of command
