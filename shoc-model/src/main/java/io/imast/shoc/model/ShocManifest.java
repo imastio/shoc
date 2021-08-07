@@ -33,9 +33,37 @@ public class ShocManifest {
     private List<String> labels;
     
     /**
-     * The kind of application
+     * The technology of application
      */
-    private String appKind;
+    private String technology;
     
+    /**
+     * Get technology flavor of application
+     */
+    private String flavor;
     
+    /**
+     * The set of packages to install additionally
+     */
+    private List<String> packages;
+    
+    /**
+     * The paths to include in the final package
+     */
+    private List<String> includes;
+    
+    /**
+     * The paths to exclude in the final package
+     */
+    private List<String> excludes;
+    
+    /**
+     * The entry point of application
+     */
+    private String entrypoint;
+    
+    /**
+     * The arguments to entry point
+     */
+    private String args;
 }
