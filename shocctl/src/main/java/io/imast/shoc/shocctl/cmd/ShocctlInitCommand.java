@@ -2,12 +2,10 @@ package io.imast.shoc.shocctl.cmd;
 
 import io.imast.shoc.common.Yml;
 import io.imast.shoc.model.ShocManifest;
-import java.io.StringWriter;
+import io.imast.shoc.shocctl.common.Models;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
+import java.util.Arrays;
 import picocli.CommandLine.Command;
 
 /**
@@ -65,15 +63,16 @@ public class ShocctlInitCommand extends ShocctlSubCommandBase {
         // get dir name
         var projectDir = String.format("/%s/", ctxPath.getParent().getFileName().toString());
         
-        // manifest data
-        var manifestObject = new LinkedHashMap<String, Object>();
-        
-        // add name and folder
-        manifestObject.put("name", projectName);
-        manifestObject.put("folder", projectDir);
+        var manifestObject = ShocManifest.builder()
+                .name(projectName)
+                .folder(projectDir)
+                .labels(Arrays.asList())
+                .technology("")
+                .flavor("")
+                .build();
         
         // dump to file
-        Files.writeString(manifest, Yml.write(manifestObject));
+        Files.writeString(manifest, Yml.write(Models.toMap(manifestObject)));
         
         return 0;
     }
