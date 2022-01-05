@@ -4,7 +4,7 @@ management:
     
 spring:
   application:
-    name: builder
+    name: shoc-builder
   
   jackson:
    serialization:

@@ -1,0 +1,31 @@
+management:
+  security:  
+    enabled: false  
+    
+spring:
+    
+  application:
+    name: shoc-webgtw
+    
+  cloud: 
+    gateway:
+        
+      routes:
+      - id: shoc-builder
+        uri: ${SHOC_BUILDER_URI:http://localhost:11002/}
+        predicates:
+        - Path=/builder/**
+        
+      x-forwarded:
+        prefix-enabled: false
+    
+server:
+  port: 11000
+  connection-timeout: 900000
+  http2:
+      enabled: true
+  compression:
+      enabled: true
+      mime-types: application/json
+
+

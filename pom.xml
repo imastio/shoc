@@ -45,6 +45,7 @@
         <module>shoc-model</module>
         <module>shoc-containerize</module>
         <module>builder</module>
+		<module>webgtw</module>
         <module>shocctl</module>
     </modules>
 
