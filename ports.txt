@@ -1,4 +1,6 @@
-shocdb - 11001
-builder - 11002
-dind - 11003
-docker-registry - 11004
+shoc-webgtw - 11000
+shoc-shocdb - 11001
+shoc-builder - 11002
+shoc-dind - 11003
+shoc-docker-registry - 11004
+

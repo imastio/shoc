@@ -1,10 +1,10 @@
 version: '3.5'
 
 volumes: 
-  dind-data-volume:
-  shocdb-data-volume:
-  shocdb-logs-volume:
-  docker-registry-volume:  
+  shoc-dind-data-volume:
+  shoc-shocdb-data-volume:
+  shoc-shocdb-logs-volume:
+  shoc-docker-registry-volume:  
 
 networks:
   shoc-network:
@@ -12,54 +12,79 @@ networks:
 
 services:   
   
-  shocdb:
-    image: shocdb:latest
+  shoc-shocdb:
+    image: shoc-shocdb:latest
     restart: always
     build: ./shocdb
-    container_name: shocdb
-    env_file: ./env/shocdb.env
+    container_name: shoc-shocdb
+    env_file: 
+      - ./env/setup-shocdb.env
     ports:
       - '11001:11001'
     networks:
       - shoc-network
     volumes:
-      - shocdb-data-volume:/data/db
-      - shocdb-logs-volume:/data/logs
+      - shoc-shocdb-data-volume:/data/db
+      - shoc-shocdb-logs-volume:/data/logs
       
-  docker-registry:
-    image: docker-registry:latest
+  shoc-docker-registry:
+    image: shoc-docker-registry:latest
     restart: always
     build: ./docker-registry
-    container_name: docker-registry
-    env_file: ./env/docker-registry.env
+    container_name: shoc-docker-registry
+    env_file: 
+      - ./env/setup-docker-registry.env
     ports:
       - '11004:11004'
     networks:
       - shoc-network
     volumes:
-      - docker-registry-volume:/var/lib/registry
+      - shoc-docker-registry-volume:/var/lib/registry
 
-  dind:
-    image: dind:latest
+  shoc-dind:
+    image: shoc-dind:latest
     build: ./dind
     restart: always
-    container_name: dind
+    container_name: shoc-dind
     privileged: true
     ports:
       - '11003:11003'
     networks:
       - shoc-network
     volumes:
-      - dind-data-volume:/var/lib/docker
+      - shoc-dind-data-volume:/var/lib/docker
 
-  builder:
-    image: builder:latest
+  shoc-builder:
+    image: shoc-builder:latest
     restart: always
     build: ./builder
-    container_name: builder
-    env_file: ./env/api.env
+    container_name: shoc-builder
+    env_file: 
+      - ./env/ref-java.env
+      - ./env/ref-shocdb.env
+      - ./env/ref-dind.env
+      - ./env/ref-docker-registry.env
     ports:
       - '11002:11002'
+    depends_on:
+      - shoc-shocdb
+      - shoc-docker-registry
+      - shoc-dind
+    networks:
+      - shoc-network
+      
+  shoc-webgtw:
+    image: shoc-webgtw:latest
+    restart: always
+    build: ./webgtw
+    container_name: shoc-webgtw
+    env_file: 
+      - ./env/ref-java.env
+      - ./env/webgtw.env
+    ports:
+      - '11000:11000'
+    depends_on:
+      - shoc-builder
     networks:
       - shoc-network
    
