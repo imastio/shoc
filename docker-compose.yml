@@ -1,10 +1,12 @@
 version: '3.5'
 
 volumes: 
+  shoc-database-sql-volume:
+    name: "shoc-database-sql-volume"
   shoc-dind-data-volume:
-  shoc-shocdb-data-volume:
-  shoc-shocdb-logs-volume:
-  shoc-docker-registry-volume:  
+    name: "shoc-dind-data-volume"
+  shoc-docker-registry-volume:
+    name: "shoc-docker-registry-volume"  
 
 networks:
   shoc-network:
@@ -12,25 +14,24 @@ networks:
 
 services:   
   
-  shoc-shocdb:
-    image: shoc-shocdb:latest
+  shoc-database-sql:
+    image: shoc-database-sql:latest
     restart: always
-    build: ./shocdb
-    container_name: shoc-shocdb
+    build: ./Shoc.Database.Sql
+    container_name: shoc-database-sql
     env_file: 
-      - ./env/setup-shocdb.env
+      - ./env/setup-database-sql.env
     ports:
       - '11001:11001'
     networks:
       - shoc-network
     volumes:
-      - shoc-shocdb-data-volume:/data/db
-      - shoc-shocdb-logs-volume:/data/logs
+      - shoc-database-sql-volume:/var/lib/mysql 
       
   shoc-docker-registry:
     image: shoc-docker-registry:latest
     restart: always
-    build: ./docker-registry
+    build: ./Shoc.Docker.Registry
     container_name: shoc-docker-registry
     env_file: 
       - ./env/setup-docker-registry.env
@@ -43,7 +44,7 @@ services:
 
   shoc-dind:
     image: shoc-dind:latest
-    build: ./dind
+    build: ./Shoc.Dind
     restart: always
     container_name: shoc-dind
     privileged: true
@@ -57,17 +58,17 @@ services:
   shoc-builder:
     image: shoc-builder:latest
     restart: always
-    build: ./builder
+    build: ./Shoc.Builder
     container_name: shoc-builder
     env_file: 
-      - ./env/ref-java.env
-      - ./env/ref-shocdb.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-database-sql.env
       - ./env/ref-dind.env
       - ./env/ref-docker-registry.env
     ports:
-      - '11002:11002'
+      - '11006:11006'
     depends_on:
-      - shoc-shocdb
+      - shoc-database-sql
       - shoc-docker-registry
       - shoc-dind
     networks:
@@ -76,7 +77,7 @@ services:
   shoc-webgtw:
     image: shoc-webgtw:latest
     restart: always
-    build: ./webgtw
+    build: ./Shoc.Webgtw
     container_name: shoc-webgtw
     env_file: 
       - ./env/ref-java.env
