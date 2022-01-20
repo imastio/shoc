@@ -1,6 +1,8 @@
 shoc-webgtw - 11000
-shoc-shocdb - 11001
-shoc-builder - 11002
+shoc-database-sql - 11001
+RESERVED - 11002
 shoc-dind - 11003
 shoc-docker-registry - 11004
+RESERVED - 11005
+shoc-builder - 11006/11007
 

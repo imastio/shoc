@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
+    <ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
+  </ItemGroup>
+  
+</Project>
