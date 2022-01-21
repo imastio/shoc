@@ -5,4 +5,5 @@ shoc-dind - 11003
 shoc-docker-registry - 11004
 RESERVED - 11005
 shoc-builder - 11006/11007
+shoc-identity - 11008/11009
 

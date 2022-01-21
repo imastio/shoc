@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="User">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByEmail">
+      <TextCommand>
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Email` = @Email;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetPasswordHash">
+      <TextCommand>
+        SELECT `PasswordHash` FROM `idp_users` WHERE `Deleted` = 0 AND `Email` = @Email;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetRootUser">
+      <TextCommand>
+        SELECT * FROM `idp_users`
+        WHERE `Deleted` = 0 AND `Role` = 'root';
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetUserRoles">
+      <TextCommand>
+        SELECT `Role`
+        FROM `idp_user_roles`
+        WHERE `UserId` = @UserId;
+      </TextCommand>
+    </SqlOperation>
+
+
+    <SqlOperation Name="CheckEmail">
+      <TextCommand>
+        SELECT COUNT(*) AS `Existing` FROM `idp_users`
+        WHERE `Email` = @Email;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="CheckUsername">
+      <TextCommand>
+        SELECT COUNT(*) AS `Existing` FROM `idp_users`
+        WHERE `Username` = @Username;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `idp_users`
+        (`Id`, `Email`, `EmailVerified`, `Username`, `PasswordHash`, `FirstName`, `LastName`, `FullName`)
+        VALUES
+        (@Id, @Email, @EmailVerified, @Username, @PasswordHash, @FirstName, @LastName, @FullName);
+        SELECT * FROM `idp_users` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="ConfirmUserEmail">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `EmailVerified` = 1
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="ConfirmUserPhone">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `PhoneVerified` = 1
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="AttemptFailed">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `FailedAttempts` = `FailedAttempts` + 1
+        WHERE `Deleted` = 0 AND `Email` = @Email;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Email` = @Email;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="AttemptSuccess">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `LastLogin` = @Time, `LastIp` = @Ip, `FailedAttempts` = 0
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="ChangeRole">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `Role` = @Role
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="ChangePassword">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `PasswordHash` = @PasswordHash
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="ChangeLockout">
+
+      <TextCommand>
+        UPDATE `idp_users`
+        SET `LockedUntil` = @LockedUntil
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+
+      <TextCommand>
+        SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+        UPDATE `idp_users`
+        SET
+        `Email` = @Email, `Username` = @Username, `Deleted` = 1,
+        `FullName` = 'Deleted', `FirstName` = 'Deleted', `LastName` = @LastName,
+        `LastIp` = NULL, `LastLogin` = NULL, `LockedUntil` = NULL
+        WHERE `Deleted` = 0 AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+  </OperationGroup>
+</DataOperations>
