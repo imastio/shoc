@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,29 +7,46 @@ using Microsoft.Extensions.Hosting;
 
 namespace Shoc.Identity
 {
+    /// <summary>
+    /// The startup application
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// The configuration
+        /// </summary>
+        private IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Creates new instance of startup
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configure services
+        /// </summary>
+        /// <param name="services">The services to configure</param>
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddControllersWithViews();
 
-            // In production, the React files will be served from this directory
+            // in production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configure the HTTP request pipeline
+        /// </summary>
+        /// <param name="app">The app</param>
+        /// <param name="env">The environment</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -40,7 +56,6 @@ namespace Shoc.Identity
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -50,12 +65,7 @@ namespace Shoc.Identity
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
 
             app.UseSpa(spa =>
             {
@@ -63,7 +73,7 @@ namespace Shoc.Identity
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseReactDevelopmentServer("start");
                 }
             });
         }

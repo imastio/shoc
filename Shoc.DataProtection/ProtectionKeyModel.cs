@@ -1,4 +1,4 @@
-﻿namespace Shoc.Identity.Model
+﻿namespace Shoc.DataProtection
 {
     /// <summary>
     /// The protection key model

@@ -1,26 +1,31 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Shoc.Identity
 {
+    /// <summary>
+    /// The program default implementation
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The entry point 
+        /// </summary>
+        /// <param name="args">The arguments</param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
-
+        
+        /// <summary>
+        /// Creates a host builder
+        /// </summary>
+        /// <param name="args">The arguments</param>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .ConfigureAppConfiguration((_, config) => config.AddEnvironmentVariables());
     }
 }

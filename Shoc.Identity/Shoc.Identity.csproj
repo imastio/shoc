@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.11" />
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,31 @@
   <ItemGroup>
     <Folder Include="ClientApp\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Config\" />
+    <Folder Include="DevOnly\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
+    <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
+    <ProjectReference Include="..\Shoc.Core.Security\Shoc.Core.Security.csproj" />
+    <ProjectReference Include="..\Shoc.DataProtection.Sql\Shoc.DataProtection.Sql.csproj" />
+    <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DevOnly\signature-dev.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations\DataOps.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Operations\User.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations\Identity.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

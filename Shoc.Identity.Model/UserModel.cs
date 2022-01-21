@@ -26,12 +26,57 @@ namespace Shoc.Identity.Model
         /// The username
         /// </summary>
         public string Username { get; set; }
-        
+
+        /// <summary>
+        /// The role of user in the system
+        /// </summary>
+        public string Role { get; set; }
+
+        /// <summary>
+        /// The first name
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// The last name
+        /// </summary>
+        public string LastName { get; set; }
+
         /// <summary>
         /// The full name of user
         /// </summary>
         public string FullName { get; set; }
         
+        /// <summary>
+        /// The last ip address
+        /// </summary>
+        public string LastIp { get; set; }
+
+        /// <summary>
+        /// The last login
+        /// </summary>
+        public DateTime? LastLogin { get; set; }
+
+        /// <summary>
+        /// The lockout expiration time
+        /// </summary>
+        public DateTime? LockedUntil { get; set; }
+
+        /// <summary>
+        /// The number of continuous failed attempts
+        /// </summary>
+        public int FailedAttempts { get; set; }
+
+        /// <summary>
+        /// The user metadata
+        /// </summary>
+        public string Metadata { get; set; }
+
+        /// <summary>
+        /// The deletion indicator
+        /// </summary>
+        public bool Deleted { get; set; }
+
         /// <summary>
         /// The creation time
         /// </summary>
