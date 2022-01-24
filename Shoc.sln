@@ -35,6 +35,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.ApiCore.DataProtection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Security", "Shoc.Core.Security\Shoc.Core.Security.csproj", "{69542760-4477-496E-9E63-AF2B628C1630}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Mailing", "Shoc.Core.Mailing\Shoc.Core.Mailing.csproj", "{7A0A84C9-3965-4641-A67E-6EA1830C2AAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.Protection", "Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj", "{636CA973-A38B-423E-B878-5480EFB5F755}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,14 @@ Global
 		{69542760-4477-496E-9E63-AF2B628C1630}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69542760-4477-496E-9E63-AF2B628C1630}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69542760-4477-496E-9E63-AF2B628C1630}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0A84C9-3965-4641-A67E-6EA1830C2AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0A84C9-3965-4641-A67E-6EA1830C2AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0A84C9-3965-4641-A67E-6EA1830C2AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0A84C9-3965-4641-A67E-6EA1830C2AAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{636CA973-A38B-423E-B878-5480EFB5F755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636CA973-A38B-423E-B878-5480EFB5F755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636CA973-A38B-423E-B878-5480EFB5F755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636CA973-A38B-423E-B878-5480EFB5F755}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

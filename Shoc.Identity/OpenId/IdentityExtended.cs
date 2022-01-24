@@ -56,10 +56,7 @@ namespace Shoc.Identity.OpenId
                 options.Discovery.ShowExtensionGrantTypes = false;
                 options.Discovery.ShowIdentityScopes = false;
             });
-
-            // add CORS policy service
-            services.AddSingleton<ICorsPolicyService>(sp => new DefaultCorsPolicyService(sp.GetRequiredService<ILogger<DefaultCorsPolicyService>>()));
-
+            
             // add and configure identity server
             services.AddIdentityServer(optionsSetup)
                 .AddInMemoryApiResources(GetApiResources())

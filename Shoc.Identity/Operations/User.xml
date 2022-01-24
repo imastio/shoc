@@ -65,9 +65,9 @@
 
       <TextCommand>
         INSERT INTO `idp_users`
-        (`Id`, `Email`, `EmailVerified`, `Username`, `PasswordHash`, `FirstName`, `LastName`, `FullName`)
+        (`Id`, `Email`, `EmailVerified`, `Username`, `PasswordHash`, `Role`, `FirstName`, `LastName`, `FullName`)
         VALUES
-        (@Id, @Email, @EmailVerified, @Username, @PasswordHash, @FirstName, @LastName, @FullName);
+        (@Id, @Email, @EmailVerified, @Username, @PasswordHash, @Role, @FirstName, @LastName, @FullName);
         SELECT * FROM `idp_users` WHERE `Id` = @Id;
       </TextCommand>
 

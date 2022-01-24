@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Enlight.Core
+namespace Shoc.Core
 {
     /// <summary>
     /// The random utilities
@@ -10,7 +10,7 @@ namespace Enlight.Core
     public class Rnd
     {
         /// <summary>
-        /// All alpha-numerics characters
+        /// All alpha numeric characters
         /// </summary>
         private static readonly char[] ALL_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray(); 
 

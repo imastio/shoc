@@ -1,9 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shoc.ApiCore;
+using Shoc.ApiCore.DataProtection;
+using Shoc.Identity.Config;
+using Shoc.Identity.OpenId;
+using Shoc.Identity.Services;
 
 namespace Shoc.Identity
 {
@@ -32,14 +38,30 @@ namespace Shoc.Identity
         /// <param name="services">The services to configure</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSelf(this.Configuration);
+            services.AddPersistenceDataProtection();
+            services.AddAuthenticationEssentials(this.Configuration);
+            services.AddIdentityEssentials(this.Configuration);
+            services.AddLocalApiProtection();
+            services.AddMailing(this.Configuration);
+            services.AddRepositories(this.Configuration);
 
             services.AddControllersWithViews();
+            services.AddControllers();
+            services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
+            services.AddForwardingConfiguration();
 
             // in production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            // add same-site cookie policy
+            services.AddSameSiteCookiePolicy();
+
+            services.AddSingleton<UserService>();
+            services.AddScoped<AuthService>();
         }
 
         /// <summary>
@@ -52,21 +74,25 @@ namespace Shoc.Identity
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseForwardedHeaders();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/error");
+                app.UseForwardedHeaders();
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCookiePolicy();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
+            app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
+            app.UseMiddleware<PublicOriginMiddleware>();
+            app.UseCors(ApiDefaults.DEFAULT_CORS);
+            app.UseIdentityServer();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
-
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

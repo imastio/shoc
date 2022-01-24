@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Enlight.Core;
-using Imast.Ext.Core;
 using Shoc.Core;
+using Imast.Ext.Core;
 using Shoc.Core.Security;
 using Shoc.Identity.Data;
 using Shoc.Identity.Model;
@@ -20,7 +19,7 @@ namespace Shoc.Identity.Services
         /// <summary>
         /// The regex to validate email
         /// </summary>
-        private static readonly Regex EMAIL_REGEX = new Regex("^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9a-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9a-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$");
+        private static readonly Regex EMAIL_REGEX = new("^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9a-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9a-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$");
 
         /// <summary>
         /// The minimum length of password
@@ -48,6 +47,11 @@ namespace Shoc.Identity.Services
         private readonly IUserRepository userRepository;
 
         /// <summary>
+        /// The confirmation code repository
+        /// </summary>
+        private readonly IConfirmationCodeRepository confirmationCodeRepository;
+
+        /// <summary>
         /// The password hasher
         /// </summary>
         private readonly IPasswordHasher passwordHasher;
@@ -56,10 +60,12 @@ namespace Shoc.Identity.Services
         /// Creates new instance of user service
         /// </summary>
         /// <param name="userRepository">The user repository</param>
+        /// <param name="confirmationCodeRepository">The confirmation code repository</param>
         /// <param name="passwordHasher">The password hasher</param>
-        public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+        public UserService(IUserRepository userRepository, IConfirmationCodeRepository confirmationCodeRepository, IPasswordHasher passwordHasher)
         {
             this.userRepository = userRepository;
+            this.confirmationCodeRepository = confirmationCodeRepository;
             this.passwordHasher = passwordHasher;
         }
 
@@ -128,6 +134,9 @@ namespace Shoc.Identity.Services
 
             // make sure last name is set
             input.LastName = input.LastName.IsNotBlank() ? input.LastName : nameParts.Last();
+
+            // default role if not given
+            input.Role ??= Roles.USER;
 
             // no need to have duplicate name
             if (input.FirstName == input.LastName)
@@ -332,6 +341,72 @@ namespace Shoc.Identity.Services
             validation.AddRange(RequireEmail(email));
 
             return validation;
+        }
+
+        /// <summary>
+        /// Gets active confirmations
+        /// </summary>
+        /// <param name="email">The email</param>
+        /// <returns></returns>
+        public Task<IEnumerable<ConfirmationCode>> GetConfirmations(string email)
+        {
+            return this.confirmationCodeRepository.GetByEmail(email);
+        }
+
+        /// <summary>
+        /// Gets the confirmation code by link
+        /// </summary>
+        /// <param name="link">The link fragment</param>
+        /// <returns></returns>
+        public Task<ConfirmationCode> GetConfirmationByLink(string link)
+        {
+            return this.confirmationCodeRepository.GetByLink(link);
+        }
+
+        /// <summary>
+        /// Create a confirmation code
+        /// </summary>
+        /// <param name="input">The code input</param>
+        /// <returns></returns>
+        public Task<ConfirmationCode> CreateConfirmation(ConfirmationCode input)
+        {
+            return this.confirmationCodeRepository.Create(input);
+        }
+
+        /// <summary>
+        /// Delete confirmation code by id
+        /// </summary>
+        /// <param name="id">The code id</param>
+        /// <returns></returns>
+        public Task<int> DeleteConfirmation(string id)
+        {
+            return this.confirmationCodeRepository.DeleteById(id);
+        }
+
+        /// <summary>
+        /// Delete confirmation codes for the email
+        /// </summary>
+        /// <param name="email">The target to confirm</param>
+        /// <returns></returns>
+        public Task<int> DeleteConfirmations(string email)
+        {
+            return this.confirmationCodeRepository.DeleteByEmail(email);
+        }
+
+        /// <summary>
+        /// Confirms the email address for the given user
+        /// </summary>
+        /// <param name="userId">The user id</param>
+        /// <returns></returns>
+        public async Task<UserModel> ConfirmUserEmail(string userId)
+        {
+            // mark confirmed
+            var user = await this.userRepository.ConfirmUserEmail(userId);
+
+            // delete confirmations 
+            var _ = await this.DeleteConfirmations(user.Email);
+
+            return user;
         }
 
         /// <summary>

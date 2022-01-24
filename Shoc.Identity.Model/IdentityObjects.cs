@@ -14,5 +14,10 @@
         /// The user object
         /// </summary>
         public const string USER = "usr";
+
+        /// <summary>
+        /// The confirmation object
+        /// </summary>
+        public const string CNF = "cnf";
     }
 }

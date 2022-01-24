@@ -9,7 +9,7 @@ RUN mvn -B -s /usr/share/maven/ref/settings-docker.xml package
 FROM adoptopenjdk/openjdk11:alpine-jre
 RUN mkdir -p /app
 
-EXPOSE 11000
+EXPOSE 11002
 
 COPY --from=builder /tmp/target/*.jar /app/app.jar
 

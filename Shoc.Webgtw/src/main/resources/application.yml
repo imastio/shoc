@@ -12,7 +12,7 @@ spring:
         
       routes:
       - id: shoc-builder
-        uri: ${SHOC_BUILDER_URI:http://localhost:11002/}
+        uri: ${SHOC_BUILDER_URI:http://localhost:11006/}
         predicates:
         - Path=/builder/**
         filters:
@@ -22,7 +22,7 @@ spring:
         prefix-enabled: false
     
 server:
-  port: 11000
+  port: 11002
   connection-timeout: 900000
   http2:
       enabled: true
