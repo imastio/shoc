@@ -20,7 +20,7 @@ services:
     build: ./Shoc.Database.Sql
     container_name: shoc-database-sql
     env_file: 
-      - ./env/setup-database-sql.env
+      - ./env/shoc-database-sql.env
     ports:
       - '11001:11001'
     networks:
@@ -34,7 +34,7 @@ services:
     build: ./Shoc.Docker.Registry
     container_name: shoc-docker-registry
     env_file: 
-      - ./env/setup-docker-registry.env
+      - ./env/shoc-docker-registry.env
     ports:
       - '11004:11004'
     networks:
@@ -65,12 +65,30 @@ services:
       - ./env/ref-database-sql.env
       - ./env/ref-dind.env
       - ./env/ref-docker-registry.env
+      - ./env/shoc-builder.env
     ports:
       - '11006:11006'
     depends_on:
       - shoc-database-sql
       - shoc-docker-registry
       - shoc-dind
+    networks:
+      - shoc-network
+      
+  shoc-identity:
+    image: shoc-identity:latest
+    restart: always
+    build: ./Shoc.Identity
+    container_name: shoc-identity
+    env_file: 
+      - ./env/ref-api-discovery.env
+      - ./env/ref-database-sql.env
+      - ./env/ref-mailing.env
+      - ./env/shoc-identity.env
+    ports:
+      - '11008:11008'
+    depends_on:
+      - shoc-database-sql
     networks:
       - shoc-network
       
@@ -81,11 +99,25 @@ services:
     container_name: shoc-webgtw
     env_file: 
       - ./env/ref-java.env
-      - ./env/webgtw.env
+      - ./env/shoc-webgtw.env
+    ports:
+      - '11002:11002'
+    depends_on:
+      - shoc-builder
+    networks:
+      - shoc-network
+      
+  shoc-ingress:
+    image: shoc-ingress
+    build: ./Shoc.Ingress
+    container_name: shoc-ingress
+    hostname: shoc.local
+    restart: always
     ports:
       - '11000:11000'
     depends_on:
-      - shoc-builder
+      - shoc-webgtw
+      - shoc-identity
     networks:
       - shoc-network
    

@@ -23,15 +23,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Templates\confirmation.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\confirmation.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Config\" />
     <Folder Include="DevOnly\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
+    <ProjectReference Include="..\Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
+    <ProjectReference Include="..\Shoc.Core.Mailing\Shoc.Core.Mailing.csproj" />
     <ProjectReference Include="..\Shoc.Core.Security\Shoc.Core.Security.csproj" />
     <ProjectReference Include="..\Shoc.DataProtection.Sql\Shoc.DataProtection.Sql.csproj" />
     <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
@@ -43,6 +53,9 @@
     </None>
     <None Update="Operations\DataOps.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Update="Operations\Confirmation.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Operations\User.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

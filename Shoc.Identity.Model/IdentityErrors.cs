@@ -66,6 +66,26 @@
         public const string SIGNUP_DISABLED = "IDENTITY_SIGNUP_DISABLED";
 
         /// <summary>
+        /// The user not found error
+        /// </summary>
+        public const string NO_USER = "IDENTITY_NO_USER";
+
+        /// <summary>
+        /// The email is already confirmed
+        /// </summary>
+        public const string EMAIL_ALREADY_CONFIRMED = "IDENTITY_EMAIL_ALREADY_CONFIRMED";
+
+        /// <summary>
+        /// The confirmation requests exceeded
+        /// </summary>
+        public const string CONFIRMATION_REQUESTS_EXCEEDED = "IDENTITY_CONFIRMATION_REQUESTS_EXCEEDED";
+
+        /// <summary>
+        /// The confirmation codes is invalid
+        /// </summary>
+        public const string INVALID_CONFIRMATION_CODE = "IDENTITY_INVALID_CONFIRMATION_CODE";
+
+        /// <summary>
         /// The unknown error
         /// </summary>
         public const string UNKNOWN_ERROR = "IDENTITY_UNKNOWN_ERROR";

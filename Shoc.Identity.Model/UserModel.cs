@@ -66,12 +66,7 @@ namespace Shoc.Identity.Model
         /// The number of continuous failed attempts
         /// </summary>
         public int FailedAttempts { get; set; }
-
-        /// <summary>
-        /// The user metadata
-        /// </summary>
-        public string Metadata { get; set; }
-
+        
         /// <summary>
         /// The deletion indicator
         /// </summary>

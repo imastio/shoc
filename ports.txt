@@ -1,6 +1,6 @@
-shoc-webgtw - 11000
+shoc-ingress - 11000
 shoc-database-sql - 11001
-RESERVED - 11002
+shoc-webgtw - 11002
 shoc-dind - 11003
 shoc-docker-registry - 11004
 RESERVED - 11005
