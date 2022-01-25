@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Mailing", "Shoc.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.Protection", "Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj", "{636CA973-A38B-423E-B878-5480EFB5F755}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Cli", "Shoc.Cli\Shoc.Cli.csproj", "{7587D28A-F259-40E6-978D-F9EBE0899CDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{636CA973-A38B-423E-B878-5480EFB5F755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{636CA973-A38B-423E-B878-5480EFB5F755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{636CA973-A38B-423E-B878-5480EFB5F755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7587D28A-F259-40E6-978D-F9EBE0899CDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7587D28A-F259-40E6-978D-F9EBE0899CDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7587D28A-F259-40E6-978D-F9EBE0899CDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7587D28A-F259-40E6-978D-F9EBE0899CDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

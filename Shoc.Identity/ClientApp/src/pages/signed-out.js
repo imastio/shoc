@@ -1,8 +1,7 @@
-import { Button, Result } from 'antd';
+import { Button, Result, Row, Col } from 'antd';
 import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
 import {useAuth} from "auth/useAuth";
-import { RiCheckboxCircleFill } from 'react-icons/ri';
 import { useHistory } from 'react-router-dom';
 
 const SignedOutPage = () => {
@@ -21,17 +20,19 @@ const SignedOutPage = () => {
      <Helmet>
         <title>Signed out</title>
       </Helmet>
+      <Row type="flex" justify="center" align="middle" style={{ minHeight: '100vh' }}>
+                <Col>
     <Result
-        status="success"
+        status="info"
         title="Signed out"
         subTitle="You were signed out from the system"
-        icon={<RiCheckboxCircleFill className="remix-icon" />}
         extra={
         <Button type="primary" onClick={() => history.push("/")}>
             Go Home
         </Button>
         }
     />
+    </Col></Row>
     </>
   )
 };

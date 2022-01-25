@@ -52,15 +52,8 @@ const SignInMain = () => {
 
   return (
     <>
-        <Col lg={12} span={24}>
-          <Row align="middle" justify="center">
-            <Col
-              xxl={11}
-              xl={15}
-              lg={20}
-              md={20}
-              sm={24}
-            >
+          <Row type="flex" justify="center" align="middle" style={{minHeight: '100vh'}}>
+            <Col>
               <h1>Sign in</h1>
                 
               { !isAuthenticated && <p>
@@ -90,7 +83,6 @@ const SignInMain = () => {
               </Col>
             </Col>
           </Row>
-        </Col>
     </>
   );
 };
