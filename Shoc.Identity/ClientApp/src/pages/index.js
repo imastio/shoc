@@ -1,8 +1,7 @@
 import { useAuth } from "auth/useAuth";
 import { UserManager } from "oidc-client-ts";
-import { Button, Result } from "antd";
+import { Button, Result, Row, Col } from "antd";
 import Helmet from "react-helmet";
-import { RiCheckboxCircleFill } from "react-icons/ri";
 
 const IndexPage = () => {
 
@@ -10,26 +9,29 @@ const IndexPage = () => {
 
     return (
         <>
-     <Helmet>
-        <title>Welcome</title>
-      </Helmet>
-    <Result
-        status="success"
-        title="Welcome"
-        subTitle={`Welcome, ${auth?.user?.profile?.name || "N/A" }`}
-        icon={<RiCheckboxCircleFill className="remix-icon" />}
-        extra={
-        <Button type="primary" onClick={() => {
-            
-            const mgr = new UserManager({ ...auth.getUserManager().settings, monitorAnonymousSession: false, monitorSession: false });
-            mgr.signoutRedirect()
+            <Helmet>
+                <title>Welcome</title>
+            </Helmet>
+            <Row type="flex" justify="center" align="middle" style={{ minHeight: '100vh' }}>
+                <Col>
+                    <Result
+                        status="success"
+                        title="Welcome"
+                        subTitle={`Welcome, ${auth?.user?.profile?.name || "N/A"}`}
+                        extra={
+                            <Button type="primary" onClick={() => {
 
-            }}>
-            Sign Out
-        </Button>
-        }
-    />
-    </>
+                                const mgr = new UserManager({ ...auth.getUserManager().settings, monitorAnonymousSession: false, monitorSession: false });
+                                mgr.signoutRedirect()
+
+                            }}>
+                                Sign Out
+                            </Button>
+                        }
+                    />
+                </Col>
+            </Row>
+        </>
 
     )
 }

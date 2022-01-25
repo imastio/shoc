@@ -49,5 +49,10 @@
         /// The interactive client settings
         /// </summary>
         public InteractiveClientSettings InteractiveClient { get; set; }
+
+        /// <summary>
+        /// The native client settings
+        /// </summary>
+        public NativeClientSettings NativeClient { get; set; }
     }
 }

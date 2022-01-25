@@ -11,7 +11,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Shoc.ApiCore;
 using Shoc.Identity.Model;
@@ -186,7 +185,16 @@ namespace Shoc.Identity.OpenId
             {
                 builtin.Add(interactive);
             }
-            
+
+            // get native settings
+            var native = GetNativeClient(settings);
+
+            // add native client if available
+            if (native != null)
+            {
+                builtin.Add(native);
+            }
+
             return builtin;
         }
 
@@ -288,6 +296,46 @@ namespace Shoc.Identity.OpenId
                 AlwaysIncludeUserClaimsInIdToken = true,
                 AccessTokenLifetime = tokenExpiration,
                 PostLogoutRedirectUris = allowedLogoutRedirectUris
+            };
+        }
+
+        /// <summary>
+        /// Gets the native client if available
+        /// </summary>
+        /// <returns></returns>
+        private static Client GetNativeClient(IdentitySettings settings)
+        {
+            // the client id
+            var clientId = settings?.NativeClient?.ClientId;
+
+            // client is not defined
+            if (clientId == null)
+            {
+                return null;
+            }
+            
+            // get expiration time in seconds
+            var tokenExpiration = settings.NativeClient?.AccessTokenExpiration ?? (int)TimeSpan.FromMinutes(5).TotalSeconds;
+
+            // get expiration time in seconds
+            var refreshTokenExpiration = settings.NativeClient?.RefreshTokenExpiration ?? (int)TimeSpan.FromDays(2).TotalSeconds;
+
+            // build the client
+            return new Client
+            {
+                ClientId = clientId,
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                RequirePkce = true,
+                AllowPlainTextPkce = false,
+                AllowedScopes = new List<string> { "openid", "email", "profile" },
+                RedirectUris = new List<string> { "http://localhost" },
+                AllowOfflineAccess = true,
+                RefreshTokenUsage = TokenUsage.ReUse,
+                AlwaysIncludeUserClaimsInIdToken = true,
+                AbsoluteRefreshTokenLifetime = refreshTokenExpiration,
+                AccessTokenLifetime = tokenExpiration,
+                PostLogoutRedirectUris = new List<string> { "http://localhost" }
             };
         }
 

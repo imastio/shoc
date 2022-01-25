@@ -1,6 +1,5 @@
 import React from "react";
 import Helmet from "react-helmet";
-import { Row } from "antd";
 import SignInMain from "components/auth/signin-main";
 
 const SignInPage = () => {
@@ -10,9 +9,7 @@ const SignInPage = () => {
       <Helmet>
         <title>Sign in</title>
       </Helmet>
-      <Row>
-        <SignInMain />
-      </Row>
+      <SignInMain />
     </>
   );
 };
