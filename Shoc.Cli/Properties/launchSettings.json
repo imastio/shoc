@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Shoc.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "project init"
+    }
+  }
+}
