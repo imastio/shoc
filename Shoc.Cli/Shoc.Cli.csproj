@@ -7,12 +7,30 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Model\" />
+    <Folder Include="Config\" />
+    <Folder Include="Utility\" />
+    <Folder Include="Services\" />
     <Folder Include="System\" />
     <Folder Include="OpenId\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityModel.OidcClient" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.1" />
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.21617.1" />
+    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
