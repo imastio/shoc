@@ -64,8 +64,8 @@ namespace Shoc.Identity.OpenId
                 .AddSigningCredential(GetSigningKey(settings), IdentityServerConstants.ECDsaSigningAlgorithm.ES256)
                 .AddInMemoryClients(GetClients(settings))
                 .AddPersistedGrantStore<PersistedGrantStore>()
-                .AddRedirectUriValidator<RedirectUriValidator>();
-            //.AddProfileService<ProfileService>();
+                .AddRedirectUriValidator<RedirectUriValidator>()
+                .AddProfileService<ProfileService>();
 
             services.AddSingleton<PublicOriginMiddleware>();
             services.AddSingleton<ICorsPolicyService, CorsPolicyService>();

@@ -12,6 +12,11 @@ namespace Shoc.Cli.Services
     public class EncryptedStorage
     {
         /// <summary>
+        /// The storage protector purpose
+        /// </summary>
+        private const string PROTECTOR_PURPOSE = "storage";
+
+        /// <summary>
         /// The data protection provider instance
         /// </summary>
         private readonly IDataProtectionProvider dataProtectionProvider;
@@ -55,7 +60,7 @@ namespace Shoc.Cli.Services
             }
 
             // create protector
-            var protector = this.dataProtectionProvider.CreateProtector("storage");
+            var protector = this.dataProtectionProvider.CreateProtector(PROTECTOR_PURPOSE);
 
             // read the value
             var value = protector.Unprotect(await File.ReadAllBytesAsync(valueFile));
@@ -83,9 +88,33 @@ namespace Shoc.Cli.Services
             var valueFile = Path.Combine(groupRoot, $"{key}.value");
 
             // create protector
-            var protector = this.dataProtectionProvider.CreateProtector("storage");
+            var protector = this.dataProtectionProvider.CreateProtector(PROTECTOR_PURPOSE);
 
             await File.WriteAllBytesAsync(valueFile, protector.Protect(Encoding.UTF8.GetBytes(value)));
+        }
+
+        /// <summary>
+        /// Removes the encrypted value by key and group
+        /// </summary>
+        /// <param name="group">The key group</param>
+        /// <param name="key">The kye</param>
+        /// <returns></returns>
+        public Task Remove(string group, string key)
+        {
+            // the group root
+            var groupRoot = Path.Combine(this.root, group);
+
+            // make sure folder exists
+            Directory.CreateDirectory(groupRoot);
+
+            // value file
+            var valueFile = Path.Combine(groupRoot, $"{key}.value");
+            
+            // delete the file
+            File.Delete(valueFile);
+
+            // completed task
+            return Task.CompletedTask;
         }
     }
 }

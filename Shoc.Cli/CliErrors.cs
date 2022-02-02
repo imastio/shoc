@@ -19,5 +19,15 @@
         /// The login failed
         /// </summary>
         public const string LOGIN_FAILED = "CLI_LOGIN_FAILED";
+
+        /// <summary>
+        /// The user is not logged in
+        /// </summary>
+        public const string NOT_LOGGED_IN = "CLI_NOT_LOGGED_IN";
+
+        /// <summary>
+        /// The unknown error
+        /// </summary>
+        public const string UNKNOWN_ERROR = "CLI_UNKNOWN_ERROR";
     }
 }

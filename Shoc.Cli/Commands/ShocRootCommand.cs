@@ -16,8 +16,8 @@ namespace Shoc.Cli.Commands
         /// <summary>
         /// Creates new instance of root command
         /// </summary>
-        public ShocRootCommand()
-        {   
+        public ShocRootCommand() : base("The Shoc Command-line Tool")
+        {
             // add command subtrees
             this.AddCommand(BuildProjectCommands());
             this.AddCommand(BuildUserCommands());
@@ -27,7 +27,7 @@ namespace Shoc.Cli.Commands
             this.Handler = CommandHandler.Create((Action) (() => this.Invoke("-h")));
 
             // add the profile as an option for all
-            this.AddOption(new Option<string>(new[] { "-p", "--profile" }, "The profile"));
+            this.AddOption(new Option<string>(new[] { "-p", "--profile" }, "Select the profile"));
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace Shoc.Cli.Commands
             var command = new Command("user", "The user commands")
             {
                 new UserSigninCommand(),
-                new UserSignoutCommand()
+                new UserSignoutCommand(),
+                new UserWhoamiCommand()
             };
             
-
             // return the wrapper command 
             return command;
         }
@@ -74,11 +74,10 @@ namespace Shoc.Cli.Commands
         private static Command BuildConfigCommands()
         {
             // a wrapper command for project commands
-            var command = new Command("config", "The configuration")
+            var command = new Command("config", "The configuration commands")
             {
                 new ConfigInitCommand()
             };
-
 
             // return the wrapper command 
             return command;
