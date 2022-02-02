@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
+using Shoc.Cli.Model;
 using Shoc.Cli.OpenId;
 using Shoc.Cli.System;
 using Shoc.Core;
@@ -13,6 +16,36 @@ namespace Shoc.Cli.Services
     /// </summary>
     public class AuthService
     {
+        /// <summary>
+        /// The refresh token key
+        /// </summary>
+        private const string REFRESH_TOKEN_KEY = "rt";
+
+        /// <summary>
+        /// The access token key
+        /// </summary>
+        private const string ACCESS_TOKEN_KEY = "at";
+
+        /// <summary>
+        /// The identity token key
+        /// </summary>
+        private const string IDENTITY_TOKEN_KEY = "it";
+
+        /// <summary>
+        /// The default scopes
+        /// </summary>
+        private const string DEFAULT_SCOPES = "openid profile email offline_access";
+
+        /// <summary>
+        /// The default client id
+        /// </summary>
+        private const string DEFAULT_CLIENT_ID = "native";
+
+        /// <summary>
+        /// The loopback prefix
+        /// </summary>
+        private const string LOOPBACK_PREFIX = "http://127.0.0.1";
+
         /// <summary>
         /// The encrypted storage
         /// </summary>
@@ -57,16 +90,16 @@ namespace Shoc.Cli.Services
             var browser = new SystemBrowser(this.networkService.GetNextAvailablePort());
 
             // build redirect uri
-            var redirectUri = $"http://127.0.0.1:{browser.Port}";
+            var redirectUri = $"{LOOPBACK_PREFIX}:{browser.Port}";
 
             // init OIDC options
             var options = new OidcClientOptions
             {
                 Authority = authority,
-                ClientId = "native",
+                ClientId = DEFAULT_CLIENT_ID,
                 RedirectUri = redirectUri,
                 Browser = browser,
-                Scope = "openid profile email",
+                Scope = DEFAULT_SCOPES,
                 FilterClaims = false
             };
 
@@ -83,12 +116,103 @@ namespace Shoc.Cli.Services
             // login error
             if (result.IsError)
             {
+                await this.SignOut(profileName);
                 throw ErrorDefinition.Access(CliErrors.LOGIN_FAILED, "Could not sign-in").AsException();
             }
 
             // save tokens in encrypted form
-            await this.encryptedStorage.Set(profile.Name, "at", result.AccessToken);
-            await this.encryptedStorage.Set(profile.Name, "rt", result.RefreshToken);
+            await this.encryptedStorage.Set(profile.Name, ACCESS_TOKEN_KEY, result.AccessToken ?? string.Empty);
+            await this.encryptedStorage.Set(profile.Name, REFRESH_TOKEN_KEY, result.RefreshToken ?? string.Empty);
+            await this.encryptedStorage.Set(profile.Name, IDENTITY_TOKEN_KEY, result.IdentityToken ?? string.Empty);
+        }
+
+        /// <summary>
+        /// Sign-in with given profile (silently)
+        /// </summary>
+        /// <param name="profileName">The name of profile</param>
+        public async Task SignInSilent(string profileName)
+        {
+            // try load the profile
+            var profile = await this.configurationService.GetProfile(profileName);
+
+            // get authority
+            var authority = await this.GetAuthority(profileName);
+            
+            // init OIDC options
+            var options = new OidcClientOptions
+            {
+                Authority = authority,
+                ClientId = DEFAULT_CLIENT_ID,
+                Scope = DEFAULT_SCOPES,
+                FilterClaims = false
+            };
+
+            // try get refresh token
+            var refreshToken = await this.encryptedStorage.Get(profile.Name, REFRESH_TOKEN_KEY);
+
+            // check if refresh token is valid and available
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                await this.SignOut(profileName);
+                throw ErrorDefinition.Access(CliErrors.LOGIN_FAILED, "The session is expired. Sign-in again!").AsException();
+            }
+
+            // build new client
+            var client = new OidcClient(options);
+
+            // try login and get result back
+            var result = await client.RefreshTokenAsync(refreshToken);
+
+            // login error
+            if (result.IsError)
+            {
+                await this.SignOut(profileName);
+                throw ErrorDefinition.Access(CliErrors.LOGIN_FAILED, "Could not extend the session. Please sign-in again!").AsException();
+            }
+
+            // save tokens in encrypted form
+            await this.encryptedStorage.Set(profile.Name, ACCESS_TOKEN_KEY, result.AccessToken ?? string.Empty);
+            await this.encryptedStorage.Set(profile.Name, REFRESH_TOKEN_KEY, result.RefreshToken ?? string.Empty);
+            await this.encryptedStorage.Set(profile.Name, IDENTITY_TOKEN_KEY, result.IdentityToken ?? string.Empty);
+        }
+
+        /// <summary>
+        /// Get current signed-in user
+        /// </summary>
+        /// <param name="profileName">The name of profile</param>
+        public async Task<WhoAmI> GetWhoAmI(string profileName)
+        {
+            // try load the profile
+            var profile = await this.configurationService.GetProfile(profileName);
+            
+            // get access and identity tokens
+            var accessToken = await this.encryptedStorage.Get(profile.Name, ACCESS_TOKEN_KEY);
+            var identityToken = await this.encryptedStorage.Get(profile.Name, IDENTITY_TOKEN_KEY);
+
+            // make sure we have token
+            if (string.IsNullOrWhiteSpace(accessToken) || string.IsNullOrWhiteSpace(identityToken))
+            {
+                throw ErrorDefinition.Access(CliErrors.NOT_LOGGED_IN, "The user is not logged in").AsException();
+            }
+
+            // the jwt token handler
+            var handler = new JwtSecurityTokenHandler();
+
+            // the parsed access token
+            var parsedAccessToken = handler.ReadJwtToken(accessToken);
+
+            // the parsed identity token
+            var parsedIdentityToken = handler.ReadJwtToken(identityToken);
+
+            // return the current signed-in user
+            return new WhoAmI
+            {
+                Id = parsedIdentityToken.Subject,
+                Email = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
+                Name = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
+                Username = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type== "preferred_username")?.Value,
+                SessionExpiration = parsedAccessToken.ValidTo
+            };
         }
 
         /// <summary>
@@ -97,9 +221,13 @@ namespace Shoc.Cli.Services
         /// <param name="profileName">The name of profile</param>
         public async Task SignOut(string profileName)
         {
-            // save tokens in encrypted form
-            await this.encryptedStorage.Set(profileName, "at", string.Empty);
-            await this.encryptedStorage.Set(profileName, "rt", string.Empty);
+            // try load the profile
+            var profile = await this.configurationService.GetProfile(profileName);
+
+            // delete tokens in encrypted form
+            await this.encryptedStorage.Remove(profile.Name, ACCESS_TOKEN_KEY);
+            await this.encryptedStorage.Remove(profile.Name, REFRESH_TOKEN_KEY);
+            await this.encryptedStorage.Remove(profile.Name, IDENTITY_TOKEN_KEY);
         }
 
         /// <summary>

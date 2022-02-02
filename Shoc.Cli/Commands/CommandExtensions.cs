@@ -22,6 +22,7 @@ namespace Shoc.Cli.Commands
 
             builder.UseCommandHandler(typeof(UserSigninCommand), typeof(UserSigninCommandHandler));
             builder.UseCommandHandler(typeof(UserSignoutCommand), typeof(UserSignoutCommandHandler));
+            builder.UseCommandHandler(typeof(UserWhoamiCommand), typeof(UserWhoamiCommandHandler));
 
             builder.UseCommandHandler(typeof(ConfigInitCommand), typeof(ConfigInitCommandHandler));
 

@@ -12,6 +12,7 @@ namespace Shoc.Cli.Commands.User
         /// </summary>
         public UserSigninCommand() : base("sign-in", "Signs in the user")
         {
+            this.AddOption(new Option<bool>(new []{ "--silent" }, () => false, "Do sing-in silently without interaction"));
         }
     }
 }
