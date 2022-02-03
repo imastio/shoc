@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Model\" />
     <Folder Include="Config\" />
     <Folder Include="Utility\" />
     <Folder Include="Services\" />
@@ -26,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+    <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

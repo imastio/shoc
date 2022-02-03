@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="Project">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `prj_projects`;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllByOwner">
+      <TextCommand>
+        SELECT * FROM `prj_projects` WHERE `OwnerId` = @OwnerId;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByName">
+      <TextCommand>
+        SELECT * FROM `prj_projects` WHERE `Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `prj_projects`
+        (`Id`, `Name`, `Directory`, `BuildSpec`, `RunSpec`, `OwnerId`)
+        VALUES
+        (@Id, @Name, @Directory, @BuildSpec, @RunSpec, @OwnerId);
+        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="Update">
+
+      <TextCommand>
+        UPDATE `prj_projects`
+        SET 
+        `Name` = @Name, `Directory` = @Directory,
+        `BuildSpec` = @BuildSpec, `RunSpec` = @RunSpec,
+        `OwnerId` = @OwnerId
+        WHERE `Id` = @Id;
+        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+
+      <TextCommand>
+        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+        DELETE FROM `prj_projects` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+  </OperationGroup>
+</DataOperations>

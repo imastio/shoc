@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Shoc.ApiCore;
+using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
 using Shoc.Builder.Config;
 using Shoc.Builder.Services;
@@ -35,8 +37,12 @@ namespace Shoc.Builder
         /// <param name="services">The services to configure</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSelf(this.Configuration);
+            services.AddPersistenceDataProtection();
             services.AddDiscovery(this.Configuration);
             services.AddEngineClient(this.Configuration);
+            services.AddRepositories(this.Configuration);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
