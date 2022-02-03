@@ -59,3 +59,18 @@ CREATE TABLE IF NOT EXISTS `idp_confirmation_codes` (
   KEY `ConfirmCode_User_FK_idx` (`UserId`),
   CONSTRAINT `ConfirmCode_User_FK` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `prj_projects` (
+  `Id` varchar(100) NOT NULL,
+  `Name` varchar(200) NOT NULL,
+  `Directory` varchar(200) NOT NULL DEFAULT '/',
+  `BuildSpec` longtext,
+  `RunSpec` longtext,
+  `OwnerId` varchar(100) NOT NULL,
+  `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Name_UNIQUE` (`Name`),
+  KEY `Project_Owner_FK_idx` (`OwnerId`),
+  CONSTRAINT `Project_Owner_FK` FOREIGN KEY (`OwnerId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
