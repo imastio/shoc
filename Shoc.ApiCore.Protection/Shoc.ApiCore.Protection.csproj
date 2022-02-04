@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
+    <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
   </ItemGroup>
 
 </Project>

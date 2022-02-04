@@ -47,6 +47,11 @@ namespace Shoc.Cli.Services
         private const string LOOPBACK_PREFIX = "http://127.0.0.1";
 
         /// <summary>
+        /// The token expiration threshold
+        /// </summary>
+        private static readonly TimeSpan TOKEN_EXPIRATION_THRESHOLD = TimeSpan.FromMinutes(2);
+
+        /// <summary>
         /// The encrypted storage
         /// </summary>
         private readonly EncryptedStorage encryptedStorage;
@@ -211,6 +216,7 @@ namespace Shoc.Cli.Services
                 Email = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
                 Name = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
                 Username = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type== "preferred_username")?.Value,
+                AccessToken = accessToken,
                 SessionExpiration = parsedAccessToken.ValidTo
             };
         }
@@ -228,6 +234,35 @@ namespace Shoc.Cli.Services
             await this.encryptedStorage.Remove(profile.Name, ACCESS_TOKEN_KEY);
             await this.encryptedStorage.Remove(profile.Name, REFRESH_TOKEN_KEY);
             await this.encryptedStorage.Remove(profile.Name, IDENTITY_TOKEN_KEY);
+        }
+
+        /// <summary>
+        /// Do the given action with authorization of profile context
+        /// </summary>
+        /// <typeparam name="T">The result type</typeparam>
+        /// <param name="profileName">The profile name</param>
+        /// <param name="action">The action to execute</param>
+        /// <returns></returns>
+        public async Task<T> DoAuthorized<T>(string profileName, Func<ShocProfile, WhoAmI, Task<T>> action)
+        {
+            // get the profile
+            var profile = await this.configurationService.GetProfile(profileName);
+
+            // get current authenticated user
+            var whoami = await this.GetWhoAmI(profile.Name);
+
+            // check if token has been expired or is about to expire
+            if (DateTime.UtcNow.Add(TOKEN_EXPIRATION_THRESHOLD) > whoami.SessionExpiration)
+            {
+                // try silently re-login
+                await this.SignInSilent(profile.Name);
+            }
+
+            // after re-login get the current session again
+            whoami = await this.GetWhoAmI(profile.Name);
+
+            // invoke required protected action
+            return await action(profile, whoami);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Shoc.Cli.OpenId
     /// <summary>
     /// The code flow worker to get response
     /// </summary>
-    public class CodeFlowWorker : IDisposable
+    public class CodeFlowWorker
     {
         /// <summary>
         /// The code flow options
@@ -167,13 +167,6 @@ namespace Shoc.Cli.OpenId
                 Error = "Timeout",
                 ResponseString = string.Empty
             };
-        }
-
-        /// <summary>
-        /// Disposes the worker
-        /// </summary>
-        public void Dispose()
-        {
         }
     }
 }

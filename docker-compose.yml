@@ -61,6 +61,7 @@ services:
     build: ./Shoc.Builder
     container_name: shoc-builder
     env_file: 
+      - ./env/ref-api-auth.env
       - ./env/ref-api-discovery.env
       - ./env/ref-database-sql.env
       - ./env/ref-dind.env
@@ -70,7 +71,6 @@ services:
       - '11006:11006'
     depends_on:
       - shoc-database-sql
-      - shoc-docker-registry
       - shoc-dind
     networks:
       - shoc-network
@@ -119,5 +119,8 @@ services:
       - shoc-webgtw
       - shoc-identity
     networks:
-      - shoc-network
+      shoc-network:
+        aliases:
+         - identity.shoc.local
+         - api.shoc.local
    

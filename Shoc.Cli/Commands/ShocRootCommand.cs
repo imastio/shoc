@@ -39,7 +39,9 @@ namespace Shoc.Cli.Commands
             // a wrapper command for project commands
             var command = new Command("project", "The project commands")
             {
-                new ProjectInitCommand()
+                new ProjectNewCommand(),
+                new ProjectConnectCommand(),
+                new ProjectListCommand()
             };
 
             // add directory as an option to all commands

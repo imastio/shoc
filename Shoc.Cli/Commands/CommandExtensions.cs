@@ -18,7 +18,9 @@ namespace Shoc.Cli.Commands
         /// <returns></returns>
         public static IHostBuilder UseCommands(this IHostBuilder builder)
         {
-            builder.UseCommandHandler(typeof(ProjectInitCommand), typeof(ProjectInitCommandHandler));
+            builder.UseCommandHandler(typeof(ProjectNewCommand), typeof(ProjectNewCommandHandler));
+            builder.UseCommandHandler(typeof(ProjectConnectCommand), typeof(ProjectConnectCommandHandler));
+            builder.UseCommandHandler(typeof(ProjectListCommand), typeof(ProjectListCommandHandler));
 
             builder.UseCommandHandler(typeof(UserSigninCommand), typeof(UserSigninCommandHandler));
             builder.UseCommandHandler(typeof(UserSignoutCommand), typeof(UserSignoutCommandHandler));

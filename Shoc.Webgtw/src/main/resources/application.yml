@@ -14,7 +14,7 @@ spring:
       - id: shoc-builder
         uri: ${SHOC_BUILDER_URI:http://localhost:11006/}
         predicates:
-        - Path=/builder/**
+        - Path=/shoc-builder/**
         filters:
         - StripPrefix=1
         

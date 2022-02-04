@@ -9,13 +9,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.Discovery\Shoc.ApiCore.Discovery.csproj" />
+    <ProjectReference Include="..\Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj" />
     <ProjectReference Include="..\Shoc.Builder.Model\Shoc.Builder.Model.csproj" />
     <ProjectReference Include="..\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
     <ProjectReference Include="..\Shoc.DataProtection.Sql\Shoc.DataProtection.Sql.csproj" />
     <ProjectReference Include="..\Shoc.Engine.Client\Shoc.Engine.Client.csproj" />
     <ProjectReference Include="..\Shoc.Engine.Model\Shoc.Engine.Model.csproj" />
+    <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

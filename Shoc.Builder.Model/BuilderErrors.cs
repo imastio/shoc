@@ -26,6 +26,16 @@
         public const string INVALID_PROJECT = "BUILDER_INVALID_PROJECT";
 
         /// <summary>
+        /// The invalid owner
+        /// </summary>
+        public const string INVALID_OWNER = "BUILDER_INVALID_OWNER";
+
+        /// <summary>
+        /// The invalid access to the object
+        /// </summary>
+        public const string ACCESS_DENIED = "BUILDER_ACCESS_DENIED";
+
+        /// <summary>
         /// The unknown error
         /// </summary>
         public const string UNKNOWN_ERROR = "BUILDER_UNKNOWN_ERROR";

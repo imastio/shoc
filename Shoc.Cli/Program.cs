@@ -57,15 +57,19 @@ namespace Shoc.Cli
         private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
             // configure logging
-            services.AddLogging(log => 
-                log.AddFilter("Default", LogLevel.Warning)
+            services.AddLogging(log =>
+                log.AddFilter("Default", LogLevel.Information)
                     .AddFilter("Microsoft", LogLevel.Warning)
                     .AddFilter("System", LogLevel.Warning)
                     .AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Warning)
                 .AddConsole());
 
+            services.AddSingleton<ILogger>(sp => sp.GetRequiredService<ILogger<Program>>());
+
             services.AddProtection();
 
+            services.AddSingleton<DiscoveryService>();
+            services.AddSingleton<ClientService>();
             services.AddSingleton<ConfigurationService>();
             services.AddSingleton<NetworkService>();
             services.AddSingleton<EncryptedStorage>();

@@ -31,5 +31,10 @@ namespace Shoc.Cli.Model
         /// The session expiration
         /// </summary>
         public DateTime SessionExpiration { get; set; }
+
+        /// <summary>
+        /// The reference to access token
+        /// </summary>
+        public string AccessToken { get; set; }
     }
 }

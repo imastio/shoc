@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Shoc.ApiCore;
-using Shoc.Core;
 using Shoc.Core.Mailing;
 using Shoc.Core.Security;
 using Shoc.Identity.Config;
@@ -212,7 +211,7 @@ namespace Shoc.Identity.Services
             {
                 try
                 {
-                    var requestResult = await this.RequestConfirmation(httpContext, new ConfirmationRequest
+                    var requestResult = await this.RequestConfirmation(new ConfirmationRequest
                     {
                         Email = user.Email,
                         ReturnUrl = returnUrl
@@ -254,10 +253,9 @@ namespace Shoc.Identity.Services
         /// <summary>
         /// Request a confirmation code for the given email
         /// </summary>
-        /// <param name="httpContext">The HTTP context</param>
         /// <param name="request">The confirmation request</param>
         /// <returns></returns>
-        public async Task<ConfirmationRequestResult> RequestConfirmation(HttpContext httpContext, ConfirmationRequest request)
+        public async Task<ConfirmationRequestResult> RequestConfirmation(ConfirmationRequest request)
         {
             // gets the user by email
             var user = await this.userService.GetByEmail(request.Email);
@@ -275,7 +273,7 @@ namespace Shoc.Identity.Services
             }
 
             // request for the user
-            return await this.RequestConfirmation(httpContext, user, request);
+            return await this.RequestConfirmation(user, request);
         }
 
         /// <summary>
@@ -441,11 +439,10 @@ namespace Shoc.Identity.Services
         /// <summary>
         /// Request a confirmation code for the given email
         /// </summary>
-        /// <param name="httpContext">The HTTP context</param>
         /// <param name="user">The target user</param>
         /// <param name="request">The request</param>
         /// <returns></returns>
-        public async Task<ConfirmationRequestResult> RequestConfirmation(HttpContext httpContext, UserModel user, ConfirmationRequest request)
+        public async Task<ConfirmationRequestResult> RequestConfirmation(UserModel user, ConfirmationRequest request)
         {
             // get existing codes
             var existingCodes = await this.userService.GetConfirmations(request.Email);

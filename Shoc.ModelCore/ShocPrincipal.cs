@@ -8,6 +8,6 @@
         /// <summary>
         /// The id of user
         /// </summary>
-        public string Id { get; set; }
+        public string Subject { get; set; }
     }
 }
