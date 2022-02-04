@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
+using Shoc.ApiCore.Protection;
 using Shoc.Builder.Services;
 using Shoc.Engine.Model;
+using Shoc.Identity.Model;
 
 namespace Shoc.Builder.Controllers
 {
@@ -13,6 +15,7 @@ namespace Shoc.Builder.Controllers
     [Route("api/engines")]
     [ApiController]
     [ShocExceptionHandler]
+    [AuthorizeAnyRole(Roles.ROOT, Roles.ADMIN)]
     public class EnginesController : ControllerBase
     {
         /// <summary>
@@ -30,7 +33,7 @@ namespace Shoc.Builder.Controllers
         }
 
         /// <summary>
-        /// Gets all the payers
+        /// Gets all the engines
         /// </summary>
         /// <returns></returns>
         [HttpGet]

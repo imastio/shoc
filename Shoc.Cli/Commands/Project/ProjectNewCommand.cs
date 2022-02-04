@@ -1,0 +1,19 @@
+﻿using System.CommandLine;
+
+namespace Shoc.Cli.Commands.Project
+{
+    /// <summary>
+    /// The command to create a project
+    /// </summary>
+    public class ProjectNewCommand : Command
+    {
+        /// <summary>
+        /// Creates new instance of project new command
+        /// </summary>
+        public ProjectNewCommand() : base("new", "Create a new project in the given directory")
+        {
+            this.AddOption(new Option<string>(new []{ "-n", "--name" }, "The name of project to initialize"));
+            this.AddOption(new Option<bool>(new[] { "--overwrite" }, "Allows overwriting the project file"));
+        }
+    }
+}

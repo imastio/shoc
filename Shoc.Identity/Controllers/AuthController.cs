@@ -71,7 +71,7 @@ namespace Shoc.Identity.Controllers
         [HttpPost("request-confirmation-code")]
         public Task<ConfirmationRequestResult> RequestConfirmationCode(ConfirmationRequest input)
         {
-            return this.authService.RequestConfirmation(this.HttpContext, input);
+            return this.authService.RequestConfirmation(input);
         }
 
         /// <summary>

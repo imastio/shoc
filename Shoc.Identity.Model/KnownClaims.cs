@@ -6,6 +6,11 @@
     public static class KnownClaims
     {
         /// <summary>
+        /// The subject claim definition
+        /// </summary>
+        public const string SUBJECT = "sub";
+
+        /// <summary>
         /// The role claim definition
         /// </summary>
         public const string ROLE = "role";

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Shoc.Builder.Data;
 using Shoc.Builder.Model;
 using Shoc.Core;
+using Shoc.ModelCore;
 
 namespace Shoc.Builder.Services
 {
@@ -53,11 +55,11 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Gets all projects for the owner
         /// </summary>
-        /// <param name="ownerId">The owner user id</param>
+        /// <param name="principal">The authenticated principal</param>
         /// <returns></returns>
-        public Task<IEnumerable<ProjectModel>> GetAllByOwner(string ownerId)
+        public Task<IEnumerable<ProjectModel>> GetAllOwned(ShocPrincipal principal)
         {
-            return this.projectRepository.GetAllByOwner(ownerId);
+            return this.projectRepository.GetAllByOwner(principal.Subject);
         }
 
         /// <summary>
@@ -68,6 +70,32 @@ namespace Shoc.Builder.Services
         public Task<ProjectModel> GetById(string id)
         {
             return this.projectRepository.GetById(id);
+        }
+
+        /// <summary>
+        /// Gets the project by id
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="id">The id of project</param>
+        /// <returns></returns>
+        public async Task<ProjectModel> GetOwnedById(ShocPrincipal principal, string id)
+        {
+            // try load project
+            var project = await this.projectRepository.GetById(id);
+
+            // no such object
+            if (project == null)
+            {
+                return null;
+            }
+
+            // if not the requesting owner report does not have access
+            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
+            {
+                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
+            }
+
+            return project;
         }
 
         /// <summary>
@@ -100,6 +128,21 @@ namespace Shoc.Builder.Services
 
             // initiate the creation
             return await this.projectRepository.Create(input);
+        }
+
+        /// <summary>
+        /// Creates the project by given input
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="input">The project creation input</param>
+        /// <returns></returns>
+        public Task<ProjectModel> CreateOwned(ShocPrincipal principal, CreateUpdateProjectModel input)
+        {
+            // the authenticate principal is the owner
+            input.OwnerId = principal.Subject;
+
+            // create new instance
+            return this.Create(input);
         }
 
         /// <summary>
@@ -145,6 +188,34 @@ namespace Shoc.Builder.Services
         }
 
         /// <summary>
+        /// Updates the project by given input
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="id">The id of entity to update</param>
+        /// <param name="input">The project update input</param>
+        /// <returns></returns>
+        public async Task<ProjectModel> UpdateOwned(ShocPrincipal principal, string id, CreateUpdateProjectModel input)
+        {
+            // try load project
+            var project = await this.projectRepository.GetById(id);
+
+            // no such object
+            if (project == null)
+            {
+                return null;
+            }
+
+            // if not the requesting owner report does not have access
+            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
+            {
+                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
+            }
+
+            // start updating 
+            return await this.Update(id, input);
+        }
+
+        /// <summary>
         /// Deletes the project by id
         /// </summary>
         /// <param name="id">The id of project to delete</param>
@@ -152,6 +223,32 @@ namespace Shoc.Builder.Services
         public Task<ProjectModel> DeleteById(string id)
         {
             return this.projectRepository.DeleteById(id);
+        }
+
+        /// <summary>
+        /// Deletes the project by id
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="id">The id of project to delete</param>
+        /// <returns></returns>
+        public async Task<ProjectModel> DeleteOwnedById(ShocPrincipal principal, string id)
+        {
+            // try load project
+            var project = await this.projectRepository.GetById(id);
+
+            // no such object
+            if (project == null)
+            {
+                return null;
+            }
+
+            // if not the requesting owner report does not have access
+            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
+            {
+                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
+            }
+
+            return await this.projectRepository.DeleteById(id);
         }
 
         /// <summary>
@@ -174,6 +271,12 @@ namespace Shoc.Builder.Services
             if (string.IsNullOrWhiteSpace(input.Name) || !NAME_REGEX.IsMatch(input.Name))
             {
                 result.Add(ErrorDefinition.Validation(BuilderErrors.INVALID_NAME));
+            }
+
+            // owner is mandatory to be there
+            if (string.IsNullOrWhiteSpace(input.OwnerId))
+            {
+                result.Add(ErrorDefinition.Validation(BuilderErrors.INVALID_OWNER));
             }
 
             // return the result
