@@ -1,18 +1,18 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace Shoc.Cli.System
+namespace Shoc.Cli.Utility
 {
     /// <summary>
-    /// The network service 
+    /// The network utilities 
     /// </summary>
-    public class NetworkService
+    public static class Network
     {
         /// <summary>
         /// Gets the next available port from the system
         /// </summary>
         /// <returns></returns>
-        public int GetNextAvailablePort()
+        public static int GetNextAvailablePort()
         {
             // new listener on loopback
             var listener = new TcpListener(IPAddress.Loopback, 0);

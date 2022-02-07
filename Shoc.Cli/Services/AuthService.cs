@@ -6,7 +6,7 @@ using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
 using Shoc.Cli.Model;
 using Shoc.Cli.OpenId;
-using Shoc.Cli.System;
+using Shoc.Cli.Utility;
 using Shoc.Core;
 
 namespace Shoc.Cli.Services
@@ -60,23 +60,16 @@ namespace Shoc.Cli.Services
         /// The configuration service
         /// </summary>
         private readonly ConfigurationService configurationService;
-
-        /// <summary>
-        /// The network service
-        /// </summary>
-        private readonly NetworkService networkService;
-
+        
         /// <summary>
         /// Creates new instance of authentication service
         /// </summary>
         /// <param name="encryptedStorage">The encrypted storage</param>
         /// <param name="configurationService">The configuration service</param>
-        /// <param name="networkService">The network service</param>
-        public AuthService(EncryptedStorage encryptedStorage, ConfigurationService configurationService, NetworkService networkService)
+        public AuthService(EncryptedStorage encryptedStorage, ConfigurationService configurationService)
         {
             this.encryptedStorage = encryptedStorage;
             this.configurationService = configurationService;
-            this.networkService = networkService;
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace Shoc.Cli.Services
             var authority = await this.GetAuthority(profileName);
 
             // create new browser
-            var browser = new SystemBrowser(this.networkService.GetNextAvailablePort());
+            var browser = new SystemBrowser(Network.GetNextAvailablePort());
 
             // build redirect uri
             var redirectUri = $"{LOOPBACK_PREFIX}:{browser.Port}";

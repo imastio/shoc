@@ -39,6 +39,7 @@ namespace Shoc.Builder.Config
 
             // add domain repositories
             services.AddSingleton<IProjectRepository, ProjectRepository>();
+            services.AddSingleton<IDockerRegistryRepository, DockerRegistryRepository>();
             services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
 
             // chain services

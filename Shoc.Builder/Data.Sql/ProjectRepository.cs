@@ -6,6 +6,9 @@ using Shoc.Core;
 
 namespace Shoc.Builder.Data.Sql
 {
+    /// <summary>
+    /// The project repository implementation
+    /// </summary>
     public class ProjectRepository : IProjectRepository
     {
         /// <summary>
@@ -29,7 +32,6 @@ namespace Shoc.Builder.Data.Sql
         public Task<IEnumerable<ProjectModel>> GetAll()
         {
             return this.dataOps.Connect().Query("Project", "GetAll").ExecuteAsync<ProjectModel>();
-
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace Shoc.Builder.Data.Sql
         /// <returns></returns>
         public Task<ProjectModel> DeleteById(string id)
         {
-            // update object to the database
+            // delete object from the database
             return this.dataOps.Connect().QueryFirst("Project", "DeleteById").ExecuteAsync<ProjectModel>(new
             {
                 Id = id
