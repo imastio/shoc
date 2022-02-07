@@ -1,4 +1,4 @@
-﻿namespace Shoc.Cli
+﻿namespace Shoc.Builder
 {
     /// <summary>
     /// The builder settings
