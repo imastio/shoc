@@ -74,3 +74,14 @@ CREATE TABLE IF NOT EXISTS `prj_projects` (
   KEY `Project_Owner_FK_idx` (`OwnerId`),
   CONSTRAINT `Project_Owner_FK` FOREIGN KEY (`OwnerId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `bld_docker_registries` (
+  `Id` varchar(100) NOT NULL,
+  `RegistryUri` varchar(500) NOT NULL,
+  `Email` text,
+  `Username` text,
+  `EncryptedPassword` blob,
+  `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

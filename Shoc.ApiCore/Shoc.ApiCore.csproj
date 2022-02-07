@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
   </ItemGroup>
 

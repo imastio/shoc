@@ -21,7 +21,8 @@ namespace Shoc.Builder
             // return sources
             return new[]
             {
-                Path.Combine(sourceDirectory, "Operations", "Project.xml")
+                Path.Combine(sourceDirectory, "Operations", "Project.xml"),
+                Path.Combine(sourceDirectory, "Operations", "DockerRegistry.xml")
             };
         }
     }

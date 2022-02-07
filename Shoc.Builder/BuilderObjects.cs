@@ -9,5 +9,10 @@
         /// The project object
         /// </summary>
         public const string PROJECT = "prj";
+        
+        /// <summary>
+        /// The docker registry object
+        /// </summary>
+        public const string DOCKER_REGISTRY = "drg";
     }
 }

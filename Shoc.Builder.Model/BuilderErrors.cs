@@ -31,6 +31,16 @@
         public const string INVALID_OWNER = "BUILDER_INVALID_OWNER";
 
         /// <summary>
+        /// The invalid registry uri
+        /// </summary>
+        public const string INVALID_REGISTRY_URI = "BUILDER_INVALID_REGISTRY_URI";
+
+        /// <summary>
+        /// The invalid registry credentials
+        /// </summary>
+        public const string INVALID_REGISTRY_CREDENTIALS = "BUILDER_INVALID_REGISTRY_CREDENTIALS";
+
+        /// <summary>
         /// The invalid access to the object
         /// </summary>
         public const string ACCESS_DENIED = "BUILDER_ACCESS_DENIED";

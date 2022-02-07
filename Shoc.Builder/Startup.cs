@@ -51,6 +51,7 @@ namespace Shoc.Builder
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shoc.Builder", Version = "v1" });
             });
 
+            services.AddSingleton<DockerRegistryService>();
             services.AddSingleton<EngineService>();
             services.AddSingleton<ProjectService>();
         }
