@@ -5,11 +5,11 @@ namespace Shoc.ModelCore
     /// <summary>
     /// The build action specification
     /// </summary>
-    public class BuildActionsSpec
+    public class BuildHooksSpec
     {
         /// <summary>
-        /// The to execute before upload
+        /// The to execute before packaging
         /// </summary>
-        public List<string> PreUpload { get; set; }
+        public List<string> BeforePackage { get; set; }
     }
 }

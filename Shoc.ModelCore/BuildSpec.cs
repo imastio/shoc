@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Shoc.ModelCore
+﻿namespace Shoc.ModelCore
 {
     /// <summary>
     /// The project build specification
@@ -8,38 +6,28 @@ namespace Shoc.ModelCore
     public class BuildSpec
     {
         /// <summary>
-        /// The code name of technology
+        /// The base technology string
         /// </summary>
-        public string Technology { get; set; }
+        public string Base { get; set; }
 
         /// <summary>
-        /// The build action specification
+        /// The name of user inside the package
         /// </summary>
-        public BuildActionsSpec Actions { get; set; }
+        public string User { get; set; }
 
         /// <summary>
-        /// The required package references
+        /// The build hooks
         /// </summary>
-        public List<PackageReference> Packages { get; set; }
+        public BuildHooksSpec Hooks { get; set; }
 
         /// <summary>
-        /// The files to add
+        /// The build input specification
         /// </summary>
-        public List<string> Files { get; set; }
+        public BuildInputSpec Input { get; set; }
 
         /// <summary>
-        /// The files to exclude
+        /// The build output specification
         /// </summary>
-        public List<string> ExcludeFiles { get; set; }
-
-        /// <summary>
-        /// The entry point of the project
-        /// </summary>
-        public string EntryPoint { get; set; }
-
-        /// <summary>
-        /// The arguments for entry point
-        /// </summary>
-        public string Args { get; set; }
+        public BuildOutputSpec Output { get; set; }
     }
 }

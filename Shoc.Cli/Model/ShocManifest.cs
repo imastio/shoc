@@ -8,9 +8,9 @@ namespace Shoc.Cli.Model
     public class ShocManifest
     {
         /// <summary>
-        /// The project identity
+        /// The name of the project
         /// </summary>
-        public string Id { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The build specification for the project
