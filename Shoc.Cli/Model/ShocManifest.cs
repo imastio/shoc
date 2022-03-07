@@ -13,6 +13,11 @@ namespace Shoc.Cli.Model
         public string Name { get; set; }
 
         /// <summary>
+        /// The directory of the project (default: /)
+        /// </summary>
+        public string Directory { get; set; }
+
+        /// <summary>
         /// The build specification for the project
         /// </summary>
         public BuildSpec Build { get; set; }

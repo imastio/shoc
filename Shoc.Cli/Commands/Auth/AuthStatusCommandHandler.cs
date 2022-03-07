@@ -3,12 +3,12 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.User
+namespace Shoc.Cli.Commands.Auth
 {
     /// <summary>
-    /// The handler for the user who am i
+    /// The handler for the user auth status
     /// </summary>
-    public class UserWhoamiCommandHandler : ShocCommandHandlerBase
+    public class AuthStatusCommandHandler : ShocCommandHandlerBase
     {
         /// <summary>
         /// The authentication service
@@ -19,7 +19,7 @@ namespace Shoc.Cli.Commands.User
         /// Creates new instance of user whoami command handler
         /// </summary>
         /// <param name="authService">The authentication service</param>
-        public UserWhoamiCommandHandler(AuthService authService)
+        public AuthStatusCommandHandler(AuthService authService)
         {
             this.authService = authService;
         }
@@ -32,14 +32,14 @@ namespace Shoc.Cli.Commands.User
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
             // get the current user
-            var whoami = await this.authService.GetWhoAmI(this.Profile);
+            var status = await this.authService.GetStatus(this.Profile);
             
             // write current claims
-            context.Console.WriteLine($"Subject: {whoami.Id}");
-            context.Console.WriteLine($"Name: {whoami.Name}");
-            context.Console.WriteLine($"Email: {whoami.Email}");
-            context.Console.WriteLine($"Username: {whoami.Username}");
-            context.Console.WriteLine($"Expiration: {whoami.SessionExpiration.ToLocalTime()}");
+            context.Console.WriteLine($"Subject: {status.Id}");
+            context.Console.WriteLine($"Name: {status.Name}");
+            context.Console.WriteLine($"Email: {status.Email}");
+            context.Console.WriteLine($"Username: {status.Username}");
+            context.Console.WriteLine($"Expiration: {status.SessionExpiration.ToLocalTime()}");
 
             // all good
             return 0;

@@ -6,6 +6,11 @@
     public class RunSpec
     {
         /// <summary>
+        /// The run output specification
+        /// </summary>
+        public RunOutputSpec Output { get; set; }
+
+        /// <summary>
         /// The resource requests
         /// </summary>
         public RunResourcesSpec Requests { get; set; }

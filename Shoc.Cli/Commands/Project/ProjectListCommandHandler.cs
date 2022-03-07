@@ -48,10 +48,10 @@ namespace Shoc.Cli.Commands.Project
             foreach (var project in result)
             {
                 // message postfix for selected one
-                var postfix = existing?.Id == project.Id ? " [Current]" : string.Empty;
+                var postfix = existing?.Name == project.Name && existing?.Directory == project.Directory ? " [Current]" : string.Empty;
 
                 // print project
-                context.Console.WriteLine($"{project.Id} \t\t {project.Name}{postfix}");
+                context.Console.WriteLine($"{project.Id} \t\t {project.Directory} \t\t {project.Name}{postfix}");
             }
             
             return 0;

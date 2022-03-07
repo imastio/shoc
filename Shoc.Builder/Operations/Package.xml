@@ -5,7 +5,7 @@
 	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
 	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
 
-  <OperationGroup Name="Project">
+  <OperationGroup Name="Package">
 
     <SqlOperation Name="GetAll">
       <TextCommand>

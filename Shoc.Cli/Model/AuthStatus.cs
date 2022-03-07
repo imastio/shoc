@@ -3,9 +3,9 @@
 namespace Shoc.Cli.Model
 {
     /// <summary>
-    /// The Who Am I Model
+    /// The auth status model
     /// </summary>
-    public class WhoAmI
+    public class AuthStatus
     {
         /// <summary>
         /// The user id

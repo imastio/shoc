@@ -1,9 +1,9 @@
-﻿using System.CommandLine.Invocation;
+﻿using System.Collections.Generic;
+using System.CommandLine.Invocation;
 using System.Threading.Tasks;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 using Shoc.Cli.Model;
 using Shoc.Cli.Services;
-using Shoc.Cli.Utility;
 using Shoc.Core;
 using Shoc.ModelCore;
 
@@ -77,15 +77,38 @@ namespace Shoc.Cli.Commands.Project
                     new CreateUpdateProjectModel
                     {
                         Name = name,
+                        Directory = "/",
                         OwnerId = me.Id
                     });
 
                 // create a manifest
                 return new ShocManifest
                 {
-                    Id = project.Id,
-                    Build = Json.Deserialize<BuildSpec>(project.BuildSpec),
-                    Run = Json.Deserialize<RunSpec>(project.RunSpec)
+                    Name = project.Name,
+                    Directory = project.Directory,
+                    Build = new BuildSpec
+                    {
+                        Base = string.Empty,
+                        User = string.Empty,
+                        Hooks = new BuildHooksSpec
+                        {
+                            BeforePackage = new List<string>()
+                        },
+                        Input = new BuildInputSpec
+                        {
+                            Copy = new List<FileCopySpec>()
+                        }
+                    },
+                    Run = new RunSpec
+                    {
+                        Output = new RunOutputSpec
+                        {
+                            StdOut = string.Empty,
+                            StdErr = string.Empty,
+                            RequiredFiles = new List<string>()
+                        },
+                        Requests = new RunResourcesSpec()
+                    }
                 };
             });
 

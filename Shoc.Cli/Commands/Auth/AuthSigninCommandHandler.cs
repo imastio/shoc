@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.User
+namespace Shoc.Cli.Commands.Auth
 {
     /// <summary>
     /// The handler for the user sign in
     /// </summary>
-    public class UserSigninCommandHandler : ShocCommandHandlerBase
+    public class AuthSigninCommandHandler : ShocCommandHandlerBase
     {
         /// <summary>
         /// The authentication service
@@ -23,7 +23,7 @@ namespace Shoc.Cli.Commands.User
         /// Creates new instance of user sign-in command handler
         /// </summary>
         /// <param name="authService">The authentication service</param>
-        public UserSigninCommandHandler(AuthService authService)
+        public AuthSigninCommandHandler(AuthService authService)
         {
             this.authService = authService;
         }

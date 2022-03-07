@@ -23,9 +23,9 @@
 
       <TextCommand>
         INSERT INTO `bld_docker_registries`
-        (`Id`, `RegistryUri`, `Email`, `Username`, `EncryptedPassword`)
+        (`Id`, `Name`, `OwnerId`, `RegistryUri`, `Email`, `Username`, `EncryptedPassword`)
         VALUES
-        (@Id, @RegistryUri, @Email, @Username, @EncryptedPassword);
+        (@Id, @Name, @OwnerId, @RegistryUri, @Email, @Username, @EncryptedPassword);
         SELECT * FROM `bld_docker_registries` WHERE `Id` = @Id;
       </TextCommand>
 
