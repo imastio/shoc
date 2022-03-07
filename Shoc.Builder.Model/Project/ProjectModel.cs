@@ -1,36 +1,31 @@
 ﻿using System;
 
-namespace Shoc.Builder.Model
+namespace Shoc.Builder.Model.Project
 {
     /// <summary>
-    /// The docker registry model
+    /// The project model
     /// </summary>
-    public class DockerRegistry
+    public class ProjectModel
     {
         /// <summary>
-        /// The registry id
+        /// The project id
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        /// The registry uri value
+        /// The project name
         /// </summary>
-        public string RegistryUri { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// The registry email
+        /// The project directory
         /// </summary>
-        public string Email { get; set; }
-
+        public string Directory { get; set; }
+        
         /// <summary>
-        /// The username value
+        /// The owner user of the project
         /// </summary>
-        public string Username { get; set; }
-
-        /// <summary>
-        /// The password in encrypted form
-        /// </summary>
-        public byte[] EncryptedPassword { get; set; }
+        public string OwnerId { get; set; }
 
         /// <summary>
         /// The creation time

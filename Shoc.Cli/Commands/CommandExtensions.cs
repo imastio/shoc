@@ -1,5 +1,6 @@
 ﻿using System.CommandLine.Hosting;
 using Microsoft.Extensions.Hosting;
+using Shoc.Cli.Commands.Auth;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
 using Shoc.Cli.Commands.User;
@@ -19,12 +20,11 @@ namespace Shoc.Cli.Commands
         public static IHostBuilder UseCommands(this IHostBuilder builder)
         {
             builder.UseCommandHandler(typeof(ProjectNewCommand), typeof(ProjectNewCommandHandler));
-            builder.UseCommandHandler(typeof(ProjectConnectCommand), typeof(ProjectConnectCommandHandler));
             builder.UseCommandHandler(typeof(ProjectListCommand), typeof(ProjectListCommandHandler));
 
-            builder.UseCommandHandler(typeof(UserSigninCommand), typeof(UserSigninCommandHandler));
-            builder.UseCommandHandler(typeof(UserSignoutCommand), typeof(UserSignoutCommandHandler));
-            builder.UseCommandHandler(typeof(UserWhoamiCommand), typeof(UserWhoamiCommandHandler));
+            builder.UseCommandHandler(typeof(AuthSigninCommand), typeof(AuthSigninCommandHandler));
+            builder.UseCommandHandler(typeof(AuthSignoutCommand), typeof(AuthSignoutCommandHandler));
+            builder.UseCommandHandler(typeof(AuthStatusCommand), typeof(AuthStatusCommandHandler));
 
             builder.UseCommandHandler(typeof(ConfigInitCommand), typeof(ConfigInitCommandHandler));
 

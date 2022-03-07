@@ -1,4 +1,4 @@
-﻿namespace Shoc.Builder.Model
+﻿namespace Shoc.Builder.Model.Registry
 {
     /// <summary>
     /// The docker registry creating model
@@ -9,6 +9,16 @@
         /// The registry id
         /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The registry name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The owner id of private registry if not shared
+        /// </summary>
+        public string OwnerId { get; set; }
 
         /// <summary>
         /// The registry uri value

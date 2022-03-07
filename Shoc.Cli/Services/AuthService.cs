@@ -178,7 +178,7 @@ namespace Shoc.Cli.Services
         /// Get current signed-in user
         /// </summary>
         /// <param name="profileName">The name of profile</param>
-        public async Task<WhoAmI> GetWhoAmI(string profileName)
+        public async Task<AuthStatus> GetStatus(string profileName)
         {
             // try load the profile
             var profile = await this.configurationService.GetProfile(profileName);
@@ -203,7 +203,7 @@ namespace Shoc.Cli.Services
             var parsedIdentityToken = handler.ReadJwtToken(identityToken);
 
             // return the current signed-in user
-            return new WhoAmI
+            return new AuthStatus
             {
                 Id = parsedIdentityToken.Subject,
                 Email = parsedIdentityToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
@@ -236,26 +236,26 @@ namespace Shoc.Cli.Services
         /// <param name="profileName">The profile name</param>
         /// <param name="action">The action to execute</param>
         /// <returns></returns>
-        public async Task<T> DoAuthorized<T>(string profileName, Func<ShocProfile, WhoAmI, Task<T>> action)
+        public async Task<T> DoAuthorized<T>(string profileName, Func<ShocProfile, AuthStatus, Task<T>> action)
         {
             // get the profile
             var profile = await this.configurationService.GetProfile(profileName);
 
             // get current authenticated user
-            var whoami = await this.GetWhoAmI(profile.Name);
+            var status = await this.GetStatus(profile.Name);
 
             // check if token has been expired or is about to expire
-            if (DateTime.UtcNow.Add(TOKEN_EXPIRATION_THRESHOLD) > whoami.SessionExpiration)
+            if (DateTime.UtcNow.Add(TOKEN_EXPIRATION_THRESHOLD) > status.SessionExpiration)
             {
                 // try silently re-login
                 await this.SignInSilent(profile.Name);
             }
 
             // after re-login get the current session again
-            whoami = await this.GetWhoAmI(profile.Name);
+            status = await this.GetStatus(profile.Name);
 
             // invoke required protected action
-            return await action(profile, whoami);
+            return await action(profile, status);
         }
 
         /// <summary>

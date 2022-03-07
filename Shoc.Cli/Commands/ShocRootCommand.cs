@@ -2,9 +2,9 @@
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.IO;
+using Shoc.Cli.Commands.Auth;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
-using Shoc.Cli.Commands.User;
 
 namespace Shoc.Cli.Commands
 {
@@ -20,7 +20,7 @@ namespace Shoc.Cli.Commands
         {
             // add command subtrees
             this.AddCommand(BuildProjectCommands());
-            this.AddCommand(BuildUserCommands());
+            this.AddCommand(BuildAuthCommands());
             this.AddCommand(BuildConfigCommands());
 
             // add default handler
@@ -40,7 +40,6 @@ namespace Shoc.Cli.Commands
             var command = new Command("project", "The project commands")
             {
                 new ProjectNewCommand(),
-                new ProjectConnectCommand(),
                 new ProjectListCommand()
             };
 
@@ -52,17 +51,17 @@ namespace Shoc.Cli.Commands
         }
 
         /// <summary>
-        /// Creates user commands subtree
+        /// Creates auth commands subtree
         /// </summary>
         /// <returns></returns>
-        private static Command BuildUserCommands()
+        private static Command BuildAuthCommands()
         {
             // a wrapper command for project commands
-            var command = new Command("user", "The user commands")
+            var command = new Command("auth", "The user authentication commands")
             {
-                new UserSigninCommand(),
-                new UserSignoutCommand(),
-                new UserWhoamiCommand()
+                new AuthSigninCommand(),
+                new AuthSignoutCommand(),
+                new AuthStatusCommand()
             };
             
             // return the wrapper command 

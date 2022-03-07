@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Imast.Ext.DiscoveryCore;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 using Shoc.ClientCore;
 using Shoc.Core;
 

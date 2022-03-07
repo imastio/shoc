@@ -1,4 +1,4 @@
-﻿namespace Shoc.Builder.Model
+﻿namespace Shoc.Builder.Model.Project
 {
     /// <summary>
     /// Create or update project model operation model
@@ -19,16 +19,6 @@
         /// The project directory
         /// </summary>
         public string Directory { get; set; }
-
-        /// <summary>
-        /// The build specification
-        /// </summary>
-        public string BuildSpec { get; set; }
-
-        /// <summary>
-        /// The run specification
-        /// </summary>
-        public string RunSpec { get; set; }
 
         /// <summary>
         /// The owner user of the project

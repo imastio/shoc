@@ -3,9 +3,9 @@
 namespace Shoc.ModelCore
 {
     /// <summary>
-    /// The build output spec
+    /// The run output spec
     /// </summary>
-    public class BuildOutputSpec
+    public class RunOutputSpec
     {
         /// <summary>
         /// The stdout file path

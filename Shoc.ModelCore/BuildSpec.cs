@@ -6,6 +6,11 @@
     public class BuildSpec
     {
         /// <summary>
+        /// The registry name 
+        /// </summary>
+        public string RegistryName { get; set; }
+
+        /// <summary>
         /// The base technology string
         /// </summary>
         public string Base { get; set; }
@@ -24,10 +29,5 @@
         /// The build input specification
         /// </summary>
         public BuildInputSpec Input { get; set; }
-
-        /// <summary>
-        /// The build output specification
-        /// </summary>
-        public BuildOutputSpec Output { get; set; }
     }
 }

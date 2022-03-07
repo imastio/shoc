@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.User
+namespace Shoc.Cli.Commands.Auth
 {
     /// <summary>
     /// The handler for the user sign out
     /// </summary>
-    public class UserSignoutCommandHandler : ShocCommandHandlerBase
+    public class AuthSignoutCommandHandler : ShocCommandHandlerBase
     {
         /// <summary>
         /// The authentication service
@@ -18,7 +18,7 @@ namespace Shoc.Cli.Commands.User
         /// Creates new instance of user sign-out command handler
         /// </summary>
         /// <param name="authService">The authentication service</param>
-        public UserSignoutCommandHandler(AuthService authService)
+        public AuthSignoutCommandHandler(AuthService authService)
         {
             this.authService = authService;
         }

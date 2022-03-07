@@ -28,6 +28,9 @@
     <None Update="Operations\DockerRegistry.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Operations\Package.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Operations\Project.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
