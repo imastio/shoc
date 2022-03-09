@@ -25,10 +25,18 @@
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetByName">
+    <SqlOperation Name="GetOwnedByPath">
       <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Name` = @Name;
+        SELECT * FROM `prj_projects` WHERE `Name` = @Name AND `Directory` = @Directory AND `OwnerId` = @OwnerId;
       </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetProjectVersions">
+
+      <TextCommand>
+        SELECT * FROM `prj_project_versions` WHERE `ProjectId` = @ProjectId;
+      </TextCommand>
+
     </SqlOperation>
 
     <SqlOperation Name="Create">
@@ -55,6 +63,20 @@
 
     </SqlOperation>
 
+    <SqlOperation Name="AssignVersion">
+
+      <TextCommand>
+        INSERT INTO `prj_project_versions` 
+        (`ProjectId`, `Version`, `PackageId`) 
+        VALUES 
+        (@ProjectId, @Version, @PackageId) 
+        ON DUPLICATE KEY UPDATE 
+        `PackageId` = @PackageId;
+
+      </TextCommand>
+
+    </SqlOperation>
+
     <SqlOperation Name="DeleteById">
 
       <TextCommand>
@@ -64,5 +86,15 @@
 
     </SqlOperation>
 
+    <SqlOperation Name="DeleteProjectVersion">
+
+      <TextCommand>
+        DELETE FROM `prj_project_versions` WHERE `ProjectId` = @ProjectId AND `Version` = @Version;
+      </TextCommand>
+
+    </SqlOperation>
+
+
   </OperationGroup>
+
 </DataOperations>

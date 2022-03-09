@@ -9,5 +9,10 @@
         /// The id of user
         /// </summary>
         public string Subject { get; set; }
+
+        /// <summary>
+        /// The role of subject
+        /// </summary>
+        public string Role { get; set; }
     }
 }

@@ -9,48 +9,31 @@
 
     <SqlOperation Name="GetAll">
       <TextCommand>
-        SELECT * FROM `prj_projects`;
+        SELECT * FROM `prj_packages`;
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetAllByOwner">
+    <SqlOperation Name="GetAllByProject">
       <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `OwnerId` = @OwnerId;
+        SELECT * FROM `prj_packages` WHERE `ProjectId` = @ProjectId;
       </TextCommand>
     </SqlOperation>
+
 
     <SqlOperation Name="GetById">
       <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetByName">
-      <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Name` = @Name;
+        SELECT * FROM `prj_packages` WHERE `Id` = @Id;
       </TextCommand>
     </SqlOperation>
 
     <SqlOperation Name="Create">
 
       <TextCommand>
-        INSERT INTO `prj_projects`
-        (`Id`, `Name`, `Directory`, `OwnerId`)
+        INSERT INTO `prj_packages`
+        (`Id`, `ProjectId`, `Status`, `RegistryId`, `ImageUri`, `BuildSpec`, `ImageRecipe`, `ListingChecksum`, `ImageChecksum`)
         VALUES
-        (@Id, @Name, @Directory, @OwnerId);
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
-
-    </SqlOperation>
-
-    <SqlOperation Name="Update">
-
-      <TextCommand>
-        UPDATE `prj_projects`
-        SET 
-        `Name` = @Name, `Directory` = @Directory, `OwnerId` = @OwnerId
-        WHERE `Id` = @Id;
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+        (@Id, @ProjectId, @Status, @RegistryId, @ImageUri, @BuildSpec, @ImageRecipe, @ListingChecksum, @ImageChecksum);
+        SELECT * FROM `prj_packages` WHERE `Id` = @Id;
       </TextCommand>
 
     </SqlOperation>
@@ -58,8 +41,8 @@
     <SqlOperation Name="DeleteById">
 
       <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-        DELETE FROM `prj_projects` WHERE `Id` = @Id;
+        SELECT * FROM `prj_packages` WHERE `Id` = @Id;
+        DELETE FROM `prj_packages` WHERE `Id` = @Id;
       </TextCommand>
 
     </SqlOperation>

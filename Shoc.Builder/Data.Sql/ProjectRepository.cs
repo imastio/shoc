@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Imast.DataOps.Api;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 using Shoc.Core;
 
 namespace Shoc.Builder.Data.Sql
@@ -60,13 +60,17 @@ namespace Shoc.Builder.Data.Sql
         /// <summary>
         /// Gets the project by name
         /// </summary>
+        /// <param name="directory">The target directory of the project</param>
         /// <param name="name">The name of project</param>
+        /// <param name="ownerId">The owner id</param>
         /// <returns></returns>
-        public Task<ProjectModel> GetByName(string name)
+        public Task<ProjectModel> GetOwnedByPath(string directory, string name, string ownerId)
         {
-            return this.dataOps.Connect().QueryFirst("Project", "GetByName").ExecuteAsync<ProjectModel>(new
+            return this.dataOps.Connect().QueryFirst("Project", "GetOwnedByPath").ExecuteAsync<ProjectModel>(new
             {
-                Name = name
+                Directory = directory,
+                Name = name,
+                OwnerId = ownerId
             });
         }
 

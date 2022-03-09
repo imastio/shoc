@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 using Shoc.Builder.Services;
 using Shoc.Identity.Model;
 

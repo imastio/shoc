@@ -101,6 +101,24 @@ namespace Shoc.Core
         }
 
         /// <summary>
+        /// Shortcut for creating not found error
+        /// </summary>
+        /// <param name="code">The code of error</param>
+        /// <param name="message">The error message</param>
+        /// <param name="payload">The payload</param>
+        /// <returns></returns>
+        public static ErrorDefinition NotFound(string code = null, string message = null, Dictionary<string, object> payload = null)
+        {
+            return new ErrorDefinition
+            {
+                Kind = ErrorKind.NotFound,
+                Code = code ?? Errors.NOT_FOUND_ERROR,
+                Message = message ?? string.Empty,
+                Payload = payload
+            };
+        }
+
+        /// <summary>
         /// Shortcut for creating validation error
         /// </summary>
         /// <param name="code">The code of error</param>

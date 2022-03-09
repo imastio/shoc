@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Shoc.Builder.Data;
 using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 using Shoc.Core;
 using Shoc.ModelCore;
 
@@ -118,7 +119,7 @@ namespace Shoc.Builder.Services
             }
 
             // try get by name
-            var existing = await this.projectRepository.GetByName(input.Name);
+            var existing = await this.projectRepository.GetOwnedByPath(input.Directory, input.Name, input.OwnerId);
 
             // check if name is already 
             if (existing != null)
@@ -175,7 +176,7 @@ namespace Shoc.Builder.Services
             }
 
             // try get by name
-            var existing = await this.projectRepository.GetByName(input.Name);
+            var existing = await this.projectRepository.GetOwnedByPath(input.Directory, input.Name, input.OwnerId);
 
             // check if name is already 
             if (existing != null)
