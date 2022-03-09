@@ -4,9 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Imast.Ext.Core;
 using Microsoft.AspNetCore.DataProtection;
+using Shoc.ApiCore;
 using Shoc.Builder.Data;
+using Shoc.Builder.Data.Model;
 using Shoc.Builder.Model;
+using Shoc.Builder.Model.Registry;
 using Shoc.Core;
+using Shoc.Identity.Model;
+using Shoc.ModelCore;
 
 namespace Shoc.Builder.Services
 {
@@ -39,28 +44,45 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Gets all the docker registry instances
         /// </summary>
+        /// <param name="principal">The requesting principal</param>
+        /// <param name="query">The query to lookup</param>
         /// <returns></returns>
-        public Task<IEnumerable<DockerRegistry>> GetAll()
+        public Task<IEnumerable<DockerRegistry>> GetBy(ShocPrincipal principal, DockerRegistryQuery query)
         {
-            return this.dockerRegistryRepository.GetAll();
+            // gets all the entries by owner
+            return this.dockerRegistryRepository.GetBy(query);
         }
 
         /// <summary>
         /// Gets the docker registry by id
         /// </summary>
+        /// <param name="principal">The current principal</param>
         /// <param name="id">The id of registry</param>
         /// <returns></returns>
-        public Task<DockerRegistry> GetById(string id)
+        public async Task<DockerRegistry> GetById(ShocPrincipal principal, string id)
         {
-            return this.dockerRegistryRepository.GetById(id);
+            // try load the result
+            var result = await this.dockerRegistryRepository.GetById(id);
+
+            // not found
+            if (result == null)
+            {
+                throw ErrorDefinition.NotFound().AsException();
+            }
+            
+            // require to be either administrator or owner
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject || result.Shared);
+
+            return result;
         }
 
         /// <summary>
         /// Creates a docker registry with given input
         /// </summary>
+        /// <param name="principal">The authenticated principal</param>
         /// <param name="input">The registry creation input</param>
         /// <returns></returns>
-        public Task<DockerRegistry> Create(CreateDockerRegistry input)
+        public Task<DockerRegistry> Create(ShocPrincipal principal, CreateDockerRegistry input)
         {
             // check if registry is missing
             if (string.IsNullOrWhiteSpace(input.RegistryUri))
@@ -108,11 +130,16 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Deletes the registry by given id
         /// </summary>
+        /// <param name="principal">The principal</param>
         /// <param name="id">The id of registry</param>
         /// <returns></returns>
-        public Task<DockerRegistry> DeleteById(string id)
+        public async Task<DockerRegistry> DeleteById(ShocPrincipal principal, string id)
         {
-            return this.dockerRegistryRepository.DeleteById(id);
+            // get the object by id
+            var result = await this.GetById(principal, id);
+            
+            // if object is available delete from repository
+            return await this.dockerRegistryRepository.DeleteById(result.Id);
         }
     }
 }

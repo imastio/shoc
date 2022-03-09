@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `bld_docker_registries` (
   `Name` varchar(100) NOT NULL,
   `OwnerId` varchar(100) DEFAULT NULL,
   `RegistryUri` varchar(500) NOT NULL,
+  `Shared` bit(1) NOT NULL DEFAULT b'0',
   `Email` text,
   `Username` text,
   `EncryptedPassword` blob,

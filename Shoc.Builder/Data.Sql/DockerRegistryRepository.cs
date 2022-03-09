@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Imast.DataOps.Api;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Registry;
 using Shoc.Core;
 
 namespace Shoc.Builder.Data.Sql
@@ -41,7 +41,7 @@ namespace Shoc.Builder.Data.Sql
         /// <returns></returns>
         public Task<DockerRegistry> GetById(string id)
         {
-            return this.dataOps.Connect().QueryFirst("DockerRegistry", "Create").ExecuteAsync<DockerRegistry>(new { Id = id });
+            return this.dataOps.Connect().QueryFirst("DockerRegistry", "GetById").ExecuteAsync<DockerRegistry>(new { Id = id });
         }
 
         /// <summary>

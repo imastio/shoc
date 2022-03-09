@@ -16,6 +16,11 @@
         Data,
 
         /// <summary>
+        /// The missing object 
+        /// </summary>
+        NotFound,
+
+        /// <summary>
         /// The validation error kind
         /// </summary>
         Validation,

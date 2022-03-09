@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Registry;
 using Shoc.Builder.Services;
-using Shoc.Identity.Model;
 
 namespace Shoc.Builder.Controllers
 {
@@ -15,7 +14,7 @@ namespace Shoc.Builder.Controllers
     [Route("api/docker-registries")]
     [ApiController]
     [ShocExceptionHandler]
-    [AuthorizeAnyRole(Roles.ADMIN)]
+    [AuthorizedSubject]
     public class DockerRegistriesController : ControllerBase
     {
         /// <summary>
@@ -39,7 +38,11 @@ namespace Shoc.Builder.Controllers
         [HttpGet]
         public Task<IEnumerable<DockerRegistry>> GetAll()
         {
-            return this.dockerRegistryService.GetAll();
+            // the request principal
+            var principal = this.HttpContext.GetShocPrincipal();
+
+            // get the entities by owner
+            return this.dockerRegistryService.GetAllByOwner(this.HttpContext.GetShocPrincipal(), principal.Subject);
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace Shoc.Builder.Controllers
         public async Task<ActionResult> GetById(string id)
         {
             // try get result
-            var result = await this.dockerRegistryService.GetById(id);
+            var result = await this.dockerRegistryService.GetById(this.HttpContext.GetShocPrincipal(), id);
 
             // no such an object
             if (result == null)
@@ -71,7 +74,7 @@ namespace Shoc.Builder.Controllers
         [HttpPost]
         public Task<DockerRegistry> Create([FromBody] CreateDockerRegistry input)
         {
-            return this.dockerRegistryService.Create(input);
+            return this.dockerRegistryService.Create(this.HttpContext.GetShocPrincipal(), input);
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace Shoc.Builder.Controllers
         [HttpDelete("{id}")]
         public Task<DockerRegistry> DeleteById(string id)
         {
-            return this.dockerRegistryService.DeleteById(id);
+            return this.dockerRegistryService.DeleteById(this.HttpContext.GetShocPrincipal(), id);
         }
     }
 }

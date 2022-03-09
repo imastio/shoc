@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Project;
 
 namespace Shoc.Builder.Data
 {
@@ -32,9 +32,11 @@ namespace Shoc.Builder.Data
         /// <summary>
         /// Gets the project by name
         /// </summary>
+        /// <param name="directory">The target directory of the project</param>
         /// <param name="name">The name of project</param>
+        /// <param name="ownerId">The owner id</param>
         /// <returns></returns>
-        Task<ProjectModel> GetByName(string name);
+        Task<ProjectModel> GetOwnedByPath(string directory, string name, string ownerId);
 
         /// <summary>
         /// Creates the project by given input

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shoc.Builder.Model;
+using Shoc.Builder.Model.Registry;
 
 namespace Shoc.Builder.Data
 {

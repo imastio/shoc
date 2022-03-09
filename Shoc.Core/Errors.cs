@@ -16,6 +16,11 @@
         public static readonly string DATA_ERROR = "DATA_ERROR";
 
         /// <summary>
+        /// The not found error
+        /// </summary>
+        public static readonly string NOT_FOUND_ERROR = "NOT_FOUND_ERROR";
+
+        /// <summary>
         /// The validation error
         /// </summary>
         public static readonly string VALIDATION_ERROR = "VALIDATION_ERROR";
