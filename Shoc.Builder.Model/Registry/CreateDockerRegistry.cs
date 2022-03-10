@@ -21,6 +21,11 @@
         public string OwnerId { get; set; }
 
         /// <summary>
+        /// The object is shared
+        /// </summary>
+        public bool? Shared { get; set; }
+
+        /// <summary>
         /// The registry uri value
         /// </summary>
         public string RegistryUri { get; set; }

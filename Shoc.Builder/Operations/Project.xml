@@ -13,21 +13,19 @@
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetAllByOwner">
+    <SqlOperation Name="GetBy">
       <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `OwnerId` = @OwnerId;
+        SELECT * FROM `prj_projects`
+        WHERE 1=1
+        {if:ByName {AND `Name` = @Name}
+        {if:ByDirectory {AND `Directory` = @Directory} {}}
+        {if:ByOwner {AND `OwnerId` = @OwnerId} {}};
       </TextCommand>
     </SqlOperation>
 
     <SqlOperation Name="GetById">
       <TextCommand>
         SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetOwnedByPath">
-      <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Name` = @Name AND `Directory` = @Directory AND `OwnerId` = @OwnerId;
       </TextCommand>
     </SqlOperation>
 
@@ -46,18 +44,6 @@
         (`Id`, `Name`, `Directory`, `OwnerId`)
         VALUES
         (@Id, @Name, @Directory, @OwnerId);
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
-
-    </SqlOperation>
-
-    <SqlOperation Name="Update">
-
-      <TextCommand>
-        UPDATE `prj_projects`
-        SET 
-        `Name` = @Name, `Directory` = @Directory, `OwnerId` = @OwnerId
-        WHERE `Id` = @Id;
         SELECT * FROM `prj_projects` WHERE `Id` = @Id;
       </TextCommand>
 

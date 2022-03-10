@@ -16,6 +16,13 @@ namespace Shoc.Builder.Data
         Task<IEnumerable<DockerRegistry>> GetAll();
 
         /// <summary>
+        /// Gets all the docker registry instances by query
+        /// </summary>
+        /// <param name="query">The lookup query</param>
+        /// <returns></returns>
+        Task<IEnumerable<DockerRegistry>> GetBy(DockerRegistryQuery query);
+
+        /// <summary>
         /// Gets the docker registry by id
         /// </summary>
         /// <param name="id">The id of registry</param>

@@ -35,13 +35,17 @@ namespace Shoc.Builder.Data.Sql
         }
 
         /// <summary>
-        /// Gets all projects for the owner
+        /// Gets all projects for the query
         /// </summary>
-        /// <param name="ownerId">The owner user id</param>
+        /// <param name="query">The project query</param>
         /// <returns></returns>
-        public Task<IEnumerable<ProjectModel>> GetAllByOwner(string ownerId)
+        public Task<IEnumerable<ProjectModel>> GetBy(ProjectQuery query)
         {
-            return this.dataOps.Connect().Query("Project", "GetAllByOwner").ExecuteAsync<ProjectModel>(new { OwnerId = ownerId });
+            return this.dataOps.Connect().Query("Project", "GetBy")
+                .WithBinding("ByName", query.Name != null)
+                .WithBinding("ByDirectory", query.Directory != null)
+                .WithBinding("ByOwner", query.OwnerId != null)
+                .ExecuteAsync<ProjectModel>(query);
         }
 
         /// <summary>
@@ -58,20 +62,13 @@ namespace Shoc.Builder.Data.Sql
         }
 
         /// <summary>
-        /// Gets the project by name
+        /// Gets the project versions
         /// </summary>
-        /// <param name="directory">The target directory of the project</param>
-        /// <param name="name">The name of project</param>
-        /// <param name="ownerId">The owner id</param>
+        /// <param name="id">The id of projects</param>
         /// <returns></returns>
-        public Task<ProjectModel> GetOwnedByPath(string directory, string name, string ownerId)
+        public Task<IEnumerable<ProjectVersion>> GetVersions(string id)
         {
-            return this.dataOps.Connect().QueryFirst("Project", "GetOwnedByPath").ExecuteAsync<ProjectModel>(new
-            {
-                Directory = directory,
-                Name = name,
-                OwnerId = ownerId
-            });
+            return this.dataOps.Connect().Query("Project", "GetProjectVersions").ExecuteAsync<ProjectVersion>();
         }
 
         /// <summary>
@@ -87,18 +84,7 @@ namespace Shoc.Builder.Data.Sql
             // add object to the database
             return this.dataOps.Connect().QueryFirst("Project", "Create").ExecuteAsync<ProjectModel>(input);
         }
-
-        /// <summary>
-        /// Updates the project by given input
-        /// </summary>
-        /// <param name="input">The project update input</param>
-        /// <returns></returns>
-        public Task<ProjectModel> Update(CreateUpdateProjectModel input)
-        {
-            // update object to the database
-            return this.dataOps.Connect().QueryFirst("Project", "Update").ExecuteAsync<ProjectModel>(input);
-        }
-
+        
         /// <summary>
         /// Deletes the project by id
         /// </summary>

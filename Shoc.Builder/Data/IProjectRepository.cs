@@ -16,11 +16,11 @@ namespace Shoc.Builder.Data
         Task<IEnumerable<ProjectModel>> GetAll();
 
         /// <summary>
-        /// Gets all projects for the owner
+        /// Gets all projects for the query
         /// </summary>
-        /// <param name="ownerId">The owner user id</param>
+        /// <param name="query">The project query</param>
         /// <returns></returns>
-        Task<IEnumerable<ProjectModel>> GetAllByOwner(string ownerId);
+        Task<IEnumerable<ProjectModel>> GetBy(ProjectQuery query);
 
         /// <summary>
         /// Gets the project by id
@@ -30,28 +30,19 @@ namespace Shoc.Builder.Data
         Task<ProjectModel> GetById(string id);
 
         /// <summary>
-        /// Gets the project by name
+        /// Gets the project versions
         /// </summary>
-        /// <param name="directory">The target directory of the project</param>
-        /// <param name="name">The name of project</param>
-        /// <param name="ownerId">The owner id</param>
+        /// <param name="id">The id of projects</param>
         /// <returns></returns>
-        Task<ProjectModel> GetOwnedByPath(string directory, string name, string ownerId);
-
+        Task<IEnumerable<ProjectVersion>> GetVersions(string id);
+        
         /// <summary>
         /// Creates the project by given input
         /// </summary>
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
         Task<ProjectModel> Create(CreateUpdateProjectModel input);
-
-        /// <summary>
-        /// Updates the project by given input
-        /// </summary>
-        /// <param name="input">The project update input</param>
-        /// <returns></returns>
-        Task<ProjectModel> Update(CreateUpdateProjectModel input);
-
+        
         /// <summary>
         /// Deletes the project by id
         /// </summary>

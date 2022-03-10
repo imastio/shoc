@@ -13,6 +13,16 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetBy">
+      <TextCommand>
+        SELECT * FROM `bld_docker_registries`
+        WHERE 1=1
+        {if:ByName {AND `Name` = @Name} {}}
+        {if:ByOwner {AND `OwnerId` = @OwnerId} {}}
+        {if:ByShared {AND `Shared` = @Shared} {}};
+      </TextCommand>
+    </SqlOperation>
+
     <SqlOperation Name="GetById">
       <TextCommand>
         SELECT * FROM `bld_docker_registries` WHERE `Id` = @Id;
@@ -23,9 +33,9 @@
 
       <TextCommand>
         INSERT INTO `bld_docker_registries`
-        (`Id`, `Name`, `OwnerId`, `RegistryUri`, `Email`, `Username`, `EncryptedPassword`)
+        (`Id`, `Name`, `OwnerId`, `Shared`, `RegistryUri`, `Email`, `Username`, `EncryptedPassword`)
         VALUES
-        (@Id, @Name, @OwnerId, @RegistryUri, @Email, @Username, @EncryptedPassword);
+        (@Id, @Name, @OwnerId, @Shared, @RegistryUri, @Email, @Username, @EncryptedPassword);
         SELECT * FROM `bld_docker_registries` WHERE `Id` = @Id;
       </TextCommand>
 
