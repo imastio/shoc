@@ -13,7 +13,7 @@ namespace Shoc.Cli.Services
         /// </summary>
         /// <param name="profile">The profile</param>
         /// <returns></returns>
-        public IDiscoveryClient GetDiscovery(ShocProfile profile)
+        public virtual IDiscoveryClient GetDiscovery(ShocProfile profile)
         {
             return new GatewayDiscoveryClient(profile.Api);
         }

@@ -42,7 +42,7 @@ namespace Shoc.Cli.Commands.Project
             var existing = await this.GetManifest();
 
             // do the operation authorized
-            var result = await this.authService.DoAuthorized(this.Profile, async (profile, me) => await this.clientService.Builder(profile).GetMyAllProjects(me.AccessToken));
+            var result = await this.authService.DoAuthorized(this.Profile, async (profile, me) => await this.clientService.Builder(profile).GetProjects(me.AccessToken));
 
             // print all the projects
             foreach (var project in result)

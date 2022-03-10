@@ -73,7 +73,7 @@ namespace Shoc.Cli.Commands.Project
             var result = await this.authService.DoAuthorized(this.Profile, async (profile, me) =>
             {
                 // use client service to create new project
-                var project = await this.clientService.Builder(profile).CreateMyProject(me.AccessToken,
+                var project = await this.clientService.Builder(profile).CreateProject(me.AccessToken,
                     new CreateUpdateProjectModel
                     {
                         Name = name,
