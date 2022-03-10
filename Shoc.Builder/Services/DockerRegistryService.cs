@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Imast.Ext.Core;
 using Microsoft.AspNetCore.DataProtection;
 using Shoc.ApiCore;
 using Shoc.Builder.Data;
-using Shoc.Builder.Data.Model;
 using Shoc.Builder.Model;
 using Shoc.Builder.Model.Registry;
 using Shoc.Core;
@@ -20,6 +21,11 @@ namespace Shoc.Builder.Services
     /// </summary>
     public class DockerRegistryService
     {
+        /// <summary>
+        /// The name validation regex
+        /// </summary>
+        private static readonly Regex NAME_REGEX = new("^[a-zA-Z0-9_]+$");
+
         /// <summary>
         /// The docker registry repository
         /// </summary>
@@ -49,6 +55,9 @@ namespace Shoc.Builder.Services
         /// <returns></returns>
         public Task<IEnumerable<DockerRegistry>> GetBy(ShocPrincipal principal, DockerRegistryQuery query)
         {
+            // require a proper access
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || principal.Subject == query.OwnerId);
+
             // gets all the entries by owner
             return this.dockerRegistryRepository.GetBy(query);
         }
@@ -71,8 +80,9 @@ namespace Shoc.Builder.Services
             }
             
             // require to be either administrator or owner
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject || result.Shared);
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
 
+            // the result
             return result;
         }
 
@@ -82,8 +92,29 @@ namespace Shoc.Builder.Services
         /// <param name="principal">The authenticated principal</param>
         /// <param name="input">The registry creation input</param>
         /// <returns></returns>
-        public Task<DockerRegistry> Create(ShocPrincipal principal, CreateDockerRegistry input)
+        public async Task<DockerRegistry> Create(ShocPrincipal principal, CreateDockerRegistry input)
         {
+            // set a owner id as a authenticated subject
+            input.OwnerId ??= principal.Subject;
+
+            // the registry is not shared by default
+            input.Shared ??= false;
+
+            // make sure proper owner id is set
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || input.OwnerId == principal.Subject);
+
+            // name should be given
+            if (string.IsNullOrEmpty(input.Name))
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.INVALID_NAME).AsException();
+            }
+
+            // check if name does not pass the pattern
+            if (!NAME_REGEX.IsMatch(input.Name))
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.INVALID_NAME).AsException();
+            }
+
             // check if registry is missing
             if (string.IsNullOrWhiteSpace(input.RegistryUri))
             {
@@ -123,8 +154,21 @@ namespace Shoc.Builder.Services
                 input.EncryptedPassword = protector.Protect(Encoding.UTF8.GetBytes(input.PasswordPlaintext));
             }
 
+            // try load an existing item with the name
+            var existing = await this.dockerRegistryRepository.GetBy(new DockerRegistryQuery
+            {
+                OwnerId = input.OwnerId,
+                Name = input.Name
+            });
+
+            // there is an object with the name
+            if (existing.Any())
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.EXISTING_NAME).AsException();
+            }
+
             // create the registry
-            return this.dockerRegistryRepository.Create(input);
+            return await this.dockerRegistryRepository.Create(input);
         }
 
         /// <summary>
@@ -137,7 +181,10 @@ namespace Shoc.Builder.Services
         {
             // get the object by id
             var result = await this.GetById(principal, id);
-            
+
+            // assure the access (administrator or the owner)
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+
             // if object is available delete from repository
             return await this.dockerRegistryRepository.DeleteById(result.Id);
         }

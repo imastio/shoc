@@ -35,6 +35,20 @@ namespace Shoc.Builder.Data.Sql
         }
 
         /// <summary>
+        /// Gets all the docker registry instances by query
+        /// </summary>
+        /// <param name="query">The lookup query</param>
+        /// <returns></returns>
+        public Task<IEnumerable<DockerRegistry>> GetBy(DockerRegistryQuery query)
+        {
+            return this.dataOps.Connect().Query("DockerRegistry", "GetBy")
+                .WithBinding("ByName", query.Name != null)
+                .WithBinding("ByOwner", query.OwnerId != null)
+                .WithBinding("ByShared", query.Shared != null)
+                .ExecuteAsync<DockerRegistry>(query);
+        }
+
+        /// <summary>
         /// Gets the docker registry by id
         /// </summary>
         /// <param name="id">The id of registry</param>

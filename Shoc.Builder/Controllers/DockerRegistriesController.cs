@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Imast.Ext.Core;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
@@ -34,15 +35,22 @@ namespace Shoc.Builder.Controllers
         /// <summary>
         /// Gets all the objects
         /// </summary>
+        /// <param name="all">Indicates if all should be considered</param>
+        /// <param name="owner">The owner of the registry</param>
+        /// <param name="name">The name of the registry</param>
         /// <returns></returns>
         [HttpGet]
-        public Task<IEnumerable<DockerRegistry>> GetAll()
+        public Task<IEnumerable<DockerRegistry>> GetAll([FromQuery] bool all = false, [FromQuery] string owner = null, [FromQuery] string name = null)
         {
             // the request principal
             var principal = this.HttpContext.GetShocPrincipal();
 
             // get the entities by owner
-            return this.dockerRegistryService.GetAllByOwner(this.HttpContext.GetShocPrincipal(), principal.Subject);
+            return this.dockerRegistryService.GetBy(principal, new DockerRegistryQuery
+            {
+                OwnerId = all ? null : owner.OnBlank(principal.Subject),
+                Name = name
+            });
         }
 
         /// <summary>
@@ -51,19 +59,10 @@ namespace Shoc.Builder.Controllers
         /// <param name="id">The id of target object</param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(string id)
+        public Task<DockerRegistry> GetById(string id)
         {
             // try get result
-            var result = await this.dockerRegistryService.GetById(this.HttpContext.GetShocPrincipal(), id);
-
-            // no such an object
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            // return found object
-            return Ok(result);
+            return this.dockerRegistryService.GetById(this.HttpContext.GetShocPrincipal(), id);
         }
 
         /// <summary>

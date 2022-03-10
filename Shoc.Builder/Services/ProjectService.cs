@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Shoc.ApiCore;
 using Shoc.Builder.Data;
 using Shoc.Builder.Model;
 using Shoc.Builder.Model.Project;
 using Shoc.Core;
+using Shoc.Identity.Model;
 using Shoc.ModelCore;
 
 namespace Shoc.Builder.Services
@@ -45,32 +47,18 @@ namespace Shoc.Builder.Services
         }
 
         /// <summary>
-        /// Gets all projects
-        /// </summary>
-        /// <returns></returns>
-        public Task<IEnumerable<ProjectModel>> GetAll()
-        {
-            return this.projectRepository.GetAll();
-        }
-
-        /// <summary>
-        /// Gets all projects for the owner
+        /// Gets all projects for the query
         /// </summary>
         /// <param name="principal">The authenticated principal</param>
+        /// <param name="query">The lookup query</param>
         /// <returns></returns>
-        public Task<IEnumerable<ProjectModel>> GetAllOwned(ShocPrincipal principal)
+        public Task<IEnumerable<ProjectModel>> GetBy(ShocPrincipal principal, ProjectQuery query)
         {
-            return this.projectRepository.GetAllByOwner(principal.Subject);
-        }
+            // require a proper access
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || principal.Subject == query.OwnerId);
 
-        /// <summary>
-        /// Gets the project by id
-        /// </summary>
-        /// <param name="id">The id of project</param>
-        /// <returns></returns>
-        public Task<ProjectModel> GetById(string id)
-        {
-            return this.projectRepository.GetById(id);
+            // get by query
+            return this.projectRepository.GetBy(query);
         }
 
         /// <summary>
@@ -79,35 +67,55 @@ namespace Shoc.Builder.Services
         /// <param name="principal">The authenticated principal</param>
         /// <param name="id">The id of project</param>
         /// <returns></returns>
-        public async Task<ProjectModel> GetOwnedById(ShocPrincipal principal, string id)
+        public async Task<ProjectModel> GetById(ShocPrincipal principal, string id)
         {
-            // try load project
-            var project = await this.projectRepository.GetById(id);
+            // try load the result
+            var result = await this.projectRepository.GetById(id);
 
-            // no such object
-            if (project == null)
+            // not found
+            if (result == null)
             {
-                return null;
+                throw ErrorDefinition.NotFound().AsException();
             }
 
-            // if not the requesting owner report does not have access
-            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
-            {
-                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
-            }
+            // require to be either administrator or owner
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
 
-            return project;
+            // the result
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the versions of the given project
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="id">The project id</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ProjectVersion>> GetVersions(ShocPrincipal principal, string id)
+        {
+            // try get the project
+            var project = await this.GetById(principal, id);
+
+            // get the versions of the project
+            return await this.projectRepository.GetVersions(project.Id);
         }
 
         /// <summary>
         /// Creates the project by given input
         /// </summary>
+        /// <param name="principal">The current principal</param>
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
-        public async Task<ProjectModel> Create(CreateUpdateProjectModel input)
+        public async Task<ProjectModel> Create(ShocPrincipal principal, CreateUpdateProjectModel input)
         {
             // generate directory if missing
             input.Directory ??= DEFAULT_DIR;
+
+            // assign default owner if not assigned yet
+            input.OwnerId ??= principal.Subject;
+
+            // make sure proper owner id is set
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || input.OwnerId == principal.Subject);
 
             // do basic validation
             var validation = ValidateCreateUpdateInput(input);
@@ -118,11 +126,16 @@ namespace Shoc.Builder.Services
                 throw new ShocException(validation);
             }
 
-            // try get by name
-            var existing = await this.projectRepository.GetOwnedByPath(input.Directory, input.Name, input.OwnerId);
+            // try get by name and directory
+            var existing = await this.projectRepository.GetBy(new ProjectQuery
+            {
+                Name = input.Name,
+                Directory = input.Directory,
+                OwnerId = input.OwnerId
+            });
 
             // check if name is already 
-            if (existing != null)
+            if (existing.Any())
             {
                 throw ErrorDefinition.Validation(BuilderErrors.EXISTING_NAME).AsException();
             }
@@ -132,126 +145,22 @@ namespace Shoc.Builder.Services
         }
 
         /// <summary>
-        /// Creates the project by given input
-        /// </summary>
-        /// <param name="principal">The authenticated principal</param>
-        /// <param name="input">The project creation input</param>
-        /// <returns></returns>
-        public Task<ProjectModel> CreateOwned(ShocPrincipal principal, CreateUpdateProjectModel input)
-        {
-            // the authenticate principal is the owner
-            input.OwnerId = principal.Subject;
-
-            // create new instance
-            return this.Create(input);
-        }
-
-        /// <summary>
-        /// Updates the project by given input
-        /// </summary>
-        /// <param name="id">The id of entity to update</param>
-        /// <param name="input">The project update input</param>
-        /// <returns></returns>
-        public async Task<ProjectModel> Update(string id, CreateUpdateProjectModel input)
-        {
-            // consider given id
-            input.Id = id;
-
-            // generate directory if missing
-            input.Directory ??= DEFAULT_DIR;
-            
-            // make sure id is given
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                throw ErrorDefinition.Validation(BuilderErrors.INVALID_PROJECT).AsException();
-            }
-
-            // do basic validation
-            var validation = ValidateCreateUpdateInput(input);
-
-            // make sure valid
-            if (validation.Count > 0)
-            {
-                throw new ShocException(validation);
-            }
-
-            // try get by name
-            var existing = await this.projectRepository.GetOwnedByPath(input.Directory, input.Name, input.OwnerId);
-
-            // check if name is already 
-            if (existing != null)
-            {
-                throw ErrorDefinition.Validation(BuilderErrors.EXISTING_NAME).AsException();
-            }
-
-            // initiate the update
-            return await this.projectRepository.Update(input);
-        }
-
-        /// <summary>
-        /// Updates the project by given input
-        /// </summary>
-        /// <param name="principal">The authenticated principal</param>
-        /// <param name="id">The id of entity to update</param>
-        /// <param name="input">The project update input</param>
-        /// <returns></returns>
-        public async Task<ProjectModel> UpdateOwned(ShocPrincipal principal, string id, CreateUpdateProjectModel input)
-        {
-            // try load project
-            var project = await this.projectRepository.GetById(id);
-
-            // no such object
-            if (project == null)
-            {
-                return null;
-            }
-
-            // if not the requesting owner report does not have access
-            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
-            {
-                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
-            }
-
-            // start updating 
-            return await this.Update(id, input);
-        }
-
-        /// <summary>
         /// Deletes the project by id
         /// </summary>
+        /// <param name="principal">The current principal</param>
         /// <param name="id">The id of project to delete</param>
         /// <returns></returns>
-        public Task<ProjectModel> DeleteById(string id)
+        public async Task<ProjectModel> DeleteById(ShocPrincipal principal, string id)
         {
-            return this.projectRepository.DeleteById(id);
-        }
+            // get the object by id
+            var result = await this.GetById(principal, id);
 
-        /// <summary>
-        /// Deletes the project by id
-        /// </summary>
-        /// <param name="principal">The authenticated principal</param>
-        /// <param name="id">The id of project to delete</param>
-        /// <returns></returns>
-        public async Task<ProjectModel> DeleteOwnedById(ShocPrincipal principal, string id)
-        {
-            // try load project
-            var project = await this.projectRepository.GetById(id);
-
-            // no such object
-            if (project == null)
-            {
-                return null;
-            }
-
-            // if not the requesting owner report does not have access
-            if (!string.Equals(principal.Subject, project.OwnerId, StringComparison.OrdinalIgnoreCase))
-            {
-                throw ErrorDefinition.Access(BuilderErrors.ACCESS_DENIED).AsException();
-            }
+            // assure the access (administrator or the owner)
+            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
 
             return await this.projectRepository.DeleteById(id);
         }
-
+        
         /// <summary>
         /// Validate the create or update input data
         /// </summary>

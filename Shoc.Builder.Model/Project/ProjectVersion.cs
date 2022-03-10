@@ -1,9 +1,9 @@
-﻿namespace Shoc.Builder.Model.Package
+﻿namespace Shoc.Builder.Model.Project
 {
     /// <summary>
     /// The package version definition
     /// </summary>
-    public class PackageVersion
+    public class ProjectVersion
     {
         /// <summary>
         /// The project id
