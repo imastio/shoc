@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Shoc.Core;
@@ -22,18 +23,33 @@ namespace Shoc.ApiCore
             var shocException = exception as ShocException;
 
             // unknown error
-            var errors = new List<ErrorDefinition> { ErrorDefinition.Unknown(Errors.UNKNOWN_ERROR) };
+            var errors = new List<ErrorDefinition> { ErrorDefinition.Unknown(Errors.UNKNOWN_ERROR, exception.Message) };
             
             // if shoc exception consider getting internal errors
             if (shocException != null)
             {
                 errors = shocException.Errors;
             }
-            
+
+            // the error kind
+            var errorKind = shocException?.Errors?.FirstOrDefault()?.Kind;
+
+            // deduce the code
+            var statusCode = errorKind switch
+            {
+                ErrorKind.Unknown => 400,
+                ErrorKind.Data => 404,
+                ErrorKind.NotFound => 404,
+                ErrorKind.Validation => 400,
+                ErrorKind.Access => 403,
+                null => 500,
+                _ => 500
+            };
+
             // build a result
             var result = new JsonResult(new AggregateErrorDefinition { Errors = errors })
             {
-                StatusCode = shocException == null ? 500 : 400
+                StatusCode = statusCode
             };
                 
             // return in the context

@@ -17,9 +17,9 @@
       <TextCommand>
         SELECT * FROM `prj_projects`
         WHERE 1=1
-        {if:ByName {AND `Name` = @Name}
-        {if:ByDirectory {AND `Directory` = @Directory} {}}
-        {if:ByOwner {AND `OwnerId` = @OwnerId} {}};
+        {if:ByName {AND `Name` = @Name} else {}}
+        {if:ByDirectory {AND `Directory` = @Directory} else {}}
+        {if:ByOwner {AND `OwnerId` = @OwnerId} else {}};
       </TextCommand>
     </SqlOperation>
 
