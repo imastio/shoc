@@ -19,10 +19,10 @@
       <TextCommand ExpectedResult="Table">
         SELECT * FROM `idp_persisted_grants`
         WHERE 1=1
-        {if:BySession {and `SessionId` = @SessionId} {}}
-        {if:ByClient {and `ClientId` = @ClientId} {}}
-        {if:BySubject {and `SubjectId` = @SubjectId} {}}
-        {if:ByType {and `Type` = @Type} {}};
+        {if:BySession {and `SessionId` = @SessionId} else {}}
+        {if:ByClient {and `ClientId` = @ClientId} else {}}
+        {if:BySubject {and `SubjectId` = @SubjectId} else {}}
+        {if:ByType {and `Type` = @Type} else {}};
       </TextCommand>
 
     </SqlOperation>
@@ -61,10 +61,10 @@
       <TextCommand ExpectedResult="RowCount">
         DELETE FROM `idp_persisted_grants`
         WHERE 1=1
-        {if:BySession {and `SessionId` = @SessionId} {}}
-        {if:ByClient {and `ClientId` = @ClientId} {}}
-        {if:BySubject {and `SubjectId` = @SubjectId} {}}
-        {if:ByType {and `Type` = @Type} {}};
+        {if:BySession {and `SessionId` = @SessionId} else {}}
+        {if:ByClient {and `ClientId` = @ClientId} else {}}
+        {if:BySubject {and `SubjectId` = @SubjectId} else {}}
+        {if:ByType {and `Type` = @Type} else {}};
       </TextCommand>
 
     </SqlOperation>

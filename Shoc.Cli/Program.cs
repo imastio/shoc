@@ -106,7 +106,11 @@ namespace Shoc.Cli
             // print errors
             foreach (var error in errors)
             {
-                Console.Error.WriteLine($"{error.Code}: {error.Message}");
+                // build message
+                var message = string.IsNullOrWhiteSpace(error.Message) ? error.Code : error.Message;
+
+                // print error message
+                Console.Error.WriteLine($"{message}");
             }
 
             // reset the color
