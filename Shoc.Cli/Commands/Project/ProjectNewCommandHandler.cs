@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Builder.Model.Project;
@@ -30,9 +31,9 @@ namespace Shoc.Cli.Commands.Project
         public string Name { get; set; }
 
         /// <summary>
-        /// Allows overwriting in case of existing manifest
+        /// Allows initializing if manifest is missing
         /// </summary>
-        public bool Overwrite { get; set; }
+        public bool Init { get; set; }
 
         /// <summary>
         /// Creates new instance of command handler
@@ -52,70 +53,78 @@ namespace Shoc.Cli.Commands.Project
         /// <returns></returns>
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
-            // get the project name
-            var name = this.Name ?? this.Directory.Name;
-
-            // remove unsafe characters and replace with underscore
-            name = name.Replace(".", "_")
-                .Replace(" ", "_")
-                .Replace("-", "_");
-
             // try get existing manifest
-            var existing = await this.GetManifest();
+            var manifest = await this.GetManifest();
 
-            // if already exists and no overwrite is allowed raise an error
-            if (existing != null && !this.Overwrite)
+            // manifest does not exist but could be initialized
+            if (manifest == null && this.Init)
             {
-                throw ErrorDefinition.Validation(CliErrors.EXISTING_MANIFEST, "The manifest already exists. Try apply --overwrite to save it anyways.").AsException();
+                manifest = await this.SaveManifest(this.InitialManifest());
+            }
+
+            // make sure manifest exists
+            if (manifest == null)
+            {
+                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST, "The manifest is missing. Try adding --init option to create new one.").AsException();
             }
 
             // do the operation authorized
             var result = await this.authService.DoAuthorized(this.Profile, async (profile, me) =>
             {
-                // use client service to create new project
-                var project = await this.clientService.Builder(profile).CreateProject(me.AccessToken,
-                    new CreateUpdateProjectModel
-                    {
-                        Name = name,
-                        Directory = "/",
-                        OwnerId = me.Id
-                    });
-
-                // create a manifest
-                return new ShocManifest
+                // the project to create
+                var project = new CreateProjectModel
                 {
-                    Name = project.Name,
-                    Directory = project.Directory,
-                    Build = new BuildSpec
-                    {
-                        Base = string.Empty,
-                        User = string.Empty,
-                        Hooks = new BuildHooksSpec
-                        {
-                            BeforePackage = new List<string>()
-                        },
-                        Input = new BuildInputSpec
-                        {
-                            Copy = new List<FileCopySpec>()
-                        }
-                    },
-                    Run = new RunSpec
-                    {
-                        Output = new RunOutputSpec
-                        {
-                            StdOut = string.Empty,
-                            StdErr = string.Empty,
-                            RequiredFiles = new List<string>()
-                        },
-                        Requests = new RunResourcesSpec()
-                    }
+                    Name = manifest.Name,
+                    Directory = manifest.Directory,
+                    OwnerId = me.Id
                 };
+                return await this.clientService.Builder(profile).CreateProject(me.AccessToken, project);
             });
-
-            // save the result
-            await this.SaveManifest(result);
-
+            
+            Console.WriteLine($"The project {result.Name} was created in directory {result.Directory}");
             return 0;
+        }
+
+        /// <summary>
+        /// Generate an initial manifest file
+        /// </summary>
+        /// <returns></returns>
+        private ShocManifest InitialManifest()
+        {
+            // get the project name
+            var name = this.Name ?? this.Directory.Name;
+
+            // remove unsafe characters and replace with underscore
+            name = name.Replace(".", "_").Replace(" ", "_");
+
+            return new ShocManifest
+            {
+                Name = name,
+                Directory = "/",
+                Build = new BuildSpec
+                {
+                    Base = string.Empty,
+                    User = string.Empty,
+                    Hooks = new BuildHooksSpec
+                    {
+                        BeforePackage = new List<string>()
+                    },
+                    Input = new BuildInputSpec
+                    {
+                        Copy = new List<FileCopySpec>()
+                    }
+                },
+                Run = new RunSpec
+                {
+                    Output = new RunOutputSpec
+                    {
+                        StdOut = string.Empty,
+                        StdErr = string.Empty,
+                        RequiredFiles = new List<string>()
+                    },
+                    Requests = new RunResourcesSpec()
+                }
+            };
         }
     }
 }

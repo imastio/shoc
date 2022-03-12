@@ -84,7 +84,7 @@ namespace Shoc.Builder.Controllers
         /// <param name="input">The project input</param>
         /// <returns></returns>
         [HttpPost]
-        public Task<ProjectModel> Create([FromBody] CreateUpdateProjectModel input)
+        public Task<ProjectModel> Create([FromBody] CreateProjectModel input)
         {
             return this.projectService.Create(this.HttpContext.GetShocPrincipal(), input);
         }

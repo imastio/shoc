@@ -106,7 +106,7 @@ namespace Shoc.Builder.Services
         /// <param name="principal">The current principal</param>
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
-        public async Task<ProjectModel> Create(ShocPrincipal principal, CreateUpdateProjectModel input)
+        public async Task<ProjectModel> Create(ShocPrincipal principal, CreateProjectModel input)
         {
             // generate directory if missing
             input.Directory ??= DEFAULT_DIR;
@@ -166,7 +166,7 @@ namespace Shoc.Builder.Services
         /// </summary>
         /// <param name="input">The input to validate</param>
         /// <returns></returns>
-        private static List<ErrorDefinition> ValidateCreateUpdateInput(CreateUpdateProjectModel input)
+        private static List<ErrorDefinition> ValidateCreateUpdateInput(CreateProjectModel input)
         {
             // validation result
             var result = new List<ErrorDefinition>();

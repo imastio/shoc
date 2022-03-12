@@ -76,7 +76,7 @@ namespace Shoc.Builder.Data.Sql
         /// </summary>
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
-        public Task<ProjectModel> Create(CreateUpdateProjectModel input)
+        public Task<ProjectModel> Create(CreateProjectModel input)
         {
             // generate id if necessary
             input.Id ??= StdIdGenerator.Next(BuilderObjects.PROJECT)?.ToLowerInvariant();

@@ -26,9 +26,9 @@
         public const string NOT_LOGGED_IN = "CLI_NOT_LOGGED_IN";
 
         /// <summary>
-        /// The manifest already exists
+        /// The manifest is missing
         /// </summary>
-        public const string EXISTING_MANIFEST = "CLI_EXISTING_MANIFEST";
+        public const string MISSING_MANIFEST = "CLI_MISSING_MANIFEST";
 
         /// <summary>
         /// The unknown error
