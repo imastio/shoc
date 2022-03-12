@@ -20,12 +20,12 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// The directory validation regex
         /// </summary>
-        private static readonly Regex DIR_REGEX = new("^(\\/[A-Za-z0-9_]+)*\\/$");
+        private static readonly Regex DIR_REGEX = new("^(\\/[A-Za-z0-9_-]+)*\\/$");
 
         /// <summary>
         /// The name validation regex
         /// </summary>
-        private static readonly Regex NAME_REGEX = new("^[a-zA-Z0-9_]+$");
+        private static readonly Regex NAME_REGEX = new("^[a-zA-Z0-9_-]+$");
 
         /// <summary>
         /// The default directory

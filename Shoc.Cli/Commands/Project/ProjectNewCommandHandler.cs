@@ -16,16 +16,6 @@ namespace Shoc.Cli.Commands.Project
     public class ProjectNewCommandHandler : ProjectCommandHandlerBase
     {
         /// <summary>
-        /// The client service
-        /// </summary>
-        private readonly ClientService clientService;
-
-        /// <summary>
-        /// The authentication service
-        /// </summary>
-        private readonly AuthService authService;
-
-        /// <summary>
         /// The given project name
         /// </summary>
         public string Name { get; set; }
@@ -40,10 +30,8 @@ namespace Shoc.Cli.Commands.Project
         /// </summary>
         /// <param name="clientService">The client service</param>
         /// <param name="authService">The auth service</param>
-        public ProjectNewCommandHandler(ClientService clientService, AuthService authService)
+        public ProjectNewCommandHandler(ClientService clientService, AuthService authService) : base(clientService, authService)
         {
-            this.clientService = clientService;
-            this.authService = authService;
         }
 
         /// <summary>

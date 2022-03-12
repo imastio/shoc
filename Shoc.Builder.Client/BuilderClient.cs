@@ -110,5 +110,26 @@ namespace Shoc.Builder.Client
             // get the result
             return await response.Map<ProjectModel>();
         }
+        
+        /// <summary>
+        /// Deletes the project by id
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="id">The id of project</param>
+        /// <returns></returns>
+        public async Task<ProjectModel> DeleteProjectById(string token, string id)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{id}");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Delete, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<ProjectModel>();
+        }
     }
 }
