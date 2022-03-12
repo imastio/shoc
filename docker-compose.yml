@@ -5,8 +5,6 @@ volumes:
     name: "shoc-database-sql-volume"
   shoc-dind-data-volume:
     name: "shoc-dind-data-volume"
-  shoc-docker-registry-volume:
-    name: "shoc-docker-registry-volume"  
 
 networks:
   shoc-network:
@@ -28,20 +26,6 @@ services:
     volumes:
       - shoc-database-sql-volume:/var/lib/mysql 
       
-  shoc-docker-registry:
-    image: shoc-docker-registry:latest
-    restart: always
-    build: ./Shoc.Docker.Registry
-    container_name: shoc-docker-registry
-    env_file: 
-      - ./env/shoc-docker-registry.env
-    ports:
-      - '11004:11004'
-    networks:
-      - shoc-network
-    volumes:
-      - shoc-docker-registry-volume:/var/lib/registry
-
   shoc-dind:
     image: shoc-dind:latest
     build: ./Shoc.Dind
@@ -65,7 +49,6 @@ services:
       - ./env/ref-api-discovery.env
       - ./env/ref-database-sql.env
       - ./env/ref-dind.env
-      - ./env/ref-docker-registry.env
       - ./env/shoc-builder.env
     ports:
       - '11006:11006'
