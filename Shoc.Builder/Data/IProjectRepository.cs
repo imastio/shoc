@@ -41,7 +41,7 @@ namespace Shoc.Builder.Data
         /// </summary>
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
-        Task<ProjectModel> Create(CreateUpdateProjectModel input);
+        Task<ProjectModel> Create(CreateProjectModel input);
         
         /// <summary>
         /// Deletes the project by id

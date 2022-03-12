@@ -96,7 +96,7 @@ namespace Shoc.Builder.Client
         /// <param name="token">The access token</param>
         /// <param name="input">The input to create</param>
         /// <returns></returns>
-        public async Task<ProjectModel> CreateProject(string token, CreateUpdateProjectModel input)
+        public async Task<ProjectModel> CreateProject(string token, CreateProjectModel input)
         {
             // the url of api
             var url = await this.GetApiUrl("api/projects");
