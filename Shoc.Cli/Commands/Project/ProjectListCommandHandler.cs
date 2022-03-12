@@ -10,25 +10,14 @@ namespace Shoc.Cli.Commands.Project
     /// </summary>
     public class ProjectListCommandHandler : ProjectCommandHandlerBase
     {
-        /// <summary>
-        /// The client service
-        /// </summary>
-        private readonly ClientService clientService;
-
-        /// <summary>
-        /// The authentication service
-        /// </summary>
-        private readonly AuthService authService;
         
         /// <summary>
         /// Creates new instance of command handler
         /// </summary>
         /// <param name="clientService">The client service</param>
         /// <param name="authService">The auth service</param>
-        public ProjectListCommandHandler(ClientService clientService, AuthService authService)
+        public ProjectListCommandHandler(ClientService clientService, AuthService authService) : base(clientService, authService)
         {
-            this.clientService = clientService;
-            this.authService = authService;
         }
 
         /// <summary>

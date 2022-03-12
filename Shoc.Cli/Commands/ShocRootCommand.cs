@@ -40,7 +40,8 @@ namespace Shoc.Cli.Commands
             var command = new Command("project", "The project commands")
             {
                 new ProjectNewCommand(),
-                new ProjectListCommand()
+                new ProjectListCommand(),
+                new ProjectDeleteCommand()
             };
 
             // add directory as an option to all commands

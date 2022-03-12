@@ -29,7 +29,12 @@
         /// The manifest is missing
         /// </summary>
         public const string MISSING_MANIFEST = "CLI_MISSING_MANIFEST";
-
+        
+        /// <summary>
+        /// The project is missing
+        /// </summary>
+        public const string MISSING_PROJECT = "CLI_MISSING_PROJECT";
+        
         /// <summary>
         /// The unknown error
         /// </summary>
