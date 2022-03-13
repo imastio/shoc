@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
-using Shoc.Builder.Model.Project;
-using Shoc.Cli.Model;
 using Shoc.Cli.Services;
-using Shoc.Core;
-using Shoc.ModelCore;
 
 namespace Shoc.Cli.Commands.Project
 {
