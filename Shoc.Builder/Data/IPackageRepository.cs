@@ -1,0 +1,46 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Shoc.Builder.Model.Package;
+
+namespace Shoc.Builder.Data
+{
+    /// <summary>
+    /// The package repository interface
+    /// </summary>
+    public interface IPackageRepository
+    {
+        /// <summary>
+        /// Gets all the packages
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<ShocPackage>> GetAll();
+
+        /// <summary>
+        /// Gets all the packages for the given query
+        /// </summary>
+        /// <param name="query">The query to filter with</param>
+        /// <returns></returns>
+        Task<IEnumerable<ShocPackage>> GetBy(PackageQuery query);
+
+        /// <summary>
+        /// Gets the package by given id
+        /// </summary>
+        /// <param name="id">The package id</param>
+        /// <returns></returns>
+        Task<ShocPackage> GetById(string id);
+
+        /// <summary>
+        /// Creates a new package with given input
+        /// </summary>
+        /// <param name="input">The package creation input</param>
+        /// <returns></returns>
+        Task<ShocPackage> Create(CreatePackageInput input);
+
+        /// <summary>
+        /// Deletes the package by given id
+        /// </summary>
+        /// <param name="id">The package id</param>
+        /// <returns></returns>
+        Task<ShocPackage> DeleteById(string id);
+    }
+}

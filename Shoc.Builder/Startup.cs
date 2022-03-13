@@ -54,6 +54,7 @@ namespace Shoc.Builder
             services.AddSingleton<DockerRegistryService>();
             services.AddSingleton<EngineService>();
             services.AddSingleton<ProjectService>();
+            services.AddSingleton<PackageService>();
         }
 
         /// <summary>

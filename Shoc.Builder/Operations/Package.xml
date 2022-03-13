@@ -13,9 +13,12 @@
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetAllByProject">
+    <SqlOperation Name="GetBy">
       <TextCommand>
-        SELECT * FROM `prj_packages` WHERE `ProjectId` = @ProjectId;
+        SELECT * FROM `prj_packages`
+        WHERE 1=1
+        {if:ByListingChecksum {AND `ListingChecksum` = @ListingChecksum} else {}}
+        {if:ByProject {AND `ProjectId` = @ProjectId} else {}};
       </TextCommand>
     </SqlOperation>
 

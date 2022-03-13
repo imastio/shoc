@@ -9,7 +9,12 @@
         /// The project object
         /// </summary>
         public const string PROJECT = "prj";
-        
+
+        /// <summary>
+        /// The package object
+        /// </summary>
+        public const string PACKAGE = "pkg";
+
         /// <summary>
         /// The docker registry object
         /// </summary>

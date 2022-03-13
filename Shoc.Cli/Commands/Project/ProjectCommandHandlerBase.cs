@@ -66,6 +66,24 @@ namespace Shoc.Cli.Commands.Project
         }
 
         /// <summary>
+        /// Gets the manifest if exists
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<ShocManifest> RequireManifest()
+        {
+            // try get manifest
+            var manifest = await this.GetManifest();
+
+            // make sure manifest exists
+            if (manifest == null)
+            {
+                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST, "The manifest is missing.").AsException();
+            }
+
+            return manifest;
+        }
+
+        /// <summary>
         /// Saves the given manifest to the project file
         /// </summary>
         /// <param name="manifest">The manifest to save</param>
@@ -89,14 +107,8 @@ namespace Shoc.Cli.Commands.Project
         /// <returns></returns>
         protected async Task<T> WithProject<T>(Func<ShocManifest, ProjectModel, Task<T>> action)
         {
-            // try get manifest
-            var manifest = await this.GetManifest();
-
-            // make sure manifest exists
-            if (manifest == null)
-            {
-                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST, "The manifest is missing.").AsException();
-            }
+            // get the manifest
+            var manifest = await this.RequireManifest();
 
             // do an authorized action
             var project =  await this.authService.DoAuthorized(this.Profile, async (profile, auth) =>

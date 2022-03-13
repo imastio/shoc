@@ -33,18 +33,18 @@ namespace Shoc.Core
         /// <param name="message">The extra message</param>
         public void Throw(string message = null)
         {
-            throw this.AsException();
+            throw this.AsException(message);
         }
 
         /// <summary>
         /// Returns the exception of the error
         /// </summary>
         /// <returns></returns>
-        public ShocException AsException()
+        public ShocException AsException(string message = null)
         {
-            return new ShocException(this);
+            return new ShocException(new List<ErrorDefinition> { this }, message);
         }
-
+        
         /// <summary>
         /// Shortcut for creating unknown error
         /// </summary>
