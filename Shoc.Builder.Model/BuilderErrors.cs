@@ -31,6 +31,16 @@
         public const string INVALID_OWNER = "BUILDER_INVALID_OWNER";
 
         /// <summary>
+        /// No registry is available
+        /// </summary>
+        public const string NO_REGISTRY = "BUILDER_NO_REGISTRY";
+
+        /// <summary>
+        /// The invalid registry name is given
+        /// </summary>
+        public const string INVALID_REGISTRY_NAME = "BUILDER_INVALID_REGISTRY_NAME";
+
+        /// <summary>
         /// The invalid registry uri
         /// </summary>
         public const string INVALID_REGISTRY_URI = "BUILDER_INVALID_REGISTRY_URI";

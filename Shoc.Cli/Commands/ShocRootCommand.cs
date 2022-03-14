@@ -22,6 +22,7 @@ namespace Shoc.Cli.Commands
             this.AddCommand(BuildProjectCommands());
             this.AddCommand(BuildAuthCommands());
             this.AddCommand(BuildConfigCommands());
+            this.AddCommand(BuildRegistryCommands());
 
             // add default handler
             this.Handler = CommandHandler.Create((Action) (() => this.Invoke("-h")));
@@ -42,7 +43,8 @@ namespace Shoc.Cli.Commands
                 new ProjectNewCommand(),
                 new ProjectListCommand(),
                 new ProjectDeleteCommand(),
-                new ProjectPackageCommand()
+                new ProjectPackageCommand(),
+                new ProjectListPackagesCommand()
             };
 
             // add directory as an option to all commands
@@ -66,6 +68,22 @@ namespace Shoc.Cli.Commands
                 new AuthStatusCommand()
             };
             
+            // return the wrapper command 
+            return command;
+        }
+
+        /// <summary>
+        /// Creates registry commands subtree
+        /// </summary>
+        /// <returns></returns>
+        private static Command BuildRegistryCommands()
+        {
+            // a wrapper command for project commands
+            var command = new Command("registry", "The registry management commands")
+            {
+                new RegistryListCommand()
+            };
+
             // return the wrapper command 
             return command;
         }

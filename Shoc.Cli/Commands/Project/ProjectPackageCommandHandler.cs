@@ -7,10 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileSystemGlobbing;
+using Shoc.Builder.Model.Package;
 using Shoc.Cli.Model;
 using Shoc.Cli.Services;
 using Shoc.Core;
 using Shoc.ModelCore;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Shoc.Cli.Commands.Project
 {
@@ -44,11 +47,38 @@ namespace Shoc.Cli.Commands.Project
                 throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST_BUILD_INPUT).AsException();
             }
 
+            // create serializer
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(HyphenatedNamingConvention.Instance)
+                .Build();
+
+
             // get all required files if everything is OK
             var files = this.GetRequiredFiles(manifest.Build.Input);
 
             // get checksum
             var checksum = GetChecksum(files);
+
+            // get the project instance
+            var project = await this.WithProject((_, p) => Task.FromResult(p));
+
+            // create package in authorized context
+            var package = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
+            {
+                // get client
+                var client = this.clientService.Builder(profile);
+
+                // create package with the client
+                return client.CreatePackage(auth.AccessToken, project.Id, new CreatePackageInput
+                {
+                    ProjectId = project.Id,
+                    BuildSpec = serializer.Serialize(manifest.Build),
+                    Status = PackageStatuses.INIT,
+                    ListingChecksum = checksum
+                });
+            });
+
+            Console.WriteLine($"Create package ({package.Id}) for the current project");
 
             // new temporary file
             var zipFile = Path.GetTempFileName();
@@ -63,8 +93,7 @@ namespace Shoc.Cli.Commands.Project
                 }
             }
 
-            // get the project instance
-            var project = await this.WithProject((_, p) => Task.FromResult(p));
+            
 
             Console.WriteLine($"Computing files to package. {files.Count} files were identified. Archived to {zipFile} and checksum is {checksum}");
             return 0;

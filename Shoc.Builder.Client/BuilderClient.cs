@@ -2,7 +2,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Imast.Ext.DiscoveryCore;
+using Shoc.Builder.Model.Package;
 using Shoc.Builder.Model.Project;
+using Shoc.Builder.Model.Registry;
 using Shoc.ClientCore;
 using Shoc.Core;
 
@@ -131,5 +133,70 @@ namespace Shoc.Builder.Client
             // get the result
             return await response.Map<ProjectModel>();
         }
+
+        /// <summary>
+        /// Gets all the projects
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="projectId">The project id</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ShocPackage>> GetPackages(string token, string projectId)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{projectId}/packages");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<IEnumerable<ShocPackage>>();
+        }
+
+        /// <summary>
+        /// Creates a new package entity
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="projectId">The id of project</param>
+        /// <param name="input">The input to create</param>
+        /// <returns></returns>
+        public async Task<ShocPackage> CreatePackage(string token, string projectId, CreatePackageInput input)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{projectId}/packages");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Post, url, input, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<ShocPackage>();
+        }
+
+        /// <summary>
+        /// Gets all docker registries
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<DockerRegistry>> GetRegistries(string token)
+        {
+            // the url of api
+            var url = await this.GetApiUrl("api/docker-registries");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<IEnumerable<DockerRegistry>>();
+        }
+
+        
     }
 }

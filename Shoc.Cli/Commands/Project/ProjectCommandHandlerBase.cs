@@ -101,6 +101,15 @@ namespace Shoc.Cli.Commands.Project
         }
 
         /// <summary>
+        /// Require the existing project in the context
+        /// </summary>
+        /// <returns></returns>
+        protected Task<ProjectModel> RequireProject()
+        {
+            return this.WithProject((_, proj) => Task.FromResult(proj));
+        }
+
+        /// <summary>
         /// Execute the action for an existing project and the manifest
         /// </summary>
         /// <param name="action">The action to execute</param>
