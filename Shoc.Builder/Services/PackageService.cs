@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Imast.Ext.Core;
 using Shoc.ApiCore;
 using Shoc.Builder.Data;
+using Shoc.Builder.Model;
 using Shoc.Builder.Model.Package;
 using Shoc.Builder.Model.Project;
+using Shoc.Builder.Model.Registry;
 using Shoc.Core;
 using Shoc.Identity.Model;
 using Shoc.ModelCore;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Shoc.Builder.Services
 {
@@ -26,14 +32,21 @@ namespace Shoc.Builder.Services
         private readonly IProjectRepository projectRepository;
 
         /// <summary>
+        /// The docker registry repository
+        /// </summary>
+        private readonly IDockerRegistryRepository dockerRegistryRepository;
+
+        /// <summary>
         /// Creates new instance of package service
         /// </summary>
         /// <param name="packageRepository">The package repository</param>
         /// <param name="projectRepository">The project repository</param>
-        public PackageService(IPackageRepository packageRepository, IProjectRepository projectRepository)
+        /// <param name="dockerRegistryRepository">The registry repository</param>
+        public PackageService(IPackageRepository packageRepository, IProjectRepository projectRepository, IDockerRegistryRepository dockerRegistryRepository)
         {
             this.packageRepository = packageRepository;
             this.projectRepository = projectRepository;
+            this.dockerRegistryRepository = dockerRegistryRepository;
         }
 
         /// <summary>
@@ -90,11 +103,28 @@ namespace Shoc.Builder.Services
             // make sure default parameters are set
             input.ProjectId = projectId;
             input.Status = PackageStatuses.INIT;
-            
+            input.Progress = 0;
+            input.ProgressMessage = string.Empty;
 
-            throw new System.NotImplementedException();
+            // prepare yaml deserializer
+            var deserializer = new DeserializerBuilder()
+                .IgnoreUnmatchedProperties()
+                .WithNamingConvention(HyphenatedNamingConvention.Instance)
+                .Build();
+
+            // deserialize build spec
+            var spec = deserializer.Deserialize<BuildSpec>(input.BuildSpec);
+
+            // resolves the registry based on the spec
+            var registry = await this.ResolveRegistry(principal, spec);
+
+            // assign registry 
+            input.RegistryId = registry.Id;
+
+            // create the package
+            return await this.packageRepository.Create(input);
         }
-
+        
         /// <summary>
         /// Deletes the package from the project
         /// </summary>
@@ -141,6 +171,59 @@ namespace Shoc.Builder.Services
 
             // the result
             return result;
+        }
+
+        /// <summary>
+        /// Resolves the registry based on the build specification
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="spec">The specification</param>
+        /// <returns></returns>
+        private async Task<DockerRegistry> ResolveRegistry(ShocPrincipal principal, BuildSpec spec)
+        {
+            // name is given
+            var nameGiven = spec.RegistryName.IsNotBlank();
+
+            // try get all registries with given name 
+            var registries = (await this.dockerRegistryRepository.GetBy(new DockerRegistryQuery
+            {
+                Name = nameGiven ? spec.RegistryName : null
+            })).ToList();
+
+            // in case if name given but not found any with name raise an error
+            if (nameGiven && registries.Count == 0)
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.INVALID_REGISTRY_NAME).AsException();
+            }
+
+            // get owned instance with name if any
+            var ownedWithName = registries.FirstOrDefault(reg => reg.Name == spec.RegistryName &&  reg.OwnerId == principal.Subject);
+
+            // return owned instance with name
+            if (ownedWithName != null)
+            {
+                return ownedWithName;
+            }
+
+            // get named registry that is shared
+            var sharedWithName = registries.FirstOrDefault(reg => reg.Name == spec.RegistryName && reg.Shared);
+
+            // return shared instance with matching name
+            if (sharedWithName != null)
+            {
+                return sharedWithName;
+            }
+
+            // try get any shared without considering the name
+            var anyShared = registries.FirstOrDefault(c => c.Shared);
+
+            // no registry available
+            if (anyShared == null)
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.NO_REGISTRY).AsException();
+            }
+
+            return anyShared;
         }
     }
 }

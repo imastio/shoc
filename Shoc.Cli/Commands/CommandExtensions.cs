@@ -23,15 +23,16 @@ namespace Shoc.Cli.Commands
             builder.UseCommandHandler(typeof(ProjectListCommand), typeof(ProjectListCommandHandler));
             builder.UseCommandHandler(typeof(ProjectDeleteCommand), typeof(ProjectDeleteCommandHandler));
             builder.UseCommandHandler(typeof(ProjectPackageCommand), typeof(ProjectPackageCommandHandler));
+            builder.UseCommandHandler(typeof(ProjectListPackagesCommand), typeof(ProjectListPackagesCommandHandler));
 
             builder.UseCommandHandler(typeof(AuthSigninCommand), typeof(AuthSigninCommandHandler));
             builder.UseCommandHandler(typeof(AuthSignoutCommand), typeof(AuthSignoutCommandHandler));
             builder.UseCommandHandler(typeof(AuthStatusCommand), typeof(AuthStatusCommandHandler));
 
+            builder.UseCommandHandler(typeof(RegistryListCommand), typeof(RegistryListCommandHandler));
+
             builder.UseCommandHandler(typeof(ConfigInitCommand), typeof(ConfigInitCommandHandler));
-
-
-
+            
             return builder;
         }
     }
