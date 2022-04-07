@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
@@ -72,6 +73,19 @@ namespace Shoc.Builder.Controllers
         /// <returns></returns>
         [HttpPost]
         public Task<ShocPackage> Create(string projectId, [FromBody] CreatePackageInput input)
+        {
+            return this.packageService.Create(this.HttpContext.GetShocPrincipal(), projectId, input);
+        }   
+
+        /// <summary>
+        /// Creates a package with the given input
+        /// </summary>
+        /// <param name="projectId">The project id</param>
+        /// <param name="id">The id of package</param>
+        /// <param name="bundle">The bundle to upload</param>
+        /// <returns></returns>
+        [HttpPut("{id}/bundle")]
+        public Task<ShocPackage> UploadBundle(string projectId, string id, [FromBody] IFormFile bundle)
         {
             return this.packageService.Create(this.HttpContext.GetShocPrincipal(), projectId, input);
         }

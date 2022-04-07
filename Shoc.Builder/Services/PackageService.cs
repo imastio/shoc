@@ -95,6 +95,18 @@ namespace Shoc.Builder.Services
         /// <param name="projectId">The project id</param>
         /// <param name="input">The package input</param>
         /// <returns></returns>
+        public async Task<ShocPackage> UploadBundle(ShocPrincipal principal, string id, Stream )
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates new package with given input
+        /// </summary>
+        /// <param name="principal">The authenticated principal</param>
+        /// <param name="projectId">The project id</param>
+        /// <param name="input">The package input</param>
+        /// <returns></returns>
         public async Task<ShocPackage> Create(ShocPrincipal principal, string projectId, CreatePackageInput input)
         {
             // gets the project with access 
