@@ -16,6 +16,11 @@
         public const string UPLOADING = "uploading";
 
         /// <summary>
+        /// The package bundle is uploaded
+        /// </summary>
+        public const string UPLOADED = "uploaded";
+
+        /// <summary>
         /// The package is building
         /// </summary>
         public const string BUILDING = "building";

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Imast.Ext.DiscoveryCore;
@@ -112,7 +113,7 @@ namespace Shoc.Builder.Client
             // get the result
             return await response.Map<ProjectModel>();
         }
-        
+
         /// <summary>
         /// Deletes the project by id
         /// </summary>
@@ -178,6 +179,41 @@ namespace Shoc.Builder.Client
         }
 
         /// <summary>
+        /// Upload the bundle
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="projectId">The id of project</param>
+        /// <param name="id">The id of the package</param>
+        /// <param name="file">The file to upload</param>
+        /// <returns></returns>
+        public async Task<PackageBundleReference> UploadBundle(string token, string projectId, string id, string file)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{projectId}/packages/{id}/bundle");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Put, url, null, Auth(token));
+
+            // open the file stream for reading
+            await using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+
+            // build the content for sending the bundle
+            using var content = new MultipartFormDataContent
+            {
+                {new StreamContent(stream), "file", "bundle.zip"}
+            };
+
+            // build message content
+            message.Content = content;
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<PackageBundleReference>();
+        }
+
+        /// <summary>
         /// Gets all docker registries
         /// </summary>
         /// <param name="token">The access token</param>
@@ -197,6 +233,6 @@ namespace Shoc.Builder.Client
             return await response.Map<IEnumerable<DockerRegistry>>();
         }
 
-        
+
     }
 }

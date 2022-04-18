@@ -112,6 +112,16 @@ CREATE TABLE IF NOT EXISTS `prj_packages` (
   CONSTRAINT `Package_Registry_FK` FOREIGN KEY (`RegistryId`) REFERENCES `bld_docker_registries` (`Id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE IF NOT EXISTS TABLE `prj_package_bundles` (
+  `Id` varchar(100) NOT NULL,
+  `PackageId` varchar(100) NOT NULL,
+  `BundleRoot` varchar(1024) NOT NULL,
+  `Created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  KEY `Bundle_Package_FK_idx` (`PackageId`),
+  CONSTRAINT `Bundle_Package_FK` FOREIGN KEY (`PackageId`) REFERENCES `prj_packages` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE IF NOT EXISTS `prj_project_versions` (
   `ProjectId` varchar(100) NOT NULL,

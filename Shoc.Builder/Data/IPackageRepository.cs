@@ -37,10 +37,45 @@ namespace Shoc.Builder.Data
         Task<ShocPackage> Create(CreatePackageInput input);
 
         /// <summary>
+        /// Updates the package status based on input
+        /// </summary>
+        /// <param name="input">The package status update model</param>
+        /// <returns></returns>
+        Task<ShocPackage> UpdateStatus(PackageStatusModel input);
+
+        /// <summary>
+        /// Updates the package image references based on input
+        /// </summary>
+        /// <param name="input">The package image update model</param>
+        /// <returns></returns>
+        Task<ShocPackage> UpdateImage(PackageImageModel input);
+
+        /// <summary>
         /// Deletes the package by given id
         /// </summary>
         /// <param name="id">The package id</param>
         /// <returns></returns>
         Task<ShocPackage> DeleteById(string id);
+
+        /// <summary>
+        /// Gets the bundle by id
+        /// </summary>
+        /// <param name="id">The id of bundle</param>
+        /// <returns></returns>
+        Task<PackageBundleModel> GetBundleById(string id);
+
+        /// <summary>
+        /// Create the bundle for a package
+        /// </summary>
+        /// <param name="input">The bundle input</param>
+        /// <returns></returns>
+        Task<PackageBundleModel> CreateBundle(PackageBundleModel input);
+
+        /// <summary>
+        /// Deletes the bundle by id
+        /// </summary>
+        /// <param name="id">The id of bundle</param>
+        /// <returns></returns>
+        Task<PackageBundleModel> DeleteBundleById(string id);
     }
 }

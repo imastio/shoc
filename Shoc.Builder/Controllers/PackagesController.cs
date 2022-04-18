@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
@@ -82,12 +81,26 @@ namespace Shoc.Builder.Controllers
         /// </summary>
         /// <param name="projectId">The project id</param>
         /// <param name="id">The id of package</param>
-        /// <param name="bundle">The bundle to upload</param>
         /// <returns></returns>
         [HttpPut("{id}/bundle")]
-        public Task<ShocPackage> UploadBundle(string projectId, string id, [FromBody] IFormFile bundle)
+        [DisableFormValueModelBinding]
+        [DisableRequestSizeLimit]
+        public async Task<PackageBundleReference> UploadBundle(string projectId, string id)
         {
-            return this.packageService.Create(this.HttpContext.GetShocPrincipal(), projectId, input);
+            // the bundle reference to return
+            var bundleReference = default(PackageBundleReference);
+
+            // stream request files
+            await this.Request.StreamFiles(async file => 
+            {
+                // open stream to read
+                await using var stream = file.OpenReadStream();
+
+                // upload the bundle 
+                bundleReference = await this.packageService.UploadBundle(this.HttpContext.GetShocPrincipal(), projectId, id, stream);
+            });
+
+            return bundleReference;
         }
 
         /// <summary>

@@ -16,6 +16,11 @@
         public const string PACKAGE = "pkg";
 
         /// <summary>
+        /// The bundle object
+        /// </summary>
+        public const string BUNDLE = "bnd";
+
+        /// <summary>
         /// The docker registry object
         /// </summary>
         public const string DOCKER_REGISTRY = "drg";
