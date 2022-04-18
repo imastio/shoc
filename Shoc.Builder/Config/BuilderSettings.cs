@@ -8,6 +8,6 @@
         /// <summary>
         /// The root directory for project files
         /// </summary>
-        public string FilesRoot { get; set; }
+        public string SandboxRoot { get; set; }
     }
 }

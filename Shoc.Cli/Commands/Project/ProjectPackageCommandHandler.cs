@@ -92,7 +92,20 @@ namespace Shoc.Cli.Commands.Project
                     zip.CreateEntryFromFile(file.Path, Path.GetRelativePath(this.Directory.FullName, file.Path), CompressionLevel.Optimal);
                 }
             }
-            
+
+            // create bundle authorized
+            var bundle = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
+            {
+                // get the client
+                var client = this.clientService.Builder(profile);
+
+                // send the file and get the reference back
+                return client.UploadBundle(auth.AccessToken, project.Id, package.Id, zipFile);
+            });
+
+            // delete temporary zip file
+            File.Delete(zipFile);
+
             Console.WriteLine($"Computing files to package. {files.Count} files were identified. Archived to {zipFile} and checksum is {checksum}");
             return 0;
         }

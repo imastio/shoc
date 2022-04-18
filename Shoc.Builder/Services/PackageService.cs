@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Imast.Ext.Core;
@@ -22,6 +25,11 @@ namespace Shoc.Builder.Services
     public class PackageService
     {
         /// <summary>
+        /// The package upload progress
+        /// </summary>
+        private const int PACKAGE_UPLOAD_PROGRESS = 25;
+
+        /// <summary>
         /// The package repository
         /// </summary>
         private readonly IPackageRepository packageRepository;
@@ -37,16 +45,23 @@ namespace Shoc.Builder.Services
         private readonly IDockerRegistryRepository dockerRegistryRepository;
 
         /// <summary>
+        /// The builder settings
+        /// </summary>
+        private readonly BuilderSettings builderSettings;
+
+        /// <summary>
         /// Creates new instance of package service
         /// </summary>
         /// <param name="packageRepository">The package repository</param>
         /// <param name="projectRepository">The project repository</param>
         /// <param name="dockerRegistryRepository">The registry repository</param>
-        public PackageService(IPackageRepository packageRepository, IProjectRepository projectRepository, IDockerRegistryRepository dockerRegistryRepository)
+        /// <param name="builderSettings">The builder settings</param>
+        public PackageService(IPackageRepository packageRepository, IProjectRepository projectRepository, IDockerRegistryRepository dockerRegistryRepository, BuilderSettings builderSettings)
         {
             this.packageRepository = packageRepository;
             this.projectRepository = projectRepository;
             this.dockerRegistryRepository = dockerRegistryRepository;
+            this.builderSettings = builderSettings;
         }
 
         /// <summary>
@@ -93,11 +108,63 @@ namespace Shoc.Builder.Services
         /// </summary>
         /// <param name="principal">The authenticated principal</param>
         /// <param name="projectId">The project id</param>
-        /// <param name="input">The package input</param>
+        /// <param name="id">The id of package</param>
+        /// <param name="stream">The stream to upload</param>
         /// <returns></returns>
-        public async Task<ShocPackage> UploadBundle(ShocPrincipal principal, string id, Stream )
+        public async Task<PackageBundleReference> UploadBundle(ShocPrincipal principal, string projectId, string id, Stream stream)
         {
+            // get package with access check
+            var package = await this.GetById(principal, projectId, id);
+
+            // update package status
+            package = await this.packageRepository.UpdateStatus(new PackageStatusModel
+            {
+                Id = package.Id,
+                Status = PackageStatuses.UPLOADING,
+                Progress = 0,
+                ProgressMessage = "Uploading the bundle for the package"
+            });
             
+            // get a temporary file
+            var temp = Path.GetTempFileName();
+
+            // create writer to temp file
+            await using (var writer = new FileStream(temp, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                // copy stream to writer
+                await stream.CopyToAsync(writer);
+            }
+
+            // create a folder for the bundle
+            var bundleRoot = Path.Combine(builderSettings.SandboxRoot, package.Id, Guid.NewGuid().ToString("N"));
+            
+            // unzip files to the bundle root
+            await Task.Run(() => ZipFile.ExtractToDirectory(temp, bundleRoot));
+
+            // delete temporary zip file
+            File.Delete(temp);
+
+            // create bundle in the database
+            var bundle = await this.packageRepository.CreateBundle(new PackageBundleModel
+            {
+                PackageId = package.Id,
+                BundleRoot = bundleRoot
+            });
+
+            // update status of the package
+            _ = await this.packageRepository.UpdateStatus(new PackageStatusModel
+            {
+                Id = package.Id,
+                Status = PackageStatuses.UPLOADED,
+                Progress = PACKAGE_UPLOAD_PROGRESS,
+                ProgressMessage = "The package bundle is updated"
+            });
+
+            // return package
+            return new PackageBundleReference
+            {
+                Id = bundle.Id
+            };
         }
 
         /// <summary>

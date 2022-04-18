@@ -39,6 +39,7 @@ namespace Shoc.Builder
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSelf(this.Configuration);
+            services.AddBuilder(this.Configuration);
             services.AddPersistenceDataProtection();
             services.AddDiscovery(this.Configuration);
             services.AddEngineClient(this.Configuration);
