@@ -15,7 +15,7 @@ namespace Shoc.Identity.Controllers
     [ApiController]
     [ShocExceptionHandler]
     [BearerOnly]
-    [AuthorizeAnyRole(Roles.ROOT, Roles.ADMIN)]
+    [AuthorizeMinUserType(UserTypes.ADMIN)]
     public class UsersController : ControllerBase
     {
         /// <summary>

@@ -1,11 +1,12 @@
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shoc.ApiCore;
+using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.Identity.Config;
 using Shoc.Identity.OpenId;
@@ -41,8 +42,8 @@ namespace Shoc.Identity
             services.AddSelf(this.Configuration);
             services.AddPersistenceDataProtection();
             services.AddAuthenticationEssentials(this.Configuration);
+            services.AddAuthenticationMiddleware(this.Configuration);
             services.AddIdentityEssentials(this.Configuration);
-            services.AddLocalApiProtection();
             services.AddMailing(this.Configuration);
             services.AddRepositories(this.Configuration);
 
@@ -57,11 +58,15 @@ namespace Shoc.Identity
                 configuration.RootPath = "ClientApp/build";
             });
 
+            // enable compression for default types (html, js, etc.)
+            services.AddResponseCompression(options => options.EnableForHttps = true);
+
             // add same-site cookie policy
             services.AddSameSiteCookiePolicy();
 
             services.AddSingleton<UserService>();
             services.AddScoped<AuthService>();
+            services.AddSingleton<ICorsPolicyService, CorsPolicyService>();
         }
 
         /// <summary>
@@ -84,13 +89,18 @@ namespace Shoc.Identity
             }
 
             app.UseCookiePolicy();
+            
             app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
-            app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto });
-            app.UseMiddleware<PublicOriginMiddleware>();
-            app.UseCors(ApiDefaults.DEFAULT_CORS);
+
             app.UseIdentityServer();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}"));
+
+            app.UseCors(ApiDefaults.DEFAULT_CORS);
+
+            app.UseResponseCompression();
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseSpa(spa =>

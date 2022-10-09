@@ -23,14 +23,14 @@ namespace Shoc.ApiCore.Protection
             // get the user id
             var sub = claims.FirstOrDefault(c => c.Type == KnownClaims.SUBJECT)?.Value ?? string.Empty;
 
-            // get the role claim
-            var role = claims.FirstOrDefault(c => c.Type == KnownClaims.ROLE)?.Value ?? Roles.USER;
+            // get the type claim
+            var type = claims.FirstOrDefault(c => c.Type == KnownClaims.USER_TYPE)?.Value ?? UserTypes.USER;
 
             // return the shoc principal
             return new ShocPrincipal
             {
                 Subject = sub,
-                Role = role 
+                Type = type
             };
         }
     }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.11" />
-    <PackageReference Include="IdentityServer4" Version="4.1.2" />
+    <PackageReference Include="Duende.IdentityServer" Version="6.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,10 +34,10 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\" />
-    <Folder Include="DevOnly\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
@@ -48,9 +48,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="DevOnly\signature-dev.pem">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Operations\DataOps.xsd">
       <SubType>Designer</SubType>
     </None>

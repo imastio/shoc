@@ -136,7 +136,7 @@ namespace Shoc.Identity.Services
             input.LastName = input.LastName.IsNotBlank() ? input.LastName : nameParts.Last();
 
             // default role if not given
-            input.Role ??= Roles.USER;
+            input.Type ??= UserTypes.USER;
 
             // no need to have duplicate name
             if (input.FirstName == input.LastName)

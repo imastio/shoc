@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Services;
 using Shoc.Core;
-using IdentityServer4;
-using IdentityServer4.Services;
 using Imast.Ext.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -182,7 +182,7 @@ namespace Shoc.Identity.Services
             var root = await this.userService.GetRootUser();
 
             // use guest role as default, if no root yet create as root
-            var role = root == null ? Roles.ROOT : Roles.USER;
+            var type = root == null ? UserTypes.ROOT : UserTypes.USER;
 
             // the email is not verified by default, in case if creating root email is already verified
             var emailVerified = root == null;
@@ -193,7 +193,7 @@ namespace Shoc.Identity.Services
                 Email = input.Email,
                 EmailVerified = emailVerified,
                 FullName = fullname,
-                Role = role,
+                Type = type,
                 Password = input.Password
             });
 

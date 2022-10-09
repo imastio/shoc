@@ -53,6 +53,6 @@
         /// <summary>
         /// The role to assign
         /// </summary>
-        public string Role { get; set; }
+        public string Type { get; set; }
     }
 }

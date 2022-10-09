@@ -56,7 +56,7 @@ namespace Shoc.Builder.Services
         public Task<IEnumerable<DockerRegistry>> GetBy(ShocPrincipal principal, DockerRegistryQuery query)
         {
             // require a proper access
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || principal.Subject == query.OwnerId);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || principal.Subject == query.OwnerId);
 
             // gets all the entries by owner
             return this.dockerRegistryRepository.GetBy(query);
@@ -80,7 +80,7 @@ namespace Shoc.Builder.Services
             }
             
             // require to be either administrator or owner
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // the result
             return result;
@@ -101,7 +101,7 @@ namespace Shoc.Builder.Services
             input.Shared ??= false;
 
             // make sure proper owner id is set
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || input.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || input.OwnerId == principal.Subject);
 
             // name should be given
             if (string.IsNullOrEmpty(input.Name))
@@ -183,7 +183,7 @@ namespace Shoc.Builder.Services
             var result = await this.GetById(principal, id);
 
             // assure the access (administrator or the owner)
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // if object is available delete from repository
             return await this.dockerRegistryRepository.DeleteById(result.Id);

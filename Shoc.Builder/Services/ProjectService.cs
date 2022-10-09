@@ -55,7 +55,7 @@ namespace Shoc.Builder.Services
         public Task<IEnumerable<ProjectModel>> GetBy(ShocPrincipal principal, ProjectQuery query)
         {
             // require a proper access
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || principal.Subject == query.OwnerId);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || principal.Subject == query.OwnerId);
 
             // get by query
             return this.projectRepository.GetBy(query);
@@ -79,7 +79,7 @@ namespace Shoc.Builder.Services
             }
 
             // require to be either administrator or owner
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // the result
             return result;
@@ -115,7 +115,7 @@ namespace Shoc.Builder.Services
             input.OwnerId ??= principal.Subject;
 
             // make sure proper owner id is set
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || input.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || input.OwnerId == principal.Subject);
 
             // do basic validation
             var validation = ValidateCreateUpdateInput(input);
@@ -156,7 +156,7 @@ namespace Shoc.Builder.Services
             var result = await this.GetById(principal, id);
 
             // assure the access (administrator or the owner)
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             return await this.projectRepository.DeleteById(id);
         }

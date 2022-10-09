@@ -1,0 +1,20 @@
+{
+  "migrations": [
+    {
+      "order": 20221009192300,
+      "description": "Add infrastructure tables"
+    },
+    {
+      "order": 20221009192301,
+      "description": "Add identity tables"
+    },
+    {
+      "order": 20221009192302,
+      "description": "Add builder tables"
+    },
+    {
+      "order": 20221009192303,
+      "description": "Add project tables"
+    }
+  ] 
+}

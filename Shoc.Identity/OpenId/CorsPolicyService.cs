@@ -1,4 +1,4 @@
-﻿using IdentityServer4.Services;
+﻿using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Logging;
 
 namespace Shoc.Identity.OpenId

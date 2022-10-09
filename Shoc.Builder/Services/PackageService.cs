@@ -246,7 +246,7 @@ namespace Shoc.Builder.Services
             }
 
             // require to be either administrator or owner
-            AccessGuard.Require(() => Roles.ADMINS.Contains(principal.Role) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // the result
             return result;

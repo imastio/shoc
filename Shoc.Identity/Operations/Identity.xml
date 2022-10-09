@@ -39,9 +39,11 @@
 
       <TextCommand ExpectedResult="Table">
         REPLACE INTO `idp_persisted_grants`
-        (`Key`, `ClientId`, `Type`, `SubjectId`, `SessionId`, `CreationTime`, `ConsumedTime`, `Expiration`, `Description`, `Data`)
+        (`Id`, `Key`, `ClientId`, `Type`, `SubjectId`, `SessionId`, `CreationTime`, `ConsumedTime`, `Expiration`,
+        `Description`, `Data`)
         VALUES
-        (@Key, @ClientId, @Type, @SubjectId, @SessionId, @CreationTime, @ConsumedTime, @Expiration, @Description, @Data);
+        (@Id, @Key, @ClientId, @Type, @SubjectId, @SessionId, @CreationTime, @ConsumedTime, @Expiration,
+        @Description, @Data);
         SELECT * FROM `idp_persisted_grants` WHERE `Key` = @Key;
       </TextCommand>
 
@@ -77,4 +79,45 @@
 
     </SqlOperation>
   </OperationGroup>
+  
+  <OperationGroup Name="SigningKey">
+
+    <SqlOperation Name="GetBy">
+
+      <TextCommand>
+        SELECT * FROM `idp_key_management` WHERE `Use` = @Use;
+      </TextCommand>
+
+    </SqlOperation>
+    <SqlOperation Name="GetById">
+
+      <TextCommand>
+        SELECT * FROM `idp_key_management` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `idp_key_management`
+        (`Id`, `Algorithm`, `Data`, `DataProtected`, `IsX509Certificate`, `Use`, `Version`, `Created`)
+        VALUES
+        (@Id, @Algorithm, @Data, @DataProtected, @IsX509Certificate, @Use, @Version, @Created);
+        SELECT * FROM `idp_key_management` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+
+      <TextCommand>
+        SELECT * FROM `idp_key_management` WHERE `Id` = @Id;
+        DELETE FROM `idp_key_management` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+  </OperationGroup>
+
 </DataOperations>

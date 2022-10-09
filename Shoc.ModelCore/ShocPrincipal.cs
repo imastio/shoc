@@ -13,6 +13,6 @@
         /// <summary>
         /// The role of subject
         /// </summary>
-        public string Role { get; set; }
+        public string Type { get; set; }
     }
 }

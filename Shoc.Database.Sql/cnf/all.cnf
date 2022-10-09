@@ -1,3 +1,4 @@
 [mysqld]
 default-authentication-plugin=caching_sha2_password
 port=11001
+bind-address=0.0.0.0

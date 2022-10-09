@@ -6,26 +6,6 @@
     public class IdentitySettings
     {
         /// <summary>
-        /// The public origin of the identity server
-        /// </summary>
-        public string PublicOrigin { get; set; }
-
-        /// <summary>
-        /// The base path for the identity provider
-        /// </summary>
-        public string BasePath { get; set; }
-
-        /// <summary>
-        /// The issuer uri
-        /// </summary>
-        public string Issuer { get; set; }
-
-        /// <summary>
-        /// The signing key path
-        /// </summary>
-        public string SigningKeyPath { get; set; }
-
-        /// <summary>
         /// The login url
         /// </summary>
         public string SignInUrl { get; set; }

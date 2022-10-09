@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using IdentityServer4;
-using IdentityServer4.Services;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Shoc.ApiCore;
 using Shoc.Core;

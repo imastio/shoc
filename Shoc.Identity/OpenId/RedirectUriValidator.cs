@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServer4.Models;
-using IdentityServer4.Validation;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Validation;
 
 namespace Shoc.Identity.OpenId
 {
@@ -57,7 +57,7 @@ namespace Shoc.Identity.OpenId
             var allowed = allowedRedirects.Select(u => new Uri(u)).ToList();
 
             // if strict match then allow
-            var strictMatch = ContainsExactUri(allowedRedirects, requestedUri);
+            var strictMatch = ContainsExactUri(allowed, uri);
 
             // on strict match allow
             if (strictMatch)
@@ -84,9 +84,13 @@ namespace Shoc.Identity.OpenId
         /// <param name="uris">The uris.</param>
         /// <param name="requestedUri">The requested URI.</param>
         /// <returns></returns>
-        protected static bool ContainsExactUri(ICollection<string> uris, string requestedUri)
+        protected static bool ContainsExactUri(ICollection<Uri> uris, Uri requestedUri)
         {
-            return uris != null && uris.Contains(requestedUri, StringComparer.OrdinalIgnoreCase);
+            // the request
+            return uris.Any(uri => string.Equals(uri.Scheme, requestedUri.Scheme, StringComparison.OrdinalIgnoreCase) &&
+                                   string.Equals(uri.Host, requestedUri.Host, StringComparison.OrdinalIgnoreCase) &&
+                                   uri.Port == requestedUri.Port &&
+                                   string.Equals(uri.PathAndQuery, requestedUri.PathAndQuery, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
