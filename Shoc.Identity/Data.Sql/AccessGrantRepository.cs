@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Imast.DataOps.Api;
+using Shoc.Core;
 using Shoc.Identity.Model;
 
 namespace Shoc.Identity.Data.Sql
@@ -68,6 +69,9 @@ namespace Shoc.Identity.Data.Sql
         /// <returns></returns>
         public Task<AccessGrant> Save(AccessGrant entity)
         {
+            // give a new id
+            entity.Id ??= StdIdGenerator.Next(IdentityObjects.AG);
+
             return this.dataOps.Connect().QueryFirst("PersistedGrant", "Save").ExecuteAsync<AccessGrant>(entity);
         }
 

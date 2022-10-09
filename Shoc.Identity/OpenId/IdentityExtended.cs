@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.Configuration;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
+using Duende.IdentityServer.Configuration;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 using Shoc.ApiCore;
 using Shoc.Identity.Model;
 
@@ -38,7 +33,6 @@ namespace Shoc.Identity.OpenId
             // setup options
             var optionsSetup = new Action<IdentityServerOptions>(options =>
             {
-                options.IssuerUri = settings.Issuer ?? settings.PublicOrigin;
                 options.UserInteraction.LoginUrl = settings.SignInUrl;
                 options.UserInteraction.LoginReturnUrlParameter = "return_url";
                 options.UserInteraction.CustomRedirectReturnUrlParameter = "return_url";
@@ -54,62 +48,29 @@ namespace Shoc.Identity.OpenId
                 options.Discovery.ShowTokenEndpointAuthenticationMethods = false;
                 options.Discovery.ShowExtensionGrantTypes = false;
                 options.Discovery.ShowIdentityScopes = false;
+                options.KeyManagement.Enabled = true;
+                options.KeyManagement.RotationInterval = TimeSpan.FromDays(90);
+                options.KeyManagement.PropagationTime = TimeSpan.FromDays(14);
+                options.KeyManagement.RetentionDuration = TimeSpan.FromDays(30);
             });
-            
+
+            // add CORS policy service
+            services.AddSingleton<ICorsPolicyService>(sp => new DefaultCorsPolicyService(sp.GetRequiredService<ILogger<DefaultCorsPolicyService>>()));
+
             // add and configure identity server
             services.AddIdentityServer(optionsSetup)
                 .AddInMemoryApiResources(GetApiResources())
                 .AddInMemoryApiScopes(GetApiScopes())
                 .AddInMemoryIdentityResources(GetIdentityResources())
-                .AddSigningCredential(GetSigningKey(settings), IdentityServerConstants.ECDsaSigningAlgorithm.ES256)
+                .AddKeyManagement()
                 .AddInMemoryClients(GetClients(settings))
                 .AddPersistedGrantStore<PersistedGrantStore>()
                 .AddRedirectUriValidator<RedirectUriValidator>()
-                .AddProfileService<ProfileService>();
+                .AddProfileService<ProfileService>()
+                .AddSigningKeyStore<SigningKeyStore>();
 
-            services.AddSingleton<PublicOriginMiddleware>();
-            services.AddSingleton<ICorsPolicyService, CorsPolicyService>();
 
             return services;
-        }
-
-        /// <summary>
-        /// Adds local application protection
-        /// </summary>
-        /// <param name="services">The services collection</param>
-        public static IServiceCollection AddLocalApiProtection(this IServiceCollection services)
-        {
-            // add local APIs protection's bearer scheme to 
-            services.AddAuthentication().AddLocalApi(AuthenticationObjects.LocalApiScheme, _ => { });
-            
-            // return services for chaining
-            return services;
-        }
-
-        /// <summary>
-        /// Gets a signing key based on settings
-        /// </summary>
-        /// <param name="settings">The identity settings</param>
-        /// <returns></returns>
-        private static ECDsaSecurityKey GetSigningKey(IdentitySettings settings)
-        {
-            // source directory
-            var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-            // build full path to key
-            var fullKeyPath = Path.GetFullPath(settings.SigningKeyPath, sourceDirectory);
-
-            // read signing key path to load key
-            var eccPem = File.ReadAllText(fullKeyPath);
-
-            // build key and import
-            var edc = ECDsa.Create();
-
-            // import pem content into key
-            edc?.ImportFromPem(eccPem);
-
-            // create a security key based on ECD 
-            return new ECDsaSecurityKey(edc) { KeyId = "default" };
         }
         
         /// <summary>
@@ -135,11 +96,11 @@ namespace Shoc.Identity.OpenId
             {
                 new (KnownScopes.SVC, new []
                 {
-                    JwtClaimTypes.Subject,
-                    JwtClaimTypes.Email,
-                    JwtClaimTypes.EmailVerified,
-                    JwtClaimTypes.PreferredUserName,
-                    JwtClaimTypes.Role
+                    KnownClaims.SUBJECT,
+                    KnownClaims.EMAIL,
+                    KnownClaims.EMAIL_VERIFIED,
+                    KnownClaims.PREFERRED_USERNAME,
+                    KnownClaims.USER_TYPE
                 })
             };
         }

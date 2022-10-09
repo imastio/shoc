@@ -6,4 +6,5 @@ shoc-docker-registry - 11004
 RESERVED - 11005
 shoc-builder - 11006/11007
 shoc-identity - 11008/11009
+shoc-database-migrator - 11010/11011
 

@@ -25,6 +25,22 @@ services:
       - shoc-network
     volumes:
       - shoc-database-sql-volume:/var/lib/mysql 
+
+  shoc-database-migrator:
+    image: shoc-database-migrator:latest
+    build: ./Shoc.Database.Migrator
+    container_name: shoc-database-migrator
+    restart: "no"
+    ports:
+      - '11010:11010'
+    env_file:
+      - ./env/ref-database-sql.env
+      - ./env/ref-api-discovery.env
+      - ./env/shoc-database-migrator.env
+    depends_on:
+      - shoc-database-sql
+    networks:
+      - shoc-network
       
   shoc-dind:
     image: shoc-dind:latest
@@ -64,6 +80,7 @@ services:
     build: ./Shoc.Identity
     container_name: shoc-identity
     env_file: 
+      - ./env/ref-api-auth.env
       - ./env/ref-api-discovery.env
       - ./env/ref-database-sql.env
       - ./env/ref-mailing.env
@@ -81,7 +98,7 @@ services:
     build: ./Shoc.Webgtw
     container_name: shoc-webgtw
     env_file: 
-      - ./env/ref-java.env
+      - ./env/ref-api-discovery.env
       - ./env/shoc-webgtw.env
     ports:
       - '11002:11002'

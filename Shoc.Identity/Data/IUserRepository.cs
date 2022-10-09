@@ -44,13 +44,6 @@ namespace Shoc.Identity.Data
         Task<UserModel> GetRootUser();
 
         /// <summary>
-        /// Gets the role of user by id
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <returns></returns>
-        Task<string> GetUserRole(string userId);
-
-        /// <summary>
         /// Checks if the email exists
         /// </summary>
         /// <param name="email">The email to check</param>
@@ -104,9 +97,9 @@ namespace Shoc.Identity.Data
         /// Updates the role of the user
         /// </summary>
         /// <param name="id">The user id</param>
-        /// <param name="role">The role of user</param>
+        /// <param name="type">The type of user</param>
         /// <returns></returns>
-        Task<UserModel> ChangeRole(string id, string role);
+        Task<UserModel> ChangeType(string id, string type);
 
         /// <summary>
         /// Locks the user until given time

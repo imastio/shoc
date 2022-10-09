@@ -1,16 +1,6 @@
-FROM maven:3.8.3-jdk-11-slim AS builder
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-COPY pom.xml /tmp/
-RUN mvn -B dependency:go-offline -f /tmp/pom.xml -s /usr/share/maven/ref/settings-docker.xml
-COPY src /tmp/src/
-WORKDIR /tmp/
-RUN mvn -B -s /usr/share/maven/ref/settings-docker.xml package
-
-FROM adoptopenjdk/openjdk11:alpine-jre
-RUN mkdir -p /app
-
+WORKDIR /app
+COPY ./bin/Release/net6.0/publish/ ./
 EXPOSE 11002
-
-COPY --from=builder /tmp/target/*.jar /app/app.jar
-
-ENTRYPOINT exec java $JAVA_OPTS -jar /app/app.jar
+ENTRYPOINT ["dotnet", "Shoc.Webgtw.dll"]

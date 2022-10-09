@@ -44,6 +44,13 @@ namespace Shoc.ApiCore.Auth
                     // disabled audience validation
                     options.TokenValidationParameters.ValidateAudience = false;
 
+                    // skip the issuer validation only for known cases
+                    if (settings.SkipIssuerValidation)
+                    {
+                        // do not validate issuer
+                        options.TokenValidationParameters.ValidateIssuer = false;
+                    }
+
                     // only if given allow self signed certificate
                     if (settings.AllowInsecure)
                     {
@@ -55,9 +62,6 @@ namespace Shoc.ApiCore.Auth
                         {
                             ServerCertificateCustomValidationCallback = (_, _, _, _) => true
                         };
-
-                        // do not validate issuer
-                        options.TokenValidationParameters.ValidateIssuer = false;
                     }
                 });
 

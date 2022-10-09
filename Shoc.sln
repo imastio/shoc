@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Core", "Shoc.Core\Shoc.Core.csproj", "{45329F3A-E4F3-41D4-BC1F-2C9524285FCF}"
 EndProject
@@ -41,13 +41,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.ApiCore.Protection", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Cli", "Shoc.Cli\Shoc.Cli.csproj", "{7587D28A-F259-40E6-978D-F9EBE0899CDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Builder.Model", "Shoc.Builder.Model\Shoc.Builder.Model.csproj", "{EB7B56E3-2E77-4DD0-A57C-D60F17AB192A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Builder.Model", "Shoc.Builder.Model\Shoc.Builder.Model.csproj", "{EB7B56E3-2E77-4DD0-A57C-D60F17AB192A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ClientCore", "Shoc.ClientCore\Shoc.ClientCore.csproj", "{9D5A3394-58EA-4A86-A42D-69D90F827ACC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.ClientCore", "Shoc.ClientCore\Shoc.ClientCore.csproj", "{9D5A3394-58EA-4A86-A42D-69D90F827ACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Builder.Client", "Shoc.Builder.Client\Shoc.Builder.Client.csproj", "{91AEC827-1C3E-40B0-BC29-3CE6AEC341B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Builder.Client", "Shoc.Builder.Client\Shoc.Builder.Client.csproj", "{91AEC827-1C3E-40B0-BC29-3CE6AEC341B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.Auth", "Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj", "{7F0CC44E-0BDE-4C76-B0AB-D17359E1692B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.ApiCore.Auth", "Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj", "{7F0CC44E-0BDE-4C76-B0AB-D17359E1692B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Webgtw", "Shoc.Webgtw\Shoc.Webgtw.csproj", "{4C6C25FA-0630-48B3-8FA1-076AB46D1D8E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Database.Migrator", "Shoc.Database.Migrator\Shoc.Database.Migrator.csproj", "{7195E1CD-DD6F-41EC-918A-9D3F3B0F8B99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +151,14 @@ Global
 		{7F0CC44E-0BDE-4C76-B0AB-D17359E1692B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F0CC44E-0BDE-4C76-B0AB-D17359E1692B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F0CC44E-0BDE-4C76-B0AB-D17359E1692B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6C25FA-0630-48B3-8FA1-076AB46D1D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6C25FA-0630-48B3-8FA1-076AB46D1D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6C25FA-0630-48B3-8FA1-076AB46D1D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6C25FA-0630-48B3-8FA1-076AB46D1D8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7195E1CD-DD6F-41EC-918A-9D3F3B0F8B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7195E1CD-DD6F-41EC-918A-9D3F3B0F8B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7195E1CD-DD6F-41EC-918A-9D3F3B0F8B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7195E1CD-DD6F-41EC-918A-9D3F3B0F8B99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

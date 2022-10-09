@@ -15,7 +15,7 @@ namespace Shoc.Builder.Controllers
     [Route("api/engines")]
     [ApiController]
     [ShocExceptionHandler]
-    [AuthorizeAnyRole(Roles.ROOT, Roles.ADMIN)]
+    [AuthorizeMinUserType(UserTypes.ADMIN)]
     public class EnginesController : ControllerBase
     {
         /// <summary>

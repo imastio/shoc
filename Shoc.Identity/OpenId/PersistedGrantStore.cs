@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Stores;
 using Shoc.Identity.Data;
 using Shoc.Identity.Model;
 
@@ -104,6 +104,11 @@ namespace Shoc.Identity.OpenId
         /// <returns></returns>
         private static AccessGrant ToModel(PersistedGrant grant)
         {
+            if (grant == null)
+            {
+                return null;
+            }
+
             return new AccessGrant
             {
                 Key = grant.Key,
@@ -126,6 +131,11 @@ namespace Shoc.Identity.OpenId
         /// <returns></returns>
         private static PersistedGrant FromModel(AccessGrant accessGrant)
         {
+            if (accessGrant == null)
+            {
+                return null;
+            }
+
             return new PersistedGrant
             {
                 Key = accessGrant.Key,

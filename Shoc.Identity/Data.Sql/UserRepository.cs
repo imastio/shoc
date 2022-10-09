@@ -91,19 +91,6 @@ namespace Shoc.Identity.Data.Sql
         }
 
         /// <summary>
-        /// Gets the roles of user by id
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <returns></returns>
-        public Task<string> GetUserRole(string userId)
-        {
-            return this.dataOps.Connect().QueryFirst("User", "GetUserRoles").ExecuteAsync<string>(new
-            {
-                UserId = userId
-            });
-        }
-
-        /// <summary>
         /// Checks if the email exists
         /// </summary>
         /// <param name="email">The email to check</param>
@@ -199,14 +186,14 @@ namespace Shoc.Identity.Data.Sql
         /// Updates the role of the user
         /// </summary>
         /// <param name="id">The user id</param>
-        /// <param name="role">The role of user</param>
+        /// <param name="type">The type of user</param>
         /// <returns></returns>
-        public Task<UserModel> ChangeRole(string id, string role)
+        public Task<UserModel> ChangeType(string id, string type)
         {
-            return this.dataOps.Connect().QueryFirst("User", "ChangeRole").ExecuteAsync<UserModel>(new
+            return this.dataOps.Connect().QueryFirst("User", "ChangeType").ExecuteAsync<UserModel>(new
             {
                 Id = id?.ToLowerInvariant(),
-                Role = role
+                Type = type
             });
         }
 

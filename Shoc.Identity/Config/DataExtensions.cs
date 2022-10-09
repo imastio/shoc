@@ -42,6 +42,7 @@ namespace Shoc.Identity.Config
             services.AddSingleton<IConfirmationCodeRepository, ConfirmationCodeRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
+            services.AddSingleton<ISigningKeyRepository, SigningKeyRepository>();
 
             // chain services
             return services;

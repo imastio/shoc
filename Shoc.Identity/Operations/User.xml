@@ -34,18 +34,9 @@
     <SqlOperation Name="GetRootUser">
       <TextCommand>
         SELECT * FROM `idp_users`
-        WHERE `Deleted` = 0 AND `Role` = 'root';
+        WHERE `Deleted` = 0 AND `Type` = 'root';
       </TextCommand>
     </SqlOperation>
-
-    <SqlOperation Name="GetUserRoles">
-      <TextCommand>
-        SELECT `Role`
-        FROM `idp_user_roles`
-        WHERE `UserId` = @UserId;
-      </TextCommand>
-    </SqlOperation>
-
 
     <SqlOperation Name="CheckEmail">
       <TextCommand>
@@ -65,9 +56,9 @@
 
       <TextCommand>
         INSERT INTO `idp_users`
-        (`Id`, `Email`, `EmailVerified`, `Username`, `PasswordHash`, `Role`, `FirstName`, `LastName`, `FullName`)
+        (`Id`, `Email`, `EmailVerified`, `Username`, `PasswordHash`, `Type`, `FirstName`, `LastName`, `FullName`)
         VALUES
-        (@Id, @Email, @EmailVerified, @Username, @PasswordHash, @Role, @FirstName, @LastName, @FullName);
+        (@Id, @Email, @EmailVerified, @Username, @PasswordHash, @Type, @FirstName, @LastName, @FullName);
         SELECT * FROM `idp_users` WHERE `Id` = @Id;
       </TextCommand>
 
@@ -117,11 +108,11 @@
 
     </SqlOperation>
 
-    <SqlOperation Name="ChangeRole">
+    <SqlOperation Name="ChangeType">
 
       <TextCommand>
         UPDATE `idp_users`
-        SET `Role` = @Role
+        SET `Type` = @Type
         WHERE `Deleted` = 0 AND `Id` = @Id;
         SELECT * FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
       </TextCommand>

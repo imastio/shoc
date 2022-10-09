@@ -19,5 +19,10 @@ namespace Shoc.ApiCore.Auth
         /// Allow self-signed certificate and http connections
         /// </summary>
         public bool AllowInsecure { get; set; }
+
+        /// <summary>
+        /// Skips the issuer validation for known cases
+        /// </summary>
+        public bool SkipIssuerValidation { get; set; }
     }
 }

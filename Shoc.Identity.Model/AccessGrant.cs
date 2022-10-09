@@ -8,6 +8,11 @@ namespace Shoc.Identity.Model
     public class AccessGrant
     {
         /// <summary>
+        /// The unique identifier
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the key.
         /// </summary>
         /// <value>

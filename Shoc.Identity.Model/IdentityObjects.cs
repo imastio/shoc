@@ -19,5 +19,10 @@
         /// The confirmation object
         /// </summary>
         public const string CNF = "cnf";
+
+        /// <summary>
+        /// The access grant constant
+        /// </summary>
+        public const string AG = "ag";
     }
 }

@@ -30,7 +30,7 @@ namespace Shoc.Identity.Model
         /// <summary>
         /// The role of user in the system
         /// </summary>
-        public string Role { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// The first name
