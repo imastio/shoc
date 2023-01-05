@@ -54,5 +54,55 @@
         /// The unknown error
         /// </summary>
         public const string UNKNOWN_ERROR = "CLI_UNKNOWN_ERROR";
+
+        /// <summary>
+        /// The registry name error
+        /// </summary>
+        public const string REGISTRY_NAME_ERROR = "CLI_REGISTRY_NAME_INVALID";
+
+        /// <summary>
+        /// The registry uri error
+        /// </summary>
+        public const string REGISTRY_REGISTRY_URI_ERROR = "CLI_REGISTRY_REGISTRY_URI_INVALID";
+
+        /// <summary>
+        /// The registry repository error
+        /// </summary>
+        public const string REGISTRY_REPOSITORY_ERROR = "CLI_REGISTRY_REPOSITORY_INVALID";
+
+        /// <summary>
+        /// The registry email error
+        /// </summary>
+        public const string REGISTRY_EMAIL_ERROR = "CLI_REGISTRY_EMAIL_INVALID";
+
+        /// <summary>
+        /// The registry username error
+        /// </summary>
+        public const string REGISTRY_USERNAME_ERROR = "CLI_REGISTRY_USERNAME_INVALID";
+
+        /// <summary>
+        /// The registry password error
+        /// </summary>
+        public const string REGISTRY_PASSWORD_ERROR = "CLI_REGISTRY_PASSWORD_INVALID";
+
+        /// <summary>
+        /// The cluster name error
+        /// </summary>
+        public const string CLUSTER_NAME_ERROR = "CLI_CLUSTER_NAME_INVALID";
+
+        /// <summary>
+        /// The cluster kubeconfig not specified error
+        /// </summary>
+        public const string CLUSTER_KUBECONFIG_PATH_ERROR = "CLI_CLUSTER_KUBECONFIG_PATH_INVALID";
+
+        /// <summary>
+        /// The cluster kubeconfig file empty error
+        /// </summary>
+        public const string CLUSTER_KUBECONFIG_EMPTY_ERROR = "CLI_CLUSTER_KUBECONFIG_FILE_INVALID";
+
+        /// <summary>
+        /// The cluster api server uri error
+        /// </summary>
+        public const string CLUSTER_URI_ERROR = "CLI_CLUSTER_URI_INVALID";
     }
 }

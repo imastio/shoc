@@ -100,7 +100,8 @@ namespace Shoc.Cli.Commands.Project
                     Input = new BuildInputSpec
                     {
                         Copy = new List<FileCopySpec>()
-                    }
+                    },
+                    EntryPoint = new List<string>()
                 },
                 Run = new RunSpec
                 {

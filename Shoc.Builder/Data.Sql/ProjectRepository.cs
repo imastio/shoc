@@ -72,6 +72,25 @@ namespace Shoc.Builder.Data.Sql
         }
 
         /// <summary>
+        /// Assigns or updates version
+        /// </summary>
+        /// <param name="id">The id of project</param>
+        /// <param name="packageId">The id of package</param>
+        /// <param name="version">The version name</param>
+        /// <returns></returns>
+        public async Task AssignVersion(string id, string packageId, string version)
+        {
+            // add object to the database
+            await this.dataOps.Connect().NonQuery("Project", "AssignVersion")
+                .ExecuteAsync(new
+                {
+                    ProjectId = id,
+                    PackageId = packageId,
+                    Version = version
+                });
+        }
+
+        /// <summary>
         /// Creates the project by given input
         /// </summary>
         /// <param name="input">The project creation input</param>

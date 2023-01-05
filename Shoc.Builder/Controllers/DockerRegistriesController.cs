@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Imast.Ext.Core;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
 using Shoc.Builder.Model.Registry;
 using Shoc.Builder.Services;
+using Shoc.Identity.Model;
 
 namespace Shoc.Builder.Controllers
 {
@@ -15,7 +15,7 @@ namespace Shoc.Builder.Controllers
     [Route("api/docker-registries")]
     [ApiController]
     [ShocExceptionHandler]
-    [AuthorizedSubject]
+    [AuthorizeMinUserType(UserTypes.ADMIN)]
     public class DockerRegistriesController : ControllerBase
     {
         /// <summary>
@@ -35,12 +35,10 @@ namespace Shoc.Builder.Controllers
         /// <summary>
         /// Gets all the objects
         /// </summary>
-        /// <param name="all">Indicates if all should be considered</param>
-        /// <param name="owner">The owner of the registry</param>
         /// <param name="name">The name of the registry</param>
         /// <returns></returns>
         [HttpGet]
-        public Task<IEnumerable<DockerRegistry>> GetAll([FromQuery] bool all = false, [FromQuery] string owner = null, [FromQuery] string name = null)
+        public Task<IEnumerable<DockerRegistry>> GetAll([FromQuery] string name = null)
         {
             // the request principal
             var principal = this.HttpContext.GetShocPrincipal();
@@ -48,7 +46,6 @@ namespace Shoc.Builder.Controllers
             // get the entities by owner
             return this.dockerRegistryService.GetBy(principal, new DockerRegistryQuery
             {
-                OwnerId = all ? null : owner.OnBlank(principal.Subject),
                 Name = name
             });
         }

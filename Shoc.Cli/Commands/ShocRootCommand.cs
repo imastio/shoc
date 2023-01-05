@@ -3,8 +3,10 @@ using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using Shoc.Cli.Commands.Auth;
+using Shoc.Cli.Commands.Cluster;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
+using Shoc.Cli.Commands.Registry;
 
 namespace Shoc.Cli.Commands
 {
@@ -23,6 +25,7 @@ namespace Shoc.Cli.Commands
             this.AddCommand(BuildAuthCommands());
             this.AddCommand(BuildConfigCommands());
             this.AddCommand(BuildRegistryCommands());
+            this.AddCommand(BuildClusterCommands());
 
             // add default handler
             this.Handler = CommandHandler.Create((Action) (() => this.Invoke("-h")));
@@ -81,7 +84,27 @@ namespace Shoc.Cli.Commands
             // a wrapper command for project commands
             var command = new Command("registry", "The registry management commands")
             {
-                new RegistryListCommand()
+                new RegistryListCommand(),
+                new RegistryCreateCommand(),
+                new RegistryDeleteCommand()
+            };
+
+            // return the wrapper command 
+            return command;
+        }
+
+        /// <summary>
+        /// Creates registry commands subtree
+        /// </summary>
+        /// <returns></returns>
+        private static Command BuildClusterCommands()
+        {
+            // a wrapper command for project commands
+            var command = new Command("cluster", "The cluster management commands")
+            {
+                new ClusterListCommand(),
+                new ClusterCreateCommand(),
+                new ClusterDeleteCommand()
             };
 
             // return the wrapper command 

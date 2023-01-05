@@ -104,6 +104,19 @@ namespace Shoc.Builder.Controllers
         }
 
         /// <summary>
+        /// Build the package with given id
+        /// </summary>
+        /// <param name="projectId">The project id</param>
+        /// <param name="id">The id of package</param>
+        /// <param name="version">The version of package</param>
+        /// <returns></returns>
+        [HttpPost("{id}/build/{version}")]
+        public async Task<PackageBundleReference> BuildBundle(string projectId, string id, string version)
+        {
+            return await this.packageService.BuildBundle(this.HttpContext.GetShocPrincipal(), projectId, id, version);
+        }
+
+        /// <summary>
         /// Deletes a package with the given id
         /// </summary>
         /// <param name="projectId">The project id</param>

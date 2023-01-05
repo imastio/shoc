@@ -43,7 +43,7 @@ namespace Shoc.Identity.OpenId
         /// <summary>
         /// Required claims in case if even not requested
         /// </summary>
-        private static readonly ISet<string> REQUIRED_CLAIMS = new HashSet<string> { JwtClaimTypes.Subject, JwtClaimTypes.Role };
+        private static readonly ISet<string> REQUIRED_CLAIMS = new HashSet<string> { KnownClaims.SUBJECT, KnownClaims.USER_TYPE };
 
         /// <summary>
         /// The user repository

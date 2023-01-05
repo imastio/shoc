@@ -1,4 +1,6 @@
-﻿namespace Shoc.ModelCore
+﻿using System.Collections.Generic;
+
+namespace Shoc.ModelCore
 {
     /// <summary>
     /// The project build specification
@@ -29,5 +31,10 @@
         /// The build input specification
         /// </summary>
         public BuildInputSpec Input { get; set; }
+
+        /// <summary>
+        /// The entry point specification
+        /// </summary>
+        public List<string> EntryPoint { get; set; }
     }
 }

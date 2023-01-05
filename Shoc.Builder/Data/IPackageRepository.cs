@@ -65,6 +65,13 @@ namespace Shoc.Builder.Data
         Task<PackageBundleModel> GetBundleById(string id);
 
         /// <summary>
+        /// Gets the bundle by package id
+        /// </summary>
+        /// <param name="id">The package id of bundle</param>
+        /// <returns></returns>
+        Task<PackageBundleModel> GetBundleByPackageId(string id);
+
+        /// <summary>
         /// Create the bundle for a package
         /// </summary>
         /// <param name="input">The bundle input</param>

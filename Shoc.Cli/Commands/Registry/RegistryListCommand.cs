@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Shoc.Cli.Commands.Project
+namespace Shoc.Cli.Commands.Registry
 {
     /// <summary>
     /// The command to list the registries
@@ -12,7 +12,6 @@ namespace Shoc.Cli.Commands.Project
         /// </summary>
         public RegistryListCommand() : base("list", "List all the available registries")
         {
-            this.AddOption(new Option<string>(new[] { "--include-shared" }, "Include shared registries"));
         }
     }
 }

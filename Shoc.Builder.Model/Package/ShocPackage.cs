@@ -26,7 +26,7 @@ namespace Shoc.Builder.Model.Package
         /// The registry id
         /// </summary>
         public string RegistryId { get; set; }
-        
+
         /// <summary>
         /// The image uri
         /// </summary>

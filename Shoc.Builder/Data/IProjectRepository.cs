@@ -42,7 +42,16 @@ namespace Shoc.Builder.Data
         /// <param name="input">The project creation input</param>
         /// <returns></returns>
         Task<ProjectModel> Create(CreateProjectModel input);
-        
+
+        /// <summary>
+        /// Assigns or updates version
+        /// </summary>
+        /// <param name="id">The id of project</param>
+        /// <param name="packageId">The id of package</param>
+        /// <param name="version">The version name</param>
+        /// <returns></returns>
+        Task AssignVersion(string id, string packageId, string version);
+
         /// <summary>
         /// Deletes the project by id
         /// </summary>

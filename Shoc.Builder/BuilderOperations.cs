@@ -23,7 +23,8 @@ namespace Shoc.Builder
             {
                 Path.Combine(sourceDirectory, "Operations", "Project.xml"),
                 Path.Combine(sourceDirectory, "Operations", "DockerRegistry.xml"),
-                Path.Combine(sourceDirectory, "Operations", "Package.xml")
+                Path.Combine(sourceDirectory, "Operations", "Package.xml"),
+                Path.Combine(sourceDirectory, "Operations", "KubernetesCluster.xml")
             };
         }
     }

@@ -18,19 +18,19 @@ namespace Shoc.Builder.Model.Registry
         public string Name { get; set; }
 
         /// <summary>
-        /// The owner id of private registry if not shared
-        /// </summary>
-        public string OwnerId { get; set; }
-
-        /// <summary>
-        /// The object is shared
-        /// </summary>
-        public bool Shared { get; set; }
-
-        /// <summary>
         /// The registry uri value
         /// </summary>
         public string RegistryUri { get; set; }
+
+        /// <summary>
+        /// The repository value
+        /// </summary>
+        public string Repository { get; set; }
+
+        /// <summary>
+        /// The allow nesting value
+        /// </summary>
+        public bool AllowNesting { get; set; }
 
         /// <summary>
         /// The registry email
@@ -45,7 +45,7 @@ namespace Shoc.Builder.Model.Registry
         /// <summary>
         /// The password in encrypted form
         /// </summary>
-        public byte[] EncryptedPassword { get; set; }
+        public string EncryptedPassword { get; set; }
 
         /// <summary>
         /// The creation time

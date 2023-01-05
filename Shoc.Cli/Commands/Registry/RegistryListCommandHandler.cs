@@ -3,25 +3,32 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.Project
+namespace Shoc.Cli.Commands.Registry
 {
     /// <summary>
     /// The registry list command handler
     /// </summary>
-    public class RegistryListCommandHandler : ProjectCommandHandlerBase
+    public class RegistryListCommandHandler : ShocCommandHandlerBase
     {
         /// <summary>
-        /// Include shared registries
+        /// The client service
         /// </summary>
-        public bool IncludeShared { get; set; }
+        protected readonly ClientService clientService;
+
+        /// <summary>
+        /// The authentication service
+        /// </summary>
+        protected readonly AuthService authService;
 
         /// <summary>
         /// Creates new instance of command handler
         /// </summary>
         /// <param name="clientService">The client service</param>
         /// <param name="authService">The auth service</param>
-        public RegistryListCommandHandler(ClientService clientService, AuthService authService) : base(clientService, authService)
+        public RegistryListCommandHandler(ClientService clientService, AuthService authService) 
         {
+            this.clientService = clientService;
+            this.authService = authService;
         }
 
         /// <summary>
@@ -37,17 +44,17 @@ namespace Shoc.Cli.Commands.Project
                 // get the client to builder
                 var client = this.clientService.Builder(profile);
 
-                // load packages of the project
+                // load registries of the project
                 return client.GetRegistries(status.AccessToken);
             });
 
             // print header
-            Console.WriteLine("Id\t\tName\t\tRegistry Uri\t\tShared\t\tUser Name");
+            Console.WriteLine("Id\t\tName\t\tRegistry Uri\t\tRepository\t\tUser Name");
 
             // print packages
             foreach (var reg in registries)
             {
-                Console.WriteLine($"{reg.Id}\t\t{reg.Name}\t\t{reg.RegistryUri}\t\t{reg.Shared}\t\t{reg.Username}");
+                Console.WriteLine($"{reg.Id}\t\t{reg.Name}\t\t{reg.RegistryUri}\t\t{reg.Repository}\t\t{reg.Username}");
             }
 
             return 0;
