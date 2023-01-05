@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Docker.DotNet;
+using Docker.DotNet.Models;
 using Shoc.Engine.Model;
 
 namespace Shoc.Engine.Client
@@ -49,6 +53,51 @@ namespace Shoc.Engine.Client
                 Images = info.Images,
                 Containers = info.Containers
             };
+        }
+
+        /// <summary>
+        /// Creates the image
+        /// </summary>
+        /// <param name="input">The creation input</param>
+        /// <returns></returns>
+        public async Task CreateImage(ImageBuildInput input)
+        {
+            // try get the system info
+            await this.dockerClient.Images.BuildImageFromDockerfileAsync(
+                new ImageBuildParameters
+                {
+                    Tags = new List<string> { $"{input.ImageUri}:{input.Version}" }
+                }, 
+                input.Payload, new List<AuthConfig>(), 
+                new Dictionary<string, string>(), 
+                new Progress<JSONMessage>(message =>
+                {
+                    Console.WriteLine($"Message of creation: {JsonSerializer.Serialize(message)}");
+                })
+            );
+        }
+
+        /// <summary>
+        /// Pushes the image to registry
+        /// </summary>
+        /// <param name="input">The creation input</param>
+        /// <returns></returns>
+        public async Task PushImage(ImagePushInput input)
+        {
+            // try get the system info
+            await this.dockerClient.Images.PushImageAsync(input.ImageUri, new ImagePushParameters
+                {
+                    Tag = input.Version
+                },
+                new AuthConfig
+                {
+                    Username = input.Username,
+                    Password = input.Password
+                },
+                new Progress<JSONMessage>((message) =>
+                {
+                    Console.WriteLine($"Message of pushing: {JsonSerializer.Serialize(message)}");
+                }));
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.CommandLine.Hosting;
 using Microsoft.Extensions.Hosting;
 using Shoc.Cli.Commands.Auth;
+using Shoc.Cli.Commands.Cluster;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
+using Shoc.Cli.Commands.Registry;
 using Shoc.Cli.Commands.User;
 
 namespace Shoc.Cli.Commands
@@ -30,6 +32,13 @@ namespace Shoc.Cli.Commands
             builder.UseCommandHandler(typeof(AuthStatusCommand), typeof(AuthStatusCommandHandler));
 
             builder.UseCommandHandler(typeof(RegistryListCommand), typeof(RegistryListCommandHandler));
+            builder.UseCommandHandler(typeof(RegistryCreateCommand), typeof(RegistryCreateCommandHandler));
+            builder.UseCommandHandler(typeof(RegistryDeleteCommand), typeof(RegistryDeleteCommandHandler));
+
+            builder.UseCommandHandler(typeof(ClusterListCommand), typeof(ClusterListCommandHandler));
+            builder.UseCommandHandler(typeof(ClusterCreateCommand), typeof(ClusterCreateCommandHandler));
+            builder.UseCommandHandler(typeof(ClusterDeleteCommand), typeof(ClusterDeleteCommandHandler));
+
 
             builder.UseCommandHandler(typeof(ConfigInitCommand), typeof(ConfigInitCommandHandler));
             

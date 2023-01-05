@@ -98,6 +98,14 @@
 
     </SqlOperation>
 
+	<SqlOperation Name="GetBundleByPackageId">
+
+	  <TextCommand>
+		  SELECT * FROM `prj_package_bundles` WHERE `PackageId` = @Id;
+	  </TextCommand>
+
+	</SqlOperation>
+
     <SqlOperation Name="DeleteBundleById">
 
       <TextCommand>

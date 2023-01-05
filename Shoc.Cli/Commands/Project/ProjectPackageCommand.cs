@@ -12,6 +12,7 @@ namespace Shoc.Cli.Commands.Project
         /// </summary>
         public ProjectPackageCommand() : base("package", "Create a package for the project")
         {
+            this.AddOption(new Option<string>(new[] { "-n", "--name" }, "The name of package"));
         }
     }
 }

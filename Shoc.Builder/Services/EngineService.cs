@@ -32,5 +32,25 @@ namespace Shoc.Builder.Services
         {
             return new[] { await this.engineClient.GetInfo()};
         }
+
+        /// <summary>
+        /// Create image
+        /// </summary>
+        /// <param name="input">The input for build</param>
+        /// <returns></returns>
+        public async Task CreateImage(ImageBuildInput input)
+        {
+            await this.engineClient.CreateImage(input);
+        }
+
+        /// <summary>
+        /// Push image
+        /// </summary>
+        /// <param name="input">The input for push</param>
+        /// <returns></returns>
+        public async Task PushImage(ImagePushInput input)
+        {
+            await this.engineClient.PushImage(input);
+        }
     }
 }

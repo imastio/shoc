@@ -10,6 +10,7 @@ using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
 using Shoc.Builder.Config;
 using Shoc.Builder.Services;
+using Shoc.Builder.Services.Interfaces;
 
 namespace Shoc.Builder
 {
@@ -56,6 +57,8 @@ namespace Shoc.Builder
             services.AddSingleton<EngineService>();
             services.AddSingleton<ProjectService>();
             services.AddSingleton<PackageService>();
+            services.AddSingleton<KubernetesClusterService>();
+            services.AddSingleton<IContainerizeProvider, ContainerizeProvider>();
         }
 
         /// <summary>

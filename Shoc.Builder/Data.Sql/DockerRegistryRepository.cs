@@ -42,9 +42,7 @@ namespace Shoc.Builder.Data.Sql
         public Task<IEnumerable<DockerRegistry>> GetBy(DockerRegistryQuery query)
         {
             return this.dataOps.Connect().Query("DockerRegistry", "GetBy")
-                .WithBinding("ByName", query.Name != null)
-                .WithBinding("ByOwner", query.OwnerId != null)
-                .WithBinding("ByShared", query.Shared != null)
+                .WithBinding("ByName", !string.IsNullOrWhiteSpace(query.Name))
                 .ExecuteAsync<DockerRegistry>(query);
         }
 

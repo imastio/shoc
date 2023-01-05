@@ -2,7 +2,7 @@
   "profiles": {
     "Shoc.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project new"
+      "commandLineArgs": "project package -n asdsdasd"
     }
   }
 }

@@ -23,6 +23,11 @@ namespace Shoc.Cli.Commands.Project
     public class ProjectPackageCommandHandler : ProjectCommandHandlerBase
     {
         /// <summary>
+        /// The project name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Creates new instance of command handler
         /// </summary>
         /// <param name="clientService">The client service</param>
@@ -52,7 +57,6 @@ namespace Shoc.Cli.Commands.Project
                 .WithNamingConvention(HyphenatedNamingConvention.Instance)
                 .Build();
 
-
             // get all required files if everything is OK
             var files = this.GetRequiredFiles(manifest.Build.Input);
 
@@ -74,7 +78,7 @@ namespace Shoc.Cli.Commands.Project
                     ProjectId = project.Id,
                     BuildSpec = serializer.Serialize(manifest.Build),
                     Status = PackageStatuses.INIT,
-                    ListingChecksum = checksum
+                    ListingChecksum = checksum,
                 });
             });
 
@@ -94,7 +98,7 @@ namespace Shoc.Cli.Commands.Project
             }
 
             // create bundle authorized
-            var bundle = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
+            _ = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
             {
                 // get the client
                 var client = this.clientService.Builder(profile);
@@ -105,6 +109,16 @@ namespace Shoc.Cli.Commands.Project
 
             // delete temporary zip file
             File.Delete(zipFile);
+
+            // create bundle authorized
+            _ = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
+            {
+                // get the client
+                var client = this.clientService.Builder(profile);
+
+                // build the package
+                return client.BuildPackage(auth.AccessToken, project.Id, package.Id, this.Name ?? "latest");
+            });
 
             Console.WriteLine($"Computing files to package. {files.Count} files were identified. Archived to {zipFile} and checksum is {checksum}");
             return 0;

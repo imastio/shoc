@@ -48,8 +48,7 @@ CREATE TABLE IF NOT EXISTS `prj_project_versions` (
   `ProjectId` varchar(100) NOT NULL,
   `Version` varchar(150) NOT NULL,
   `PackageId` varchar(100) NOT NULL,
-  PRIMARY KEY (`ProjectId`),
-  UNIQUE KEY `Project_Version_Unique` (`ProjectId`,`Version`),
+  PRIMARY KEY (`ProjectId`, `Version`),
   KEY `Package_Version_FK_idx` (`PackageId`),
   CONSTRAINT `Package_Version_FK` FOREIGN KEY (`PackageId`) REFERENCES `prj_packages` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Project_Version_FK` FOREIGN KEY (`ProjectId`) REFERENCES `prj_projects` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE

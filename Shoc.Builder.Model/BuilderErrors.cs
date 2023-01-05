@@ -46,9 +46,19 @@
         public const string INVALID_REGISTRY_URI = "BUILDER_INVALID_REGISTRY_URI";
 
         /// <summary>
+        /// The invalid repository uri
+        /// </summary>
+        public const string INVALID_REPOSITORY_URI = "BUILDER_INVALID_REPOSITORY_URI";
+
+        /// <summary>
         /// The invalid registry credentials
         /// </summary>
         public const string INVALID_REGISTRY_CREDENTIALS = "BUILDER_INVALID_REGISTRY_CREDENTIALS";
+
+        /// <summary>
+        /// The invalid kubeconfig
+        /// </summary>
+        public const string INVALID_KUBE_CONFIG = "BUILDER_INVALID_KUBE_CONFIG";
 
         /// <summary>
         /// The invalid access to the object
@@ -59,5 +69,10 @@
         /// The unknown error
         /// </summary>
         public const string UNKNOWN_ERROR = "BUILDER_UNKNOWN_ERROR";
+
+        /// <summary>
+        /// The dockerfile error
+        /// </summary>
+        public const string DOCKERFILE_ERROR = "BUILDER_DOCKERFILE_FAILED_ERROR";
     }
 }

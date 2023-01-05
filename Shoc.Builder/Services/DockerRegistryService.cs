@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Imast.Ext.Core;
@@ -55,9 +54,6 @@ namespace Shoc.Builder.Services
         /// <returns></returns>
         public Task<IEnumerable<DockerRegistry>> GetBy(ShocPrincipal principal, DockerRegistryQuery query)
         {
-            // require a proper access
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || principal.Subject == query.OwnerId);
-
             // gets all the entries by owner
             return this.dockerRegistryRepository.GetBy(query);
         }
@@ -80,7 +76,7 @@ namespace Shoc.Builder.Services
             }
             
             // require to be either administrator or owner
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
+            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type));
 
             // the result
             return result;
@@ -94,15 +90,6 @@ namespace Shoc.Builder.Services
         /// <returns></returns>
         public async Task<DockerRegistry> Create(ShocPrincipal principal, CreateDockerRegistry input)
         {
-            // set a owner id as a authenticated subject
-            input.OwnerId ??= principal.Subject;
-
-            // the registry is not shared by default
-            input.Shared ??= false;
-
-            // make sure proper owner id is set
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || input.OwnerId == principal.Subject);
-
             // name should be given
             if (string.IsNullOrEmpty(input.Name))
             {
@@ -125,6 +112,12 @@ namespace Shoc.Builder.Services
             if (!input.RegistryUri.EndsWith("/"))
             {
                 input.RegistryUri = $"{input.RegistryUri}/";
+            }
+
+            // check if repository is missing
+            if (string.IsNullOrWhiteSpace(input.Repository))
+            {
+                throw ErrorDefinition.Validation(BuilderErrors.INVALID_REPOSITORY_URI).AsException();
             }
 
             // make sure to have valid uri
@@ -151,13 +144,12 @@ namespace Shoc.Builder.Services
             // in case if password is given encrypt it
             if (input.PasswordPlaintext.IsNotBlank())
             {
-                input.EncryptedPassword = protector.Protect(Encoding.UTF8.GetBytes(input.PasswordPlaintext));
+                input.EncryptedPassword = protector.Protect(input.PasswordPlaintext);
             }
 
             // try load an existing item with the name
             var existing = await this.dockerRegistryRepository.GetBy(new DockerRegistryQuery
             {
-                OwnerId = input.OwnerId,
                 Name = input.Name
             });
 
@@ -181,9 +173,6 @@ namespace Shoc.Builder.Services
         {
             // get the object by id
             var result = await this.GetById(principal, id);
-
-            // assure the access (administrator or the owner)
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // if object is available delete from repository
             return await this.dockerRegistryRepository.DeleteById(result.Id);

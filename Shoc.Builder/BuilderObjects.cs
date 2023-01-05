@@ -24,5 +24,10 @@
         /// The docker registry object
         /// </summary>
         public const string DOCKER_REGISTRY = "drg";
+
+        /// <summary>
+        /// The kubernetes cluster object
+        /// </summary>
+        public const string KUBERNETES_CLUSTER = "kbc";
     }
 }

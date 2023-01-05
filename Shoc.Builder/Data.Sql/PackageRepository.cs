@@ -125,6 +125,20 @@ namespace Shoc.Builder.Data.Sql
         }
 
         /// <summary>
+        /// Gets the bundle by package id
+        /// </summary>
+        /// <param name="id">The package id of bundle</param>
+        /// <returns></returns>
+        public Task<PackageBundleModel> GetBundleByPackageId(string id)
+        {
+            // gets object from the database
+            return this.dataOps.Connect().QueryFirst("Package", "GetBundleByPackageId").ExecuteAsync<PackageBundleModel>(new
+            {
+                Id = id
+            });
+        }
+
+        /// <summary>
         /// Create the bundle for a package
         /// </summary>
         /// <param name="input">The bundle input</param>

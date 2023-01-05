@@ -57,7 +57,8 @@
         VALUES 
         (@ProjectId, @Version, @PackageId) 
         ON DUPLICATE KEY UPDATE 
-        `PackageId` = @PackageId;
+        `PackageId` = @PackageId,
+        `Version` = @Version;
 
       </TextCommand>
 
