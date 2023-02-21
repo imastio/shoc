@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="YamlDotNet" Version="12.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
+		<ProjectReference Include="..\Shoc.ApiCore.AuthClient\Shoc.ApiCore.AuthClient.csproj" />
+		<ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
+		<ProjectReference Include="..\Shoc.ApiCore.Discovery\Shoc.ApiCore.Discovery.csproj" />
+		<ProjectReference Include="..\Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj" />
+		<ProjectReference Include="..\Shoc.Builder.Client\Shoc.Builder.Client.csproj" />
+		<ProjectReference Include="..\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
+		<ProjectReference Include="..\Shoc.DataProtection.Sql\Shoc.DataProtection.Sql.csproj" />
+		<ProjectReference Include="..\Shoc.Executor.Model\Shoc.Executor.Model.csproj" />
+		<ProjectReference Include="..\Shoc.Kube.Client\Shoc.Kube.Client.csproj" />
+		<ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Operations\DataOps.xsd">
+	    <SubType>Designer</SubType>
+	  </None>
+	  <None Update="Operations\Job.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Operations\KubernetesCluster.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

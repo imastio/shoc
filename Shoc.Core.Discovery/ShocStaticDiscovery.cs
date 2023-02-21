@@ -53,7 +53,8 @@ namespace Shoc.Core.Discovery
                 {"shoc-docker-registry", useHttps ? 0 : 11004},
                 {"shoc-builder", useHttps ? 11007 : 11006},
                 {"shoc-identity", useHttps ? 11009 : 11008},
-                {"shoc-database-migrator", useHttps ? 11011 : 11010}
+                {"shoc-database-migrator", useHttps ? 11011 : 11010},
+                {"shoc-executor", useHttps ? 11013 : 11012}
             };
 
             return services;

@@ -55,7 +55,7 @@ namespace Shoc.Cli.Commands.Cluster
             var cluster = (await this.authService.DoAuthorized(this.Profile, (profile, status) =>
             {
                 // get the client to builder
-                var client = this.clientService.Builder(profile);
+                var client = this.clientService.Executor(profile);
 
                 // load cluster by name
                 return client.GetClusters(status.AccessToken, this.Name);
@@ -65,7 +65,7 @@ namespace Shoc.Cli.Commands.Cluster
             cluster = (await this.authService.DoAuthorized(this.Profile, (profile, status) =>
             {
                 // get the client to builder
-                var client = this.clientService.Builder(profile);
+                var client = this.clientService.Executor(profile);
 
                 // delete the cluster by id
                 return client.DeleteCluster(status.AccessToken, cluster?.Id);

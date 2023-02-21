@@ -5,14 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="10.0.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="YamlDotNet" Version="12.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
+	  <ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
+	  <ProjectReference Include="..\Shoc.ApiCore.AuthClient\Shoc.ApiCore.AuthClient.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.Discovery\Shoc.ApiCore.Discovery.csproj" />
     <ProjectReference Include="..\Shoc.ApiCore.Protection\Shoc.ApiCore.Protection.csproj" />
@@ -27,9 +27,6 @@
   <ItemGroup>
     <None Update="Operations\DataOps.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Update="Operations\KubernetesCluster.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Operations\DockerRegistry.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

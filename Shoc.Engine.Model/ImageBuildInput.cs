@@ -18,6 +18,11 @@ namespace Shoc.Engine.Model
         public string Version { get; set; }
 
         /// <summary>
+        /// The dockerfile
+        /// </summary>
+        public string Dockerfile { get; set; }
+
+        /// <summary>
         /// The payload to create image from
         /// </summary>
         public Stream Payload { get; set; }

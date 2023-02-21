@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Shoc.Builder.Client\Shoc.Builder.Client.csproj" />
     <ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
     <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+    <ProjectReference Include="..\Shoc.Executor.Client\Shoc.Executor.Client.csproj" />
     <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
   </ItemGroup>
 

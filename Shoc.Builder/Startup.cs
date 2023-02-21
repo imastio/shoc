@@ -57,7 +57,6 @@ namespace Shoc.Builder
             services.AddSingleton<EngineService>();
             services.AddSingleton<ProjectService>();
             services.AddSingleton<PackageService>();
-            services.AddSingleton<KubernetesClusterService>();
             services.AddSingleton<IContainerizeProvider, ContainerizeProvider>();
         }
 

@@ -1,12 +1,8 @@
-﻿using System;
-using System.CommandLine.Invocation;
-using System.IO;
+﻿using System.CommandLine.Invocation;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Builder.Model.Project;
-using Shoc.Cli.Model;
 using Shoc.Cli.Services;
-using Shoc.Cli.Utility;
 using Shoc.Core;
 
 namespace Shoc.Cli.Commands.Project
@@ -17,11 +13,6 @@ namespace Shoc.Cli.Commands.Project
     public abstract class ProjectCommandHandlerBase : ICommandHandler
     {
         /// <summary>
-        /// The shoc manifest file name
-        /// </summary>
-        private const string MANIFEST_FILE = "shoc-manifest.yml";
-
-        /// <summary>
         /// The client service
         /// </summary>
         protected readonly ClientService clientService;
@@ -30,11 +21,6 @@ namespace Shoc.Cli.Commands.Project
         /// The authentication service
         /// </summary>
         protected readonly AuthService authService;
-        
-        /// <summary>
-        /// The context directory
-        /// </summary>
-        public DirectoryInfo Directory { get; set; }
 
         /// <summary>
         /// The profile name
@@ -53,97 +39,35 @@ namespace Shoc.Cli.Commands.Project
         }
 
         /// <summary>
-        /// Gets the manifest if exists
+        /// Gets the project by name
         /// </summary>
+        /// <param name="name">The project</param>
         /// <returns></returns>
-        protected async Task<ShocManifest> GetManifest()
+        protected async Task<ProjectModel> RequireProject(string name)
         {
-            // the path to manifest file
-            var path = Path.Combine(this.Directory.FullName, MANIFEST_FILE);
-
-            // check if manifest file exists
-            return File.Exists(path) ? Yml.Deserialize<ShocManifest>(await File.ReadAllTextAsync(path)) : null;
-        }
-
-        /// <summary>
-        /// Gets the manifest if exists
-        /// </summary>
-        /// <returns></returns>
-        protected async Task<ShocManifest> RequireManifest()
-        {
-            // try get manifest
-            var manifest = await this.GetManifest();
-
-            // make sure manifest exists
-            if (manifest == null)
+            // make sure name specified
+            if (string.IsNullOrEmpty(name))
             {
-                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST, "The manifest is missing.").AsException();
+                ErrorDefinition.Validation(CliErrors.MISSING_PROJECT_NAME).Throw();
             }
 
-            return manifest;
-        }
-
-        /// <summary>
-        /// Saves the given manifest to the project file
-        /// </summary>
-        /// <param name="manifest">The manifest to save</param>
-        /// <returns></returns>
-        protected async Task<ShocManifest> SaveManifest(ShocManifest manifest)
-        {
-            // the path to manifest file
-            var path = Path.Combine(this.Directory.FullName, MANIFEST_FILE);
-
-            // write the manifest to the directory
-            await File.WriteAllTextAsync(path, Yml.Serialize(manifest));
-
-            // get saved object
-            return await this.GetManifest();
-        }
-
-        /// <summary>
-        /// Require the existing project in the context
-        /// </summary>
-        /// <returns></returns>
-        protected Task<ProjectModel> RequireProject()
-        {
-            return this.WithProject((_, proj) => Task.FromResult(proj));
-        }
-
-        /// <summary>
-        /// Execute the action for an existing project and the manifest
-        /// </summary>
-        /// <param name="action">The action to execute</param>
-        /// <returns></returns>
-        protected async Task<T> WithProject<T>(Func<ShocManifest, ProjectModel, Task<T>> action)
-        {
-            // get the manifest
-            var manifest = await this.RequireManifest();
-
-            // do an authorized action
-            var project =  await this.authService.DoAuthorized(this.Profile, async (profile, auth) =>
+            // get project by name
+            var project = (await this.authService.DoAuthorized(this.Profile, async (profile, status) =>
             {
-                // the builder client
                 var builder = this.clientService.Builder(profile);
-                
-                // get the project by path
-                var query = await builder.GetProjectsByPath(auth.AccessToken, manifest.Directory, manifest.Name);
 
-                // get the result
-                var result = query.FirstOrDefault();
+                return await builder.GetProjects(status.AccessToken, name);
+            })).FirstOrDefault();
 
-                // make sure result is there
-                if (result == null)
-                {
-                    throw ErrorDefinition.Validation(CliErrors.MISSING_PROJECT).AsException();
-                }
-                
-                return result;
-            });
+            // make sure project exists
+            if (project == null)
+            {
+                ErrorDefinition.Validation(CliErrors.INVALID_PROJECT).Throw();
+            }
 
-            // execute action with manifest and project
-            return await action(manifest, project);
+            return project;
         }
-        
+
         /// <summary>
         /// Implementation of project command invocation
         /// </summary>

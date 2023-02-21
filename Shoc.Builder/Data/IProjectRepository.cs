@@ -25,16 +25,17 @@ namespace Shoc.Builder.Data
         /// <summary>
         /// Gets the project by id
         /// </summary>
+        /// <param name="ownerId">The owner id</param>
         /// <param name="id">The id of project</param>
         /// <returns></returns>
-        Task<ProjectModel> GetById(string id);
+        Task<ProjectModel> GetById(string ownerId, string id);
 
         /// <summary>
         /// Gets the project versions
         /// </summary>
-        /// <param name="id">The id of projects</param>
+        /// <param name="query">The project version query</param>
         /// <returns></returns>
-        Task<IEnumerable<ProjectVersion>> GetVersions(string id);
+        Task<IEnumerable<ProjectVersion>> GetVersions(ProjectVersion query);
         
         /// <summary>
         /// Creates the project by given input

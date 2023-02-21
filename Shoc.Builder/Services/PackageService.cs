@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Tar;
 using Imast.Ext.Core;
 using Microsoft.AspNetCore.DataProtection;
-using Shoc.ApiCore;
 using Shoc.Builder.Data;
 using Shoc.Builder.Model;
 using Shoc.Builder.Model.Package;
@@ -17,7 +16,6 @@ using Shoc.Builder.Model.Registry;
 using Shoc.Builder.Services.Interfaces;
 using Shoc.Core;
 using Shoc.Engine.Model;
-using Shoc.Identity.Model;
 using Shoc.ModelCore;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -116,7 +114,7 @@ namespace Shoc.Builder.Services
         public async Task<IEnumerable<ShocPackage>> GetBy(ShocPrincipal principal, PackageQuery query)
         {
             // gets the project by id with valid access
-            var _ = await this.RequireProject(principal, query.ProjectId);
+            var _ = await this.RequireProject(principal.Subject, query.ProjectId);
 
             // get the packages with given query
             return await this.packageRepository.GetBy(query);
@@ -125,14 +123,14 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Gets the package by the given id
         /// </summary>
-        /// <param name="principal">The authenticated principals</param>
+        /// <param name="ownerId">The authenticated principal owner id</param>
         /// <param name="projectId">The project id</param>
         /// <param name="id">The package id</param>
         /// <returns></returns>
-        public async Task<ShocPackage> GetById(ShocPrincipal principal, string projectId, string id)
+        public async Task<ShocPackage> GetById(string ownerId, string projectId, string id)
         {
             // gets the project by id with valid access
-            var _ = await this.RequireProject(principal, projectId);
+            var _ = await this.RequireProject(ownerId, projectId);
 
             // try get by id
             var result = await this.packageRepository.GetById(id);
@@ -157,7 +155,7 @@ namespace Shoc.Builder.Services
         public async Task<PackageBundleReference> UploadBundle(ShocPrincipal principal, string projectId, string id, Stream stream)
         {
             // get package with access check
-            var package = await this.GetById(principal, projectId, id);
+            var package = await this.GetById(principal.Subject, projectId, id);
 
             // update package status
             package = await this.packageRepository.UpdateStatus(new PackageStatusModel
@@ -250,10 +248,10 @@ namespace Shoc.Builder.Services
         public async Task<PackageBundleReference> BuildBundleExecute(ShocPrincipal principal, string projectId, string id, string version)
         {
             // get package with access check
-            var project = await this.RequireProject(principal, projectId);
+            var project = await this.RequireProject(principal.Subject, projectId);
 
             // get package with access check
-            var package = await this.GetById(principal, projectId, id);
+            var package = await this.GetById(principal.Subject, projectId, id);
 
             // update package status
             package = await this.packageRepository.UpdateStatus(new PackageStatusModel
@@ -273,7 +271,7 @@ namespace Shoc.Builder.Services
                 throw ErrorDefinition.NotFound().AsException();
             }
 
-            // makre sure directory is present
+            // make sure directory is present
             if (!Directory.Exists(bundle.BundleRoot))
             {
                 ErrorDefinition.Validation().Throw();
@@ -286,10 +284,10 @@ namespace Shoc.Builder.Services
                 .Build();
 
             // deserialize build spec
-            var spec = deserializer.Deserialize<BuildSpec>(package.BuildSpec);
+            var spec = deserializer.Deserialize<ShocManifest>(package.BuildSpec);
 
             // get containerizer
-            var containerizer = this.containerizeProvider.Create(spec.Base);
+            var containerizer = this.containerizeProvider.Create(project.Type);
 
             // make sure containerizer exists
             if (containerizer == null)
@@ -298,12 +296,12 @@ namespace Shoc.Builder.Services
             }
 
             // get docker file contents
-            var fileContent = containerizer.GetFileContents(spec);
+            var fileContent = containerizer.GetDockerFile(new BuildSpec());
 
             try
             {
                 // write content to the file
-                await File.WriteAllTextAsync(Path.Combine(bundle.BundleRoot, "Dockerfile"), fileContent);
+                await File.WriteAllTextAsync(Path.Combine(bundle.BundleRoot, "Dockerfile.shoc"), fileContent);
             }
             catch
             {
@@ -335,6 +333,7 @@ namespace Shoc.Builder.Services
                 Version = package.Id,
                 ImageUri = imageUri,
                 Payload = stream,
+                Dockerfile = "Dockerfile.shoc"
             });
 
             // get protector
@@ -357,6 +356,14 @@ namespace Shoc.Builder.Services
             {
                 await this.projectRepository.AssignVersion(projectId, package.Id, version);
             }
+
+            // update package image 
+            await this.packageRepository.UpdateImage(new PackageImageModel
+            {
+                Id = package.Id,
+                ImageUri = imageUri,
+                ImageRecipe = fileContent
+            });
 
             // update package status
             package = await this.packageRepository.UpdateStatus(new PackageStatusModel
@@ -384,7 +391,7 @@ namespace Shoc.Builder.Services
         public async Task<ShocPackage> Create(ShocPrincipal principal, string projectId, CreatePackageInput input)
         {
             // gets the project with access 
-            _ = await this.RequireProject(principal, projectId);
+            _ = await this.RequireProject(principal.Subject, projectId);
 
             // make sure default parameters are set
             input.ProjectId = projectId;
@@ -399,10 +406,10 @@ namespace Shoc.Builder.Services
                 .Build();
 
             // deserialize build spec
-            var spec = deserializer.Deserialize<BuildSpec>(input.BuildSpec);
+            var spec = deserializer.Deserialize<ShocManifest>(input.BuildSpec);
 
             // resolves the registry based on the spec
-            var registry = await this.ResolveRegistry(spec);
+            var registry = await this.ResolveRegistry(spec?.RegistryName);
 
             // assign registry 
             input.RegistryId = registry.Id;
@@ -421,7 +428,7 @@ namespace Shoc.Builder.Services
         public async Task<ShocPackage> DeleteById(ShocPrincipal principal, string projectId, string id)
         {
             // gets the project by id with valid access
-            var _ = await this.RequireProject(principal, projectId);
+            var _ = await this.RequireProject(principal.Subject, projectId);
 
             // try delete by id
             var result = await this.packageRepository.DeleteById(id);
@@ -438,22 +445,19 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Require the project by id
         /// </summary>
-        /// <param name="principal">The authenticated principal</param>
+        /// <param name="ownerId">The authenticated owner id</param>
         /// <param name="projectId">The id of project</param>
         /// <returns></returns>
-        private async Task<ProjectModel> RequireProject(ShocPrincipal principal, string projectId)
+        private async Task<ProjectModel> RequireProject(string ownerId, string projectId)
         {
             // try load the result
-            var result = await this.projectRepository.GetById(projectId);
+            var result = await this.projectRepository.GetById(ownerId, projectId);
 
             // not found
             if (result == null)
             {
                 throw ErrorDefinition.NotFound().AsException();
             }
-
-            // require to be either administrator or owner
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type) || result.OwnerId == principal.Subject);
 
             // the result
             return result;
@@ -462,17 +466,17 @@ namespace Shoc.Builder.Services
         /// <summary>
         /// Resolves the registry based on the build specification
         /// </summary>
-        /// <param name="spec">The specification</param>
+        /// <param name="registryName">The specification</param>
         /// <returns></returns>
-        private async Task<DockerRegistry> ResolveRegistry(BuildSpec spec)
+        private async Task<DockerRegistry> ResolveRegistry(string registryName)
         {
             // name is given
-            var nameGiven = spec.RegistryName.IsNotBlank();
+            var nameGiven = registryName.IsNotBlank();
 
             // try get all registries with given name 
             var registry = (await this.dockerRegistryRepository.GetBy(new DockerRegistryQuery
             {
-                Name = nameGiven ? spec.RegistryName : null
+                Name = nameGiven ? registryName : null
             })).FirstOrDefault();
 
             // in case if name given but not found any with name raise an error

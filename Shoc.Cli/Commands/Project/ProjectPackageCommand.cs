@@ -13,6 +13,8 @@ namespace Shoc.Cli.Commands.Project
         public ProjectPackageCommand() : base("package", "Create a package for the project")
         {
             this.AddOption(new Option<string>(new[] { "-n", "--name" }, "The name of package"));
+            this.AddOption(new Option<string>(new[] { "-v", "--project-version" }, "The version of project"));
+            this.AddOption(new Option<string>(new[] { "-d", "--target-directory" }, "The directory path to package"));
         }
     }
 }

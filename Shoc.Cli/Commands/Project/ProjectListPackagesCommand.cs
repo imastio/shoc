@@ -12,6 +12,7 @@ namespace Shoc.Cli.Commands.Project
         /// </summary>
         public ProjectListPackagesCommand() : base("list-packages", "List all the packages of the project")
         {
+            this.AddOption(new Option<string>(new[] { "-n", "--name" }, "The name of project to list packages"));
         }
     }
 }

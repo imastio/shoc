@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Migrations.Sql\20221009192304_ExecutorMigration.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Migrations.Sql\20221009192303_ProjectMigration.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -47,7 +47,8 @@ namespace Shoc.Cli.Commands
                 new ProjectListCommand(),
                 new ProjectDeleteCommand(),
                 new ProjectPackageCommand(),
-                new ProjectListPackagesCommand()
+                new ProjectListPackagesCommand(),
+                new ProjectRunCommand()
             };
 
             // add directory as an option to all commands

@@ -24,6 +24,7 @@ $AllServices = @(
     "shoc-webgtw", 
     "shoc-identity", 
     "shoc-builder", 
+	"shoc-executor", 
     "shoc-ingress")
 
 function IsValidService($service, $all){

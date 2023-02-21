@@ -16,7 +16,9 @@ namespace Shoc.Builder.Services
         {
             return name switch
             {
-                "alpine" => new AlpineContainerize(),
+                "hostname" => new HostnameContainerizer(),
+                "list" => new ListContainerizer(),
+                "python-pip" => new PythonPipContainerizer(),
                 _ => null
             };
         }

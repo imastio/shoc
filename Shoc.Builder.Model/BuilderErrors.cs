@@ -6,14 +6,14 @@
     public class BuilderErrors
     {
         /// <summary>
-        /// The invalid directory name
-        /// </summary>
-        public const string INVALID_DIRECTORY = "BUILDER_INVALID_DIRECTORY";
-
-        /// <summary>
         /// The invalid name
         /// </summary>
         public const string INVALID_NAME = "BUILDER_INVALID_NAME";
+
+        /// <summary>
+        /// The invalid type
+        /// </summary>
+        public const string INVALID_TYPE = "BUILDER_INVALID_TYPE";
 
         /// <summary>
         /// The existing name

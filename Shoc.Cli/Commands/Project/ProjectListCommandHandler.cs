@@ -27,20 +27,17 @@ namespace Shoc.Cli.Commands.Project
         /// <returns></returns>
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
-            // try get existing manifest
-            var existing = await this.GetManifest();
-
             // do the operation authorized
             var result = await this.authService.DoAuthorized(this.Profile, async (profile, me) => await this.clientService.Builder(profile).GetProjects(me.AccessToken));
+
+            // print header
+            context.Console.WriteLine("Id\t\tName\t\tType");
 
             // print all the projects
             foreach (var project in result)
             {
-                // message postfix for selected one
-                var postfix = existing?.Name == project.Name && existing?.Directory == project.Directory ? " [Current]" : string.Empty;
-
                 // print project
-                context.Console.WriteLine($"{project.Id} \t\t {project.Directory} \t\t {project.Name}{postfix}");
+                context.Console.WriteLine($"{project.Id} \t\t {project.Type}");
             }
             
             return 0;

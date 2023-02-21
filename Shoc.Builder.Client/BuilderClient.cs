@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Imast.Ext.DiscoveryCore;
-using Shoc.Builder.Model.Kubernetes;
 using Shoc.Builder.Model.Package;
 using Shoc.Builder.Model.Project;
 using Shoc.Builder.Model.Registry;
@@ -20,7 +21,7 @@ namespace Shoc.Builder.Client
         /// <summary>
         /// The service name by default
         /// </summary>
-        private static readonly string DEFAULT_SERVICE = "shoc-builder";
+        private const string DEFAULT_SERVICE = "shoc-builder";
 
         /// <summary>
         /// Creates new instance of the client
@@ -29,39 +30,19 @@ namespace Shoc.Builder.Client
         /// <param name="discovery">The discovery</param>
         public BuilderClient(string client, IDiscoveryClient discovery) : base(client, DEFAULT_SERVICE, discovery)
         {
+            this.webClient.Timeout = Timeout.InfiniteTimeSpan;
         }
 
         /// <summary>
         /// Gets all the projects
         /// </summary>
         /// <param name="token">The access token</param>
+        /// <param name="name">The project name filter</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ProjectModel>> GetProjects(string token)
+        public async Task<IEnumerable<ProjectModel>> GetProjects(string token, string name = null)
         {
             // the url of api
-            var url = await this.GetApiUrl("api/projects");
-
-            // build the message
-            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
-
-            // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
-
-            // get the result
-            return await response.Map<IEnumerable<ProjectModel>>();
-        }
-
-        /// <summary>
-        /// Gets all the projects by name and directory
-        /// </summary>
-        /// <param name="token">The access token</param>
-        /// <param name="directory">The directory</param>
-        /// <param name="name">The name</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ProjectModel>> GetProjectsByPath(string token, string directory, string name)
-        {
-            // the url of api
-            var url = await this.GetApiUrl($"api/projects?directory={directory}&name={name}");
+            var url = await this.GetApiUrl($"api/projects?name={name}");
 
             // build the message
             var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
@@ -78,11 +59,12 @@ namespace Shoc.Builder.Client
         /// </summary>
         /// <param name="token">The access token</param>
         /// <param name="id">The id of project</param>
+        /// <param name="ownerId">The owner id</param>
         /// <returns></returns>
-        public async Task<ProjectModel> GetProjectById(string token, string id)
+        public async Task<ProjectModel> GetProjectById(string token, string id, string ownerId)
         {
             // the url of api
-            var url = await this.GetApiUrl($"api/projects/{id}");
+            var url = await this.GetApiUrl($"api/projects/{id}/by-owner/{ownerId}");
 
             // build the message
             var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
@@ -92,6 +74,29 @@ namespace Shoc.Builder.Client
 
             // get the result
             return await response.Map(new MapOptions<ProjectModel>().OnNotFoundDefault());
+        }
+
+        /// <summary>
+        /// Gets the package by given id
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="projectId">The project id</param>
+        /// <param name="id">The id of project</param>
+        /// <param name="ownerId">The owner id</param>
+        /// <returns></returns>
+        public async Task<ShocPackage> GetPackageById(string token, string projectId, string id, string ownerId)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{projectId}/packages/{id}/by-owner/{ownerId}");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map(new MapOptions<ShocPackage>().OnNotFoundDefault());
         }
 
         /// <summary>
@@ -206,9 +211,9 @@ namespace Shoc.Builder.Client
 
             // build message content
             message.Content = content;
-
+            
             // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+            var response = await WithTimeout(TimeSpan.FromMinutes(10), source => Guard.DoAsync(() => this.webClient.SendAsync(message, source.Token)));
 
             // get the result
             return await response.Map<PackageBundleReference>();
@@ -238,6 +243,28 @@ namespace Shoc.Builder.Client
         }
 
         /// <summary>
+        /// Get project version by name
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="projectId">The id of project</param>
+        /// <param name="version">The version of the package</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ProjectVersion>> GetProjectVersionByName(string token, string projectId, string version)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/projects/{projectId}/versions?version={version}");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<IEnumerable<ProjectVersion>>();
+        }
+
+        /// <summary>
         /// Gets all docker registries
         /// </summary>
         /// <param name="token">The access token</param>
@@ -256,6 +283,27 @@ namespace Shoc.Builder.Client
 
             // get the result
             return await response.Map<IEnumerable<DockerRegistry>>();
+        }
+
+        /// <summary>
+        /// Gets docker registry by id
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="id">The id of the registry</param>
+        /// <returns></returns>
+        public async Task<DockerRegistry> GetRegistryById(string token, string id)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/docker-registries/{id}");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<DockerRegistry>();
         }
 
         /// <summary>
@@ -299,68 +347,6 @@ namespace Shoc.Builder.Client
             // get the result
             return await response.Map<DockerRegistry>();
         }
-
-        /// <summary>
-        /// Gets all kubernetes cluster
-        /// </summary>
-        /// <param name="token">The access token</param>
-        /// <param name="name">The name of the cluster</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<KubernetesCluster>> GetClusters(string token, string name = null)
-        {
-            // the url of api
-            var url = await this.GetApiUrl($"api/kubernetes-clusters/?name={name}");
-
-            // build the message
-            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
-
-            // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
-
-            // get the result
-            return await response.Map<IEnumerable<KubernetesCluster>>();
-        }
-
-        /// <summary>
-        /// Creates a new cluster entity
-        /// </summary>
-        /// <param name="token">The access token</param>
-        /// <param name="input">The input to create</param>
-        /// <returns></returns>
-        public async Task<KubernetesCluster> CreateCluster(string token, CreateKubernetesCluster input)
-        {
-            // the url of api
-            var url = await this.GetApiUrl("api/kubernetes-clusters");
-
-            // build the message
-            var message = BuildMessage(HttpMethod.Post, url, input, Auth(token));
-
-            // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
-
-            // get the result
-            return await response.Map<KubernetesCluster>();
-        }
-
-        /// <summary>
-        /// Deletes existing cluster entity
-        /// </summary>
-        /// <param name="token">The access token</param>
-        /// <param name="id">The id of the cluster</param>
-        /// <returns></returns>
-        public async Task<KubernetesCluster> DeleteCluster(string token, string id)
-        {
-            // the url of api
-            var url = await this.GetApiUrl($"api/kubernetes-clusters/{id}");
-
-            // build the message
-            var message = BuildMessage(HttpMethod.Delete, url, null, Auth(token));
-
-            // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
-
-            // get the result
-            return await response.Map<KubernetesCluster>();
-        }
+        
     }
 }

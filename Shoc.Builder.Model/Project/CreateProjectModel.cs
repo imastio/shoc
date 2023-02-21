@@ -16,13 +16,13 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// The project directory
-        /// </summary>
-        public string Directory { get; set; }
-
-        /// <summary>
         /// The owner user of the project
         /// </summary>
         public string OwnerId { get; set; }
+
+        /// <summary>
+        /// The project type
+        /// </summary>
+        public string Type { get; set; }
     }
 }

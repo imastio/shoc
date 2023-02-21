@@ -2,9 +2,9 @@
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
-using Shoc.Builder.Model.Kubernetes;
 using Shoc.Cli.Services;
 using Shoc.Core;
+using Shoc.Executor.Model.Kubernetes;
 
 namespace Shoc.Cli.Commands.Cluster
 {
@@ -85,7 +85,7 @@ namespace Shoc.Cli.Commands.Cluster
             var cluster = await this.authService.DoAuthorized(this.Profile, (profile, status) =>
             {
                 // get the client to builder
-                var client = this.clientService.Builder(profile);
+                var client = this.clientService.Executor(profile);
 
                 // create the cluster
                 return client.CreateCluster(status.AccessToken, new CreateKubernetesCluster

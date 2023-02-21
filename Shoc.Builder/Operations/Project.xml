@@ -5,83 +5,84 @@
 	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
 	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
 
-  <OperationGroup Name="Project">
+	<OperationGroup Name="Project">
 
-    <SqlOperation Name="GetAll">
-      <TextCommand>
-        SELECT * FROM `prj_projects`;
-      </TextCommand>
-    </SqlOperation>
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT * FROM `prj_projects`
+				WHERE `OwnerId` = @OwnerId;
+			</TextCommand>
+		</SqlOperation>
 
-    <SqlOperation Name="GetBy">
-      <TextCommand>
-        SELECT * FROM `prj_projects`
-        WHERE 1=1
-        {if:ByName {AND `Name` = @Name} else {}}
-        {if:ByDirectory {AND `Directory` = @Directory} else {}}
-        {if:ByOwner {AND `OwnerId` = @OwnerId} else {}};
-      </TextCommand>
-    </SqlOperation>
+		<SqlOperation Name="GetBy">
+			<TextCommand>
+				SELECT * FROM `prj_projects`
+				WHERE `OwnerId` = @OwnerId
+				{if:ByName {AND `Name` = @Name} else {}}
+			</TextCommand>
+		</SqlOperation>
 
-    <SqlOperation Name="GetById">
-      <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
-    </SqlOperation>
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT * FROM `prj_projects` WHERE `Id` = @Id AND `OwnerId` = @OwnerId;
+			</TextCommand>
+		</SqlOperation>
 
-    <SqlOperation Name="GetProjectVersions">
+		<SqlOperation Name="GetProjectVersions">
 
-      <TextCommand>
-        SELECT * FROM `prj_project_versions` WHERE `ProjectId` = @ProjectId;
-      </TextCommand>
+			<TextCommand>
+				SELECT * FROM `prj_project_versions`
+				WHERE `ProjectId` = @ProjectId
+				{if:ByVersion {AND `Version` = @Version} else {}};
+			</TextCommand>
 
-    </SqlOperation>
+		</SqlOperation>
 
-    <SqlOperation Name="Create">
+		<SqlOperation Name="Create">
 
-      <TextCommand>
-        INSERT INTO `prj_projects`
-        (`Id`, `Name`, `Directory`, `OwnerId`)
-        VALUES
-        (@Id, @Name, @Directory, @OwnerId);
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
+			<TextCommand>
+				INSERT INTO `prj_projects`
+				(`Id`, `Name`, `Type`, `OwnerId`)
+				VALUES
+				(@Id, @Name, @Type, @OwnerId);
+				SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+			</TextCommand>
 
-    </SqlOperation>
+		</SqlOperation>
 
-    <SqlOperation Name="AssignVersion">
+		<SqlOperation Name="AssignVersion">
 
-      <TextCommand>
-        INSERT INTO `prj_project_versions` 
-        (`ProjectId`, `Version`, `PackageId`) 
-        VALUES 
-        (@ProjectId, @Version, @PackageId) 
-        ON DUPLICATE KEY UPDATE 
-        `PackageId` = @PackageId,
-        `Version` = @Version;
+			<TextCommand>
+				INSERT INTO `prj_project_versions`
+				(`ProjectId`, `Version`, `PackageId`)
+				VALUES
+				(@ProjectId, @Version, @PackageId)
+				ON DUPLICATE KEY UPDATE
+				`PackageId` = @PackageId,
+				`Version` = @Version;
 
-      </TextCommand>
+			</TextCommand>
 
-    </SqlOperation>
+		</SqlOperation>
 
-    <SqlOperation Name="DeleteById">
+		<SqlOperation Name="DeleteById">
 
-      <TextCommand>
-        SELECT * FROM `prj_projects` WHERE `Id` = @Id;
-        DELETE FROM `prj_projects` WHERE `Id` = @Id;
-      </TextCommand>
+			<TextCommand>
+				SELECT * FROM `prj_projects` WHERE `Id` = @Id;
+				DELETE FROM `prj_projects` WHERE `Id` = @Id;
+			</TextCommand>
 
-    </SqlOperation>
+		</SqlOperation>
 
-    <SqlOperation Name="DeleteProjectVersion">
+		<SqlOperation Name="DeleteProjectVersion">
 
-      <TextCommand>
-        DELETE FROM `prj_project_versions` WHERE `ProjectId` = @ProjectId AND `Version` = @Version;
-      </TextCommand>
+			<TextCommand>
+				DELETE FROM `prj_project_versions` WHERE `ProjectId` = @ProjectId AND `Version` = @Version;
+			</TextCommand>
 
-    </SqlOperation>
+		</SqlOperation>
 
 
-  </OperationGroup>
+	</OperationGroup>
 
 </DataOperations>

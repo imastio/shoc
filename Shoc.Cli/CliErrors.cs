@@ -49,7 +49,7 @@
         /// The project is missing
         /// </summary>
         public const string MISSING_PROJECT = "CLI_MISSING_PROJECT";
-        
+
         /// <summary>
         /// The unknown error
         /// </summary>
@@ -71,21 +71,6 @@
         public const string REGISTRY_REPOSITORY_ERROR = "CLI_REGISTRY_REPOSITORY_INVALID";
 
         /// <summary>
-        /// The registry email error
-        /// </summary>
-        public const string REGISTRY_EMAIL_ERROR = "CLI_REGISTRY_EMAIL_INVALID";
-
-        /// <summary>
-        /// The registry username error
-        /// </summary>
-        public const string REGISTRY_USERNAME_ERROR = "CLI_REGISTRY_USERNAME_INVALID";
-
-        /// <summary>
-        /// The registry password error
-        /// </summary>
-        public const string REGISTRY_PASSWORD_ERROR = "CLI_REGISTRY_PASSWORD_INVALID";
-
-        /// <summary>
         /// The cluster name error
         /// </summary>
         public const string CLUSTER_NAME_ERROR = "CLI_CLUSTER_NAME_INVALID";
@@ -104,5 +89,35 @@
         /// The cluster api server uri error
         /// </summary>
         public const string CLUSTER_URI_ERROR = "CLI_CLUSTER_URI_INVALID";
+
+        /// <summary>
+        /// The project version name error
+        /// </summary>
+        public const string PROJECT_VERSION_ERROR = "CLI_PROJECT_VERSION_INVALID";
+
+        /// <summary>
+        /// The project name is missing
+        /// </summary>
+        public const string MISSING_PROJECT_NAME = "CLI_MISSING_PROJECT_NAME";
+
+        /// <summary>
+        /// The project directory is missing
+        /// </summary>
+        public const string MISSING_PROJECT_DIRECTORY = "CLI_MISSING_PROJECT_DIRECTORY";
+
+        /// <summary>
+        /// The project type is missing
+        /// </summary>
+        public const string MISSING_PROJECT_TYPE = "CLI_MISSING_PROJECT_TYPE";
+        
+        /// <summary>
+        /// The project is invalid
+        /// </summary>
+        public const string INVALID_PROJECT = "CLI_INVALID_PROJECT";
+
+        /// <summary>
+        /// The job failed to create
+        /// </summary>
+        public const string JOB_CREATE_FAILED = "CLI_JOB_CREATE_FAILED";
     }
 }

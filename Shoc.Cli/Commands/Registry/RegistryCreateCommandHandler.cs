@@ -82,21 +82,9 @@ namespace Shoc.Cli.Commands.Registry
             Console.Write("Email: ");
             var email = Console.ReadLine();
 
-            // check email not empty
-            if (string.IsNullOrEmpty(email))
-            {
-                throw ErrorDefinition.Validation(CliErrors.REGISTRY_EMAIL_ERROR).AsException();
-            }
-
             // enter username for docker registry
             Console.Write("Username: ");
             var username = Console.ReadLine();
-
-            // check email not empty
-            if (string.IsNullOrEmpty(username))
-            {
-                throw ErrorDefinition.Validation(CliErrors.REGISTRY_USERNAME_ERROR).AsException();
-            }
 
             // enter username for docker registry
             Console.Write("Password: ");
@@ -104,12 +92,6 @@ namespace Shoc.Cli.Commands.Registry
 
             // break console line after getting password
             Console.WriteLine();
-
-            // check password not empty
-            if (string.IsNullOrEmpty(password))
-            {
-                throw ErrorDefinition.Validation(CliErrors.REGISTRY_PASSWORD_ERROR).AsException();
-            }
 
             // create the registry in authorized context
             var registry = await this.authService.DoAuthorized(this.Profile, (profile, status) =>

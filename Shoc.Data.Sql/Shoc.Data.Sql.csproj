@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Imast.DataOps" Version="0.0.5" />
-    <PackageReference Include="MySql.Data" Version="8.0.30" />
+    <PackageReference Include="MySql.Data" Version="8.0.32" />
   </ItemGroup>
 
 </Project>
