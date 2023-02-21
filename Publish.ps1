@@ -22,6 +22,10 @@ function GetCsharpProject ($serviceName) {
 		return "$PSScriptRoot/Shoc.Webgtw/Shoc.Webgtw.csproj"
 	}
 	
+	if($serviceName -eq "shoc-executor"){
+		return "$PSScriptRoot/Shoc.Executor/Shoc.Executor.csproj"
+	}
+	
 	return ""
 }
 

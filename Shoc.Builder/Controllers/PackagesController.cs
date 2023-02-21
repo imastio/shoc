@@ -5,6 +5,7 @@ using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
 using Shoc.Builder.Model.Package;
 using Shoc.Builder.Services;
+using Shoc.Identity.Model;
 
 namespace Shoc.Builder.Controllers
 {
@@ -60,8 +61,25 @@ namespace Shoc.Builder.Controllers
         [HttpGet("{id}")]
         public Task<ShocPackage> GetById(string projectId, string id)
         {
+            var principal = this.HttpContext.GetShocPrincipal();
+
             // try get result
-            return this.packageService.GetById(this.HttpContext.GetShocPrincipal(), projectId, id);
+            return this.packageService.GetById(principal.Subject, projectId, id);
+        }
+
+        /// <summary>
+        /// Gets the package by id
+        /// </summary>
+        /// <param name="projectId">The project id</param>
+        /// <param name="id">The id of package</param>
+        /// <param name="ownerId">The owner id</param>
+        /// <returns></returns>
+        [HttpGet("{id}/by-owner/{ownerId}")]
+        [AuthorizeMinUserType(UserTypes.ADMIN, AllowInsiders = true)]
+        public Task<ShocPackage> GetInternalById(string projectId, string id, string ownerId)
+        {
+            // try get result
+            return this.packageService.GetById(ownerId, projectId, id);
         }
 
         /// <summary>

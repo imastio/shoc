@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Imast.Ext.Core;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
 using Shoc.Builder.Model.Project;
 using Shoc.Builder.Services;
+using Shoc.Identity.Model;
 
 namespace Shoc.Builder.Controllers
 {
@@ -35,22 +35,18 @@ namespace Shoc.Builder.Controllers
         /// <summary>
         /// Gets the projects by given filters
         /// </summary>
-        /// <param name="all">Indicates if all the projects should be included</param>
-        /// <param name="owner">The owner to filter with</param>
-        /// <param name="directory">The directory to filter</param>
         /// <param name="name">The target name</param>
         /// <returns></returns>
         [HttpGet]
-        public Task<IEnumerable<ProjectModel>> GetAll([FromQuery] bool all = false, [FromQuery] string owner = null, [FromQuery] string directory = null, [FromQuery] string name = null)
+        public Task<IEnumerable<ProjectModel>> GetAll([FromQuery] string name = null)
         {
             // the request principal
             var principal = this.HttpContext.GetShocPrincipal();
 
-            return this.projectService.GetBy(principal, new ProjectQuery
+            return this.projectService.GetBy(new ProjectQuery
             {
-                OwnerId = all ? null : owner.OnBlank(principal.Subject),
-                Name = name,
-                Directory = directory
+                OwnerId = principal.Subject,
+                Name = name
             });
         }
 
@@ -62,20 +58,41 @@ namespace Shoc.Builder.Controllers
         [HttpGet("{id}")]
         public Task<ProjectModel> GetById(string id)
         {
+            // get the principal
+            var principal = this.HttpContext.GetShocPrincipal();
+
             // try get result
-            return this.projectService.GetById(this.HttpContext.GetShocPrincipal(), id);
+            return this.projectService.GetById(principal.Subject, id);
+        }
+
+        /// <summary>
+        /// Gets the project by id
+        /// </summary>
+        /// <param name="id">The id of project</param>
+        /// <param name="ownerId">The owner id of project</param>
+        /// <returns></returns>
+        [HttpGet("{id}/by-owner/{ownerId}")]
+        [AuthorizeMinUserType(UserTypes.ADMIN, AllowInsiders = true)]
+        public Task<ProjectModel> GetInternalById(string id, string ownerId)
+        {
+            // try get result
+            return this.projectService.GetById(ownerId, id);
         }
 
         /// <summary>
         /// Gets the versions of the project by id
         /// </summary>
         /// <param name="id">The id of project</param>
+        /// <param name="version">The version of project</param>
         /// <returns></returns>
         [HttpGet("{id}/versions")]
-        public Task<IEnumerable<ProjectVersion>> GetVersions(string id)
+        public Task<IEnumerable<ProjectVersion>> GetVersions(string id, [FromQuery] string version = null)
         {
+            // get the principal
+            var principal = this.HttpContext.GetShocPrincipal();
+
             // try get result
-            return this.projectService.GetVersions(this.HttpContext.GetShocPrincipal(), id);
+            return this.projectService.GetVersions(principal.Subject, id, version);
         }
 
         /// <summary>
@@ -86,7 +103,13 @@ namespace Shoc.Builder.Controllers
         [HttpPost]
         public Task<ProjectModel> Create([FromBody] CreateProjectModel input)
         {
-            return this.projectService.Create(this.HttpContext.GetShocPrincipal(), input);
+            // get the principal
+            var principal = this.HttpContext.GetShocPrincipal();
+
+            // set owner id
+            input.OwnerId = principal.Subject;
+
+            return this.projectService.Create(input);
         }
         
         /// <summary>
@@ -97,7 +120,10 @@ namespace Shoc.Builder.Controllers
         [HttpDelete("{id}")]
         public Task<ProjectModel> DeleteById(string id)
         {
-            return this.projectService.DeleteById(this.HttpContext.GetShocPrincipal(), id);
+            // get the principal
+            var principal = this.HttpContext.GetShocPrincipal();
+
+            return this.projectService.DeleteById(principal.Subject, id);
         }
     }
 }

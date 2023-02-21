@@ -17,7 +17,7 @@ namespace Shoc.ApiCore.DataProtection
         /// <param name="services">The services collection</param>
         public static IDataProtectionBuilder AddPersistenceDataProtection(this IServiceCollection services)
         {
-            return services.AddDataProtection().PersistKeysToDatabase();
+            return services.AddDataProtection().SetApplicationName("shoc").PersistKeysToDatabase();
         }
 
         /// <summary>

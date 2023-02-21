@@ -12,6 +12,6 @@ namespace Shoc.Builder.Services.Interfaces
         /// </summary>
         /// <param name="spec">The build specification</param>
         /// <returns>The content of Dockerfile</returns>
-        string GetFileContents(BuildSpec spec);
+        string GetDockerFile(BuildSpec spec);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Shoc.Builder.Client;
 using Shoc.Cli.Model;
+using Shoc.Executor.Client;
 
 namespace Shoc.Cli.Services
 {
@@ -34,6 +35,15 @@ namespace Shoc.Cli.Services
         public BuilderClient Builder(ShocProfile profile)
         {
             return new BuilderClient(DEFAULT_CLIENT, this.discoveryService.GetDiscovery(profile));
+        }
+
+        /// <summary>
+        /// Provide the executor client
+        /// </summary>
+        /// <returns></returns>
+        public ExecutorClient Executor(ShocProfile profile)
+        {
+            return new ExecutorClient(DEFAULT_CLIENT, this.discoveryService.GetDiscovery(profile));
         }
     }
 }

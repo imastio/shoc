@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Net;
 using Yarp.ReverseProxy.Forwarder;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Discovery;
 using Shoc.Webgtw.Gateway;
@@ -44,6 +46,18 @@ namespace Shoc.Webgtw
             services.AddSelf(this.Configuration);
             services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
             services.AddControllers();
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = long.MaxValue;
+                options.BufferBodyLengthLimit = long.MaxValue;
+                options.MultipartBoundaryLengthLimit = int.MaxValue;
+            });
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = int.MaxValue;
+            });
 
             // add proxy essentials
             services.AddSingleton<RequestTransformer>();

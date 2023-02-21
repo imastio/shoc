@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Imast.Ext.ApiClient;
 using Imast.Ext.DiscoveryCore;
 
@@ -46,6 +49,24 @@ namespace Shoc.ClientCore
 
             // return message
             return message;
+        }
+
+        /// <summary>
+        /// Do an operation within an exception guard async
+        /// </summary>
+        /// <typeparam name="T">The result type</typeparam>
+        /// <param name="timeout">The timeout to set</param>
+        /// <param name="supplier">The supplier to execute</param>
+        /// <returns></returns>
+        protected static async Task<T> WithTimeout<T>(TimeSpan timeout, Func<CancellationTokenSource, Task<T>> supplier)
+        {
+            // create a token source with timeout
+            using var cts = new CancellationTokenSource();
+
+            // cancel
+            cts.CancelAfter(timeout);
+
+            return await supplier.Invoke(cts);
         }
     }
 }

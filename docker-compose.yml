@@ -92,6 +92,23 @@ services:
     networks:
       - shoc-network
       
+  shoc-executor:
+    image: shoc-executor:latest
+    restart: always
+    build: ./Shoc.Executor
+    container_name: shoc-executor
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-database-sql.env
+      - ./env/shoc-executor.env
+    ports:
+      - '11012:11012'
+    depends_on:
+      - shoc-database-sql
+    networks:
+      - shoc-network
+      
   shoc-webgtw:
     image: shoc-webgtw:latest
     restart: always

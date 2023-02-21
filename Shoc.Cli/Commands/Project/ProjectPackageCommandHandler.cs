@@ -10,6 +10,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Shoc.Builder.Model.Package;
 using Shoc.Cli.Model;
 using Shoc.Cli.Services;
+using Shoc.Cli.Utility;
 using Shoc.Core;
 using Shoc.ModelCore;
 using YamlDotNet.Serialization;
@@ -23,9 +24,29 @@ namespace Shoc.Cli.Commands.Project
     public class ProjectPackageCommandHandler : ProjectCommandHandlerBase
     {
         /// <summary>
+        /// The shoc build spec manifest file name
+        /// </summary>
+        private const string BUILDSPEC_FILE = "shoc-build.yml";
+
+        /// <summary>
+        /// The shoc ignore file for files
+        /// </summary>
+        private const string SHOCIGNORE_FILE = ".shocignore";
+
+        /// <summary>
+        /// The project version (package)
+        /// </summary>
+        public string Version { get; set; }
+
+        /// <summary>
         /// The project name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The directory path
+        /// </summary>
+        public DirectoryInfo TargetDirectory { get; set; }
 
         /// <summary>
         /// Creates new instance of command handler
@@ -43,14 +64,23 @@ namespace Shoc.Cli.Commands.Project
         /// <returns></returns>
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
-            // get the manifest
-            var manifest = await this.RequireManifest();
-
-            // make sure input is valid
-            if (manifest.Build?.Input == null)
+            if (string.IsNullOrEmpty(this.Name))
             {
-                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST_BUILD_INPUT).AsException();
+                ErrorDefinition.Validation(CliErrors.MISSING_PROJECT_NAME);
             }
+
+            this.TargetDirectory ??= new DirectoryInfo("./");
+
+            if (string.IsNullOrEmpty(this.TargetDirectory.FullName))
+            {
+                ErrorDefinition.Validation(CliErrors.MISSING_PROJECT_DIRECTORY);
+            }
+
+            // get the project
+            var project = await this.RequireProject(this.Name);
+
+            // get the build manifest
+            var manifest = await this.GetBuildManifest();
 
             // create serializer
             var serializer = new SerializerBuilder()
@@ -58,13 +88,10 @@ namespace Shoc.Cli.Commands.Project
                 .Build();
 
             // get all required files if everything is OK
-            var files = this.GetRequiredFiles(manifest.Build.Input);
+            var files = await this.GetRequiredFiles();
 
             // get checksum
             var checksum = GetChecksum(files);
-
-            // get the project instance
-            var project = await this.WithProject((_, p) => Task.FromResult(p));
 
             // create package in authorized context
             var package = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
@@ -76,7 +103,7 @@ namespace Shoc.Cli.Commands.Project
                 return client.CreatePackage(auth.AccessToken, project.Id, new CreatePackageInput
                 {
                     ProjectId = project.Id,
-                    BuildSpec = serializer.Serialize(manifest.Build),
+                    BuildSpec = manifest == null ? string.Empty : serializer.Serialize(manifest),
                     Status = PackageStatuses.INIT,
                     ListingChecksum = checksum,
                 });
@@ -93,18 +120,18 @@ namespace Shoc.Cli.Commands.Project
                 // adding files to archive
                 foreach (var file in files)
                 {
-                    zip.CreateEntryFromFile(file.Path, Path.GetRelativePath(this.Directory.FullName, file.Path), CompressionLevel.Optimal);
+                    zip.CreateEntryFromFile(file.Path, Path.GetRelativePath(this.TargetDirectory.FullName, file.Path), CompressionLevel.Optimal);
                 }
             }
 
             // create bundle authorized
-            _ = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
+            _ = await this.authService.DoAuthorized(this.Profile, async (profile, auth) =>
             {
                 // get the client
                 var client = this.clientService.Builder(profile);
 
                 // send the file and get the reference back
-                return client.UploadBundle(auth.AccessToken, project.Id, package.Id, zipFile);
+                return await client.UploadBundle(auth.AccessToken, project.Id, package.Id, zipFile);
             });
 
             // delete temporary zip file
@@ -127,12 +154,15 @@ namespace Shoc.Cli.Commands.Project
         /// <summary>
         /// Gets all the required files
         /// </summary>
-        /// <param name="input">The input specification</param>
         /// <returns></returns>
-        private IList<FileEntry> GetRequiredFiles(BuildInputSpec input)
+        private async Task<IList<FileEntry>> GetRequiredFiles()
         {
             // get all the paths in the copy section
-            var files = input?.Copy?.Select(cp => cp.From) ?? Enumerable.Empty<string>();
+            //var files = input?.(cp => cp.From) ?? Enumerable.Empty<string>();
+            var files = new List<string>() { "**" };
+            
+            // get shoc ignore 
+            var shocIgnore = await this.GetShocIgnore();
 
             // create new matcher
             var matcher = new Matcher();
@@ -140,8 +170,14 @@ namespace Shoc.Cli.Commands.Project
             // add all patterns for matching
             matcher.AddIncludePatterns(files);
 
+            // if shoc ignore exists then add exclude patterns
+            if (shocIgnore != null)
+            {
+                matcher.AddExcludePatterns(shocIgnore);
+            }
+
             // get all the files
-            var all = matcher.GetResultsInFullPath(this.Directory.FullName).Select(path => new FileInfo(path)).ToList();
+            var all = matcher.GetResultsInFullPath(this.TargetDirectory.FullName).Select(path => new FileInfo(path)).ToList();
 
             // if there is any file that does not exist
             if (all.Any(file => !file.Exists))
@@ -150,7 +186,7 @@ namespace Shoc.Cli.Commands.Project
             }
 
             // check if there is a file that is outside of the context directory
-            if (all.Any(file => !file.FullName.StartsWith(this.Directory.FullName)))
+            if (all.Any(file => !file.FullName.StartsWith(this.TargetDirectory.FullName)))
             {
                 ErrorDefinition.Validation(CliErrors.FILE_OUTSIDE_CONTEXT).AsException();
             }
@@ -182,6 +218,85 @@ namespace Shoc.Cli.Commands.Project
 
             // as checksum string
             return $"CA1-{builder.ToString().ToSafeSha256()}";
+        }
+
+        /// <summary>
+        /// Gets the manifest if exists
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<ShocManifest> GetBuildManifest()
+        {
+            // the path to manifest file
+            var path = Path.Combine(this.TargetDirectory.FullName, BUILDSPEC_FILE);
+
+            // check if manifest file exists
+            return File.Exists(path) ? Yml.Deserialize<ShocManifest>(await File.ReadAllTextAsync(path)) : null;
+        }
+
+        /// <summary>
+        /// Gets the manifest if exists
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<IEnumerable<string>> GetShocIgnore()
+        {
+            // the path to manifest file
+            var path = Path.Combine(this.TargetDirectory.FullName, SHOCIGNORE_FILE);
+
+            // get file data
+            var fileData = File.Exists(path) ? (await File.ReadAllLinesAsync(path)).ToList() : new List<string>();
+
+            // add known files
+            fileData.AddRange(this.GetKnownIgnoreFiles());
+
+            // check if manifest file exists
+            return fileData;
+        }
+
+        /// <summary>
+        /// Gets the manifest if exists
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<ShocManifest> RequireBuildManifest()
+        {
+            // try get manifest
+            var manifest = await this.GetBuildManifest();
+
+            // make sure manifest exists
+            if (manifest == null)
+            {
+                throw ErrorDefinition.Validation(CliErrors.MISSING_MANIFEST, "The build manifest is missing.").AsException();
+            }
+
+            return manifest;
+        }
+
+        /// <summary>
+        /// Saves the given manifest to the project file
+        /// </summary>
+        /// <param name="manifest">The manifest to save</param>
+        /// <returns></returns>
+        protected async Task<ShocManifest> SaveManifest(ShocManifest manifest)
+        {
+            // the path to manifest file
+            var path = Path.Combine(this.TargetDirectory.FullName, BUILDSPEC_FILE);
+
+            // write the manifest to the directory
+            await File.WriteAllTextAsync(path, Yml.Serialize(manifest));
+
+            // get saved object
+            return await this.GetBuildManifest();
+        }
+
+        /// <summary>
+        /// Gets the manifest if exists
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerable<string> GetKnownIgnoreFiles()
+        {
+            return new List<string>
+            {
+                ".git"
+            };
         }
     }
 }

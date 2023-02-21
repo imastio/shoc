@@ -5,12 +5,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Imast.Ext.Core;
 using Microsoft.AspNetCore.DataProtection;
-using Shoc.ApiCore;
 using Shoc.Builder.Data;
 using Shoc.Builder.Model;
 using Shoc.Builder.Model.Registry;
 using Shoc.Core;
-using Shoc.Identity.Model;
 using Shoc.ModelCore;
 
 namespace Shoc.Builder.Services
@@ -75,9 +73,6 @@ namespace Shoc.Builder.Services
                 throw ErrorDefinition.NotFound().AsException();
             }
             
-            // require to be either administrator or owner
-            AccessGuard.Require(() => UserTypes.ESCALATED.Contains(principal.Type));
-
             // the result
             return result;
         }

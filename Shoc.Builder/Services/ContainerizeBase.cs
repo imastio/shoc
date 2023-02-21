@@ -40,7 +40,7 @@ namespace Shoc.Builder.Services
         /// <returns></returns>
         protected virtual string MakeParameter(string value)
         {
-            // makre sure value not empty
+            // make sure value not empty
             if (string.IsNullOrWhiteSpace(value))
             {
                 return string.Empty;

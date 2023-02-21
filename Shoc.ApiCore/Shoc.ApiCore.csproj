@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
+    <PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
   </ItemGroup>
 
   <ItemGroup>

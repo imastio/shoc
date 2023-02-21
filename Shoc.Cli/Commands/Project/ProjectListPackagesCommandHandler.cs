@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
@@ -10,6 +10,11 @@ namespace Shoc.Cli.Commands.Project
     /// </summary>
     public class ProjectListPackagesCommandHandler : ProjectCommandHandlerBase
     {
+        /// <summary>
+        /// The package name
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// Creates new instance of command handler
         /// </summary>
@@ -27,7 +32,7 @@ namespace Shoc.Cli.Commands.Project
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
             // requires the project in the context
-            var project = await this.RequireProject();
+            var project = await this.RequireProject(this.Name);
 
             // get the packages in authorized context
             var packages = await this.authService.DoAuthorized(this.Profile, (profile, status) =>
@@ -40,12 +45,12 @@ namespace Shoc.Cli.Commands.Project
             });
 
             // print header
-            Console.WriteLine("Id\t\tStatus\t\tProgress\t\tProgress Message\t\tRegistry\t\tImage Uri");
+            context.Console.WriteLine("Id\t\tStatus\t\tProgress\t\tProgress Message\t\tRegistry\t\tImage Uri");
 
             // print packages
             foreach (var package in packages)
             {
-                Console.WriteLine($"{package.Id}\t\t{package.Status}\t\t{package.Progress}\t\t{package.ProgressMessage}\t\t{package.RegistryId}\t\t{package.ImageUri}");
+                context.Console.WriteLine($"{package.Id}\t\t{package.Status}\t\t{package.Progress}\t\t{package.ProgressMessage}\t\t{package.RegistryId}\t\t{package.ImageUri}");
             }
 
             return 0;

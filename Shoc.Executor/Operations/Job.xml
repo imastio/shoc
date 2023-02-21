@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="Job">
+
+	  <SqlOperation Name="GetById">
+		  <TextCommand>
+			  SELECT * FROM `exc_jobs` WHERE `Id` = @JobId;
+		  </TextCommand>
+	  </SqlOperation>
+
+	  <SqlOperation Name="Create">
+
+		  <TextCommand>
+			  INSERT INTO `exc_jobs`
+			  (`Id`, `ProjectId`, `PackageId`, `OwnerId`, `RunSpec`, `Status`, `RunInfo`)
+			  VALUES
+			  (@Id, @ProjectId, @PackageId, @OwnerId, @RunSpec, @Status, @RunInfo);
+			  SELECT * FROM `exc_jobs` WHERE `Id` = @Id;
+		  </TextCommand>
+
+	  </SqlOperation>
+
+	  <SqlOperation Name="UpdateStatus">
+
+		  <TextCommand>
+			  UPDATE `exc_jobs`
+			  SET
+			  `Status` = @Status,
+			  `Progress` = @Progress,
+			  `ProgressMessage` = @ProgressMessage
+			  WHERE `Id` = @Id;
+			  SELECT * FROM `exc_jobs` WHERE `Id` = @Id;
+		  </TextCommand>
+
+	  </SqlOperation>
+  </OperationGroup>
+</DataOperations>

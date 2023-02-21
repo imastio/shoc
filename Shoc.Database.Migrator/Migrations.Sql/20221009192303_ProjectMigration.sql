@@ -2,12 +2,12 @@
 CREATE TABLE IF NOT EXISTS `prj_projects` (
   `Id` varchar(100) NOT NULL,
   `Name` varchar(200) NOT NULL,
-  `Directory` varchar(200) NOT NULL DEFAULT '/',
   `OwnerId` varchar(100) NOT NULL,
+  `Type` varchar(100) NOT NULL,
   `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `Project_Name_Dir_Unique_idx` (`Name`,`Directory`,`OwnerId`),
+  UNIQUE KEY `Project_Name_Dir_Unique_idx` (`Name`, `OwnerId`),
   KEY `Project_Owner_FK_idx` (`OwnerId`),
   CONSTRAINT `Project_Owner_FK` FOREIGN KEY (`OwnerId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

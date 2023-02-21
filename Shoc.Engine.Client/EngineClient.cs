@@ -66,9 +66,11 @@ namespace Shoc.Engine.Client
             await this.dockerClient.Images.BuildImageFromDockerfileAsync(
                 new ImageBuildParameters
                 {
-                    Tags = new List<string> { $"{input.ImageUri}:{input.Version}" }
+                    Tags = new List<string> { $"{input.ImageUri}:{input.Version}" },
+                    Dockerfile = input.Dockerfile
                 }, 
-                input.Payload, new List<AuthConfig>(), 
+                input.Payload,
+                new List<AuthConfig>(), 
                 new Dictionary<string, string>(), 
                 new Progress<JSONMessage>(message =>
                 {

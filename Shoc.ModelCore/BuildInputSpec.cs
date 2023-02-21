@@ -10,6 +10,6 @@ namespace Shoc.ModelCore
         /// <summary>
         /// The files copy specification
         /// </summary>
-        public List<FileCopySpec> Copy { get; set; }
+        public List<FileCopySpec> Files { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace Shoc.Cli.Commands.Project
         public ProjectNewCommand() : base("new", "Create a new project in the given directory")
         {
             this.AddOption(new Option<string>(new []{ "-n", "--name" }, "The name of project to initialize"));
-            this.AddOption(new Option<bool>(new[] { "--init" }, "Allow initializing the manifest if missing"));
+            this.AddOption(new Option<string>(new []{ "-t", "--type" }, "The type of project to initialize"));
         }
     }
 }

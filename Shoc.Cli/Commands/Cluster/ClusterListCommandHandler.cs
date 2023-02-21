@@ -42,7 +42,7 @@ namespace Shoc.Cli.Commands.Cluster
             var clusters = await this.authService.DoAuthorized(this.Profile, (profile, status) =>
             {
                 // get the client to builder
-                var client = this.clientService.Builder(profile);
+                var client = this.clientService.Executor(profile);
 
                 // load clusters of the project
                 return client.GetClusters(status.AccessToken);
