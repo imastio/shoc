@@ -64,7 +64,6 @@ namespace Shoc.Kube.Client
             // create namespace
             await this.client.CreateNamespaceAsync(new V1Namespace
             {
-                //ApiVersion = "v1",
                 Kind = KubernetesKind.NAMESPACE,
                 Metadata = new V1ObjectMeta(name:this.ns, labels:new Dictionary<string, string>{ {"name", this.ns} }),
             });
