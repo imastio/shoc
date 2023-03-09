@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -109,12 +108,8 @@ namespace Shoc.Cli.Commands.Project
                 => await this.clientService.Executor(profile).DeployProject(me.AccessToken, job.Id)
             );
 
-            // do the operation authorized
-            var watchResult = await this.authService.DoAuthorized(this.Profile, async (profile, me)
-                => await this.clientService.Executor(profile).WatchJob(me.AccessToken, job.Id)
-            );
-
-            Console.WriteLine(watchResult.Values.FirstOrDefault());
+            context.Console.WriteLine("Job is in deployment process.To watch for log run");
+            context.Console.WriteLine($"shocctl project watch -j {job.Id}");
 
             return 0;
         }

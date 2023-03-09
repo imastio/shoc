@@ -119,5 +119,10 @@
         /// The job failed to create
         /// </summary>
         public const string JOB_CREATE_FAILED = "CLI_JOB_CREATE_FAILED";
+
+        /// <summary>
+        /// The job invalid
+        /// </summary>
+        public const string JOB_INVALID = "CLI_JOB_INVALID";
     }
 }

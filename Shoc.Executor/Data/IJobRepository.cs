@@ -11,9 +11,10 @@ namespace Shoc.Executor.Data
         /// <summary>
         /// Gets job by id
         /// </summary>
+        /// <param name="ownerId">The owner id</param>
         /// <param name="id">The job id</param>
         /// <returns></returns>
-        Task<JobModel> GetById(string id);
+        Task<JobModel> GetById(string ownerId, string id);
 
         /// <summary>
         /// Creates the job by given input

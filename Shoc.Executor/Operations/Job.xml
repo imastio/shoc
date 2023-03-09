@@ -9,7 +9,7 @@
 
 	  <SqlOperation Name="GetById">
 		  <TextCommand>
-			  SELECT * FROM `exc_jobs` WHERE `Id` = @JobId;
+			  SELECT * FROM `exc_jobs` WHERE `Id` = @JobId AND `OwnerId` = @OwnerId;
 		  </TextCommand>
 	  </SqlOperation>
 

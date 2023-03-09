@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Protection;
@@ -31,6 +32,17 @@ namespace Shoc.Executor.Controllers
         }
 
         /// <summary>
+        /// Gets job by identifier
+        /// </summary>
+        /// <param name="id">The job identifier</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public Task<JobModel> Get(string id)
+        {
+            return this.jobService.GetById(this.HttpContext.GetShocPrincipal(), id);
+        }
+
+        /// <summary>
         /// Creates new job
         /// </summary>
         /// <param name="input">The job create input</param>
@@ -58,10 +70,9 @@ namespace Shoc.Executor.Controllers
         /// <param name="id">The job identifier</param>
         /// <returns></returns>
         [HttpGet("{id}/watch")]
-        public async Task<object> WatchJob(string id)
+        public async Task<Stream> WatchJob(string id)
         {
-            return new 
-                { Logs = await this.jobService.WatchJob(this.HttpContext.GetShocPrincipal(), id) };
+            return await this.jobService.WatchJob(this.HttpContext.GetShocPrincipal(), id);
         }
     }
 }

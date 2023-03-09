@@ -27,6 +27,7 @@ namespace Shoc.Cli.Commands
             builder.UseCommandHandler(typeof(ProjectPackageCommand), typeof(ProjectPackageCommandHandler));
             builder.UseCommandHandler(typeof(ProjectListPackagesCommand), typeof(ProjectListPackagesCommandHandler));
             builder.UseCommandHandler(typeof(ProjectRunCommand), typeof(ProjectRunCommandHandler));
+            builder.UseCommandHandler(typeof(ProjectWatchCommand), typeof(ProjectWatchCommandHandler));
 
             builder.UseCommandHandler(typeof(AuthSigninCommand), typeof(AuthSigninCommandHandler));
             builder.UseCommandHandler(typeof(AuthSignoutCommand), typeof(AuthSignoutCommandHandler));

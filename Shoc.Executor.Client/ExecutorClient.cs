@@ -1,4 +1,5 @@
-﻿using Imast.Ext.DiscoveryCore;
+﻿using System;
+using Imast.Ext.DiscoveryCore;
 using Shoc.ClientCore;
 using Shoc.Core;
 using System.Net.Http;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 using Shoc.Executor.Model.Job;
 using Shoc.Executor.Model.Kubernetes;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
 namespace Shoc.Executor.Client
 {
@@ -26,6 +29,27 @@ namespace Shoc.Executor.Client
         /// <param name="discovery">The discovery</param>
         public ExecutorClient(string client, IDiscoveryClient discovery) : base(client, DEFAULT_SERVICE, discovery)
         {
+        }
+
+        /// <summary>
+        /// Get the job by identifier
+        /// </summary>
+        /// <param name="token">The access token</param>
+        /// <param name="id">The job identifier</param>
+        /// <returns></returns>
+        public async Task<JobModel> GetJobById(string token, string id)
+        {
+            // the url of api
+            var url = await this.GetApiUrl($"api/jobs/{id}");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<JobModel>();
         }
 
         /// <summary>
@@ -75,20 +99,43 @@ namespace Shoc.Executor.Client
         /// </summary>
         /// <param name="token">The access token</param>
         /// <param name="id">The job id</param>
+        /// <param name="action">The action to execute while reading stream</param>
+        /// <param name="cancellationToken">The cancellation token</param>
         /// <returns></returns>
-        public async Task<Dictionary<string, object>> WatchJob(string token, string id)
+        public async Task<int> WatchJob(string token, string id, Action<string> action, CancellationToken cancellationToken)
         {
             // the url of api
             var url = await this.GetApiUrl($"api/jobs/{id}/watch");
 
             // build the message
             var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
-
+            
             // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken));
 
-            // get the result
-            return await response.Map<Dictionary<string, object>>();
+            // read stream from http response
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+            // init reader for stream
+            using var reader = new StreamReader(stream);
+
+            // loop through stream line while cancellation not requested
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                // get line from stream
+                var line = await reader.ReadLineAsync();
+
+                // in case line is null break, means stream ended
+                if (line == null)
+                {
+                    break;
+                }
+
+                // execute action with the param
+                action(line);
+            }
+
+            return 0;
         }
 
         /// <summary>

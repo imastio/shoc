@@ -27,13 +27,15 @@ namespace Shoc.Executor.Data.Sql
         /// <summary>
         /// Gets job by id
         /// </summary>
+        /// <param name="ownerId">The owner id</param>
         /// <param name="id">The job id</param>
         /// <returns></returns>
-        public Task<JobModel> GetById(string id)
+        public Task<JobModel> GetById(string ownerId, string id)
         {
             // get object from the database
             return this.dataOps.Connect().QueryFirst("Job", "GetById").ExecuteAsync<JobModel>(new 
             {
+                OwnerId = ownerId,
                 JobId = id
             });
         }

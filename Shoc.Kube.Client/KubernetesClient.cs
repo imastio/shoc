@@ -157,18 +157,10 @@ namespace Shoc.Kube.Client
         /// <returns></returns>
         public async Task<Stream> GetPodLog(string name)
         {
-            try
-            {
-                var result =  await this.client.CoreV1.ReadNamespacedPodLogWithHttpMessagesAsync(name, this.ns, null, true);
+            // get logs of the specified pod as stream
+            var result = await this.client.CoreV1.ReadNamespacedPodLogWithHttpMessagesAsync(name, this.ns, null, true);
 
-                return result.Body;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex, ex.Message);
-
-                return Stream.Null;
-            }
+            return result.Body;
         }
 
         /// <summary>

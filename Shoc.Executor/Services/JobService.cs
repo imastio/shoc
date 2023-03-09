@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
@@ -83,6 +82,27 @@ namespace Shoc.Executor.Services
         }
 
         /// <summary>
+        /// Gets the job by identifier
+        /// </summary>
+        /// <param name="principal">The current principal</param>
+        /// <param name="id">The job identifier</param>
+        /// <returns></returns>
+        public async Task<JobModel> GetById(ShocPrincipal principal, string id)
+        {
+            // get job
+            var job = await this.jobRepository.GetById(principal.Subject, id);
+
+            // make sure job exists
+            if (job == null)
+            {
+                throw ErrorDefinition.NotFound(ExecutorErrors.JOB_NOT_FOUND).AsException();
+            }
+
+            // return job
+            return job;
+        }
+
+        /// <summary>
         /// Creates the job by given input
         /// </summary>
         /// <param name="principal">The current principal</param>
@@ -136,7 +156,7 @@ namespace Shoc.Executor.Services
         public async Task<JobModel> Deploy(ShocPrincipal principal, string id)
         {
             // get the job
-            var job = await this.jobRepository.GetById(id);
+            var job = await this.jobRepository.GetById(principal.Subject, id);
 
             // make sure job exists
             if (job == null)
@@ -224,10 +244,10 @@ namespace Shoc.Executor.Services
         /// <param name="principal">The current principal</param>
         /// <param name="id">The job identifier</param>
         /// <returns></returns>
-        public async Task<string> WatchJob(ShocPrincipal principal, string id)
+        public async Task<Stream> WatchJob(ShocPrincipal principal, string id)
         {
             // get the job
-            var job = await this.jobRepository.GetById(id);
+            var job = await this.jobRepository.GetById(principal.Subject, id);
 
             // make sure job exists
             if (job == null)
@@ -254,21 +274,16 @@ namespace Shoc.Executor.Services
             var kubeClient = new KubernetesClient(kubeConfig, job.Id);
 
             // gets pods of job
-            var pods = await kubeClient.GetPodsByLabel("app", job.Id);
+            var pods = (await kubeClient.GetPodsByLabel("app", job.Id)).ToList();
 
-            // get streams
-            var streams = new List<Stream>();
-
-            foreach (var pod in pods)
+            // check if any pod exists
+            if (!pods.Any())
             {
-                streams.Add(await kubeClient.GetPodLog(pod));
+                throw ErrorDefinition.NotFound(ExecutorErrors.PODS_MISSING).AsException();
             }
 
-            var memoryStream = new StreamReader(streams.First());
-
-            var val = await memoryStream.ReadToEndAsync();
-
-            return val;
+            // get log stream of the first pod
+            return await kubeClient.GetPodLog(pods.First());
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Shoc.ClientCore
@@ -61,6 +62,23 @@ namespace Shoc.ClientCore
 
             // map from json
             return response.Content.ReadFromJsonAsync<T>();
+        }
+
+        /// <summary>
+        /// Maps the response on success
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response">The response to map</param>
+        /// <returns></returns>
+        public static async Task<IAsyncEnumerable<T>> MapAsyncEnumerable<T>(this HttpResponseMessage response)
+        {
+            // make sure all is fine as we need
+            response.EnsureShocSuccess();
+
+            return JsonSerializer.DeserializeAsyncEnumerable<T>(await response.Content.ReadAsStreamAsync(), new JsonSerializerOptions
+            {
+                DefaultBufferSize = 1
+            });
         }
     }
 }
