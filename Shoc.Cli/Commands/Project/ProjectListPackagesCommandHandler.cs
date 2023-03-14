@@ -1,6 +1,6 @@
-﻿using System.CommandLine;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
 using System.Threading.Tasks;
+using ConsoleTables;
 using Shoc.Cli.Services;
 
 namespace Shoc.Cli.Commands.Project
@@ -44,14 +44,17 @@ namespace Shoc.Cli.Commands.Project
                 return client.GetPackages(status.AccessToken, project.Id);
             });
 
-            // print header
-            context.Console.WriteLine("Id\t\tStatus\t\tProgress\t\tProgress Message\t\tRegistry\t\tImage Uri");
+            // add headers
+            var table = new ConsoleTable("Id", "Status", "Progress", "Progress Message", "Registry", "Image Uri");
 
-            // print packages
+            // add packages
             foreach (var package in packages)
             {
-                context.Console.WriteLine($"{package.Id}\t\t{package.Status}\t\t{package.Progress}\t\t{package.ProgressMessage}\t\t{package.RegistryId}\t\t{package.ImageUri}");
+                table.AddRow(package.Id, package.Status, package.Progress, package.ProgressMessage, package.RegistryId, package.ImageUri);
             }
+
+            // print table
+            table.Write();
 
             return 0;
         }

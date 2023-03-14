@@ -441,5 +441,16 @@ namespace Shoc.Identity.Services
             // use guid if no option worked
             return $"{username}-{Guid.NewGuid():N}";
         }
+
+        /// <summary>
+        /// Deletes a entity with the given id
+        /// </summary>
+        /// <param name="id">The user id</param>
+        /// <returns></returns>
+        public async Task<UserModel> DeleteById(string id)
+        {
+            // delete from repository
+            return await this.userRepository.DeleteById(id);
+        }
     }
 }

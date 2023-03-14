@@ -1,6 +1,6 @@
-﻿using System;
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
 using System.Threading.Tasks;
+using ConsoleTables;
 using Shoc.Cli.Services;
 
 namespace Shoc.Cli.Commands.Cluster
@@ -48,14 +48,17 @@ namespace Shoc.Cli.Commands.Cluster
                 return client.GetClusters(status.AccessToken);
             });
 
-            // print header
-            Console.WriteLine("Id\t\tName\t\tApi Server");
+            // add headers
+            var table = new ConsoleTable("Id", "Name", "Api Server");
 
             // print clusters
             foreach (var cl in clusters)
             {
-                Console.WriteLine($"{cl.Id}\t\t{cl.Name}\t\t{cl.ApiServerUri}");
+                table.AddRow(cl.Id, cl.Name, cl.ApiServerUri);
             }
+
+            // print table
+            table.Write();
 
             return 0;
         }

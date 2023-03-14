@@ -124,5 +124,25 @@
         /// The job invalid
         /// </summary>
         public const string JOB_INVALID = "CLI_JOB_INVALID";
+
+        /// <summary>
+        /// The user fullname is invalid
+        /// </summary>
+        public const string USER_FULLNAME_ERROR = "CLI_INVALID_FULLNAME";
+
+        /// <summary>
+        /// The user email invalid
+        /// </summary>
+        public const string USER_EMAIL_ERROR = "CLI_INVALID_EMAIL";
+
+        /// <summary>
+        /// The user password invalid
+        /// </summary>
+        public const string USER_PASSWORD_ERROR = "CLI_INVALID_PASSWORD";
+
+        /// <summary>
+        /// The user email is missing
+        /// </summary>
+        public const string USER_MISSING_EMAIL = "CLI_MISSING_EMAIL";
     }
 }

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shoc.ClientCore\Shoc.ClientCore.csproj" />
+    <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
   </ItemGroup>
 
 </Project>

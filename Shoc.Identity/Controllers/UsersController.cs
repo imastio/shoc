@@ -88,5 +88,16 @@ namespace Shoc.Identity.Controllers
         {
             return this.userService.Create(input);
         }
+
+        /// <summary>
+        /// Deletes a entity with the given id
+        /// </summary>
+        /// <param name="id">The id of entity to delete</param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public Task<UserModel> DeleteById(string id)
+        {
+            return this.userService.DeleteById(id);
+        }
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Shoc.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "project watch -j jb-1edfed6b66144d19b79acf3a70c786f4"
+      "commandLineArgs": "user delete -e test@test.cin"
     }
   }
 }

@@ -41,9 +41,13 @@ namespace Shoc.Cli.Commands
             builder.UseCommandHandler(typeof(ClusterCreateCommand), typeof(ClusterCreateCommandHandler));
             builder.UseCommandHandler(typeof(ClusterDeleteCommand), typeof(ClusterDeleteCommandHandler));
 
-
             builder.UseCommandHandler(typeof(ConfigInitCommand), typeof(ConfigInitCommandHandler));
-            
+
+            builder.UseCommandHandler(typeof(UserCreateCommand), typeof(UserCreateCommandHandler));
+            builder.UseCommandHandler(typeof(UserListCommand), typeof(UserListCommandHandler));
+            builder.UseCommandHandler(typeof(UserDeleteCommand), typeof(UserDeleteCommandHandler));
+
+
             return builder;
         }
     }

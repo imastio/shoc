@@ -7,6 +7,7 @@ using Shoc.Cli.Commands.Cluster;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
 using Shoc.Cli.Commands.Registry;
+using Shoc.Cli.Commands.User;
 
 namespace Shoc.Cli.Commands
 {
@@ -26,6 +27,7 @@ namespace Shoc.Cli.Commands
             this.AddCommand(BuildConfigCommands());
             this.AddCommand(BuildRegistryCommands());
             this.AddCommand(BuildClusterCommands());
+            this.AddCommand(BuildUserCommands());
 
             // add default handler
             this.Handler = CommandHandler.Create((Action) (() => this.Invoke("-h")));
@@ -65,7 +67,7 @@ namespace Shoc.Cli.Commands
         /// <returns></returns>
         private static Command BuildAuthCommands()
         {
-            // a wrapper command for project commands
+            // a wrapper command for auth commands
             var command = new Command("auth", "The user authentication commands")
             {
                 new AuthSigninCommand(),
@@ -83,7 +85,7 @@ namespace Shoc.Cli.Commands
         /// <returns></returns>
         private static Command BuildRegistryCommands()
         {
-            // a wrapper command for project commands
+            // a wrapper command for registry commands
             var command = new Command("registry", "The registry management commands")
             {
                 new RegistryListCommand(),
@@ -101,7 +103,7 @@ namespace Shoc.Cli.Commands
         /// <returns></returns>
         private static Command BuildClusterCommands()
         {
-            // a wrapper command for project commands
+            // a wrapper command for cluster commands
             var command = new Command("cluster", "The cluster management commands")
             {
                 new ClusterListCommand(),
@@ -119,10 +121,28 @@ namespace Shoc.Cli.Commands
         /// <returns></returns>
         private static Command BuildConfigCommands()
         {
-            // a wrapper command for project commands
+            // a wrapper command for config commands
             var command = new Command("config", "The configuration commands")
             {
                 new ConfigInitCommand()
+            };
+
+            // return the wrapper command 
+            return command;
+        }
+
+        /// <summary>
+        /// Creates user commands subtree
+        /// </summary>
+        /// <returns></returns>
+        private static Command BuildUserCommands()
+        {
+            // a wrapper command for user commands
+            var command = new Command("user", "The user management commands")
+            {
+                new UserCreateCommand(),
+                new UserListCommand(),
+                new UserDeleteCommand()
             };
 
             // return the wrapper command 

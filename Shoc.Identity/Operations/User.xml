@@ -148,7 +148,7 @@
         UPDATE `idp_users`
         SET
         `Email` = @Email, `Username` = @Username, `Deleted` = 1,
-        `FullName` = 'Deleted', `FirstName` = 'Deleted', `LastName` = @LastName,
+        `FullName` = 'Deleted', `FirstName` = 'Deleted', `LastName` = 'Deleted',
         `LastIp` = NULL, `LastLogin` = NULL, `LockedUntil` = NULL
         WHERE `Deleted` = 0 AND `Id` = @Id;
       </TextCommand>

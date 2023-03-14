@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using ConsoleTables;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.Registry
+namespace Shoc.Cli.Commands.User
 {
     /// <summary>
-    /// The registry list command handler
+    /// The user list command handler
     /// </summary>
-    public class RegistryListCommandHandler : ShocCommandHandlerBase
+    public class UserListCommandHandler : ShocCommandHandlerBase
     {
         /// <summary>
         /// The client service
@@ -25,7 +25,7 @@ namespace Shoc.Cli.Commands.Registry
         /// </summary>
         /// <param name="clientService">The client service</param>
         /// <param name="authService">The auth service</param>
-        public RegistryListCommandHandler(ClientService clientService, AuthService authService) 
+        public UserListCommandHandler(ClientService clientService, AuthService authService) 
         {
             this.clientService = clientService;
             this.authService = authService;
@@ -38,23 +38,17 @@ namespace Shoc.Cli.Commands.Registry
         /// <returns></returns>
         public override async Task<int> InvokeAsync(InvocationContext context)
         {
-            // get the registries in authorized context
-            var registries = await this.authService.DoAuthorized(this.Profile, (profile, status) =>
-            {
-                // get the client to builder
-                var client = this.clientService.Builder(profile);
-
-                // load registries of the project
-                return client.GetRegistries(status.AccessToken);
-            });
+            // get the users in authorized context
+            var users = await this.authService.DoAuthorized(this.Profile, (profile, status) => 
+                this.clientService.Identity(profile).GetUsers(status.AccessToken));
 
             // add headers
-            var table = new ConsoleTable("Id", "Name", "Registry Uri", "Repository", "User Name");
+            var table = new ConsoleTable("Id", "Full Name", "Email", "Username", "Type", "Last IP");
 
-            // add registries
-            foreach (var reg in registries)
+            // add users to table
+            foreach (var user in users)
             {
-                table.AddRow(reg.Id, reg.Name, reg.RegistryUri, reg.Repository, reg.Username);
+                table.AddRow(user.Id, user.FullName, user.Email, user.Username, user.Type, user.LastIp);
             }
 
             // print table
