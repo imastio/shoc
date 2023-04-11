@@ -66,11 +66,3 @@ jobs:
 
     - name: Push all images
       run: docker-compose push $SHOC_PUBLIC_SERVICES
-      
-  delpoy:
-    needs: build
-    
-    runs-on: ubuntu-latest
-    
-
-      
