@@ -33,9 +33,6 @@ jobs:
         cache: 'yarn'
         cache-dependency-path: '**/yarn.lock'
     
-    - name: Restore dependencies
-      run: dotnet restore
-      
     - name: Publish Builder
       run: dotnet publish Shoc.Builder/Shoc.Builder.csproj -c Release -o Shoc.Builder/bin/Release/net6.0/publish/
     
