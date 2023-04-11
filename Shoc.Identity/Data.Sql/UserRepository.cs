@@ -129,19 +129,6 @@ namespace Shoc.Identity.Data.Sql
         }
 
         /// <summary>
-        /// Confirms the user's emails
-        /// </summary>
-        /// <param name="id">The user id</param>
-        /// <returns></returns>
-        public Task<UserModel> ConfirmUserEmail(string id)
-        {
-            return this.dataOps.Connect().QueryFirst("User", "ConfirmUserEmail").ExecuteAsync<UserModel>(new
-            {
-                Id = id
-            });
-        }
-
-        /// <summary>
         /// Record failed attempt for the email
         /// </summary>
         /// <param name="email">The email</param>

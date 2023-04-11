@@ -63,9 +63,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.ApiCore.AuthClient", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Executor", "Shoc.Executor\Shoc.Executor.csproj", "{40AE79F2-598B-4530-BBF0-94E491A0761C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Kube.Client", "Shoc.Kube.Client\Shoc.Kube.Client.csproj", "{33F68DCF-A1B3-44A4-A811-BF5F592931C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Kube.Client", "Shoc.Kube.Client\Shoc.Kube.Client.csproj", "{33F68DCF-A1B3-44A4-A811-BF5F592931C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Kube.Model", "Shoc.Kube.Model\Shoc.Kube.Model.csproj", "{5A96ACA5-DD94-49D3-B6CF-10A5EAD4648B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shoc.Kube.Model", "Shoc.Kube.Model\Shoc.Kube.Model.csproj", "{5A96ACA5-DD94-49D3-B6CF-10A5EAD4648B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

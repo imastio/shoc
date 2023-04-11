@@ -108,8 +108,11 @@ namespace Shoc.Cli.Commands.Project
                 => await this.clientService.Executor(profile).DeployProject(me.AccessToken, job.Id)
             );
 
-            context.Console.WriteLine("Job is in deployment process.To watch for log run");
-            context.Console.WriteLine($"shocctl project watch -j {job.Id}");
+            context.Console.WriteLine($"Job {job.Id} is being deployed.");
+            context.Console.WriteLine(""); 
+            context.Console.WriteLine("Once Job is deployed you can watch the output as follows:");
+            context.Console.WriteLine($"\tshocctl project watch -j {job.Id}");
+            context.Console.WriteLine("");
 
             return 0;
         }

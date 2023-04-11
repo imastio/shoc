@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.IO.Compression;
@@ -137,6 +138,8 @@ namespace Shoc.Cli.Commands.Project
             // delete temporary zip file
             File.Delete(zipFile);
 
+            var version = this.Version ?? "latest";
+
             // create bundle authorized
             _ = await this.authService.DoAuthorized(this.Profile, (profile, auth) =>
             {
@@ -144,10 +147,18 @@ namespace Shoc.Cli.Commands.Project
                 var client = this.clientService.Builder(profile);
 
                 // build the package
-                return client.BuildPackage(auth.AccessToken, project.Id, package.Id, this.Name ?? "latest");
+                return client.BuildPackage(auth.AccessToken, project.Id, package.Id, version);
             });
 
-            Console.WriteLine($"Computing files to package. {files.Count} files were identified. Archived to {zipFile} and checksum is {checksum}");
+            context.Console.WriteLine($"Computing files to package. {files.Count} files were identified. Archived to {zipFile} and checksum is {checksum}");
+            context.Console.WriteLine("");
+            context.Console.WriteLine("To run the project, use the following command:");
+            context.Console.WriteLine($"\tshocctl project run -n {project.Name} -v {version}");
+            context.Console.WriteLine("");
+            context.Console.WriteLine("To pass additional command-line arguments specify -a parameter as follows:");
+            context.Console.WriteLine($"\tshocctl project run -n {project.Name} -v {version} -a <ARGS>");
+            context.Console.WriteLine("");
+
             return 0;
         }
 

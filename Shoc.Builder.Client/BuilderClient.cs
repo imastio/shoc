@@ -347,6 +347,5 @@ namespace Shoc.Builder.Client
             // get the result
             return await response.Map<DockerRegistry>();
         }
-        
     }
 }

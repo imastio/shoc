@@ -47,9 +47,9 @@ namespace Shoc.Identity.Services
         private readonly IUserRepository userRepository;
 
         /// <summary>
-        /// The confirmation code repository
+        /// The external user repository
         /// </summary>
-        private readonly IConfirmationCodeRepository confirmationCodeRepository;
+        private readonly IExternalUserRepository externalUserRepository;
 
         /// <summary>
         /// The password hasher
@@ -60,13 +60,13 @@ namespace Shoc.Identity.Services
         /// Creates new instance of user service
         /// </summary>
         /// <param name="userRepository">The user repository</param>
-        /// <param name="confirmationCodeRepository">The confirmation code repository</param>
         /// <param name="passwordHasher">The password hasher</param>
-        public UserService(IUserRepository userRepository, IConfirmationCodeRepository confirmationCodeRepository, IPasswordHasher passwordHasher)
+        /// <param name="externalUserRepository">The external user repository</param>
+        public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher, IExternalUserRepository externalUserRepository)
         {
             this.userRepository = userRepository;
-            this.confirmationCodeRepository = confirmationCodeRepository;
             this.passwordHasher = passwordHasher;
+            this.externalUserRepository = externalUserRepository;
         }
 
         /// <summary>
@@ -86,6 +86,17 @@ namespace Shoc.Identity.Services
         public Task<UserModel> GetById(string id)
         {
             return this.userRepository.GetById(id);
+        }
+
+        /// <summary>
+        /// Gets the external user by email and provider
+        /// </summary>
+        /// <param name="email">The user email</param>
+        /// <param name="provider">The external provider name</param>
+        /// <returns></returns>
+        public Task<ExternalUserModel> GetExternalByEmailAndProvider(string email, string provider)
+        {
+            return this.externalUserRepository.GetByEmailAndProvider(email, provider);
         }
 
         /// <summary>
@@ -175,6 +186,45 @@ namespace Shoc.Identity.Services
             // create the user
             return await this.userRepository.Create(input);
         }
+
+        /// <summary>
+        /// Creates entity based on input
+        /// </summary>
+        /// <param name="input">The creation input</param>
+        /// <returns></returns>
+        public async Task<UserModel> CreateRoot(CreateRootModel input)
+        {
+            // get root user
+            var root = await this.GetRootUser();
+            
+            // make sure root does not exists
+            if (root != null)
+            {
+                throw ErrorDefinition.Validation(IdentityErrors.ROOT_EXISTS).AsException();
+            }
+
+            // create root user
+            return await this.Create(new CreateUserModel
+            {
+                Email = input.Email,
+                EmailVerified = true,
+                Password = input.Password,
+                FullName = input.FullName,
+                Type = UserTypes.ROOT
+            });
+        }
+
+        /// <summary>
+        /// Creates external user entity based on input
+        /// </summary>
+        /// <param name="input">The creation input</param>
+        /// <returns></returns>
+        public async Task<ExternalUserModel> CreateExternal(CreateExternalUserModel input)
+        {
+            // create the external user
+            return await this.externalUserRepository.Create(input);
+        }
+
 
         /// <summary>
         /// Record sign-in failure by given email
@@ -275,7 +325,7 @@ namespace Shoc.Identity.Services
 
             // checks the hash against password
             var validation = this.passwordHasher.Check(hash ?? string.Empty, password);
-            
+
             // does not match anyways
             if (!validation.Verified)
             {
@@ -341,72 +391,6 @@ namespace Shoc.Identity.Services
             validation.AddRange(RequireEmail(email));
 
             return validation;
-        }
-
-        /// <summary>
-        /// Gets active confirmations
-        /// </summary>
-        /// <param name="email">The email</param>
-        /// <returns></returns>
-        public Task<IEnumerable<ConfirmationCode>> GetConfirmations(string email)
-        {
-            return this.confirmationCodeRepository.GetByEmail(email);
-        }
-
-        /// <summary>
-        /// Gets the confirmation code by link
-        /// </summary>
-        /// <param name="link">The link fragment</param>
-        /// <returns></returns>
-        public Task<ConfirmationCode> GetConfirmationByLink(string link)
-        {
-            return this.confirmationCodeRepository.GetByLink(link);
-        }
-
-        /// <summary>
-        /// Create a confirmation code
-        /// </summary>
-        /// <param name="input">The code input</param>
-        /// <returns></returns>
-        public Task<ConfirmationCode> CreateConfirmation(ConfirmationCode input)
-        {
-            return this.confirmationCodeRepository.Create(input);
-        }
-
-        /// <summary>
-        /// Delete confirmation code by id
-        /// </summary>
-        /// <param name="id">The code id</param>
-        /// <returns></returns>
-        public Task<int> DeleteConfirmation(string id)
-        {
-            return this.confirmationCodeRepository.DeleteById(id);
-        }
-
-        /// <summary>
-        /// Delete confirmation codes for the email
-        /// </summary>
-        /// <param name="email">The target to confirm</param>
-        /// <returns></returns>
-        public Task<int> DeleteConfirmations(string email)
-        {
-            return this.confirmationCodeRepository.DeleteByEmail(email);
-        }
-
-        /// <summary>
-        /// Confirms the email address for the given user
-        /// </summary>
-        /// <param name="userId">The user id</param>
-        /// <returns></returns>
-        public async Task<UserModel> ConfirmUserEmail(string userId)
-        {
-            // mark confirmed
-            var user = await this.userRepository.ConfirmUserEmail(userId);
-
-            // delete confirmations 
-            var _ = await this.DeleteConfirmations(user.Email);
-
-            return user;
         }
 
         /// <summary>

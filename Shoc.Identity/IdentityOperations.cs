@@ -23,7 +23,7 @@ namespace Shoc.Identity
             {
                 Path.Combine(sourceDirectory, "Operations", "Identity.xml"),
                 Path.Combine(sourceDirectory, "Operations", "User.xml"),
-                Path.Combine(sourceDirectory, "Operations", "Confirmation.xml")
+                Path.Combine(sourceDirectory, "Operations", "ExternalUser.xml")
             };
         }
     }

@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MailKit" Version="3.1.0" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="3.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+	</ItemGroup>
 
 </Project>

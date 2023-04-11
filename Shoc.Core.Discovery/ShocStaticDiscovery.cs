@@ -54,7 +54,8 @@ namespace Shoc.Core.Discovery
                 {"shoc-builder", useHttps ? 11007 : 11006},
                 {"shoc-identity", useHttps ? 11009 : 11008},
                 {"shoc-database-migrator", useHttps ? 11011 : 11010},
-                {"shoc-executor", useHttps ? 11013 : 11012}
+                {"shoc-executor", useHttps ? 11013 : 11012},
+				{"shoc-ui", useHttps ? 11015 : 11014}
             };
 
             return services;

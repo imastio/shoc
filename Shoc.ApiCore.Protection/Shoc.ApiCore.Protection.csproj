@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	<Import Project="../Shoc.Shared.proj" />
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
-    <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
+		<ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
+	</ItemGroup>
 
 </Project>

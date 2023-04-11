@@ -108,6 +108,18 @@ services:
       - shoc-database-sql
     networks:
       - shoc-network
+         
+  shoc-ui:
+    image: shoc-ui:latest
+    restart: always
+    build: ./Shoc.Ui
+    container_name: shoc-ui
+    env_file: 
+      - ./env/shoc-ui.env
+    ports:
+      - '11014:11015'
+    networks:
+      - shoc-network
       
   shoc-webgtw:
     image: shoc-webgtw:latest
@@ -115,6 +127,7 @@ services:
     build: ./Shoc.Webgtw
     container_name: shoc-webgtw
     env_file: 
+      - ./env/ref-api-auth.env
       - ./env/ref-api-discovery.env
       - ./env/shoc-webgtw.env
     ports:
@@ -135,9 +148,22 @@ services:
     depends_on:
       - shoc-webgtw
       - shoc-identity
+      - shoc-ui
     networks:
       shoc-network:
         aliases:
+         - shoc.local
          - identity.shoc.local
          - api.shoc.local
-   
+      
+  shoc-registry:
+    image: shoc-registry
+    build: ./Shoc.Registry
+    container_name: shoc-registry
+    restart: always
+    env_file: 
+      - ./Shoc.Registry/config.env
+    ports:
+      - '11004:11004'
+    networks:
+      - shoc-network

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
@@ -11,10 +8,6 @@ using Imast.Ext.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
-using Shoc.ApiCore;
-using Shoc.Core.Mailing;
-using Shoc.Core.Security;
-using Shoc.Identity.Config;
 using Shoc.Identity.Model;
 
 namespace Shoc.Identity.Services
@@ -25,39 +18,9 @@ namespace Shoc.Identity.Services
     public class AuthService
     {
         /// <summary>
-        /// The default redirect path
+        /// The length for generating random password
         /// </summary>
-        private const string DEFAULT_REDIRECT = "/";
-
-        /// <summary>
-        /// The length of confirmation code
-        /// </summary>
-        private static readonly int CONFIRMATION_CODE_LENGTH = 8;
-
-        /// <summary>
-        /// The maximum number of active confirmation codes
-        /// </summary>
-        private static readonly int MAX_ACTIVE_CONFIRMATION_CODES = 5;
-
-        /// <summary>
-        /// Give a short period of time for confirmation code as life time
-        /// </summary>
-        private static readonly TimeSpan CONFIRMATION_CODE_LIFETIME = TimeSpan.FromHours(1);
-
-        /// <summary>
-        /// The confirmation email template
-        /// </summary>
-        private static readonly string CONFIRMATION_TEMPLATE = ReadEmailTemplate("Templates", "confirmation.html");
-
-        /// <summary>
-        /// The self settings
-        /// </summary>
-        private readonly SelfSettings selfSettings;
-
-        /// <summary>
-        /// The sign-on settings
-        /// </summary>
-        private readonly SignOnSettings signOnSettings;
+        private static readonly int USER_RANDOM_PASSWORD_LENGTH = 20;
 
         /// <summary>
         /// The user repository
@@ -70,32 +33,14 @@ namespace Shoc.Identity.Services
         private readonly IIdentityServerInteractionService identityInteraction;
 
         /// <summary>
-        /// The email sender
-        /// </summary>
-        private readonly IEmailSender emailSender;
-
-        /// <summary>
-        /// The password hasher
-        /// </summary>
-        private readonly IPasswordHasher passwordHasher;
-
-        /// <summary>
         /// Creates new instance of authentication service
         /// </summary>
-        /// <param name="selfSettings">The self settings</param>
-        /// <param name="signOnSettings">The sign-on settings</param>
         /// <param name="userService">The users service</param>
         /// <param name="identityInteraction">The identity server interaction service</param>
-        /// <param name="emailSender">The email sender</param>
-        /// <param name="passwordHasher">The password hasher</param>
-        public AuthService(SelfSettings selfSettings, SignOnSettings signOnSettings, UserService userService, IIdentityServerInteractionService identityInteraction, IEmailSender emailSender, IPasswordHasher passwordHasher)
+        public AuthService( UserService userService, IIdentityServerInteractionService identityInteraction)
         {
-            this.selfSettings = selfSettings;
-            this.signOnSettings = signOnSettings;
             this.userService = userService;
             this.identityInteraction = identityInteraction;
-            this.emailSender = emailSender;
-            this.passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -147,344 +92,6 @@ namespace Shoc.Identity.Services
         }
 
         /// <summary>
-        /// The sign-up operation based on input
-        /// </summary>
-        /// <param name="httpContext">The HTTP Context</param>
-        /// <param name="input">The input for sign-up</param>
-        /// <returns></returns>
-        public async Task<SignUpFlowResult> SignUp(HttpContext httpContext, SignUpFlowInput input)
-        {
-            // check if can sign-up
-            if (!this.signOnSettings.SignUpEnabled)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.SIGNUP_DISABLED).AsException();
-            }
-
-            // gets the authorization context by the return URL (authorize callback URL)
-            var context = await this.identityInteraction.GetAuthorizationContextAsync(input.ReturnUrl);
-            
-            // the return url
-            var returnUrl = input.ReturnUrl.IsBlank() || context == null ? "/" : input.ReturnUrl;
-
-            // validate email and password
-            var validate = this.userService.ValidateEmailAndPassword(input.Email, input.Password);
-
-            // failed validation
-            if (validate.Count > 0)
-            {
-                throw new ShocException(validate);
-            }
-
-            // build a full name
-            var fullname = input.FullName.IsBlank() ? "New User" : input.FullName;
-
-            // try get root user if exists
-            var root = await this.userService.GetRootUser();
-
-            // use guest role as default, if no root yet create as root
-            var type = root == null ? UserTypes.ROOT : UserTypes.USER;
-
-            // the email is not verified by default, in case if creating root email is already verified
-            var emailVerified = root == null;
-
-            // try create user based on given input
-            var user = await this.userService.Create(new CreateUserModel
-            {
-                Email = input.Email,
-                EmailVerified = emailVerified,
-                FullName = fullname,
-                Type = type,
-                Password = input.Password
-            });
-
-            // user is missing
-            if (user == null)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.UNKNOWN_ERROR).AsException();
-            }
-
-            // confirmation message sent
-            var confirmationSent = false;
-
-            // need to send email verification code message
-            if (!user.EmailVerified)
-            {
-                try
-                {
-                    var requestResult = await this.RequestConfirmation(new ConfirmationRequest
-                    {
-                        Email = user.Email,
-                        ReturnUrl = returnUrl
-                    });
-
-                    confirmationSent = requestResult.Sent;
-                }
-                catch (Exception)
-                {
-                    confirmationSent = false;
-                }
-            }
-
-            // sign in in case of verified email
-            if (emailVerified)
-            {
-                // do sign-in registration was successful
-                await this.SignInImpl(httpContext, new SignInPrincipal
-                {
-                    Subject = user.Id,
-                    Email = user.Email,
-                    DisplayName = user.FullName,
-                    Provider = IdentityProviders.LOCAL
-                });
-            }
-
-            // build sign-up flow result
-            return new SignUpFlowResult
-            {
-                Subject = user.Id,
-                Email = user.Email,
-                EmailVerified = emailVerified,
-                ConfirmationSent = confirmationSent,
-                ContinueFlow = context != null,
-                ReturnUrl = returnUrl
-            };
-        }
-
-        /// <summary>
-        /// Request a confirmation code for the given email
-        /// </summary>
-        /// <param name="request">The confirmation request</param>
-        /// <returns></returns>
-        public async Task<ConfirmationRequestResult> RequestConfirmation(ConfirmationRequest request)
-        {
-            // gets the user by email
-            var user = await this.userService.GetByEmail(request.Email);
-
-            // check if no user
-            if (user == null)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.NO_USER).AsException();
-            }
-
-            // email is confirmed
-            if (user.EmailVerified)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.EMAIL_ALREADY_CONFIRMED).AsException();
-            }
-
-            // request for the user
-            return await this.RequestConfirmation(user, request);
-        }
-
-        /// <summary>
-        /// The email confirmation flow
-        /// </summary>
-        /// <param name="httpContext">The HTTP context</param>
-        /// <param name="link">The link fragment</param>
-        /// <param name="proof">The proof of email link</param>
-        /// <returns></returns>
-        public async Task<string> ConfirmEmail(HttpContext httpContext, string link, string proof)
-        {
-            // no link to authorize
-            if (link.IsBlank())
-            {
-                return DEFAULT_REDIRECT;
-            }
-
-            // try get confirmation code by link
-            var code = await this.userService.GetConfirmationByLink(link);
-
-            // do nothing because no link
-            if (code == null)
-            {
-                return DEFAULT_REDIRECT;
-            }
-
-            // create otp proof to check
-            var codeProof = code.Created.ToString("O").ToSafeSha512();
-
-            // not equal proof, so error
-            if (!string.Equals(codeProof, proof, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return DEFAULT_REDIRECT;
-            }
-
-            // delete code as not needed anymore
-            var _ = await this.userService.DeleteConfirmation(code.Id);
-
-            // not valid anymore
-            if (code.ValidUntil < DateTime.UtcNow)
-            {
-                return DEFAULT_REDIRECT;
-            }
-
-            // try get user by id
-            var user = await this.userService.GetById(code.UserId);
-
-            // no user
-            if (user == null)
-            {
-                return DEFAULT_REDIRECT;
-            }
-
-            // confirm target (email or phone) if needed
-            user = await this.ProceedConfirmation(user);
-
-            // sign-in if valid
-            await this.SignInImpl(httpContext, new SignInPrincipal
-            {
-                Subject = user.Id,
-                Email = user.Email,
-                DisplayName = user.FullName,
-                Provider = IdentityProviders.LOCAL
-            });
-
-            // try get authorization context
-            var context = await this.identityInteraction.GetAuthorizationContextAsync(code.ReturnUrl);
-
-            // redirect with sign-in flow if context is available
-            if (context != null && code.ReturnUrl.IsNotBlank())
-            {
-                return code.ReturnUrl;
-            }
-
-            return DEFAULT_REDIRECT;
-        }
-
-        /// <summary>
-        /// Process confirmation submit
-        /// </summary>
-        /// <param name="httpContext">The HTTP context</param>
-        /// <param name="request">The confirmation process request</param>
-        /// <returns></returns>
-        public async Task<ConfirmationProcessResult> ProcessConfirmation(HttpContext httpContext, ConfirmationProcessRequest request)
-        {
-            // check if valid request
-            if (request == null || request.Email.IsBlank())
-            {
-                throw ErrorDefinition.Unknown(IdentityErrors.INVALID_EMAIL).AsException();
-            }
-
-            // gets the authorization context by the return URL (authorize callback URL)
-            var context = await this.identityInteraction.GetAuthorizationContextAsync(request.ReturnUrl);
-
-            // the return url
-            var returnUrl = request.ReturnUrl.IsBlank() || context == null ? "/" : request.ReturnUrl;
-
-            // gets the user by email
-            var user = await this.userService.GetByEmail(request.Email);
-
-            // check if no user
-            if (user == null)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.INVALID_EMAIL).AsException();
-            }
-
-            // email is confirmed
-            if (user.EmailVerified)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.EMAIL_ALREADY_CONFIRMED).AsException();
-            }
-
-            // get codes for the target
-            var codes = await this.userService.GetConfirmations(request.Email);
-
-            // choose ones that are not expired
-            var validCodes = codes.Where(c => c.ValidUntil >= DateTime.UtcNow);
-
-            // check is valid
-            var isValid = validCodes.Any(c => this.passwordHasher.Check(c.CodeHash, request.Code).Verified);
-
-            // verification failed
-            if (!isValid)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.INVALID_CONFIRMATION_CODE).AsException();
-            }
-
-            // confirm otherwise
-            user = await this.ProceedConfirmation(user);
-
-            // do sign-in registration was successful
-            await this.SignInImpl(httpContext, new SignInPrincipal
-            {
-                Subject = user.Id,
-                Email = user.Email,
-                DisplayName = user.FullName,
-                Provider = IdentityProviders.LOCAL
-            });
-
-            // build result
-            return new ConfirmationProcessResult
-            {
-                Subject = user.Id,
-                ContinueFlow = context != null,
-                ReturnUrl = returnUrl
-            };
-        }
-
-        /// <summary>
-        /// Proceed confirmation of target if needed
-        /// </summary>
-        /// <param name="user">The user</param>
-        /// <returns></returns>
-        private async Task<UserModel> ProceedConfirmation(UserModel user)
-        {
-            // decide if confirmation is required based on delivery type 
-            var needConfirmation = !user.EmailVerified;
-
-            // do confirmation if needed
-            return needConfirmation ? await this.userService.ConfirmUserEmail(user.Id) : user;
-        }
-
-        /// <summary>
-        /// Request a confirmation code for the given email
-        /// </summary>
-        /// <param name="user">The target user</param>
-        /// <param name="request">The request</param>
-        /// <returns></returns>
-        public async Task<ConfirmationRequestResult> RequestConfirmation(UserModel user, ConfirmationRequest request)
-        {
-            // get existing codes
-            var existingCodes = await this.userService.GetConfirmations(request.Email);
-
-            // count existing active codes
-            var existingActive = existingCodes.Count(c => c.ValidUntil >= DateTime.UtcNow);
-
-            // check if exceeded
-            if (existingActive > MAX_ACTIVE_CONFIRMATION_CODES)
-            {
-                throw ErrorDefinition.Validation(IdentityErrors.CONFIRMATION_REQUESTS_EXCEEDED).AsException();
-            }
-
-            // get a fresh confirmation code (uppercase)
-            var code = Rnd.GetString(CONFIRMATION_CODE_LENGTH).ToUpperInvariant();
-
-            // generate fresh validation link
-            var link = Guid.NewGuid().ToString("N");
-
-            // calculate the hash of code
-            var codeHash = this.passwordHasher.Hash(code).AsHash();
-
-            // build confirmation code entity
-            var confirmation = await this.userService.CreateConfirmation(new ConfirmationCode
-            {
-                UserId = user.Id,
-                Email = request.Email,
-                CodeHash = codeHash,
-                Link = link,
-                ValidUntil = DateTime.UtcNow.Add(CONFIRMATION_CODE_LIFETIME),
-                ReturnUrl = request.ReturnUrl,
-                Created = DateTime.UtcNow
-            });
-
-            // send notification
-            var sent = await this.SendConfirmationCode(confirmation, code);
-
-            // build result
-            return new ConfirmationRequestResult { Sent = sent };
-        }
-
-        /// <summary>
         /// The implementation of sign-in to the system
         /// </summary>
         /// <param name="httpContext">The HTTP context</param>
@@ -510,40 +117,109 @@ namespace Shoc.Identity.Services
         }
 
         /// <summary>
-        /// Send the confirmation code
+        /// Sign in with Google external provider
         /// </summary>
-        /// <param name="confirmation">The confirmation object</param>
-        /// <param name="code">The code to send</param>
+        /// <param name="httpContext">The Http context</param>
         /// <returns></returns>
-        private async Task<bool> SendConfirmationCode(ConfirmationCode confirmation, string code)
+        public async Task<SignInFlowResult> SignInGoogle(HttpContext httpContext)
         {
-            // stringify the creation time and make sha512 code
-            var proof = confirmation.Created.ToString("O").ToSafeSha512();
+            // get root user
+            var root = await this.userService.GetRootUser();
 
-            // build confirmation URL
-            var fullUrl = $"{selfSettings.ExternalBaseAddress}api-auth/email-confirmation/{confirmation.Link}/crypto-proof/{proof}";
-            
-            // set of messages for format the email
-            var messages = new Dictionary<string, string>
+            // make sure root exists
+            if (root == null)
             {
-                {"confirmation_url", fullUrl},
-                {"confirmation_code", code}
-            };
+                throw new Exception("No root");
+            }
 
-            // format template into final message
-            var content = messages.Aggregate(CONFIRMATION_TEMPLATE, (current, message) => current.Replace($"{{{message.Key}}}", message.Value));
-            
-            // send email and get result
-            var result = await this.emailSender.SendAsync(new EmailMessage
+            // authenticate request to scheme
+            var authenticateResult = await httpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+            // if authentication to external provider failed
+            if (!authenticateResult.Succeeded)
             {
-                Subject = "Please confirm your email!",
-                To = new List<string> { confirmation.Email },
-                Body = content,
-                Resources = new List<ContentResource>()
+                throw new Exception("Login error");
+            }
+
+            // get external user principal
+            var principal = authenticateResult.Principal;
+
+            // get id for the user
+            var userIdClaim = principal.FindFirst(KnownClaims.SUBJECT) ?? principal.FindFirst(ClaimTypes.NameIdentifier);
+
+            // make sure user id exists
+            if (userIdClaim == null)
+            {
+                throw ErrorDefinition.Unknown("Unknown userid").AsException();
+            }
+
+            // get email
+            var userEmailClaim = principal.FindFirst(ClaimTypes.Email);
+
+            // make sure user email exists
+            if (userEmailClaim == null)
+            {
+                throw ErrorDefinition.Unknown("Unknown email").AsException();
+            }
+
+            // get the external provider name
+            var provider = authenticateResult.Properties.Items["provider"];
+
+            // make sure the provider is the expected one
+            if (provider != IdentityProviders.GOOGLE)
+            {
+                ErrorDefinition.Unknown().Throw();
+            }
+
+            // get user by email from our db
+            // if missing, then create
+            var user = await this.userService.GetByEmail(userEmailClaim.Value) ?? await this.userService.Create(new CreateUserModel
+            {
+                Email = userEmailClaim.Value,
+                EmailVerified = true,
+                FirstName = principal.FindFirst(ClaimTypes.GivenName)?.Value,
+                LastName = principal.FindFirst(ClaimTypes.Surname)?.Value,
+                FullName = principal.FindFirst(ClaimTypes.Name)?.Value,
+                Password = Rnd.GetString(USER_RANDOM_PASSWORD_LENGTH),
+                Type = UserTypes.USER
             });
 
-            // return result
-            return result.Sent;
+            // get external user by email and provider
+            var externalUser = await this.userService.GetExternalByEmailAndProvider(user.Email, provider);
+
+            // if external user does exist, then create
+            if (externalUser == null)
+            {
+                await this.userService.CreateExternal(new CreateExternalUserModel
+                {
+                    ExternalId = userIdClaim.Value,
+                    UserId = user.Id,
+                    Provider = provider.ToLowerInvariant(),
+                    Email = user.Email
+                });
+            }
+
+            // do actual sign-in with given scheme
+            await this.SignInImpl(httpContext, new SignInPrincipal
+            {
+                Subject = user.Id,
+                Email = user.Email,
+                DisplayName = user.FullName,
+                Provider = IdentityProviders.GOOGLE
+            });
+
+            // delete temporary cookie used during external authentication
+            await httpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+            // retrieve return URL
+            var returnUrl = authenticateResult.Properties.Items["returnUrl"] ?? "~/";
+
+            return new SignInFlowResult
+            {
+                Subject = user.Id,
+                ContinueFlow = true,
+                ReturnUrl = returnUrl
+            };
         }
 
         /// <summary>
@@ -566,30 +242,6 @@ namespace Shoc.Identity.Services
                 UserAgent = userAgent,
                 Time = DateTime.UtcNow
             };
-        }
-
-        /// <summary>
-        /// Resolves the relative path into full one
-        /// </summary>
-        /// <param name="parts">The path parts</param>
-        /// <returns></returns>
-        private static string ResolveRelative(params string[] parts)
-        {
-            // source directory
-            var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-            // build full path
-            return Path.GetFullPath(Path.Combine(parts), sourceDirectory);
-        }
-
-        /// <summary>
-        /// Reads mail template into the string
-        /// </summary>
-        /// <returns></returns>
-        private static string ReadEmailTemplate(params string[] parts)
-        {
-            // read content of template 
-            return File.ReadAllText(ResolveRelative(parts));
         }
     }
 }

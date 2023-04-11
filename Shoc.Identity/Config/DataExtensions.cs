@@ -39,8 +39,8 @@ namespace Shoc.Identity.Config
 
             // add domain repositories
             services.AddSingleton<IAccessGrantRepository, AccessGrantRepository>();
-            services.AddSingleton<IConfirmationCodeRepository, ConfirmationCodeRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IExternalUserRepository, ExternalUserRepository>();
             services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
             services.AddSingleton<ISigningKeyRepository, SigningKeyRepository>();
 

@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Builder.Model\Shoc.Builder.Model.csproj" />
-    <ProjectReference Include="..\Shoc.ClientCore\Shoc.ClientCore.csproj" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Builder.Model\Shoc.Builder.Model.csproj" />
+		<ProjectReference Include="..\Shoc.ClientCore\Shoc.ClientCore.csproj" />
+	</ItemGroup>
 
 </Project>

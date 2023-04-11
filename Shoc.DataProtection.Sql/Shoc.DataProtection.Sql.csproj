@@ -1,19 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
-    <ProjectReference Include="..\Shoc.DataProtection\Shoc.DataProtection.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Operations\DataOps.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Update="Operations\ProtectionKey.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	
+	<Import Project="../Shoc.Shared.proj" />
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
+		<ProjectReference Include="..\Shoc.DataProtection\Shoc.DataProtection.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Operations\DataOps.xsd">
+			<SubType>Designer</SubType>
+		</None>
+		<None Update="Operations\ProtectionKey.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

@@ -11,13 +11,8 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// The api root
+        /// The backend url
         /// </summary>
-        public string Api { get; set; }
-
-        /// <summary>
-        /// The authority root
-        /// </summary>
-        public string Authority { get; set; }
+        public string Backend { get; set; }
     }
 }

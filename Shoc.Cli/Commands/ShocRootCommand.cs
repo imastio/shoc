@@ -7,6 +7,7 @@ using Shoc.Cli.Commands.Cluster;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
 using Shoc.Cli.Commands.Registry;
+using Shoc.Cli.Commands.Setup;
 using Shoc.Cli.Commands.User;
 
 namespace Shoc.Cli.Commands
@@ -28,6 +29,7 @@ namespace Shoc.Cli.Commands
             this.AddCommand(BuildRegistryCommands());
             this.AddCommand(BuildClusterCommands());
             this.AddCommand(BuildUserCommands());
+            this.AddCommand(BuildSetupCommands());
 
             // add default handler
             this.Handler = CommandHandler.Create((Action) (() => this.Invoke("-h")));
@@ -149,6 +151,21 @@ namespace Shoc.Cli.Commands
             return command;
         }
 
+        /// <summary>
+        /// Creates setup commands subtree
+        /// </summary>
+        /// <returns></returns>
+        private static Command BuildSetupCommands()
+        {
+            // a wrapper command for setup commands
+            var command = new Command("setup", "The setup management commands")
+            {
+                new CreateRootCommand(),
+            };
+
+            // return the wrapper command 
+            return command;
+        }
 
         /// <summary>
         /// Gets the current directory by default

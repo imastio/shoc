@@ -42,20 +42,17 @@ CREATE TABLE IF NOT EXISTS `idp_users` (
   UNIQUE KEY `Username_UNIQUE` (`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `idp_confirmation_codes` (
-  `Id` varchar(100) NOT NULL,
+CREATE TABLE `idp_external_users` (
+  `ExternalId` varchar(200) NOT NULL,
   `UserId` varchar(100) NOT NULL,
-  `Email` varchar(100) NOT NULL,
-  `CodeHash` varchar(200) NOT NULL,
-  `Link` varchar(200) NOT NULL,
-  `ValidUntil` datetime NOT NULL,
-  `ReturnUrl` text,
+  `Provider` varchar(100) NOT NULL,
+  `Email` varchar(200) DEFAULT NULL,
   `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`),
-  KEY `ConfirmCode_User_FK_idx` (`UserId`),
-  CONSTRAINT `ConfirmCode_User_FK` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ExternalId`,`Provider`),
+  KEY `ExternalUsers_Users_FK_idx` (`UserId`),
+  CONSTRAINT `ExternalUsers_Users_FK_idx` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 
 CREATE TABLE IF NOT EXISTS `idp_key_management` (
   `Id` varchar(450) NOT NULL,

@@ -1,0 +1,7 @@
+<Project Sdk="">
+  <PropertyGroup>
+    <Authors>Imast</Authors>
+    <Version>0.0.1</Version>
+    <Company>Imast</Company>
+  </PropertyGroup>
+</Project>

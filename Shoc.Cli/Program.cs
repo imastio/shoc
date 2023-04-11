@@ -4,6 +4,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +29,9 @@ namespace Shoc.Cli
         /// <param name="args">The CLI arguments</param>
         public static async Task Main(string[] args)
         {
+            // globally allow self-signed certificate
+            ServicePointManager.ServerCertificateValidationCallback = (_, _, _, _) => true;
+
             // configure command line builder
             var parser = BuildCli()
                 .UseDefaults()
@@ -82,6 +86,7 @@ namespace Shoc.Cli
             services.AddSingleton<ConfigurationService>();
             services.AddSingleton<EncryptedStorage>();
             services.AddSingleton<AuthService>();
+            services.AddSingleton<EndpointService>();
         }
         
         /// <summary>

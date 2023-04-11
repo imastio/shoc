@@ -1,20 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
-    <PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Imast.Ext.Core" Version="0.0.3" />
+		<PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+	</ItemGroup>
 
 </Project>

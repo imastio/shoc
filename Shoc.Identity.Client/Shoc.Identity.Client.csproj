@@ -1,17 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-	  <ImplicitUsings>disable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.ClientCore\Shoc.ClientCore.csproj" />
-    <ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.ClientCore\Shoc.ClientCore.csproj" />
+		<ProjectReference Include="..\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
+	</ItemGroup>
 
 </Project>

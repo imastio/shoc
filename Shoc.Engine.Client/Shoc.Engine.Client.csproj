@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Docker.DotNet" Version="3.125.5" />
-    <PackageReference Include="Docker.DotNet.BasicAuth" Version="3.125.3" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Engine.Model\Shoc.Engine.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Docker.DotNet" Version="3.125.5" />
+		<PackageReference Include="Docker.DotNet.BasicAuth" Version="3.125.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Engine.Model\Shoc.Engine.Model.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Cli.Services;
 
-namespace Shoc.Cli.Commands.User
+namespace Shoc.Cli.Commands.Config
 {
     /// <summary>
     /// The handler for the config init

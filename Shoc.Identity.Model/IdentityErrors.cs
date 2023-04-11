@@ -46,9 +46,9 @@
         public const string UNVERIFIED_EMAIL = "IDENTITY_UNVERIFIED_EMAIL";
 
         /// <summary>
-        /// The missing input data error
+        /// The root already exists
         /// </summary>
-        public const string MISSING_DATA = "IDENTITY_MISSING_DATA";
+        public const string ROOT_EXISTS = "IDENTITY_ROOT_EXISTS";
 
         /// <summary>
         /// The user is locked

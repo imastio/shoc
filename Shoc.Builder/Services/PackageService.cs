@@ -284,7 +284,7 @@ namespace Shoc.Builder.Services
                 .Build();
 
             // deserialize build spec
-            var spec = deserializer.Deserialize<ShocManifest>(package.BuildSpec);
+            var _ = deserializer.Deserialize<ShocManifest>(package.BuildSpec);
 
             // get containerizer
             var containerizer = this.containerizeProvider.Create(project.Type);
@@ -345,7 +345,7 @@ namespace Shoc.Builder.Services
                 Version = package.Id,
                 ImageUri = imageUri,
                 Username = registry.Username,
-                Password = protector.Unprotect(registry.EncryptedPassword)
+                Password = string.IsNullOrWhiteSpace(registry.EncryptedPassword) ? string.Empty : protector.Unprotect(registry.EncryptedPassword)
             });
 
             // update latest version to newest package

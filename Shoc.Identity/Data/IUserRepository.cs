@@ -65,13 +65,6 @@ namespace Shoc.Identity.Data
         Task<UserModel> Create(CreateUserModel input);
 
         /// <summary>
-        /// Confirms the user's emails
-        /// </summary>
-        /// <param name="id">The user id</param>
-        /// <returns></returns>
-        Task<UserModel> ConfirmUserEmail(string id);
-        
-        /// <summary>
         /// Record failed attempt for the email
         /// </summary>
         /// <param name="email">The email</param>

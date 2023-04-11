@@ -1,44 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	
+	<Import Project="../Shoc.Shared.proj" />
+	
+	<ItemGroup>
+		<Folder Include="Common\" />
+		<Folder Include="Config\" />
+		<Folder Include="System\" />
+		<Folder Include="OpenId\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Config\" />
-    <Folder Include="Services\" />
-    <Folder Include="System\" />
-    <Folder Include="OpenId\" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ConsoleTables" Version="2.4.2" />
+		<PackageReference Include="IdentityModel.OidcClient" Version="5.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.1" />
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+		<PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.21617.1" />
+		<PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+		<PackageReference Include="YamlDotNet" Version="11.2.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.4.2" />
-    <PackageReference Include="IdentityModel.OidcClient" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.1" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.4.0-alpha.21617.1" />
-    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.21617.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
-    <PackageReference Include="YamlDotNet" Version="11.2.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.Builder.Client\Shoc.Builder.Client.csproj" />
+		<ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
+		<ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+		<ProjectReference Include="..\Shoc.Executor.Client\Shoc.Executor.Client.csproj" />
+		<ProjectReference Include="..\Shoc.Identity.Client\Shoc.Identity.Client.csproj" />
+		<ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.Builder.Client\Shoc.Builder.Client.csproj" />
-    <ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
-    <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
-    <ProjectReference Include="..\Shoc.Executor.Client\Shoc.Executor.Client.csproj" />
-    <ProjectReference Include="..\Shoc.Identity.Client\Shoc.Identity.Client.csproj" />
-    <ProjectReference Include="..\Shoc.ModelCore\Shoc.ModelCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

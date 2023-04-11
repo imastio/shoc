@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Yarp.ReverseProxy" Version="1.1.1" />
-  </ItemGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
-    <ProjectReference Include="..\Shoc.ApiCore.Discovery\Shoc.ApiCore.Discovery.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Yarp.ReverseProxy" Version="1.1.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
+		<ProjectReference Include="..\Shoc.ApiCore.Discovery\Shoc.ApiCore.Discovery.csproj" />
+	</ItemGroup>
 
 </Project>

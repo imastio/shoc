@@ -25,7 +25,9 @@ $AllServices = @(
     "shoc-identity", 
     "shoc-builder", 
 	"shoc-executor", 
-    "shoc-ingress")
+    "shoc-ingress",
+    "shoc-ui"
+)
 
 function IsValidService($service, $all){
 

@@ -52,51 +52,6 @@ namespace Shoc.Identity.Controllers
         }
 
         /// <summary>
-        /// The public confirmation endpoint
-        /// </summary>
-        /// <param name="link">The link fragment</param>
-        /// <param name="proof">The proof of link</param>
-        /// <returns></returns>
-        [HttpGet("email-confirmation/{link}/crypto-proof/{proof}")]
-        public async Task<IActionResult> ConfirmEmail(string link, string proof)
-        {
-            return this.Redirect(await this.authService.ConfirmEmail(this.HttpContext, link, proof));
-        }
-
-        /// <summary>
-        /// The public confirmation code request
-        /// </summary>
-        /// <param name="input">The code request input</param>
-        /// <returns></returns>
-        [HttpPost("request-confirmation-code")]
-        public Task<ConfirmationRequestResult> RequestConfirmationCode(ConfirmationRequest input)
-        {
-            return this.authService.RequestConfirmation(input);
-        }
-
-        /// <summary>
-        /// The public to process confirmation request
-        /// </summary>
-        /// <param name="input">The confirmation input</param>
-        /// <returns></returns>
-        [HttpPost("confirm-account")]
-        public Task<ConfirmationProcessResult> ConfirmAccount(ConfirmationProcessRequest input)
-        {
-            return this.authService.ProcessConfirmation(this.HttpContext, input);
-        }
-
-        /// <summary>
-        /// The public sign-up endpoint
-        /// </summary>
-        /// <param name="input">The sign-up input</param>
-        /// <returns></returns>
-        [HttpPost("sign-up")]
-        public Task<SignUpFlowResult> SignUpFlow(SignUpFlowInput input)
-        {
-            return this.authService.SignUp(this.HttpContext, input);
-        }
-
-        /// <summary>
         /// The public sign-out endpoint
         /// </summary>
         /// <param name="input">The sing-out input</param>

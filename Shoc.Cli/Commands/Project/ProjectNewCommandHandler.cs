@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Shoc.Builder.Model.Project;
@@ -62,7 +62,15 @@ namespace Shoc.Cli.Commands.Project
                 return await this.clientService.Builder(profile).CreateProject(me.AccessToken, project);
             });
             
-            Console.WriteLine($"The project {result.Name} was created.");
+            context.Console.WriteLine($"The project {result.Name} was created.");
+            context.Console.WriteLine("");
+            context.Console.WriteLine("You can package your project by:");
+            context.Console.WriteLine($"\tshocctl project package -n {result.Name}");
+            context.Console.WriteLine("");
+            context.Console.WriteLine("Or if you want to specify other directory or version name:");
+            context.Console.WriteLine($"\tshocctl project package -n {result.Name} -v <VERSION> -d <DIR>");
+            context.Console.WriteLine("");
+            
             return 0;
         }
     }

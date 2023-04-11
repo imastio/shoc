@@ -45,7 +45,7 @@ namespace Shoc.Identity.Client
         public async Task<IEnumerable<UserModel>> GetUsers(string token)
         {
             // the url of api
-            var url = await this.GetApiUrl($"api/users");
+            var url = await this.GetApiUrl("api/users");
 
             // build the message
             var message = BuildMessage(HttpMethod.Get, url, null, Auth(token));
@@ -112,6 +112,26 @@ namespace Shoc.Identity.Client
 
             // build the message
             var message = BuildMessage(HttpMethod.Delete, url, null, Auth(token));
+
+            // execute safely and get response
+            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
+
+            // get the result
+            return await response.Map<UserModel>();
+        }
+
+        /// <summary>
+        /// Creates a new root user entity
+        /// </summary>
+        /// <param name="input">The input to create</param>
+        /// <returns></returns>
+        public async Task<UserModel> CreateRoot(CreateRootModel input)
+        {
+            // the url of api
+            var url = await this.GetApiUrl("api/setup/root");
+
+            // build the message
+            var message = BuildMessage(HttpMethod.Post, url, input);
 
             // execute safely and get response
             var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));

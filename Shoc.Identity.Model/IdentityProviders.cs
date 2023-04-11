@@ -9,5 +9,10 @@ namespace Shoc.Identity.Model
         /// The local identity provider
         /// </summary>
         public const string LOCAL = "local";
+
+        /// <summary>
+        /// The Google identity provider
+        /// </summary>
+        public const string GOOGLE = "google";
     }
 }

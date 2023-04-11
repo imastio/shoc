@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
@@ -60,16 +61,23 @@ namespace Shoc.Cli.Services
         /// The configuration service
         /// </summary>
         private readonly ConfigurationService configurationService;
-        
+
+        /// <summary>
+        /// The endpoint service
+        /// </summary>
+        private readonly EndpointService endpointService;
+
         /// <summary>
         /// Creates new instance of authentication service
         /// </summary>
         /// <param name="encryptedStorage">The encrypted storage</param>
         /// <param name="configurationService">The configuration service</param>
-        public AuthService(EncryptedStorage encryptedStorage, ConfigurationService configurationService)
+        /// <param name="endpointService">The endpoint service</param>
+        public AuthService(EncryptedStorage encryptedStorage, ConfigurationService configurationService, EndpointService endpointService)
         {
             this.encryptedStorage = encryptedStorage;
             this.configurationService = configurationService;
+            this.endpointService = endpointService;
         }
 
         /// <summary>
@@ -98,7 +106,11 @@ namespace Shoc.Cli.Services
                 RedirectUri = redirectUri,
                 Browser = browser,
                 Scope = DEFAULT_SCOPES,
-                FilterClaims = false
+                FilterClaims = false,
+                BackchannelHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+                }
             };
 
             // build new client
@@ -142,7 +154,11 @@ namespace Shoc.Cli.Services
                 Authority = authority,
                 ClientId = DEFAULT_CLIENT_ID,
                 Scope = DEFAULT_SCOPES,
-                FilterClaims = false
+                FilterClaims = false,
+                BackchannelHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+                }
             };
 
             // try get refresh token
@@ -269,12 +285,15 @@ namespace Shoc.Cli.Services
             var profile = await this.configurationService.GetProfile(profileName);
 
             // check if authority is missing
-            if (string.IsNullOrWhiteSpace(profile.Authority))
+            if (string.IsNullOrWhiteSpace(profile.Backend))
             {
                 throw ErrorDefinition.Validation(CliErrors.INVALID_AUTHORITY, $"The authority is missing for the profile {profileName}").AsException();
             }
 
-            return profile.Authority;
+            // get the endpoints
+            var endpoints = await this.endpointService.GetEndpoints(profile);
+
+            return endpoints.Authority;
         }
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-import { Row, Col, Typography} from "antd";
+import { Row, Col, Typography, Button } from "antd";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { useAuth } from "auth/useAuth";
 import qs from 'qs';
@@ -15,7 +15,7 @@ const SignInMain = () => {
   const history = useHistory();
   const isAuthenticated = auth.isAuthenticated;
   const [errors, setErrors] = useState([]);
-
+  
   // get the query string
   const query = qs.parse(history.location.search, { ignoreQueryPrefix: true });
 
@@ -50,6 +50,13 @@ const SignInMain = () => {
 
   }, [errors, query, history]);
 
+
+  const googleHandler = () => {
+    const params = new URLSearchParams();
+    params.set('returnUrl', returnUrl)
+    window.location.href = '/sign-in/google?' + params.toString()
+  };
+
   return (
     <>
           <Row type="flex" justify="center" align="middle" style={{minHeight: '100vh'}}>
@@ -65,8 +72,8 @@ const SignInMain = () => {
 
               {errors && errors.length > 0 && alertErrors(errors)}
 
-              <SignInForm isAuthenticated={ isAuthenticated } returnUrl={ returnUrl } onError={ setErrors } />
-
+                  <SignInForm isAuthenticated={isAuthenticated} returnUrl={returnUrl} onError={setErrors} />
+                  <Button onClick={googleHandler}>Google</Button>
               <Col>
                 <span>
                   Do not have an account?

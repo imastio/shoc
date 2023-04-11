@@ -30,7 +30,7 @@ namespace Shoc.Cli.Services
                 await File.WriteAllTextAsync(path, Yml.Serialize(new ShocConfiguration
                 {
                     DefaultProfile = "default",
-                    Profiles = new List<ShocProfile> {new() {Name = "default"}}
+                    Profiles = new List<ShocProfile> {new() {Name = "default", Backend = "https://shoc.asnet.am"}}
                 }));
             }
 

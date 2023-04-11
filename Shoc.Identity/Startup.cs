@@ -44,6 +44,7 @@ namespace Shoc.Identity
             services.AddAuthenticationEssentials(this.Configuration);
             services.AddAuthenticationMiddleware(this.Configuration);
             services.AddIdentityEssentials(this.Configuration);
+            services.AddGoogleAuthEssentials(this.Configuration);
             services.AddMailing(this.Configuration);
             services.AddRepositories(this.Configuration);
 

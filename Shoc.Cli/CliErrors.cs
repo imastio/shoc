@@ -144,5 +144,20 @@
         /// The user email is missing
         /// </summary>
         public const string USER_MISSING_EMAIL = "CLI_MISSING_EMAIL";
+
+        /// <summary>
+        /// The root user password missing
+        /// </summary>
+        public const string SETUP_MISSING_NAME = "CLI_MISSING_PASSWORD";
+
+        /// <summary>
+        /// The root user email is missing
+        /// </summary>
+        public const string SETUP_MISSING_EMAIL = "CLI_MISSING_EMAIL";
+
+        /// <summary>
+        /// The root user password invalid
+        /// </summary>
+        public const string SETUP_PASSWORD_ERROR = "CLI_INVALID_PASSWORD";
     }
 }

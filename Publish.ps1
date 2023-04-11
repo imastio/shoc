@@ -25,14 +25,23 @@ function GetCsharpProject ($serviceName) {
 	if($serviceName -eq "shoc-executor"){
 		return "$PSScriptRoot/Shoc.Executor/Shoc.Executor.csproj"
 	}
+
+	return ""
+}
+
+function GetNodeProject ($serviceName) {
+
+	if($serviceName -eq "shoc-ui"){
+		return "$PSScriptRoot/Shoc.Ui/"
+	}
 	
 	return ""
 }
 
-
 Write-Host "Detecting service type..."
 
 $CsharpProj = GetCsharpProject $Service
+$NodeProj = GetNodeProject $Service
 
 Write-Host "Trying to detect csproj for the service... "
 
@@ -41,7 +50,12 @@ if(-not [string]::IsNullOrWhiteSpace($CsharpProj)){
     dotnet publish -c Release "$CsharpProj" 
     Exit
 } 
+elseif(-not [string]::IsNullOrWhiteSpace($NodeProj)) {
+	Write-Host "Detected package.json at $NodeProj to publish..."
+    yarn --cwd $NodeProj build  
+    Exit
+}
 else {
-    Write-Host "Not a dotnet project. Skipping..."
+    Write-Host "Not a dotnet or node project. Skipping..."
 }
 

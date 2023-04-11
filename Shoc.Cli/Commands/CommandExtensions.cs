@@ -5,6 +5,7 @@ using Shoc.Cli.Commands.Cluster;
 using Shoc.Cli.Commands.Config;
 using Shoc.Cli.Commands.Project;
 using Shoc.Cli.Commands.Registry;
+using Shoc.Cli.Commands.Setup;
 using Shoc.Cli.Commands.User;
 
 namespace Shoc.Cli.Commands
@@ -47,6 +48,7 @@ namespace Shoc.Cli.Commands
             builder.UseCommandHandler(typeof(UserListCommand), typeof(UserListCommandHandler));
             builder.UseCommandHandler(typeof(UserDeleteCommand), typeof(UserDeleteCommandHandler));
 
+            builder.UseCommandHandler(typeof(CreateRootCommand), typeof(CreateRootCommandHandler));
 
             return builder;
         }

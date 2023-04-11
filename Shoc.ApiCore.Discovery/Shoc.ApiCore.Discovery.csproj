@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	<Import Project="../Shoc.Shared.proj" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
-    <ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
-  </ItemGroup>
-  
+	<ItemGroup>
+		<ProjectReference Include="..\Shoc.ApiCore\Shoc.ApiCore.csproj" />
+		<ProjectReference Include="..\Shoc.Core.Discovery\Shoc.Core.Discovery.csproj" />
+	</ItemGroup>
+
 </Project>
