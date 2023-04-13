@@ -1,15 +1,43 @@
-import React from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
-import routes from 'routes'
-import MaybeProtectedRoute from 'maybe-protected-route';
+import React, { lazy as reactLazy, Suspense } from 'react';
+import MainLayout from 'layouts/main-layout';
+import { Route, Routes } from 'react-router-dom';
+import LoadingPage from 'pages/_loading';
+import PrivateLayout from 'layouts/private-layout';
 
-const PageRouter = (props) => {
+const lazy = (action) => {
+    return reactLazy(() => {
+        return action();
+    });
+} 
+
+const page = (elem) => (
+    <Suspense fallback={<LoadingPage />}>
+        {elem}
+    </Suspense>
+);
+
+const IndexPage = lazy(() => import('pages/index'));
+const SignedInPage = lazy(() => import('pages/signed-in'));
+const AccessDeniedPage = lazy(() => import('pages/access-denied'));
+const NotFoundPage = lazy(() => import('pages/not-found'));
+const SignInPage = lazy(() => import('pages/sign-in'));
+const SignOutPage = lazy(() => import('pages/sign-out'));
+
+const PageRouter = () => {
     return (
-        <BrowserRouter>
-            <Switch>
-                {routes.map(route => <MaybeProtectedRoute {...props} {...route} />)}
-            </Switch>
-        </BrowserRouter>
+        <Routes>
+            <Route element={<PrivateLayout />}>
+                <Route element={<MainLayout />}>
+                    <Route index element={page(<IndexPage />)} />
+                </Route>
+            </Route>
+            <Route path="/sign-in" element={page(<SignInPage />)} />
+            <Route path="/signed-in" element={page(<SignedInPage />)} />
+            <Route path="/sign-out" element={page(<SignOutPage />)} />
+            <Route path="/access-denied" element={page(<AccessDeniedPage />)} />
+            <Route path="/not-found" element={page(<NotFoundPage />)} />
+            <Route path="*" element={page(<NotFoundPage />)} />
+        </Routes>
     )
 }
 

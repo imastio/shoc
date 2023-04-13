@@ -1,11 +1,13 @@
-import './assets/less/main-theme.less'
 import PageRouter from 'page-router';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from 'redux/store';
 import ConnectedConfigProvider from 'providers/connected-config-provider';
-import { AuthProvider } from 'auth/auth-provider';
-import { userManager } from 'auth';
+import { oidcContextConfig } from 'auth';
+import { AuthProvider } from 'react-oidc-context';
 import Helmet from 'react-helmet';
+import { BrowserRouter } from 'react-router-dom';
+import ThemeProvider from 'theme/theme-provider';
+import { ApiAuthenticationProvider } from 'api-authentication/api-authentication-provider';
 
 const App = () => {
 
@@ -15,12 +17,18 @@ const App = () => {
         <title>Loading</title>
       </Helmet>
 
-      <AuthProvider userManager={ userManager }>
-        <ReduxProvider store={store}>
+      <AuthProvider {...oidcContextConfig} >
+        <ApiAuthenticationProvider>
+          <ReduxProvider store={store}>
             <ConnectedConfigProvider>
-              <PageRouter />
+              <BrowserRouter>
+                <ThemeProvider>
+                  <PageRouter />
+                </ThemeProvider>
+              </BrowserRouter>
             </ConnectedConfigProvider>
-        </ReduxProvider>
+          </ReduxProvider>
+        </ApiAuthenticationProvider>
       </AuthProvider>
     </>
   )

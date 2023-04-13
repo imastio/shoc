@@ -1,7 +1,6 @@
-import { useAuth } from "auth/useAuth";
-import { UserManager } from "oidc-client-ts";
 import { Button, Result, Row, Col } from "antd";
 import Helmet from "react-helmet";
+import { useAuth } from "react-oidc-context"
 
 const IndexPage = () => {
 
@@ -19,12 +18,7 @@ const IndexPage = () => {
                         title="Welcome"
                         subTitle={`Welcome, ${auth?.user?.profile?.name || "N/A"}`}
                         extra={
-                            <Button type="primary" onClick={() => {
-
-                                const mgr = new UserManager({ ...auth.getUserManager().settings, monitorAnonymousSession: false, monitorSession: false });
-                                mgr.signoutRedirect()
-
-                            }}>
+                            <Button type="primary" onClick={() => auth.signoutRedirect()}>
                                 Sign Out
                             </Button>
                         }
