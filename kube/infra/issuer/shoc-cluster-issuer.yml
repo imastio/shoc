@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: shoc-cluster-issuer
+spec:
+  acme:
+    email: imast.labs@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: shoc-cluster-issuer-acc-key
+    solvers:
+    - http01:
+        ingress:
+          class: public
