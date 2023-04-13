@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: shoc-cr-storage-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi 
+  storageClassName: shoc-local-storage-class
+  selector:
+    matchLabels:
+      use-for: shoc-cr

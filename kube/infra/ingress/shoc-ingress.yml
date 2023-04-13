@@ -1,0 +1,68 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shoc-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    cert-manager.io/cluster-issuer: shoc-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - shoc.asnet.am
+    - api.shoc.asnet.am
+    - identity.shoc.asnet.am
+    - cr.shoc.asnet.am
+    secretName: shoc-tls-certificate-secret
+    
+  rules:
+  - host: identity.shoc.asnet.am
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: shoc-connect
+            port:
+              number: 11008
+              
+  - host: api.shoc.asnet.am
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: shoc-webgtw
+            port:
+              number: 11002
+              
+  - host: cr.shoc.asnet.am
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: shoc-cr
+            port:
+              number: 11004
+              
+  - host: shoc.asnet.am
+    http:
+      paths:
+      - pathType: Prefix
+        path: /discovery
+        backend:
+          service:
+            name: shoc-webgtw
+            port:
+              number: 11002
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: shoc-ui
+            port:
+              number: 11014
+              

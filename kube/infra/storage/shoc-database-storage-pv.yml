@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: shoc-database-storage-pv
+  labels:
+    volume-type: ssd
+    use-for: shoc-database
+spec:
+  capacity:
+    storage: 3Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: shoc-local-storage-class
+  local:
+    path: /volumes/shoc-database-volume
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: shoc-database-host
+          operator: In
+          values:
+          - shoc-database-host

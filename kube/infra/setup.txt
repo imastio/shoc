@@ -1,0 +1,55 @@
+Environment setup for Shoc
+
+# Updates (logged in as a user)
+sudo apt update
+sudo apt upgrade
+
+# Setup shell (logged in as a user)
+sudo apt install zsh 
+wget -O .zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+wget -O .zshrc.local  https://git.grml.org/f/grml-etc-core/etc/skel/.zshrc
+chsh -s $(which zsh) $USER
+
+# Setup Snap (if not installed)
+sudo apt install snapd
+
+
+# Setup Kubernetes (Microk8s)
+
+sudo snap install microk8s --classic
+
+# Add firewall rules for kube
+sudo ufw allow in on cni0 && sudo ufw allow out on cni0
+sudo ufw default allow routed
+
+# Configure user permission
+mkdir ~/.kube
+sudo usermod -a -G microk8s $USER
+sudo chown -f -R $USER ~/.kube
+newgrp microk8s
+
+# Add microk8s addons
+microk8s enable dns dashboard storage ingress
+
+# Optional: Setup microk8s containerd ulimits
+sudo nano  /var/snap/microk8s/current/args/containerd-env
+
+# Add shell alias
+echo "alias kubectl='microk8s kubectl'" >> ~/.zshrc.local
+
+# Restart Microk8s
+microk8s stop
+microk8s start
+
+# Labeling nodes
+kubectl label nodes shoc.asnet.am shoc-cr-host=shoc-cr-host
+kubectl label nodes shoc.asnet.am shoc-database-host=shoc-database-host
+
+# Create folders to host volumes
+sudo mkdir /volumes
+sudo mkdir /volumes/shoc-database-volume
+sudo mkdir /volumes/shoc-cr-volume
+
+# Installing cert-manager (check version)
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.1/cert-manager.yaml
+
