@@ -53,3 +53,19 @@ sudo mkdir /volumes/shoc-cr-volume
 # Installing cert-manager (check version)
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.1/cert-manager.yaml
 
+# Clone repo to temporary location
+cd /tmp
+git clone https://github.com/imastio/shoc.git
+cd /tmp/shoc
+
+# Apply issuer 
+kubectl apply -f ./issuer
+
+# Apply storages 
+kubectl apply -f ./storage
+
+# Apply volume claims
+kubectl apply -f ./volume-claims
+
+# Apply ingress
+kubectl apply -f ./ingress
