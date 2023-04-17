@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: shoc-github-cluster-role
+rules:
+  - apiGroups:
+      - ''
+      - apps
+      - networking.k8s.io
+      - batch
+    resources:
+      - namespaces
+      - deployments
+      - replicasets
+      - ingresses
+      - services
+      - secrets
+      - jobs
+      - pods
+      - configmaps
+      - pods/log
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - get
+      - list
+      - patch
+      - update
+      - watch

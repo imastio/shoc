@@ -69,3 +69,9 @@ kubectl apply -f ./volume-claims
 
 # Apply ingress
 kubectl apply -f ./ingress
+
+# Create service account called shoc-github
+kubectl create serviceaccount shoc-github-service-account
+
+# Create cluster role for shoc-github-cluster-role
+kubectl apply -f ./rbac/shoc-github-cluster-role.yml
