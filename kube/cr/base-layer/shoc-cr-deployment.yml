@@ -41,7 +41,7 @@ spec:
                 path: config.yml
         - name: shoc-cr-htpasswd-secret-volume
           secret: 
-           secretName: shoc-cr-htpasswd-secret
+            secretName: shoc-cr-htpasswd-secret
             items:
               - key: HTPASSWD
                 path: htpasswd
