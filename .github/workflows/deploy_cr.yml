@@ -31,5 +31,6 @@ jobs:
         cd kube/cr/
         yagen
         cd build/prod/
+        cat shoc-cr-htpasswd-secret.yml
         kubectl apply -f .
         
