@@ -75,3 +75,9 @@ kubectl create serviceaccount shoc-github-service-account
 
 # Create cluster role for shoc-github-cluster-role
 kubectl apply -f ./rbac/shoc-github-cluster-role.yml
+
+# Create a role binding
+kubectl create clusterrolebinding shoc-github-cluster-role-binding --clusterrole=shoc-github-cluster-role --serviceaccount=default:shoc-github-service-account
+
+# Create a token for service account 
+kubectl create token shoc-github-service-account --duration=999999h

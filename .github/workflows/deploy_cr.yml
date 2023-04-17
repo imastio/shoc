@@ -1,0 +1,29 @@
+name: Deploy Container Registry
+
+on:
+  workflow_dispatch:
+    branches: [ "main" ]
+
+env:
+  SHOC_PUBLIC_REGISTRY: ghcr.io
+  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public
+  SHOC_PUBLIC_VERSION: ${{ github.sha }}
+  SHOC_PUBLIC_SERVICES: shoc-builder shoc-identity shoc-webgtw shoc-executor shoc-database-migrator shoc-dind shoc-database-sql shoc-ui
+
+jobs:
+  build:
+   
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          method: service-account
+          k8s-url: ${{secrets.SHOC_K8S_API_URL}}
+          k8s-secret: ${{ secrets.SHOC_K8S_API_TOKEN }}
+    
+    - name: List pods
+      run: kubectl get pods
