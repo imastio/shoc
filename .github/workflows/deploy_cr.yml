@@ -25,6 +25,7 @@ jobs:
         chmod +x /usr/local/bin/yagen
         
     - name: Deploy container registry
+      shell: bash
       env:
         HTPASSWD_SECRET: ${{secrets.SHOC_DEFAULT_CR_HTPASSWD}}
       run: |
