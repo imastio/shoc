@@ -3,7 +3,6 @@ import Helmet from "react-helmet";
 
 const LoadingPage = () => {
     
-
     return (
         <>
             <Helmet title="Loading" />

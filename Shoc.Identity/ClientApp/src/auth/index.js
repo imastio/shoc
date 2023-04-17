@@ -1,44 +1,43 @@
-import getAuthConfig from "../auth/auth-config";
-import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
+import { WebStorageStateStore, User } from 'oidc-client-ts';
+import getAuthConfig from './auth-config';
+import resolveStorage from './utils';
 
 const authConfig = getAuthConfig();
 
-const getUser = () => {
-    const oidcStorage = resolveStorage(authConfig.storageType).getItem(`oidc.user:${authConfig.authority}:${authConfig.clientId}`)
+const userStore = resolveStorage(authConfig.userStorageType);
+const stateStore = resolveStorage(authConfig.stateStorageType);
 
-    if (!oidcStorage) {
-        return null;
-    }
-
-    return User.fromStorageString(oidcStorage);
-}
-
-const resolveStorage = type => {
-
-    switch (type) {
-        case "local":
-            return localStorage;
-        default:
-            return sessionStorage;
-    }
-}
-
-const userManagerSettings = {
+const oidcConfig = {
     authority: authConfig.authority,
     client_id: authConfig.clientId,
     redirect_uri: `${window.origin}${authConfig.redirectUri}`,
     silent_redirect_uri: `${window.origin}${authConfig.silentRedirectUri}`,
     post_logout_redirect_uri: `${window.origin}${authConfig.postLogoutRedirectUri}`,
     scope: authConfig.scope,
-    userStore: new WebStorageStateStore({ store: resolveStorage(authConfig.storageType) }),
-    stateStore: new WebStorageStateStore({ store: resolveStorage(authConfig.storageType) }),
-    response_type: "code",
+    userStore: new WebStorageStateStore({ prefix: authConfig.storeKeyPrefix, store: userStore }),
+    stateStore: new WebStorageStateStore({ prefix: authConfig.storeKeyPrefix, store: stateStore }),
+    response_type: 'code',
+    staleStateAgeInSeconds: 3600,
     monitorSession: true
 };
 
-const userManager = new UserManager(userManagerSettings);
+const oidcContextConfig = {
+    ...oidcConfig,
+    onSigninCallback: (user) => {
+        window.location = user?.state;
+    },
+};
 
-const withToken = fn => fn(getUser()?.access_token);
+const getUser = () => {
+    const userString = userStore.getItem(`${authConfig.storeKeyPrefix}user:${authConfig.authority}:${authConfig.clientId}`);
 
-export { withToken, userManager };
+    if (!userString) {
+        return null;
+    }
 
+    return User.fromStorageString(userString);
+};
+
+const withToken = (fn) => fn(getUser()?.access_token);
+
+export { withToken, oidcConfig, oidcContextConfig };

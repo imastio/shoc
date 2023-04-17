@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router";
+import React, { useState } from "react";
 import { Row, Col, Typography, Button } from "antd";
-import { RiCloseCircleLine } from "react-icons/ri";
-import { useAuth } from "auth/useAuth";
-import qs from 'qs';
+import { useAuth } from "react-oidc-context";
 import AlreadyLoggedIn from "./already-logged-in";
 import SignInForm from "./signin-form";
 import { resolveError } from "common/errors";
+import { useSearchParams } from "react-router-dom";
+import { CloseOutlined } from "@ant-design/icons";
 
 const SignInMain = () => {
 
   const auth = useAuth();
-  const history = useHistory();
   const isAuthenticated = auth.isAuthenticated;
   const [errors, setErrors] = useState([]);
+  const [searchParams] = useSearchParams();
   
-  // get the query string
-  const query = qs.parse(history.location.search, { ignoreQueryPrefix: true });
-
   // the return url from query
-  const returnUrl = query.return_url || query.returnUrl;
+  const returnUrl = searchParams.get('returnUrl') || searchParams.get('return_url');
 
   const alertErrors = errors => errors.map((error, i) => renderError(error, i))
 
@@ -28,28 +23,10 @@ const SignInMain = () => {
 
     return (  
       <Typography.Paragraph key={i}>
-        <RiCloseCircleLine className="remix-icon" /> {resolveError(error.code)}</Typography.Paragraph>
+        <CloseOutlined /> {resolveError(error.code)}
+      </Typography.Paragraph>
     )
   }
-
-  // handle specific errors
-  useEffect(() => {
-
-    // no errors
-    if(!errors || !errors.length || errors.length === 0){
-      return;
-    }
-
-    // handle if need verification
-    if(errors.some(e => e.code === "CONNECT_UNVERIFIED_EMAIL")){
-      history.push({
-        pathname: "confirm",
-        search: "?" + new URLSearchParams({...query}).toString()
-      })
-    }
-
-  }, [errors, query, history]);
-
 
   const googleHandler = () => {
     const params = new URLSearchParams();
@@ -74,20 +51,6 @@ const SignInMain = () => {
 
                   <SignInForm isAuthenticated={isAuthenticated} returnUrl={returnUrl} onError={setErrors} />
                   <Button onClick={googleHandler}>Google</Button>
-              <Col>
-                <span>
-                  Do not have an account?
-                </span>
-                <Link
-                  to={{
-                    pathname: "/sign-up",
-                    search: "?" + new URLSearchParams({...query})
-                  }}
-                >
-                  Sign up
-                </Link>
-               
-              </Col>
             </Col>
           </Row>
     </>

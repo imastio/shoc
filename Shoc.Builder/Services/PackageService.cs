@@ -336,6 +336,12 @@ namespace Shoc.Builder.Services
                 Dockerfile = "Dockerfile.shoc"
             });
 
+            // close tarball stream
+            stream.Close();
+
+            // delete sources of the image
+            Directory.Delete(bundle.BundleRoot, true);
+
             // get protector
             var protector = this.dataProtectionProvider.CreateProtector(BuilderProtection.REGISTRY_CREDENTIALS);
 

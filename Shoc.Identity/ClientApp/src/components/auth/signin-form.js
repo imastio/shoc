@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import { Form, Input, Button } from "antd";
 import { useDispatch } from "react-redux";
 import { actions as userActions } from 'redux/users/slice';
-import _ from "lodash";
+import { useNavigate } from "react-router-dom";
+import { isEmpty } from "extensions/string";
 
 const SignInForm = (props) => {
 
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [progress, setProgress] = useState(false);
     const { returnUrl, onError, isAuthenticated } = props;
     const [form] = Form.useForm();
@@ -33,11 +33,11 @@ const SignInForm = (props) => {
         // get payload
         const payload = result?.payload || {};
 
-        if (_.isEmpty(payload.returnUrl)) {
-            history.push("/");
+        if (isEmpty(payload.returnUrl)) {
+            navigate("/")
         }
         else if (payload.returnUrl.startsWith("/") && !payload.continueFlow) {
-            history.push(payload.returnUrl)
+            navigate(payload.returnUrl)
         }
         else {
             window.location.href = payload.returnUrl;

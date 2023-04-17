@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 /**
  * The base client module
  */
@@ -93,7 +91,7 @@ export default class BaseClient {
     let result = null;
 
     // in case of array
-    if (_.isArray(value)) {
+    if (Array.isArray(value)) {
       result = value.map(this.esc).join(",");
     } else {
       result = this.esc(value);

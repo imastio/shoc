@@ -1,26 +1,22 @@
 import Loader from "components/loader";
 import Helmet from "react-helmet";
-import { useHistory } from "react-router";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button, Modal } from "antd";
-import { RiCloseFill } from "react-icons/ri";
 import { useCallback, useEffect, useState } from "react";
-import qs from "qs";
-import _ from "lodash";
 import { actions as userActions } from "redux/users/slice";
 import { useDispatch } from "react-redux";
-
-// get the query string
-const query = qs.parse(document.location.search, { ignoreQueryPrefix: true });
-
-// the logout id from query
-const logoutId = query.logout_id || query.logoutId;
+import { isEmpty } from "extensions/string";
+import { CloseOutlined } from "@ant-design/icons";
 
 const SignOutPage = () => {
 
-    const history = useHistory();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
 
-    const [manual, setManual] = useState(_.isEmpty(logoutId));
+    const logoutId = searchParams.get('logout_id') || searchParams.get('logoutId')
+
+    const [manual, setManual] = useState(isEmpty(logoutId));
     const [progress, setProgress] = useState(false);
     const [iframeUrl, setIframeUrl] = useState(null);
     const [redirectUri, setRedirectUri] = useState("/");
@@ -53,13 +49,13 @@ const SignOutPage = () => {
             window.location.href = payload.postLogoutRedirectUri;
         }
 
-    }, [dispatch, manual]);
+    }, [dispatch, manual, logoutId]);
 
     useEffect(() => {
-        if(!_.isEmpty(logoutId)){
+        if(!isEmpty(logoutId)){
             signOutProcess();
         }  
-    }, [signOutProcess])
+    }, [signOutProcess, logoutId])
 
     return (
         <>
@@ -70,11 +66,11 @@ const SignOutPage = () => {
                 centered
                 visible={manual}
                 onOk={signOutProcess}
-                onCancel={() => history.goBack()}
+                onCancel={() => navigate(-1)}
                 width={1000}
                 footer={
                     <>
-                        <Button onClick={() => history.goBack()} type="text">
+                        <Button onClick={() => navigate(-1)} type="text">
                         No
                         </Button>
 
@@ -84,10 +80,7 @@ const SignOutPage = () => {
                     </>
                 }
                 closeIcon={
-                    <RiCloseFill
-                        className="remix-icon"
-                        size={24}
-                    />
+                    <CloseOutlined />
                 }
             >
                 <p>
@@ -100,7 +93,7 @@ const SignOutPage = () => {
                 style={{position: 'absolute', width: 0,height: 0, border:0}} 
                 onLoad={() => {
                     if(redirectUri.startsWith("/") && !continueFlow){
-                        history.replace(redirectUri);
+                        navigate(redirectUri, { replace: true });
                     }
                     else{
                         window.location.href = redirectUri;

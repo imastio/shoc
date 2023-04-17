@@ -21,7 +21,7 @@ export const ApiAuthenticationProvider = ({children}) => {
 
     const auth = useAuth();
     const accessToken = auth.user?.access_token;
-    
+
     const withToken = useCallback(async (fn) => {
         return withErrorHandling(() => fn(accessToken))
     }, [accessToken]);
