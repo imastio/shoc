@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoc-cr-deployment
+  labels:
+    app: shoc-cr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoc-cr
+  template:
+    metadata:
+      labels:
+        app: shoc-cr
+    spec:
+      containers:
+      - name: shoc-cr
+        image: registry:2.8.1
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 11004
+            protocol: TCP
+        volumeMounts:
+          - name: shoc-cr-registry-config-volume
+            mountPath: /etc/docker/registry
+            readOnly: true
+          - name: shoc-cr-htpasswd-secret-volume
+            mountPath: /auth
+            readOnly: true
+          - name: shoc-cr-storage-volume
+            mountPath: /var/lib/registry
+
+      volumes:
+        - name: shoc-cr-registry-config-volume
+          configMap:
+            name: shoc-cr-registry-config
+            items:
+              - key: registry-config.yml
+                path: config.yml
+        - name: shoc-cr-htpasswd-secret-volume
+            secret: 
+            secretName: shoc-cr-htpasswd-secret
+            items:
+              - key: HTPASSWD
+                path: htpasswd
+        - name: shoc-cr-storage-volume
+          persistentVolumeClaim:
+            claimName: shoc-cr-storage-pvc
