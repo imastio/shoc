@@ -40,8 +40,8 @@ spec:
               - key: registry-config.yml
                 path: config.yml
         - name: shoc-cr-htpasswd-secret-volume
-            secret: 
-            secretName: shoc-cr-htpasswd-secret
+          secret: 
+           secretName: shoc-cr-htpasswd-secret
             items:
               - key: HTPASSWD
                 path: htpasswd
