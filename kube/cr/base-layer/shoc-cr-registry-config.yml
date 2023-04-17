@@ -25,5 +25,5 @@ data:
         threshold: 3
     auth:
         htpasswd:
-        realm: basic-realm
-        path: /auth/htpasswd
+          realm: basic-realm
+          path: /auth/htpasswd

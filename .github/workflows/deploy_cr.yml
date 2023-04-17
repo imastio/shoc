@@ -33,6 +33,5 @@ jobs:
         envsubst < ./values/base-values.yml > ./values/base-values.yml.tmp && mv ./values/base-values.yml.tmp ./values/base-values.yml
         yagen
         cd build/prod/
-        cat shoc-cr-htpasswd-secret.yml
         kubectl apply -f .
         
