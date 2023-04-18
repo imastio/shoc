@@ -1,0 +1,2 @@
+cr:
+  htpasswd: ${HTPASSWD_SECRET}

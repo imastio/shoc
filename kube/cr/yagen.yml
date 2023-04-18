@@ -2,3 +2,5 @@ goals:
   - name: prod
     layers:
       - ./base-layer
+    value-files:
+      - ./values/base-values.yml
