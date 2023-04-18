@@ -13,7 +13,7 @@ networks:
 services:   
   
   shoc-database-sql:
-    image: shoc-database-sql:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database-sql:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Database.Sql
     container_name: shoc-database-sql
@@ -27,7 +27,7 @@ services:
       - shoc-database-sql-volume:/var/lib/mysql 
 
   shoc-database-migrator:
-    image: shoc-database-migrator:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database-migrator:${SHOC_PUBLIC_VERSION:-latest}
     build: ./Shoc.Database.Migrator
     container_name: shoc-database-migrator
     restart: "no"
@@ -43,7 +43,7 @@ services:
       - shoc-network
       
   shoc-dind:
-    image: shoc-dind:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-dind:${SHOC_PUBLIC_VERSION:-latest}
     build: ./Shoc.Dind
     restart: always
     container_name: shoc-dind
@@ -56,7 +56,7 @@ services:
       - shoc-dind-data-volume:/var/lib/docker
 
   shoc-builder:
-    image: shoc-builder:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-builder:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Builder
     container_name: shoc-builder
@@ -75,7 +75,7 @@ services:
       - shoc-network
       
   shoc-identity:
-    image: shoc-identity:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-identity:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Identity
     container_name: shoc-identity
@@ -93,7 +93,7 @@ services:
       - shoc-network
       
   shoc-executor:
-    image: shoc-executor:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-executor:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Executor
     container_name: shoc-executor
@@ -110,7 +110,7 @@ services:
       - shoc-network
          
   shoc-ui:
-    image: shoc-ui:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Ui
     container_name: shoc-ui
@@ -122,7 +122,7 @@ services:
       - shoc-network
       
   shoc-webgtw:
-    image: shoc-webgtw:latest
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}
     restart: always
     build: ./Shoc.Webgtw
     container_name: shoc-webgtw
@@ -138,7 +138,7 @@ services:
       - shoc-network
       
   shoc-ingress:
-    image: shoc-ingress
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ingress:${SHOC_PUBLIC_VERSION:-latest}
     build: ./Shoc.Ingress
     container_name: shoc-ingress
     hostname: shoc.local
@@ -157,7 +157,7 @@ services:
          - api.shoc.local
       
   shoc-registry:
-    image: shoc-registry
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-registry:${SHOC_PUBLIC_VERSION:-latest}
     build: ./Shoc.Registry
     container_name: shoc-registry
     restart: always
