@@ -53,8 +53,8 @@ jobs:
 
     - name: Publish Shoc Ui
       run: |
-      yarn --cwd Shoc.Ui/
-      yarn --cwd Shoc.Ui/ build
+        yarn --cwd Shoc.Ui/
+        yarn --cwd Shoc.Ui/ build
   
     - name: Build all images
       run: docker-compose build $SHOC_PUBLIC_SERVICES
