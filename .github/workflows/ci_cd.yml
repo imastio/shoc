@@ -33,6 +33,9 @@ jobs:
         cache: 'yarn'
         cache-dependency-path: '**/yarn.lock'
     
+    - name: Restore dependencies
+      run: dotnet restore
+      
     - name: Publish Builder
       run: dotnet publish Shoc.Builder/Shoc.Builder.csproj -c Release -o Shoc.Builder/bin/Release/net6.0/publish/
     
@@ -49,7 +52,9 @@ jobs:
       run: dotnet publish Shoc.Database.Migrator/Shoc.Database.Migrator.csproj -c Release -o Shoc.Database.Migrator/bin/Release/net6.0/publish/
 
     - name: Publish Shoc Ui
-      run: yarn --cwd Shoc.Ui/ build
+      run: |
+      yarn --cwd Shoc.Ui/
+      yarn --cwd Shoc.Ui/ build
   
     - name: Build all images
       run: docker-compose build $SHOC_PUBLIC_SERVICES
