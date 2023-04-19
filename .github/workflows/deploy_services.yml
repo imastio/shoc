@@ -122,6 +122,7 @@ jobs:
       run: |
         kubectl apply -f ./shoc-identity
         kubectl apply -f ./shoc-webgtw
+        kubectl apply -f ./shoc-dind
         kubectl apply -f ./shoc-executor
         kubectl apply -f ./shoc-builder
         kubectl apply -f ./shoc-ui

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoc-dind
+  labels:
+    app: shoc-dind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoc-dind
+  template:
+    metadata:
+      labels:
+        app: shoc-dind
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Always
+      containers:
+        - name: shoc-dind
+          image: {{registry.registry}}/{{registry.repository}}/shoc-dind:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11003
