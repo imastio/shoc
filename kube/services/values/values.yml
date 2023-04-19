@@ -1,8 +1,8 @@
 registry:
-  dockerConfigJson: 
-  registry: 
-  repository: 
-  publicVersion: 
+  dockerConfigJson: ${SHOC_REGISTRY_DOCKER_CONFIG_JSON}
+  registry: ${SHOC_REGISTY_URL}
+  repository: ${SHOC_REGISTRY_REPOSITORY}
+  publicVersion: ${SHOC_PUBLIC_VERSION}
   pullPolicy: Always
 
 addresses:
@@ -19,18 +19,18 @@ discovery:
     gateway: 
 
 database:
-  connectionString: 
-  name: 
+  connectionString: ${SHOC_DATABASE_CONNECTION_STRING}
+  name: ${SHOC_DATABASE_NAME}
 
 dind:
   clientAddress: tcp://shoc-dind:11003
 
 identity:
   machine:
-    clientId: 
-    clientSecret: 
+    clientId: ${SHOC_IDENTITY_CLIENT_ID}
+    clientSecret: ${SHOC_IDENTITY_CLIENT_SECRET}
   interactive:
     tokenExpiration: 3600
   google:
-    clientId: 
-    clientSecret: 
+    clientId: ${SHOC_IDENTITY_GOOGLE_CLIENT_ID}
+    clientSecret: ${SHOC_IDENTITY_GOOGLE_CLIENT_SECRET}
