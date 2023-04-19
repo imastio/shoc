@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: shoc-database-migrator
+  labels:
+    app: shoc-database-migrator
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Never
+      containers:
+        - name: shoc-database-migrator
+          image: {{registry.registry}}/{{registry.repository}}/shoc-database-migrator:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11010
+          envFrom:
+            - configMapRef:
+                  name: shoc-database-migrator-config
+            - secretRef:
+                  name: shoc-api-discovery-ref-secret
+            - secretRef:
+                  name: shoc-database-sql-ref-secret
