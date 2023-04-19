@@ -1,0 +1,125 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    branches: [ "main" ]
+
+env:
+  SHOC_PUBLIC_REGISTRY: ghcr.io
+  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public
+  SHOC_PUBLIC_VERSION: ${{ github.sha }}
+  SHOC_PUBLIC_SERVICES: shoc-builder shoc-identity shoc-webgtw shoc-executor shoc-database-migrator shoc-dind shoc-ui
+
+jobs:
+  build:
+   
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'yarn'
+        cache-dependency-path: '**/yarn.lock'
+      
+    - name: Publish Builder
+      run: dotnet publish Shoc.Builder/Shoc.Builder.csproj -c Release -o Shoc.Builder/bin/Release/net6.0/publish/
+    
+    - name: Publish Identity
+      run: dotnet publish Shoc.Identity/Shoc.Identity.csproj -c Release -o Shoc.Identity/bin/Release/net6.0/publish/
+
+    - name: Publish Executor
+      run: dotnet publish Shoc.Executor/Shoc.Executor.csproj -c Release -o Shoc.Executor/bin/Release/net6.0/publish/
+
+    - name: Publish Web Gateway
+      run: dotnet publish Shoc.Webgtw/Shoc.Webgtw.csproj -c Release -o Shoc.Webgtw/bin/Release/net6.0/publish/
+
+    - name: Publish Database Migrator
+      run: dotnet publish Shoc.Database.Migrator/Shoc.Database.Migrator.csproj -c Release -o Shoc.Database.Migrator/bin/Release/net6.0/publish/
+
+    - name: Publish Shoc Ui
+      run: |
+        yarn --cwd Shoc.Ui/
+        yarn --cwd Shoc.Ui/ build
+  
+    - name: Build all images
+      run: docker-compose build $SHOC_PUBLIC_SERVICES
+   
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.SHOC_PUBLIC_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.SHOC_GHCR_TOKEN }}
+
+    - name: Push all images
+      run: docker-compose push $SHOC_PUBLIC_SERVICES
+      
+      
+    
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Checkout yagen and make it executable
+      run: |
+        wget -O /usr/local/bin/yagen https://github.com/imastio/yagen/releases/download/v1.0.2/yagen-linux64-v1.0.2
+        chmod +x /usr/local/bin/yagen
+        
+    - name: Build kubernetes package
+      shell: bash
+      env:
+        SHOC_PUBLIC_REGISTRY_USERNAME: ${{github.actor}}
+        SHOC_PUBLIC_REGISTRY_PASSWORD: ${{secrets.SHOC_GHCR_TOKEN}}
+        SHOC_PUBLIC_REGISTRY_EMAIL: ${{secrets.SHOC_PUBLIC_REGISTRY_EMAIL}}
+        SHOC_DATABASE_USERNAME: ${{secrets.SHOC_DATABASE_USERNAME}}
+        SHOC_DATABASE_PASSWORD: ${{secrets.SHOC_DATABASE_PASSWORD}}
+        SHOC_IDENTITY_CLIENT_ID: ${{secrets.SHOC_IDENTITY_CLIENT_ID}}
+        SHOC_IDENTITY_CLIENT_SECRET: ${{secrets.SHOC_IDENTITY_CLIENT_SECRET}}
+        SHOC_IDENTITY_GOOGLE_CLIENT_ID: ${{secrets.SHOC_IDENTITY_GOOGLE_CLIENT_ID}}
+        SHOC_IDENTITY_GOOGLE_CLIENT_SECRET: ${{secrets.SHOC_IDENTITY_GOOGLE_CLIENT_SECRET}}
+      run: |
+        export SHOC_REGISTRY_DOCKER_CONFIG_JSON=$(./kube/scripts/gen_docker_config_json.sh)
+        cd kube/services
+        envsubst < ./values/values.yml > ./values/values.yml.tmp && mv ./values/values.yml.tmp ./values/values.yml
+        yagen
+        
+    - name: Set the Kubernetes context
+      uses: azure/k8s-set-context@v3
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.SHOC_K8S_KUBECONFIG }}
+        context: microk8s
+      
+    - name: Deploy common configuration
+      working-directory: kube/services/build/prod/
+      run: |
+        kubectl apply -f ./common
+    
+    - name: Deploy database migrator
+      working-directory: kube/services/build/prod/
+      run: |
+        kubectl apply -f ./shoc-database-migrator
+    
+    - name: Deploy all remaining service
+      working-directory: kube/services/build/prod/
+      run: |
+        kubectl apply -f ./shoc-identity
+        kubectl apply -f ./shoc-webgtw
+        kubectl apply -f ./shoc-executor
+        kubectl apply -f ./shoc-builder
+        kubectl apply -f ./shoc-ui
