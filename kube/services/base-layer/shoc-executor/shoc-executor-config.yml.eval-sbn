@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoc-executor-config
+data:
+  ASPNETCORE_URLS: http://0.0.0.0:11012
+  Self__ExternalBaseAddress: https://{{addresses.api}}/shoc-executor/

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoc-webgtw-config
+data:
+  ASPNETCORE_URLS: http://0.0.0.0:11002
+  Self__ExternalBaseAddress: https://{{addresses.api}}/

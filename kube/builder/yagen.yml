@@ -1,4 +1,0 @@
-goals:
-  - name: prod
-    layers:
-      - ./base-layer

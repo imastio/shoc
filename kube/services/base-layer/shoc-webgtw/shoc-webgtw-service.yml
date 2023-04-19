@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoc-webgtw
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 11002
+      targetPort: 11002
+  selector:
+    app: shoc-webgtw

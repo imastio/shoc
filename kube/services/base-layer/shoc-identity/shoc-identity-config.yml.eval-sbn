@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoc-identity-config
+data:
+  ASPNETCORE_URLS: http://0.0.0.0:11008
+  Self__ExternalBaseAddress: https://{{addresses.identity}}/

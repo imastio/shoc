@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoc-ui
+  labels:
+    app: shoc-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoc-ui
+  template:
+    metadata:
+      labels:
+        app: shoc-ui
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Always
+      containers:
+        - name: shoc-ui
+          image: {{registry.registry}}/{{registry.repository}}/shoc-ui:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11014

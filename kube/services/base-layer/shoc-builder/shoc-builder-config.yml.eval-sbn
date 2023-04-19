@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoc-builder-config
+data:
+  ASPNETCORE_URLS: http://0.0.0.0:11006
+  Self__ExternalBaseAddress: https://{{ addresses.api }}/shoc-builder/

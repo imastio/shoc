@@ -1,0 +1,6 @@
+goals:
+  - name: prod
+    layers:
+      - ./base-layer
+    value-files:
+      - ./values/values.yml

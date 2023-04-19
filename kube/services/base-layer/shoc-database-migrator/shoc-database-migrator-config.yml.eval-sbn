@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoc-database-migrator-config
+data:
+  ASPNETCORE_URLS: http://0.0.0.0:11010
+  Self__ExternalBaseAddress: https://{{addresses.api}}/shoc-database-migrator/

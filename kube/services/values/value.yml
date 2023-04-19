@@ -1,0 +1,31 @@
+registry:
+  dockerConfigJson: 
+  registry: 
+  repository: 
+  publicVersion: 
+  pullPolicy: Always
+addresses:
+  root: shoc.asnet.am
+  api: api.shoc.asnet.am
+  identity: identity.shoc.asnet.am
+discovery:
+  primary: static
+  fallback: gateway
+  static:
+    host: ""
+  gateway:
+    gateway: ""
+database:
+  connectionString: 
+  name: 
+dind:
+  clientAddress: tcp://shoc-dind:11003
+identity:
+  machine:
+    clientId: 
+    clientSecret: 
+  interactive:
+    tokenExpiration: 3600
+  google:
+    clientId: 
+    clientSecret: 
