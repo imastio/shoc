@@ -93,6 +93,7 @@ jobs:
         SHOC_IDENTITY_GOOGLE_CLIENT_ID: ${{secrets.SHOC_IDENTITY_GOOGLE_CLIENT_ID}}
         SHOC_IDENTITY_GOOGLE_CLIENT_SECRET: ${{secrets.SHOC_IDENTITY_GOOGLE_CLIENT_SECRET}}
       run: |
+        chmod +x ./kube/scripts/gen_docker_config_json.sh
         export SHOC_REGISTRY_DOCKER_CONFIG_JSON=$(./kube/scripts/gen_docker_config_json.sh)
         cd kube/services
         envsubst < ./values/values.yml > ./values/values.yml.tmp && mv ./values/values.yml.tmp ./values/values.yml

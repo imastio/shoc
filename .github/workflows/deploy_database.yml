@@ -60,6 +60,7 @@ jobs:
         SHOC_DATABASE_PASSWORD: ${{secrets.SHOC_DATABASE_PASSWORD}}
         SHOC_DATABASE_ROOT_PASSWORD: ${{secrets.SHOC_DATABASE_ROOT_PASSWORD}}
       run: |
+        chmod +x ./kube/scripts/gen_docker_config_json.sh
         export SHOC_REGISTRY_DOCKER_CONFIG_JSON=$(./kube/scripts/gen_docker_config_json.sh)
         cd kube/database
         envsubst < ./values/values.yml > ./values/values.yml.tmp && mv ./values/values.yml.tmp ./values/values.yml
