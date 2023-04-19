@@ -6,7 +6,7 @@ PASSWORD=${SHOC_PUBLIC_REGISTRY_PASSWORD}
 EMAIL=${SHOC_PUBLIC_REGISTRY_EMAIL}
 
 AUTH_ENCODED=$(echo "$USERNAME:$PASSWORD" | base64 | tr -d '\n')
-CONFIG_PLAIN=$(echo "{\"$SERVER\":{\"USERNAME\":\"$USERNAME\",\"PASSWORD\":\"$PASSWORD\",\"EMAIL\":\"$EMAIL\",\"auth\":\"$AUTH_ENCODED\"}}")
+CONFIG_PLAIN=$(echo "{\"auths\": {\"$SERVER\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\",\"email\":\"$EMAIL\",\"auth\":\"$AUTH_ENCODED\"}}}")
 CONFIG_ENCODED=$(echo $CONFIG_PLAIN | base64 | tr -d '\n')
 
 echo $CONFIG_ENCODED
