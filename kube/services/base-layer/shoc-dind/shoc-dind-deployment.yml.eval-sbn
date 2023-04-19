@@ -20,6 +20,14 @@ spec:
       containers:
         - name: shoc-dind
           image: {{registry.registry}}/{{registry.repository}}/shoc-dind:{{registry.publicVersion}}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: docker-graph-storage
+              mountPath: /var/lib/docker
           imagePullPolicy: {{registry.pullPolicy}}
           ports:
             - containerPort: 11003
+      volumes:
+        - name: docker-graph-storage
+          emptyDir: {}
