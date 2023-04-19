@@ -27,6 +27,8 @@ spec:
             - configMapRef:
                   name: shoc-identity-config
             - secretRef:
+                  name: shoc-identity-secret
+            - secretRef:
                   name: shoc-api-auth-ref-secret
             - secretRef:
                   name: shoc-api-discovery-ref-secret

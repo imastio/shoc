@@ -114,6 +114,7 @@ jobs:
     - name: Deploy database migrator
       working-directory: kube/services/build/prod/
       run: |
+        kubectl delete job -l app=shoc-database-migrator 
         kubectl apply -f ./shoc-database-migrator
     
     - name: Deploy all remaining service
