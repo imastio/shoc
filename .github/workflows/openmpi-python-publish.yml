@@ -6,7 +6,7 @@ on:
 
 env:
   SHOC_PUBLIC_REGISTRY: ghcr.io
-  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public
+  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public/images
   SHOC_PUBLIC_VERSION: ${{ github.sha }}
   
 jobs:
@@ -29,5 +29,5 @@ jobs:
         with:
           context: images/openmpi-python
           push: true
-          tags: latest
+          tags: openmpi-python:latest
         
