@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shoc-builder
-  labels:
-    app: shoc-builder
+  name: shoc-builder
+  labels:
+    app: shoc-builder
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: shoc-builder
-  template:
-    metadata:
-      labels:
-        app: shoc-builder
-    spec:
-      imagePullSecrets:
-        - name: shoc-registry-pull-secret
-      restartPolicy: Always
-      containers:
-        - name: shoc-builder
-          image: {{registry.registry}}/{{registry.repository}}/shoc-builder:{{registry.publicVersion}}
-          imagePullPolicy: {{registry.pullPolicy}}
-          ports:
-            - containerPort: 11006
-          envFrom:
-            - configMapRef:
-                  name: shoc-builder-config
-            - secretRef:
-                  name: shoc-api-auth-ref-secret
-            - secretRef:
-                  name: shoc-api-discovery-ref-secret
-            - secretRef:
-                  name: shoc-database-sql-ref-secret
-            - secretRef:
-                  name: shoc-dind-ref-secret
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoc-builder
+  template:
+    metadata:
+      labels:
+        app: shoc-builder
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Always
+      containers:
+        - name: shoc-builder
+          image: {{registry.registry}}/{{registry.repository}}/shoc-builder:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11006
+          envFrom:
+            - configMapRef:
+                  name: shoc-builder-config
+            - secretRef:
+                  name: shoc-api-auth-ref-secret
+            - secretRef:
+                  name: shoc-api-discovery-ref-secret
+            - secretRef:
+                  name: shoc-database-sql-ref-secret
+            - secretRef:
+                  name: shoc-dind-ref-secret

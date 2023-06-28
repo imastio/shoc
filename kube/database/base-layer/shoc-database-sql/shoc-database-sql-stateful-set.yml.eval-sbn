@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: shoc-database-sql
+  labels:
+    app: shoc-database-sql
+ 
+spec:
+  replicas: 1
+  serviceName: shoc-database-sql
+  selector:
+    matchLabels:
+      app: shoc-database-sql
+  template:
+    metadata:
+      labels:
+        app: shoc-database-sql
+        
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: shoc-database-sql
+          image: {{registry.registry}}/{{registry.repository}}/shoc-database-sql:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11001
+          volumeMounts:
+            - name: shoc-database-data-volume
+              mountPath: /var/lib/mysql
+          envFrom:
+            - secretRef:
+                name: shoc-database-sql-secret
+      volumes:
+        - name: shoc-database-data-volume
+          persistentVolumeClaim:
+            claimName: shoc-database-storage-pvc

@@ -1,0 +1,12 @@
+registry:
+  dockerConfigJson: ${SHOC_REGISTRY_DOCKER_CONFIG_JSON}
+  registry: ${SHOC_PUBLIC_REGISTRY}
+  repository: ${SHOC_PUBLIC_REPOSITORY}
+  publicVersion: ${SHOC_PUBLIC_VERSION}
+  pullPolicy: Always
+  
+database:
+  setup:
+    rootPassword: ${SHOC_DATABASE_ROOT_PASSWORD}
+    username: ${SHOC_DATABASE_USERNAME}
+    password: ${SHOC_DATABASE_PASSWORD}

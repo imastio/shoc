@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shoc-webgtw
-  labels:
-    app: shoc-webgtw
+  name: shoc-webgtw
+  labels:
+    app: shoc-webgtw
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: shoc-webgtw
-  template:
-    metadata:
-      labels:
-        app: shoc-webgtw
-    spec:
-      imagePullSecrets:
-        - name: shoc-registry-pull-secret
-      restartPolicy: Always
-      containers:
-        - name: shoc-webgtw
-          image: {{registry.registry}}/{{registry.repository}}/shoc-webgtw:{{registry.publicVersion}}
-          imagePullPolicy: {{registry.pullPolicy}}
-          ports:
-            - containerPort: 11002
-          envFrom:
-            - configMapRef:
-                  name: shoc-webgtw-config
-            - secretRef:
-                  name: shoc-api-auth-ref-secret
-            - secretRef:
-                  name: shoc-api-discovery-ref-secret
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoc-webgtw
+  template:
+    metadata:
+      labels:
+        app: shoc-webgtw
+    spec:
+      imagePullSecrets:
+        - name: shoc-registry-pull-secret
+      restartPolicy: Always
+      containers:
+        - name: shoc-webgtw
+          image: {{registry.registry}}/{{registry.repository}}/shoc-webgtw:{{registry.publicVersion}}
+          imagePullPolicy: {{registry.pullPolicy}}
+          ports:
+            - containerPort: 11002
+          envFrom:
+            - configMapRef:
+                  name: shoc-webgtw-config
+            - secretRef:
+                  name: shoc-api-auth-ref-secret
+            - secretRef:
+                  name: shoc-api-discovery-ref-secret

@@ -1,7 +1,7 @@
 registry:
   dockerConfigJson: ${SHOC_REGISTRY_DOCKER_CONFIG_JSON}
-  registry: ${SHOC_REGISTY_URL}
-  repository: ${SHOC_REGISTRY_REPOSITORY}
+  registry: ${SHOC_PUBLIC_REGISTRY}
+  repository: ${SHOC_PUBLIC_REPOSITORY}
   publicVersion: ${SHOC_PUBLIC_VERSION}
   pullPolicy: Always
 
@@ -19,8 +19,9 @@ discovery:
     gateway: 
 
 database:
-  connectionString: ${SHOC_DATABASE_CONNECTION_STRING}
-  name: ${SHOC_DATABASE_NAME}
+  username: ${SHOC_DATABASE_USERNAME}
+  password: ${SHOC_DATABASE_PASSWORD}
+  name: shoc
 
 dind:
   clientAddress: tcp://shoc-dind:11003

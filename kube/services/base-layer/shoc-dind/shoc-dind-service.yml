@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: shoc-cr
+  name: shoc-dind
 spec:
   type: ClusterIP
   ports:
     - name: http
       protocol: TCP
-      port: 11004
-      targetPort: 11004
+      port: 11003
+      targetPort: 11003
   selector:
-    app: shoc-cr
+    app: shoc-dind
