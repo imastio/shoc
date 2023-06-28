@@ -1,6 +1,7 @@
 name: Publish OpenMpi Python Docker image
 
-workflow_dispatch:
+on:
+  workflow_dispatch:
     branches: [ "main" ]
 
 env:
