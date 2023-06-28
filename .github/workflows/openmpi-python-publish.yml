@@ -6,7 +6,7 @@ on:
 
 env:
   SHOC_PUBLIC_REGISTRY: ghcr.io
-  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public/images/
+  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public/images
   
 jobs:
   build-and-push-image:
