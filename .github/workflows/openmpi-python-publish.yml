@@ -1,0 +1,35 @@
+name: Publish OpenMpi Python Docker image
+
+workflow_dispatch:
+    branches: [ "main" ]
+
+env:
+  SHOC_PUBLIC_REGISTRY: ghcr.io
+  SHOC_PUBLIC_REPOSITORY: ${{ github.repository }}/public
+  SHOC_PUBLIC_VERSION: ${{ github.sha }}
+  
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.SHOC_PUBLIC_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.SHOC_GHCR_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: images/openmpi-python
+          push: true
+          tags: latest
+        
