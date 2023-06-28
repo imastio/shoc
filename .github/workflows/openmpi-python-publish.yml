@@ -28,4 +28,4 @@ jobs:
         with:
           context: images/openmpi-python
           push: true
-          tags: ${{ env.SHOC_PUBLIC_REPOSITORY }}:latest        
+          tags: ${{ env.SHOC_PUBLIC_REGISTRY }}/${{ env.SHOC_PUBLIC_REPOSITORY }}:latest        
