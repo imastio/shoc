@@ -77,15 +77,15 @@ namespace Shoc.Executor.Client
         /// Deploy the project
         /// </summary>
         /// <param name="token">The access token</param>
-        /// <param name="id">The job id</param>
+        /// <param name="input">The job deploy input</param>
         /// <returns></returns>
-        public async Task<JobModel> DeployProject(string token, string id)
+        public async Task<JobModel> DeployProject(string token, DeployJobInput input)
         {
             // the url of api
-            var url = await this.GetApiUrl($"api/jobs/{id}");
+            var url = await this.GetApiUrl($"api/jobs/deploy");
 
             // build the message
-            var message = BuildMessage(HttpMethod.Post, url, null, Auth(token));
+            var message = BuildMessage(HttpMethod.Post, url, input, Auth(token));
 
             // execute safely and get response
             var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));

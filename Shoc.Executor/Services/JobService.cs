@@ -151,12 +151,12 @@ namespace Shoc.Executor.Services
         /// Deploys the job with id
         /// </summary>
         /// <param name="principal">The current principal</param>
-        /// <param name="id">The job id</param>
+        /// <param name="input">The job deploy input</param>
         /// <returns></returns>
-        public async Task<JobModel> Deploy(ShocPrincipal principal, string id)
+        public async Task<JobModel> Deploy(ShocPrincipal principal, DeployJobInput input)
         {
             // get the job
-            var job = await this.jobRepository.GetById(principal.Subject, id);
+            var job = await this.jobRepository.GetById(principal.Subject, input.Id);
 
             // make sure job exists
             if (job == null)
@@ -223,7 +223,8 @@ namespace Shoc.Executor.Services
                 RegistryPassword = protectorRegistry.Unprotect(registry.EncryptedPassword),
                 RegistryEmail = registry.Email,
                 RegistryUrl = $"{registry.RegistryUri.TrimEnd('/')}/{registry.Repository}",
-                Image = $"{package.ImageUri}:{package.Id}"
+                Image = $"{package.ImageUri}:{package.Id}",
+                NodeCount = input.Workers
             });
 
             // make sure deployment exists

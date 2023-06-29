@@ -19,6 +19,7 @@ namespace Shoc.Builder.Services
                 "hostname" => new HostnameContainerizer(),
                 "list" => new ListContainerizer(),
                 "python-pip" => new PythonPipContainerizer(),
+                "python-mpi" => new PythonMpiContainerizer(),
                 _ => null
             };
         }

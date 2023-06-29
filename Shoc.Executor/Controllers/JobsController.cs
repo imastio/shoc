@@ -56,12 +56,12 @@ namespace Shoc.Executor.Controllers
         /// <summary>
         /// Deploys the job
         /// </summary>
-        /// <param name="id">The job identifier</param>
+        /// <param name="input">The job deploy input</param>
         /// <returns></returns>
-        [HttpPost("{id}")]
-        public Task<JobModel> Deploy(string id)
+        [HttpPost("deploy")]
+        public Task<JobModel> Deploy([FromBody] DeployJobInput input)
         {
-            return this.jobService.Deploy(this.HttpContext.GetShocPrincipal(), id);
+            return this.jobService.Deploy(this.HttpContext.GetShocPrincipal(), input);
         }
 
         /// <summary>

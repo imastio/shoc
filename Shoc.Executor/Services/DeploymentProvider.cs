@@ -20,6 +20,7 @@ namespace Shoc.Executor.Services
                 "list" => new ListDeployment(input),
                 "hostname" => new HostnameDeployment(input),
                 "python-pip" => new PythonPipDeployment(input),
+                "python-mpi" => new PythonMpiDeployment(input),
                 _ => null
             };
         }

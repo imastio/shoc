@@ -15,6 +15,7 @@ namespace Shoc.Cli.Commands.Project
         {
             this.AddOption(new Option<string>(new []{ "-n", "--name" }, "The name of project to run."));
             this.AddOption(new Option<string>(new []{ "-v", "--version" }, "The name of package to run. Defaults to latest"));
+            this.AddOption(new Option<string>(new []{ "-w", "--workers" }, "The count of workers to run on."));
             this.AddOption(new Option<IEnumerable<string>>(new []{ "-a", "--args" }, "The arguments to pass to the entrypoint executable.") { AllowMultipleArgumentsPerToken = true });
         }
     }

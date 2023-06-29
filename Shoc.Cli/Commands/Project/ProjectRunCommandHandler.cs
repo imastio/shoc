@@ -28,6 +28,11 @@ namespace Shoc.Cli.Commands.Project
         public string Version { get; set; }
 
         /// <summary>
+        /// The given workers count
+        /// </summary>
+        public int Workers { get; set; }
+
+        /// <summary>
         /// The arguments list
         /// </summary>
         public IEnumerable<string> Args { get; set; }
@@ -52,8 +57,6 @@ namespace Shoc.Cli.Commands.Project
             var project = await this.RequireProject(this.Name);
 
             // get the manifest
-            // TODO get run spec instead of manifest
-            //var manifest = await this.RequireManifest();
             var manifest = new ShocManifest();
 
             // set project version name
@@ -105,7 +108,11 @@ namespace Shoc.Cli.Commands.Project
 
             // do the operation authorized
             await this.authService.DoAuthorized(this.Profile, async (profile, me)
-                => await this.clientService.Executor(profile).DeployProject(me.AccessToken, job.Id)
+                => await this.clientService.Executor(profile).DeployProject(me.AccessToken, new DeployJobInput
+                {
+                    Id = job.Id,
+                    Workers = this.Workers
+                })
             );
 
             context.Console.WriteLine($"Job {job.Id} is being deployed.");

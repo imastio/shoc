@@ -43,27 +43,27 @@ namespace Shoc.Executor.Services
         protected virtual async Task AssureNamespace()
         {
             // make sure required namespace exists
-            await kubeClient.AssureNamespace();
+            await this.kubeClient.AssureNamespace();
         }
 
         /// <summary>
         /// Creates secret in kubernetes
         /// </summary>
         /// <returns></returns>
-        protected virtual async Task CreateSecret()
+        protected virtual async Task CreatePullSecret()
         {
             // if either username or password not set then consider secret not needed
-            if (string.IsNullOrEmpty(deploymentInput.RegistryUsername) || string.IsNullOrEmpty(deploymentInput.RegistryPassword))
+            if (string.IsNullOrEmpty(this.deploymentInput.RegistryUsername) || string.IsNullOrEmpty(this.deploymentInput.RegistryPassword))
             {
                 return;
             }
 
             // get the config as byte array
-            var config = CreateSecretConfig(deploymentInput.RegistryUsername, deploymentInput.RegistryPassword, 
-                deploymentInput.RegistryEmail, deploymentInput.RegistryUrl);
+            var config = CreatePullSecretData(this.deploymentInput.RegistryUsername, this.deploymentInput.RegistryPassword, 
+                this.deploymentInput.RegistryEmail, this.deploymentInput.RegistryUrl);
 
             // create the secret in kubernetes
-            await kubeClient.CreateSecret(config);
+            await this.kubeClient.CreatePullSecret(config);
         }
 
         /// <summary>
@@ -79,13 +79,13 @@ namespace Shoc.Executor.Services
                 .Build();
 
             // get run info
-            var runInfo = deserializer.Deserialize<JobRunInfo>(deploymentInput.Job.RunInfo);
+            var runInfo = deserializer.Deserialize<JobRunInfo>(this.deploymentInput.Job.RunInfo);
 
-            await this.kubeClient.CreateJob(deploymentInput.Image, runInfo.Args);
+            await this.kubeClient.CreateJob(this.deploymentInput.Image, runInfo.Args);
         }
 
         /// <summary>
-        /// Creates config for secret kind
+        /// Creates pull secret data from given credentials
         /// </summary>
         /// <param></param>
         /// <param name="username">The username</param>
@@ -93,7 +93,7 @@ namespace Shoc.Executor.Services
         /// <param name="email">The email address</param>
         /// <param name="uri">The uri</param>
         /// <returns>The serialized config</returns>
-        private static byte[] CreateSecretConfig(string username, string password, string email, string uri)
+        private static byte[] CreatePullSecretData(string username, string password, string email, string uri)
         {
             // encode username and password
             var encodedAuth = Base64Encode($"{username}:{password}");

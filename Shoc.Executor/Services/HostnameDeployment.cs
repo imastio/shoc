@@ -27,7 +27,7 @@ namespace Shoc.Executor.Services
             await this.AssureNamespace();
 
             // create the secret for pulling images
-            await this.CreateSecret();
+            await this.CreatePullSecret();
 
             // creates batch job in kubernetes
             await this.CreateJob();

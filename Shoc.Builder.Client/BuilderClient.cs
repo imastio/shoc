@@ -178,8 +178,8 @@ namespace Shoc.Builder.Client
             var message = BuildMessage(HttpMethod.Post, url, input, Auth(token));
 
             // execute safely and get response
-            var response = await Guard.DoAsync(() => this.webClient.SendAsync(message));
-
+            var response = await WithTimeout(TimeSpan.FromMinutes(10), source => Guard.DoAsync(() => this.webClient.SendAsync(message, source.Token)));
+            
             // get the result
             return await response.Map<ShocPackage>();
         }

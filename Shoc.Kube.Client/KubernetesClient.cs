@@ -70,11 +70,11 @@ namespace Shoc.Kube.Client
         }
 
         /// <summary>
-        /// Creates secret kind
+        /// Creates pull secret
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="config">The config byte array</param>
         /// <returns></returns>
-        public async Task CreateSecret(byte[] config)
+        public async Task CreatePullSecret(byte[] config)
         {
             var secret = new V1Secret
             {
@@ -152,6 +152,109 @@ namespace Shoc.Kube.Client
         }
 
         /// <summary>
+        /// Creates job
+        /// </summary>
+        /// <param name="imageUri"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public async Task CreateJobWithOverridenCommand(string imageUri, IList<string> args)
+        {
+            var job = new V1Job
+            {
+                ApiVersion = "batch/v1",
+                Kind = KubernetesKind.JOB,
+                Metadata = new V1ObjectMeta
+                {
+                    Labels = this.GetLabels(),
+                    Name = $"{this.jobId}",
+                },
+                Spec = new V1JobSpec
+                {
+                    Template = new V1PodTemplateSpec
+                    {
+                        Metadata = new V1ObjectMeta
+                        {
+                            Labels = this.GetLabels()
+                        },
+                        Spec = new V1PodSpec
+                        {
+                            Containers = new List<V1Container>
+                            {
+                                new()
+                                {
+                                    Image = imageUri,
+                                    Name = this.jobId,
+                                    SecurityContext = new V1SecurityContext
+                                    {
+                                        RunAsUser = 1000
+                                    },
+                                    Command = args,
+                                    VolumeMounts = new List<V1VolumeMount>
+                                    {
+                                        new()
+                                        {
+                                            Name = "config-volume",
+                                            MountPath = "/home/shoc/hosts"
+                                        }
+                                    }
+                                }
+                            },
+                            Volumes = new List<V1Volume>
+                            {
+                                new ()
+                                {
+                                    Name = "config-volume",
+                                    ConfigMap = new V1ConfigMapVolumeSource
+                                    {
+                                        Name = $"config-{this.jobId}"
+                                    }
+                                }
+                            },
+                            ImagePullSecrets = new List<V1LocalObjectReference> { new($"{this.jobId}-secret") },
+                            RestartPolicy = "Never"
+                        }
+                    },
+                }
+            };
+
+            try
+            {
+                await this.client.CreateNamespacedJobAsync(job, this.jobId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Creates configmap for given key value configs
+        /// </summary>
+        /// <returns></returns>
+        public async Task CreateConfigMap(CreateConfigMapInput input)
+        {
+            var configMap = new V1ConfigMap()
+            {
+                ApiVersion = "v1",
+                Kind = KubernetesKind.CONFIGMAP,
+                Metadata = new V1ObjectMeta
+                {
+                    Name = input.Name
+                },
+                Data = input.Configs
+            };
+
+            try
+            {
+                await this.client.CreateNamespacedConfigMapAsync(configMap, this.jobId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Watches job
         /// </summary>
         /// <returns></returns>
@@ -180,6 +283,108 @@ namespace Shoc.Kube.Client
                 Debug.WriteLine(ex, ex.Message);
                 
                 return Enumerable.Empty<string>();
+            }
+        }
+
+        /// <summary>
+        /// Creates headless service with given port
+        /// </summary>
+        /// <param name="input">The create headless service model</param>
+        /// <returns></returns>
+        public async Task CreateHeadlessService(CreateHeadlessServiceInput input)
+        {
+            var service = new V1Service
+            {
+                ApiVersion = "v1",
+                Kind = KubernetesKind.SERVICE,
+                Metadata = new V1ObjectMeta
+                {
+                    Name = input.Name
+                },
+                Spec = new V1ServiceSpec
+                {
+                    ClusterIP = "None",
+                    Selector = input.Selector,
+                    Ports = new List<V1ServicePort>
+                    {
+                        new()
+                        {
+                            Name = input.Name,
+                            Port = input.Port,
+                            TargetPort = input.TargetPort
+                        }
+                    }
+                }
+            };
+
+            try
+            {
+                await this.client.CreateNamespacedServiceAsync(service, this.jobId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Creates statefulset
+        /// </summary>
+        /// <returns></returns>
+        public async Task CreateStatefulSet(CreateStatefulSetInput input)
+        {
+            var statefulSet = new V1StatefulSet
+            {
+                ApiVersion = "apps/v1",
+                Kind = KubernetesKind.STATEFULSET,
+                Metadata = new V1ObjectMeta
+                {
+                    Name = input.Name,
+                },
+                Spec = new V1StatefulSetSpec
+                {
+                    ServiceName = input.ServiceName,
+                    Selector = new V1LabelSelector
+                    {
+                        MatchLabels = input.ServiceSelector
+                    },
+                    Replicas = input.Replicas,
+                    Template = new V1PodTemplateSpec
+                    {
+                        Metadata = new V1ObjectMeta
+                        {
+                            Labels = input.PodLabels
+                        },
+                        Spec = new V1PodSpec
+                        {
+                            Containers = new List<V1Container>
+                            {
+                                new()
+                                {
+                                    Name = input.ContainerName,
+                                    Image = input.ContainerImageUri,
+                                    ImagePullPolicy = "Always",
+                                    Ports = new List<V1ContainerPort>
+                                    {
+                                        new()
+                                        {
+                                            ContainerPort = input.ContainerPort
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            };
+
+            try
+            {
+                await this.client.CreateNamespacedStatefulSetAsync(statefulSet, this.jobId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex, ex.Message);
             }
         }
 

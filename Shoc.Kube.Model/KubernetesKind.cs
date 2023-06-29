@@ -19,5 +19,20 @@
         /// The job known kind
         /// </summary>
         public const string JOB = "Job";
+
+        /// <summary>
+        /// The service known kind
+        /// </summary>
+        public const string SERVICE = "Service";
+
+        /// <summary>
+        /// The statefulset known kind
+        /// </summary>
+        public const string STATEFULSET = "StatefulSet";
+
+        /// <summary>
+        /// The configmap known kind
+        /// </summary>
+        public const string CONFIGMAP = "ConfigMap";
     }
 }

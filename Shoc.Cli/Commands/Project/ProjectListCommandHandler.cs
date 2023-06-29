@@ -36,7 +36,7 @@ namespace Shoc.Cli.Commands.Project
             // add projects
             foreach (var project in result)
             {
-                table.AddRow(project.Id, project.Type, project.Type);
+                table.AddRow(project.Id, project.Name, project.Type);
             }
 
             // print table

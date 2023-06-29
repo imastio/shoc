@@ -155,8 +155,8 @@ namespace Shoc.Cli.Commands.Project
             context.Console.WriteLine("To run the project, use the following command:");
             context.Console.WriteLine($"\tshocctl project run -n {project.Name} -v {version}");
             context.Console.WriteLine("");
-            context.Console.WriteLine("To pass additional command-line arguments specify -a parameter as follows:");
-            context.Console.WriteLine($"\tshocctl project run -n {project.Name} -v {version} -a <ARGS>");
+            context.Console.WriteLine("To pass additional command-line arguments specify -a parameter, and for specifying workers count -w as follows:");
+            context.Console.WriteLine($"\tshocctl project run -n {project.Name} -v {version} -a <ARGS> -w <WORKERS>");
             context.Console.WriteLine("");
 
             return 0;
