@@ -15,7 +15,7 @@
     $SkipBuild,
 	
 	[switch] 
-    $SkipPush
+    $Push
 )
 
 $AllServices = @(
@@ -67,10 +67,10 @@ else {
    & "$ComposePath" "build" $AllRequested 
 }
 
-if($SkipPush){
-    Write-Host "Skipping docker push step for $($AllRequested.Count) services"
+if($Push){
+   & "$ComposePath" "push" $AllRequested 
 }
 else {    
-   & "$ComposePath" "push" $AllRequested 
+    Write-Host "Skipping docker push step for $($AllRequested.Count) services"
 }
 
