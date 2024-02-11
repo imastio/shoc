@@ -5,6 +5,8 @@ volumes:
     name: "shoc-database-sql-volume"
   shoc-dind-data-volume:
     name: "shoc-dind-data-volume"
+  shoc-kind-data-volume:
+    name: "shoc-kind-data-volume"
 
 networks:
   shoc-network:
@@ -54,6 +56,19 @@ services:
       - shoc-network
     volumes:
       - shoc-dind-data-volume:/var/lib/docker
+  
+  shoc-kind:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-kind:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./Shoc.Kind
+    restart: always
+    container_name: shoc-kube-instance
+    privileged: true
+    ports:
+      - '11017:6443'
+    networks:
+      - shoc-network
+    volumes:
+      - shoc-kind-data-volume:/var/lib/rancher/k3s
 
   shoc-builder:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-builder:${SHOC_PUBLIC_VERSION:-latest}

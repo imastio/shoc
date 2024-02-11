@@ -9,3 +9,4 @@ shoc-identity - 11008/11009
 shoc-database-migrator - 11010/11011
 shoc-executor - 11012/11013
 shoc-ui - 11014/11015
+shoc-kind - 11016 (RESERVED)/11017
