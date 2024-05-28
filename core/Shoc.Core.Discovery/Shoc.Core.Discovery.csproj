@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="Imast.Ext.DiscoveryCore" Version="0.0.3" />
+  </ItemGroup>
+
+</Project>

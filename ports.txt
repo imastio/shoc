@@ -1,5 +1,5 @@
 shoc-ingress - 11000
-shoc-database-sql - 11001
+shoc-database - 11001
 shoc-webgtw - 11002
 shoc-dind - 11003
 shoc-docker-registry - 11004

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+	<OperationGroup Name="Access">
+
+    <SqlOperation Name="GetEffectiveByUser">
+
+      <TextCommand ExpectedResult="Table">
+		  SELECT a.Access, 'user' as `Source` FROM `idp_users_accesses` a WHERE a.`UserId` = @UserId
+		  UNION
+		  SELECT ug.Access, 'user_group' as `Source` FROM `idp_user_groups_accesses` ug
+		  INNER JOIN `idp_user_group_membership` ugm ON ug.`GroupId` = ugm.`GroupId`
+		  WHERE ugm.`UserId` = @UserId
+		  UNION
+		  SELECT p.Access, 'privilege' as `Source` FROM `idp_privileges_accesses` p
+		  INNER JOIN `idp_role_privileges` rp ON p.`PrivilegeId` = rp.`PrivilegeId`
+		  INNER JOIN `idp_role_membership` rm ON rp.`RoleId` = rm.`RoleId`
+		  WHERE rm.`UserId` = @UserId
+	  </TextCommand>
+
+    </SqlOperation>
+
+	</OperationGroup>
+ 
+</DataOperations>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+  
+  <ItemGroup>
+    <ProjectReference Include="../../core/Shoc.Data.Sql/Shoc.Data.Sql.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Operations/DataOps.xsd">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Access.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

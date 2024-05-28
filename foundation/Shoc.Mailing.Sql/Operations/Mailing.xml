@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="Mailing">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `infra_mailing_profiles` ORDER BY `Created` DESC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByCode">
+      <TextCommand>
+        SELECT * FROM `infra_mailing_profiles` WHERE `Code` = @Code;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `infra_mailing_profiles`
+        (`Id`, `Code`, `Provider`, `Server`, `Port`, `Username`, `PasswordEncrypted`, `EncryptionType`, `ApiUrl`, `ApplicationId`, `ApiSecretEncrypted`, `DefaultFromEmail`, `DefaultFromSender`)
+        VALUES
+        (@Id, @Code, @Provider, @Server, @Port, @Username, @PasswordEncrypted, @EncryptionType, @ApiUrl, @ApplicationId, @ApiSecretEncrypted, @DefaultFromEmail, @DefaultFromSender);
+        SELECT * FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+
+    <SqlOperation Name="UpdatePassword">
+
+      <TextCommand>
+        UPDATE `infra_mailing_profiles`
+        SET
+        `PasswordEncrypted` = @PasswordEncrypted
+        WHERE
+        `Id` = @Id;
+        SELECT * FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateApiSecret">
+
+      <TextCommand>
+        UPDATE `infra_mailing_profiles`
+        SET
+        `ApiSecretEncrypted` = @ApiSecretEncrypted
+        WHERE
+        `Id` = @Id;
+        SELECT * FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+        DELETE FROM `infra_mailing_profiles` WHERE `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+</DataOperations>

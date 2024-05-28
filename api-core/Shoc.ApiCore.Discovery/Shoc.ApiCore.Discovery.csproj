@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="3.2.7" />
+    <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.2.7" />
+    <PackageReference Include="Steeltoe.Management.EndpointBase" Version="3.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+  </ItemGroup>
+
+</Project>

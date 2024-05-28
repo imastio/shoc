@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="../../foundation/Shoc.Access/Shoc.Access.csproj" />
+        <ProjectReference Include="../../core/Shoc.Core.OpenId\Shoc.Core.OpenId.csproj" />
+        <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+    </ItemGroup>
+
+</Project>
