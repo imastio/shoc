@@ -1,6 +1,10 @@
 volumes: 
   shoc-database-volume:
     name: "shoc-database-volume"
+  shoc-dind-data-volume:
+    name: "shoc-dind-data-volume"
+  shoc-kind-data-volume:
+    name: "shoc-kind-data-volume"
 
 networks:
   shoc-network:
@@ -21,3 +25,29 @@ services:
       - shoc-network
     volumes:
       - shoc-database-volume:/var/lib/mysql 
+
+  shoc-dind:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-dind:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./infrastructure/Shoc.Dind
+    restart: always
+    container_name: shoc-dind
+    privileged: true
+    ports:
+      - '11006:11006'
+    networks:
+      - shoc-network
+    volumes:
+      - shoc-dind-data-volume:/var/lib/docker
+
+  shoc-kind:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-kind:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./infrastructure/Shoc.Kind
+    restart: always
+    container_name: shoc-kind
+    privileged: true
+    ports:
+      - '11008:11008'
+    networks:
+      - shoc-network
+    volumes:
+      - shoc-kind-data-volume:/var/lib/rancher/k3s
