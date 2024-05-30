@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Identity.SigninHistory">
+
+        <SqlOperation Name="GetAll">
+
+            <TextCommand>
+                SELECT * FROM `idp_signin_history`
+                WHERE `UserId` = @UserId
+                ORDER BY `Time` DESC
+                LIMIT @Offset, @Count;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="CountAll">
+
+            <TextCommand>
+                SELECT COUNT(*) AS `TotalCount` FROM `idp_signin_history`
+                WHERE `UserId` = @UserId;
+            </TextCommand>
+
+        </SqlOperation>
+
+
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `idp_signin_history`
+                (`Id`, `SessionId`, `UserId`, `Ip`, `Provider`, `UserAgent`, `Time`, `Refreshed`)
+                VALUES
+                (@Id, @SessionId, @UserId, @Ip, @Provider, @UserAgent, @Time, @Refreshed);
+                SELECT * FROM `idp_signin_history` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

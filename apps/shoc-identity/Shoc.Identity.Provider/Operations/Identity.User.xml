@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+	<OperationGroup Name="Identity.User">
+
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`,
+				`FullName`, `Timezone`, `LastIp`, `LastLogin`, `MultiFactor`,
+				`LockedUntil`, `FailedAttempts`, `Deleted`, `Created`, `Updated`
+				FROM `idp_users`
+				WHERE `Deleted` = 0
+				{if:WithSearch {AND ((`FullName` LIKE @Search ESCAPE '\\') OR (`Email` LIKE @Search ESCAPE '\\'))} else {}}
+				{if:ByType {AND `Type` = @Type} else {}}
+				ORDER BY Created DESC;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="CountBy">
+			<TextCommand>
+				SELECT COUNT(*) AS `TotalCount`
+				FROM `idp_users`
+				WHERE `Deleted` = 0
+				{if:WithSearch {AND ((`FullName` LIKE @Search ESCAPE '\\') OR (`Email` LIKE @Search ESCAPE '\\'))} else {}}
+				{if:ByType {AND `Type` = @Type} else {}};
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetPageBy">
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`,
+				`FullName`, `Timezone`, `LastIp`, `LastLogin`, `MultiFactor`,
+				`LockedUntil`, `FailedAttempts`, `Deleted`, `Created`, `Updated`
+				FROM `idp_users`
+				WHERE `Deleted` = 0
+				{if:WithSearch {AND ((`FullName` LIKE @Search ESCAPE '\\') OR (`Email` LIKE @Search ESCAPE '\\'))} else {}}
+				{if:ByType {AND `Type` = @Type} else {}}
+				ORDER BY Created DESC
+				LIMIT @Offset, @Count;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetReferentialValuesPageBy">
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `FullName`
+				FROM `idp_users`
+				WHERE `Deleted` = 0
+				{if:WithSearch {AND ((`FullName` LIKE @Search ESCAPE '\\') OR (`Email` LIKE @Search ESCAPE '\\'))} else {}}
+				{if:ByType {AND `Type` = @Type} else {}}
+				ORDER BY Created DESC
+				LIMIT @Offset, @Count;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`,
+				`FullName`, `Timezone`, `LastIp`, `LastLogin`, `MultiFactor`,
+				`LockedUntil`, `FailedAttempts`, `Deleted`, `Created`, `Updated`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetByEmail">
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`,
+				`FullName`, `Timezone`, `LastIp`, `LastLogin`, `MultiFactor`,
+				`LockedUntil`, `FailedAttempts`, `Deleted`, `Created`, `Updated`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Email` = @Email;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetProfileById">
+			<TextCommand>
+				SELECT
+				`Id`, `Phone`, `PhoneVerified`, `FirstName`, `LastName`,
+				`Gender`, `BirthDate`, `Country`, `State`, `City`,
+				`Postal`, `Address1`, `Address2`
+				FROM `idp_users`
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetPictureById">
+			<TextCommand>
+				SELECT `Id`, `PictureUri` FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetGroupsById">
+			<TextCommand>
+				SELECT g.`Id`, g.`Name`
+				FROM `idp_user_groups` g
+				INNER JOIN `idp_user_group_membership` m ON g.`Id` = m.`GroupId`
+				WHERE m.`UserId` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetRolesById">
+			<TextCommand>
+				SELECT r.`Id`, r.`Name`
+				FROM `idp_roles` r
+				INNER JOIN `idp_role_membership` m ON r.`Id` = m.`RoleId`
+				WHERE m.`UserId` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="Create">
+
+			<TextCommand>
+				INSERT INTO `idp_users`
+				(`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`, `PasswordHash`, `Phone`,
+				`PhoneVerified`, `FirstName`, `LastName`, `FullName`, `PictureUri`, `Gender`, `Timezone`, `BirthDate`,
+				`Country`, `State`, `City`, `Postal`, `Address1`, `Address2`, `Metadata`)
+				VALUES
+				(@Id, @Email, @EmailVerified, @Username, @Type, @UserState, @PasswordHash, @Phone, @PhoneVerified,
+				@FirstName, @LastName, @FullName, @PictureUri, @Gender, @Timezone, @BirthDate, @Country, @State, @City,
+				@Postal, @Address1, @Address2, @Metadata);
+
+				SELECT `Id`, `Updated`
+				FROM `idp_users` WHERE `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="UpdateById">
+
+			<TextCommand>
+				UPDATE `idp_users`
+				SET
+				`Email` = @Email,
+				`EmailVerified` = @EmailVerified,
+				`FullName` = @FullName,
+				`Timezone` = @Timezone
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				SELECT `Id`, `Updated`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="UpdateTypeById">
+
+			<TextCommand>
+				UPDATE `idp_users`
+				SET `Type` = @UserType
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				SELECT `Id`, `Updated`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="UpdateUserStateById">
+
+			<TextCommand>
+				UPDATE `idp_users`
+				SET `UserState` = @UserState
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				SELECT `Id`, `Updated`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="UpdatePictureById">
+
+			<TextCommand>
+				UPDATE `idp_users`
+				SET
+				`PictureUri` = @PictureUri
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				SELECT `Id`, `PictureUri` FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="UpdateProfileById">
+
+			<TextCommand>
+				UPDATE `idp_users`
+				SET
+				`Phone` = @Phone,
+				`PhoneVerified` = @PhoneVerified,
+				`FirstName` = @FirstName,
+				`LastName` = @LastName,
+				`Gender` = @Gender,
+				`BirthDate` = @BirthDate,
+				`Country` = @Country,
+				`State` = @State,
+				`City` = @City,
+				`Postal` = @Postal,
+				`Address1` = @Address1,
+				`Address2` = @Address2
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				SELECT
+				`Id`, `Phone`, `PhoneVerified`, `FirstName`, `LastName`,
+				`Gender`, `BirthDate`, `Country`, `State`, `City`,
+				`Postal`, `Address1`, `Address2`
+				FROM `idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+
+		<SqlOperation Name="DeleteById">
+
+			<TextCommand>
+				SELECT
+				`Id`, `Email`, `EmailVerified`, `Username`, `Type`, `UserState`,
+				`FullName`, `Timezone`, `LastIp`, `LastLogin`, `MultiFactor`,
+				`LockedUntil`, `FailedAttempts`, `Deleted`, `Created`, `Updated`
+				FROM
+				`idp_users` WHERE `Deleted` = 0 AND `Id` = @Id;
+
+				UPDATE `idp_users`
+				SET
+				`Email` = @Email, `Username` = @Username, `Deleted` = 1,
+				`FullName` = 'Deleted', `FirstName` = 'Deleted', `LastName` = @LastName,
+				`Phone` = NULL, `PictureUri` = NULL, `Gender` = NULL, `Timezone` = NULL,
+				`BirthDate` = NULL, `Country` = NULL, `State` = NULL, `City` = NULL,
+				`Postal` = null, `Address1` = NULL, `Address2` = NULL, `LastIp` = NULL,
+				`LastLogin` = NULL, `MultiFactor` = 0, `LockedUntil` = NULL, `Metadata` = NULL
+				WHERE `Deleted` = 0 AND `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+	</OperationGroup>
+
+</DataOperations>

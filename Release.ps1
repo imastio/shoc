@@ -19,14 +19,8 @@
 )
 
 $AllServices = @(
-    "shoc-database-sql", 
-    "shoc-database-migrator", 
-    "shoc-webgtw", 
-    "shoc-identity", 
-    "shoc-builder", 
-	"shoc-executor", 
-    "shoc-ingress",
-    "shoc-ui"
+    "shoc-database", 
+    "shoc-database-migrator"
 )
 
 function IsValidService($service, $all){
@@ -58,17 +52,16 @@ foreach($service in $AllRequested){
     & "$PSScriptRoot/Publish.ps1" "$service"
 }
 
-$ComposePath = Get-Command docker-compose | Select-Object -First 1 -ExpandProperty Definition
 
 if($SkipBuild){
     Write-Host "Skipping docker build step for $($AllRequested.Count) services"
 }
 else {    
-   & "$ComposePath" "build" $AllRequested 
+   & docker "compose" "build" $AllRequested 
 }
 
 if($Push){
-   & "$ComposePath" "push" $AllRequested 
+   & docker "compose" "push" $AllRequested 
 }
 else {    
     Write-Host "Skipping docker push step for $($AllRequested.Count) services"

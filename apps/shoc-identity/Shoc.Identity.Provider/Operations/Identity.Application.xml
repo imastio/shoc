@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Identity.Application">
+
+        <SqlOperation Name="GetAll">
+            <TextCommand>
+                SELECT *
+                FROM `idp_applications`
+                ORDER BY Created DESC;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetById">
+            <TextCommand>
+                SELECT *
+                FROM `idp_applications` 
+                WHERE `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetByClientId">
+            <TextCommand>
+                SELECT *
+                FROM `idp_applications`
+                WHERE `ApplicationClientId` = @ApplicationClientId;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetClientByClientId">
+            <TextCommand>
+                SET @id = (SELECT `Id` FROM `idp_applications` WHERE `ApplicationClientId` = @ApplicationClientId);
+                
+                SELECT *
+                FROM `idp_applications`
+                WHERE `Id` = @id;
+                
+                SELECT * 
+                FROM `idp_applications_secrets`
+                WHERE `ApplicationId` = @id;
+
+                SELECT *
+                FROM `idp_applications_uris`
+                WHERE `ApplicationId` = @id;
+
+                SELECT *
+                FROM `idp_applications_claims`
+                WHERE `ApplicationId` = @id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `idp_applications`
+                (`Id`, `Enabled`, `ApplicationClientId`, `ProtocolType`, `Name`, `Description`, `SecretRequired`, `ApplicationUri`, `LogoUri`,
+                `ConsentRequired`, `AllowRememberConsent`, `AllowedGrantTypes`, `PkceRequired`, `AllowPlainTextPkce`, `RequireRequestObject`,
+                `AllowAccessTokensViaBrowser`, `DpopRequired`, `DpopValidationMode`, `DpopClockSkewSeconds`, `FrontChannelLogoutUri`, `FrontChannelLogoutSessionRequired`,
+                `BackChannelLogoutUri`, `BackChannelLogoutSessionRequired`, `AllowOfflineAccess`, `AllowedScopes`, `AlwaysIncludeUserClaimsInIdToken`,
+                `IdentityTokenLifetime`, `AllowedIdentityTokenSigningAlgorithms`, `AccessTokenLifetime`, `AuthorizationCodeLifetime`, `AbsoluteRefreshTokenLifetime`, 
+                `SlidingRefreshTokenLifetime`, `ConsentLifetime`, `RefreshTokenUsage`, `UpdateAccessTokenClaimsOnRefresh`, `RefreshTokenExpiration`,
+                `AccessTokenType`, `EnableLocalLogin`, `IdentityProviderRestrictions`, `IncludeJwtId`, `AlwaysSendClientClaims`, `ClientClaimsPrefix`, `PairWiseSubjectSalt`,
+                `UserSsoLifetime`, `UserCodeType`, `DeviceCodeLifetime`, `CibaLifetime`, `PollingInterval`, `CoordinateLifetimeWithUserSession`, `InitiateLoginUri`)
+                VALUES
+                (@Id, @Enabled, @ApplicationClientId, @ProtocolType, @Name, @Description, @SecretRequired, @ApplicationUri, @LogoUri,
+                @ConsentRequired, @AllowRememberConsent, @AllowedGrantTypes, @PkceRequired, @AllowPlainTextPkce, @RequireRequestObject,
+                @AllowAccessTokensViaBrowser, @DpopRequired, @DpopValidationMode, @DpopClockSkewSeconds, @FrontChannelLogoutUri, @FrontChannelLogoutSessionRequired,
+                @BackChannelLogoutUri, @BackChannelLogoutSessionRequired, @AllowOfflineAccess, @AllowedScopes, @AlwaysIncludeUserClaimsInIdToken,
+                @IdentityTokenLifetime, @AllowedIdentityTokenSigningAlgorithms, @AccessTokenLifetime, @AuthorizationCodeLifetime, @AbsoluteRefreshTokenLifetime,
+                @SlidingRefreshTokenLifetime, @ConsentLifetime, @RefreshTokenUsage, @UpdateAccessTokenClaimsOnRefresh, @RefreshTokenExpiration,
+                @AccessTokenType, @EnableLocalLogin, @IdentityProviderRestrictions, @IncludeJwtId, @AlwaysSendClientClaims, @ClientClaimsPrefix, @PairWiseSubjectSalt,
+                @UserSsoLifetime, @UserCodeType, @DeviceCodeLifetime, @CibaLifetime, @PollingInterval, @CoordinateLifetimeWithUserSession, @InitiateLoginUri);
+
+                SELECT *
+                FROM `idp_applications` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+                
+        <SqlOperation Name="UpdateById">
+
+            <TextCommand>
+                UPDATE `idp_applications`
+                SET
+                `Enabled` = @Enabled,
+                `ApplicationClientId` = @ApplicationClientId,
+                `ProtocolType` = @ProtocolType,
+                `Name` = @Name,
+                `Description` = @Description,
+                `SecretRequired` = @SecretRequired,
+                `ApplicationUri` = @ApplicationUri,
+                `LogoUri` = @LogoUri,
+                `ConsentRequired` = @ConsentRequired,
+                `AllowRememberConsent` = @AllowRememberConsent,
+                `AllowedGrantTypes` = @AllowedGrantTypes,
+                `PkceRequired` = @PkceRequired,
+                `AllowPlainTextPkce` = @AllowPlainTextPkce,
+                `RequireRequestObject` = @RequireRequestObject,
+                `AllowAccessTokensViaBrowser` = @AllowAccessTokensViaBrowser,
+                `DpopRequired` = @DpopRequired,
+                `DpopValidationMode` = @DpopValidationMode,
+                `DpopClockSkewSeconds` = @DpopClockSkewSeconds,
+                `FrontChannelLogoutUri` = @FrontChannelLogoutUri,
+                `FrontChannelLogoutSessionRequired` = @FrontChannelLogoutSessionRequired,
+                `BackChannelLogoutUri` = @BackChannelLogoutUri,
+                `BackChannelLogoutSessionRequired` = @BackChannelLogoutSessionRequired,
+                `AllowOfflineAccess` = @AllowOfflineAccess,
+                `AllowedScopes` = @AllowedScopes,
+                `AlwaysIncludeUserClaimsInIdToken` = @AlwaysIncludeUserClaimsInIdToken,
+                `IdentityTokenLifetime` = @IdentityTokenLifetime,
+                `AllowedIdentityTokenSigningAlgorithms` = @AllowedIdentityTokenSigningAlgorithms,
+                `AccessTokenLifetime` = @AccessTokenLifetime,
+                `AuthorizationCodeLifetime` = @AuthorizationCodeLifetime,
+                `AbsoluteRefreshTokenLifetime` = @AbsoluteRefreshTokenLifetime,
+                `SlidingRefreshTokenLifetime` = @SlidingRefreshTokenLifetime,
+                `ConsentLifetime` = @ConsentLifetime,
+                `RefreshTokenUsage` = @RefreshTokenUsage,
+                `UpdateAccessTokenClaimsOnRefresh` = @UpdateAccessTokenClaimsOnRefresh,
+                `RefreshTokenExpiration` = @RefreshTokenExpiration,
+                `AccessTokenType` = @AccessTokenType,
+                `EnableLocalLogin` = @EnableLocalLogin,
+                `IdentityProviderRestrictions` = @IdentityProviderRestrictions,
+                `IncludeJwtId` = @IncludeJwtId,
+                `AlwaysSendClientClaims` = @AlwaysSendClientClaims,
+                `ClientClaimsPrefix` = @ClientClaimsPrefix,
+                `PairWiseSubjectSalt` = @PairWiseSubjectSalt,
+                `UserSsoLifetime` = @UserSsoLifetime,
+                `UserCodeType` = @UserCodeType,
+                `DeviceCodeLifetime` = @DeviceCodeLifetime,
+                `CibaLifetime` = @CibaLifetime,
+                `PollingInterval` = @PollingInterval,
+                `CoordinateLifetimeWithUserSession` = @CoordinateLifetimeWithUserSession,
+                `InitiateLoginUri` = @InitiateLoginUri
+                WHERE `Id` = @Id;
+
+                SELECT *
+                FROM `idp_applications` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteById">
+
+            <TextCommand>
+                SELECT *
+                FROM `idp_applications` 
+                WHERE `Id` = @Id;
+
+                DELETE FROM `idp_applications` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

@@ -60,6 +60,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Identity", "apps\shoc-
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Shoc.Identity.Ui", "apps\shoc-identity\Shoc.Identity.Ui\Shoc.Identity.Ui.esproj", "{224D74DC-BAC8-428B-A8DB-BB07E0D973EA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shoc-database-migrator", "shoc-database-migrator", "{83BF867D-09AE-4F07-8327-8AAA85511A34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Database.Migrator", "apps\shoc-database-migrator\Shoc.Database.Migrator\Shoc.Database.Migrator.csproj", "{1109E4F0-DE6C-40FF-9C0C-02F9652B7452}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.DataProtection", "api-core\Shoc.ApiCore.DataProtection\Shoc.ApiCore.DataProtection.csproj", "{0A01EE6F-67B1-4FB6-B666-6890E22115E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Identity.Model", "apps\shoc-identity\Shoc.Identity.Model\Shoc.Identity.Model.csproj", "{46B5F17D-FBA1-4983-8B3A-24F8597B9B25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Identity.Provider", "apps\shoc-identity\Shoc.Identity.Provider\Shoc.Identity.Provider.csproj", "{73F80124-BB4D-48EE-97D5-BBB2960E64D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +164,22 @@ Global
 		{224D74DC-BAC8-428B-A8DB-BB07E0D973EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{224D74DC-BAC8-428B-A8DB-BB07E0D973EA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{224D74DC-BAC8-428B-A8DB-BB07E0D973EA}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{1109E4F0-DE6C-40FF-9C0C-02F9652B7452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1109E4F0-DE6C-40FF-9C0C-02F9652B7452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1109E4F0-DE6C-40FF-9C0C-02F9652B7452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1109E4F0-DE6C-40FF-9C0C-02F9652B7452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A01EE6F-67B1-4FB6-B666-6890E22115E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A01EE6F-67B1-4FB6-B666-6890E22115E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A01EE6F-67B1-4FB6-B666-6890E22115E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A01EE6F-67B1-4FB6-B666-6890E22115E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,5 +211,10 @@ Global
 		{513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB} = {21A6D5CD-1D11-43E0-A84C-82811AA2FF3A}
 		{8E7E0015-2AD7-406F-A546-021803226EEF} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
 		{224D74DC-BAC8-428B-A8DB-BB07E0D973EA} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
+		{83BF867D-09AE-4F07-8327-8AAA85511A34} = {21A6D5CD-1D11-43E0-A84C-82811AA2FF3A}
+		{1109E4F0-DE6C-40FF-9C0C-02F9652B7452} = {83BF867D-09AE-4F07-8327-8AAA85511A34}
+		{0A01EE6F-67B1-4FB6-B666-6890E22115E8} = {7F8F6B8C-AC72-43ED-92D3-EBFA36CF7689}
+		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
+		{73F80124-BB4D-48EE-97D5-BBB2960E64D3} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
 	EndGlobalSection
 EndGlobal

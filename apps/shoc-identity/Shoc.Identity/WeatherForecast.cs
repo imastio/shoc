@@ -1,3 +1,5 @@
+using System;
+
 namespace ReactApp1.Server
 {
     public class WeatherForecast

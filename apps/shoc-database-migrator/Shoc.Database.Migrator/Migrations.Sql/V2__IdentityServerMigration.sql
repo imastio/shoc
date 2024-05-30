@@ -1,0 +1,122 @@
+﻿CREATE TABLE `idp_key_management` (
+    `Id` varchar(450) NOT NULL,
+    `Algorithm` varchar(100) NOT NULL,
+    `Data` longtext NOT NULL,
+    `DataProtected` bit(1) DEFAULT NULL,
+    `IsX509Certificate` bit(1) DEFAULT NULL,
+    `Use` varchar(450) DEFAULT NULL,
+    `Version` int DEFAULT NULL,
+    `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`Id`),
+    KEY `IDP_KM_Use` (`Use`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `idp_persisted_grants` (
+    `Id` varchar(100) NOT NULL,
+    `Key` varchar(200) NOT NULL,
+    `ClientId` varchar(200) NOT NULL,
+    `Type` varchar(50) NOT NULL,
+    `SubjectId` varchar(100) DEFAULT NULL,
+    `SessionId` varchar(50) DEFAULT NULL,
+    `Description` text,
+    `Data` longtext,
+    `Expiration` datetime DEFAULT NULL,
+    `ConsumedTime` datetime DEFAULT NULL,
+    `CreationTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY `Key_UNIQUE` (`Key`),
+    KEY `IDP_PG_Expiration` (`Expiration`),
+    KEY `IDP_PG_Sub_Cli_Type` (`SubjectId`,`ClientId`,`Type`),
+    KEY `IDP_PG_Sub_Sess_Type` (`SubjectId`,`SessionId`,`Type`),
+    KEY `IDP_PG_ConsumedTime` (`ConsumedTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `idp_applications` (
+    `Id` varchar(100) NOT NULL,
+    `Enabled` bit(1) NOT NULL,
+    `ApplicationClientId` varchar(100) NOT NULL,
+    `ProtocolType` varchar(45) NOT NULL,
+    `Name` text NOT NULL,
+    `Description` text NOT NULL,
+    `SecretRequired` bit(1) NOT NULL,
+    `ApplicationUri` text NOT NULL,
+    `LogoUri` text NOT NULL,
+    `ConsentRequired` bit(1) NOT NULL,
+    `AllowRememberConsent` bit(1) NOT NULL,
+    `AllowedGrantTypes` text NOT NULL,
+    `PkceRequired` bit(1) NOT NULL,
+    `AllowPlainTextPkce` bit(1) NOT NULL,
+    `RequireRequestObject` bit(1) NOT NULL,
+    `AllowAccessTokensViaBrowser` bit(1) NOT NULL,
+    `DpopRequired` bit(1) NOT NULL,
+    `DpopValidationMode` text NOT NULL,
+    `DpopClockSkewSeconds` int NOT NULL,
+    `FrontChannelLogoutUri` text NOT NULL,
+    `FrontChannelLogoutSessionRequired` bit(1) NOT NULL,
+    `BackChannelLogoutUri` text NOT NULL,
+    `BackChannelLogoutSessionRequired` bit(1) NOT NULL,
+    `AllowOfflineAccess` bit(1) NOT NULL,
+    `AllowedScopes` text NOT NULL,
+    `AlwaysIncludeUserClaimsInIdToken` bit(1) NOT NULL,
+    `IdentityTokenLifetime` int NOT NULL,
+    `AllowedIdentityTokenSigningAlgorithms` text NOT NULL,
+    `AccessTokenLifetime` int NOT NULL,
+    `AuthorizationCodeLifetime` int NOT NULL,
+    `AbsoluteRefreshTokenLifetime` int NOT NULL,
+    `SlidingRefreshTokenLifetime` int NOT NULL,
+    `ConsentLifetime` int NOT NULL,
+    `RefreshTokenUsage` text NOT NULL,
+    `UpdateAccessTokenClaimsOnRefresh` bit(1) NOT NULL,
+    `RefreshTokenExpiration` text NOT NULL,
+    `AccessTokenType` text NOT NULL,
+    `EnableLocalLogin` bit(1) NOT NULL,
+    `IdentityProviderRestrictions` text NOT NULL,
+    `IncludeJwtId` bit(1) NOT NULL,
+    `AlwaysSendClientClaims` bit(1) NOT NULL,
+    `ClientClaimsPrefix` text NOT NULL,
+    `PairWiseSubjectSalt` text NOT NULL,
+    `UserSsoLifetime` int NOT NULL,
+    `UserCodeType` text NOT NULL,
+    `DeviceCodeLifetime` int NOT NULL,
+    `CibaLifetime` int NOT NULL,
+    `PollingInterval` int NOT NULL,
+    `CoordinateLifetimeWithUserSession` bit(1) NOT NULL,
+    `InitiateLoginUri` text NOT NULL,
+    `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY `ApplicationClientId_UNIQUE` (`ApplicationClientId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `idp_applications_claims` (
+    `Id` varchar(100) NOT NULL,
+    `ApplicationId` varchar(100) NOT NULL,
+    `Type` varchar(100) NOT NULL,
+    `Value` text NOT NULL,
+    `ValueType` text,
+    PRIMARY KEY (`Id`),
+    KEY `FK_Applications_ApplicationClaims_idx` (`ApplicationId`),
+    CONSTRAINT `FK_Applications_ApplicationClaims` FOREIGN KEY (`ApplicationId`) REFERENCES `idp_applications` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `idp_applications_secrets` (
+    `Id` varchar(100) NOT NULL,
+    `ApplicationId` varchar(100) NOT NULL,
+    `Type` varchar(100) NOT NULL,
+    `Value` text NOT NULL,
+    `Description` text,
+    `Expiration` datetime DEFAULT NULL,
+    PRIMARY KEY (`Id`),
+    KEY `FK_Applications_ApplicationSecrets_idx` (`ApplicationId`),
+    CONSTRAINT `FK_Applications_ApplicationSecrets` FOREIGN KEY (`ApplicationId`) REFERENCES `idp_applications` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `idp_applications_uris` (
+    `Id` varchar(100) NOT NULL,
+    `ApplicationId` varchar(100) NOT NULL,
+    `Type` varchar(100) NOT NULL,
+    `Uri` text NOT NULL,
+    PRIMARY KEY (`Id`),
+    KEY `FK_Applications_ApplicationUris_idx` (`ApplicationId`),
+    CONSTRAINT `FK_Applications_ApplicationUris` FOREIGN KEY (`ApplicationId`) REFERENCES `idp_applications` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

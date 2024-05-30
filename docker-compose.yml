@@ -51,3 +51,19 @@ services:
       - shoc-network
     volumes:
       - shoc-kind-data-volume:/var/lib/rancher/k3s
+
+  shoc-database-migrator:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database-migrator:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./apps/shoc-database-migrator/Shoc.Database.Migrator
+    container_name: shoc-database-migrator
+    restart: "no"
+    ports:
+      - '11012:11012'
+    env_file:
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-discovery.env
+      - ./env/shoc-database-migrator.env
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network

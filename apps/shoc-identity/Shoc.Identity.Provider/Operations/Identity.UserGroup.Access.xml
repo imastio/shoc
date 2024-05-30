@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+	<OperationGroup Name="Identity.UserGroup.Access">
+
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT * FROM `idp_user_groups_accesses`;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT * FROM `idp_user_groups_accesses` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetByGroupId">
+			<TextCommand>
+				SELECT * FROM `idp_user_groups_accesses` WHERE `GroupId` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="Create">
+
+			<TextCommand>
+				INSERT INTO `idp_user_groups_accesses`
+				(`Id`, `GroupId`, `Access`)
+				VALUES
+				(@Id, @GroupId, @Access)
+				ON DUPLICATE KEY UPDATE `Updated` = CURRENT_TIMESTAMP;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteByAccess">
+
+			<TextCommand>
+				DELETE FROM `idp_user_groups_accesses`
+				WHERE
+				`Access` in @Revoke AND `GroupId` = @GroupId;
+
+				SELECT ROW_COUNT();
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteById">
+
+			<TextCommand>
+				SELECT * FROM `idp_user_groups_accesses` WHERE `Id` = @Id;
+				DELETE FROM `idp_user_groups_accesses` WHERE `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+	</OperationGroup>
+
+</DataOperations>
