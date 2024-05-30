@@ -67,3 +67,55 @@ services:
       - shoc-database
     networks:
       - shoc-network
+
+  shoc-identity:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-identity:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-identity/Shoc.Identity
+    container_name: shoc-identity
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-identity-provider.env
+      - ./env/shoc-identity.env
+    ports:
+      - '11014:11014'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
+  shoc-webgtw:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-webgtw/Shoc.Webgtw
+    container_name: shoc-webgtw
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/shoc-webgtw.env
+    ports:
+      - '11010:11010'
+    networks:
+      - shoc-network
+
+  shoc-ingress:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ingress:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./infrastructure/Shoc.Ingress
+    container_name: shoc-ingress
+    hostname: shoc.local
+    restart: always
+    ports:
+      - '11000:11000'
+    depends_on:
+      - shoc-identity
+    networks:
+      shoc-network:
+        aliases:
+         - shoc.local
+         - identity.shoc.local
+         - api.shoc.local
+         - cr.shoc.local
+         - admin.shoc.local

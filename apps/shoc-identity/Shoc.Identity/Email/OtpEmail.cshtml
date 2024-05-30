@@ -1,0 +1,20 @@
+﻿@using Shoc.ApiCore.Intl
+@model dynamic
+@inject IIntlService intlService
+@{
+    var lang = Model.Language.ToString() ?? this.intlService.GetDefaultLocale();
+}
+
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<!-- START: MAIN CONTENT -->
+
+<p style="margin-bottom: 20px;">@this.intlService.Format("global.email.greeting", lang),</p>
+<p style="margin-bottom: 20px;">@this.intlService.Format("signin.email.otp.otpNotice", lang) <b>@Model.OneTimePassword</b></p>
+<p style="margin-bottom: 20px;"></p>
+<p style="margin-bottom: 20px;">@this.intlService.Format("signin.email.otp.ignoreNotice", lang)</p>
+
+
+<!-- END: MAIN CONTENT -->

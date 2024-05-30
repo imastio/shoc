@@ -1,0 +1,22 @@
+﻿@using Shoc.ApiCore.Intl
+@model dynamic
+@inject IIntlService intlService
+@{
+    var lang = Model.Language.ToString() ?? this.intlService.GetDefaultLocale();
+}
+
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<!-- START: MAIN CONTENT -->
+
+<p style="margin-bottom: 20px;">@this.intlService.Format("global.email.greeting", lang),</p>
+<p style="margin-bottom: 20px;">
+    @this.intlService.Format("confirm.email.linkNotice", lang) <a href="@Model.ConfirmationLink" style="color: #08c; text-decoration: none;">
+        @this.intlService.Format("confirm.email.link", lang)
+    </a>
+</p>
+<p style="margin-bottom: 20px;">@this.intlService.Format("confirm.email.codeNotice", lang) <b>@Model.ConfirmationCode</b></p>
+
+<!-- END: MAIN CONTENT -->

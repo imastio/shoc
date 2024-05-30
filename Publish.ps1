@@ -10,6 +10,14 @@ function GetCsharpProject ($serviceName) {
 		return "$PSScriptRoot/apps/shoc-database-migrator/Shoc.Database.Migrator/Shoc.Database.Migrator.csproj"
 	}
 
+	if($serviceName -eq "shoc-identity"){
+		return "$PSScriptRoot/apps/shoc-identity/Shoc.Identity/Shoc.Identity.csproj"
+	}
+
+	if($serviceName -eq "shoc-webgtw"){
+		return "$PSScriptRoot/apps/shoc-webgtw/Shoc.Webgtw/Shoc.Webgtw.csproj"
+	}
+
 	return ""
 }
 

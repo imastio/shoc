@@ -70,6 +70,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Identity.Model", "apps
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Identity.Provider", "apps\shoc-identity\Shoc.Identity.Provider\Shoc.Identity.Provider.csproj", "{73F80124-BB4D-48EE-97D5-BBB2960E64D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shoc-webgtw", "shoc-webgtw", "{CF9F2A28-591E-4717-9134-7C24AB494B94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Webgtw", "apps\shoc-webgtw\Shoc.Webgtw\Shoc.Webgtw.csproj", "{4DDE654C-261F-4589-86CB-9236044225E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +184,10 @@ Global
 		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73F80124-BB4D-48EE-97D5-BBB2960E64D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DDE654C-261F-4589-86CB-9236044225E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DDE654C-261F-4589-86CB-9236044225E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DDE654C-261F-4589-86CB-9236044225E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DDE654C-261F-4589-86CB-9236044225E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,5 +224,7 @@ Global
 		{0A01EE6F-67B1-4FB6-B666-6890E22115E8} = {7F8F6B8C-AC72-43ED-92D3-EBFA36CF7689}
 		{46B5F17D-FBA1-4983-8B3A-24F8597B9B25} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
 		{73F80124-BB4D-48EE-97D5-BBB2960E64D3} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
+		{CF9F2A28-591E-4717-9134-7C24AB494B94} = {21A6D5CD-1D11-43E0-A84C-82811AA2FF3A}
+		{4DDE654C-261F-4589-86CB-9236044225E9} = {CF9F2A28-591E-4717-9134-7C24AB494B94}
 	EndGlobalSection
 EndGlobal

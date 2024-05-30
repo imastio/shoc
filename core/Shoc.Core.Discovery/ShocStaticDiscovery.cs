@@ -48,7 +48,8 @@ public class ShocStaticDiscovery : StaticDiscoveryClient
         // define known services for discovery
         var services = new Dictionary<string, int>
         {
-            { "shoc-identity", useHttps ? 11009 : 11008},
+            { "shoc-identity", useHttps ? 11015 : 11014},
+            { "shoc-database-migrator", useHttps ? 11013 : 11012},
         };
 
         return services;

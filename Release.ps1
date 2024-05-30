@@ -20,7 +20,10 @@
 
 $AllServices = @(
     "shoc-database", 
-    "shoc-database-migrator"
+    "shoc-database-migrator",
+    "shoc-identity",
+    "shoc-webgtw",
+    "shoc-ingress"
 )
 
 function IsValidService($service, $all){
