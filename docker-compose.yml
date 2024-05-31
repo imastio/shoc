@@ -47,6 +47,8 @@ services:
     privileged: true
     ports:
       - '11008:11008'
+    env_file:
+      - ./env/shoc-kind.env
     networks:
       - shoc-network
     volumes:

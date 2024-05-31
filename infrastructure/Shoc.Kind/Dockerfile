@@ -1,9 +1,7 @@
 FROM rancher/k3s:latest
 
-ENV K3S_CLUSTER_SECRET=test
-ENV K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
-ENV K3S_KUBECONFIG_MODE=666
+EXPOSE 11008
 
-CMD ["server", "--https-listen-port", "11008" ]
+CMD ["server", "--https-listen-port", "11008"]
 
 
