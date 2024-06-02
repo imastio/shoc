@@ -12,7 +12,6 @@ export const clientGuard = async (fn) => {
         return { payload: result.data, error: null };
     }
     catch(error){
-        console.log("something is wrong", error)
         if(error && error.response && error.response.data){
             return { payload: error.response.data, error }
         }

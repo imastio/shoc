@@ -16,12 +16,14 @@ const page = (elem) => (
 const GlobalLayout = lazy(() => import('@/layouts/global-layout'));
 
 const IndexPage = lazy(() => import('@/pages/index'));
+const SignInPage = lazy(() => import('@/pages/sign-in'));
 
 export const allRoutes = [
     {
         element: <GlobalLayout />,
         children: [
             { index: true, element: page(<IndexPage />) },
+            { path: '/sign-in', element: page(<SignInPage />) },
         ]
     }
 ]
