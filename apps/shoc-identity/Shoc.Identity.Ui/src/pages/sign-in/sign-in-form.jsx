@@ -7,9 +7,11 @@ import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import useMethod from "./use-method"
 import useNavigateSearch from "@/hooks/use-navigate-search"
-import * as Yup from 'yup';
-import { Formik, Form, ErrorMessage } from 'formik';
 import useAuthorizeContext from "@/hooks/use-authorize-context"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 export default function SignInForm({ className, ...props }) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -19,71 +21,81 @@ export default function SignInForm({ className, ...props }) {
 
     const method = useMethod();
 
-    const signInSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email').required('Email is required'),
-        password: method === 'password' ? Yup.string()
-            .min(6, 'Password must be at least 6 characters')
-            .required('Password is required') : Yup.string()
-    });
+    const emailRule = { email: z.string().email('Enter a valid email!') }
+    const passwordRule = method === 'magic-link' ? {} : {
+        password: z.string().min(6, 'Password must have at least 6 characters!')
+    }
 
-    async function onSubmit(event) {
-        event.preventDefault()
-        setIsLoading(true)
+    const formSchema = z.object({
+        ...emailRule,
+        ...passwordRule
+    })
 
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 3000)
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: authorizeContext.loginHint,
+            password: ''
+        },
+        shouldUseNativeValidation: false
+    })
+
+    async function onSubmit(values) {
+       console.log("here are the values")
     }
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            <Formik
-                initialValues={{
-                    email: authorizeContext.loginHint || '',
-                    password: ''
-                }}
-                validationSchema={signInSchema}
-                onSubmit={async (values) => {
-                    setIsLoading(true);
-                    await new Promise((r) => setTimeout(r, 500));
-                    setIsLoading(false);
-                    alert(JSON.stringify(values, null, 2));
-                }}
-            >
-                <Form>
+
+            <Form {...form} autoComplete="off">
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="grid gap-2">
                         <div className="grid gap-1">
-                            <Label className="sr-only" htmlFor="email">
-                                Email
-                            </Label>
-                            <Input
-                                autoFocus
-                                id="email"
+                            <FormField
+                                control={form.control}
                                 name="email"
-                                placeholder="name@example.com"
-                                type="email"
-                                autoCapitalize="none"
-                                autoComplete="email"
-                                autoCorrect="off"
-                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                autoFocus
+                                                placeholder="name@example.com"
+                                                type="email"
+                                                autoCapitalize="none"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                autoCorrect="off"
+                                                disabled={isLoading}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            <ErrorMessage name="email" component="div" className="text-red-500" />
                         </div>
                         {method === 'password' && <div className="grid gap-1">
-                            <Label className="sr-only" htmlFor="password">
-                                Password
-                            </Label>
-                            <Input
-                                id="password"
+                        <FormField
+                                control={form.control}
                                 name="password"
-                                placeholder="**********"
-                                type="password"
-                                autoCapitalize="none"
-                                autoComplete="current-password"
-                                autoCorrect="off"
-                                disabled={isLoading}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="**********"
+                                                type="password"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                disabled={isLoading}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
-                            <ErrorMessage name="password" component="div" className="text-red-500" />
                         </div>}
                         <Button type="submit" disabled={isLoading}>
                             {isLoading && (
@@ -92,8 +104,8 @@ export default function SignInForm({ className, ...props }) {
                             Continue
                         </Button>
                     </div>
-                </Form>
-            </Formik>
+                </form>
+            </Form>
             <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
