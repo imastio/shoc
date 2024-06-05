@@ -36,7 +36,7 @@ public class UserGroupsController : ControllerBase
     /// Gets all user groups
     /// </summary>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_LIST)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_LIST)]
     [HttpGet]
     public Task<IEnumerable<UserGroupModel>> GetAll()
     {
@@ -48,7 +48,7 @@ public class UserGroupsController : ControllerBase
     /// </summary>
     /// <param name="id">The of user group to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_READ)]
     [HttpGet("{id}")]
     public Task<UserGroupModel> GetById(string id)
     {
@@ -60,7 +60,7 @@ public class UserGroupsController : ControllerBase
     /// </summary>
     /// <param name="input">The user group input</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_CREATE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_CREATE)]
     [HttpPost]
     public Task<UserGroupModel> Create([FromBody] UserGroupCreateModel input)
     {
@@ -73,7 +73,7 @@ public class UserGroupsController : ControllerBase
     /// <param name="id">The user group id.</param>
     /// <param name="input">The user group update input.</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_EDIT)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_EDIT)]
     [HttpPut]
     public Task<UserGroupModel> UpdateById(string id, UserGroupUpdateModel input)
     {
@@ -85,7 +85,7 @@ public class UserGroupsController : ControllerBase
     /// </summary>
     /// <param name="id">The id of user group to delete</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_DELETE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_DELETE)]
     [HttpDelete("{id}")]
     public Task<UserGroupModel> DeleteById(string id)
     {

@@ -45,6 +45,7 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UserAccessService>();
 builder.Services.AddSingleton<UserPasswordService>();
 builder.Services.AddSingleton<CurrentUserService>();
+builder.Services.AddSingleton<CurrentSessionService>();
 builder.Services.AddSingleton<CredentialEvaluator>();
 builder.Services.AddSingleton<UserGroupService>();
 builder.Services.AddSingleton<UserGroupMembersService>();

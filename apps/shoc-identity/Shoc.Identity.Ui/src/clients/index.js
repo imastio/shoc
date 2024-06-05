@@ -1,10 +1,12 @@
+import AuthClient from "./auth-client";
 import getApiConfig from "./client-config";
-import CurrentUserClient from "./current-user-client";
+import SessionClient from "./session-client";
 
 // build configuration
 const config = getApiConfig();
 
-export const currentUserClient = new CurrentUserClient(config);
+export const sessionClient = new SessionClient(config);
+export const authClient = new AuthClient(config);
 
 export const clientGuard = async (fn) => {
     try{

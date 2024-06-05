@@ -1,4 +1,4 @@
-import { clientGuard, currentUserClient } from "@/clients";
+import { clientGuard, sessionClient } from "@/clients";
 import AuthContext from "./auth-context";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useInterval, useTimeout } from 'usehooks-ts';
@@ -12,7 +12,7 @@ export default function AuthProvider({children}){
     const load = useCallback(async () => {
         setProgress(true);
 
-        const result = await clientGuard(() => currentUserClient.get());
+        const result = await clientGuard(() => sessionClient.get());
 
         setProgress(false);
 

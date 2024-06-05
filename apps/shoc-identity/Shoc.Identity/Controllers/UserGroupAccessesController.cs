@@ -39,7 +39,7 @@ public class UserGroupAccessesController : ControllerBase
     /// </summary>
     /// <param name="groupId">The user group id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_READ)]
     [HttpGet]
     public Task<IEnumerable<UserGroupAccessModel>> Get(string groupId)
     {
@@ -52,7 +52,7 @@ public class UserGroupAccessesController : ControllerBase
     /// <param name="groupId">The user group id</param>
     /// <param name="input">The input to update</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_MANAGE_ACCESS)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_MANAGE_ACCESS)]
     [HttpPost]
     [HttpPut]
     public Task<UserGroupAccessUpdateResultModel> Update(string groupId, UserGroupAccessUpdateModel input)

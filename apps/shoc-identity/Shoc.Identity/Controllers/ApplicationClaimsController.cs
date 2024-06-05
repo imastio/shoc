@@ -37,7 +37,7 @@ public class ApplicationClaimsController : ControllerBase
     /// </summary>
     /// <param name="applicationId">The application id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_READ)]
     [HttpGet]
     public Task<IEnumerable<ApplicationClaimModel>> GetAll(string applicationId)
     {
@@ -50,7 +50,7 @@ public class ApplicationClaimsController : ControllerBase
     /// <param name="applicationId">The application id</param>
     /// <param name="id">The id of object to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_READ)]
     [HttpGet("{id}")]
     public Task<ApplicationClaimModel> GetById(string applicationId, string id)
     {
@@ -63,7 +63,7 @@ public class ApplicationClaimsController : ControllerBase
     /// <param name="applicationId">The application id</param>
     /// <param name="input">The object input</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpPost]
     public Task<ApplicationClaimModel> Create(string applicationId, [FromBody] ApplicationClaimModel input)
     {
@@ -77,7 +77,7 @@ public class ApplicationClaimsController : ControllerBase
     /// <param name="id">The id of object to request</param>
     /// <param name="input">The update input</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpPut("{id}")]
     public Task<ApplicationClaimModel> UpdateById(string applicationId, string id, [FromBody] ApplicationClaimModel input)
     {
@@ -90,7 +90,7 @@ public class ApplicationClaimsController : ControllerBase
     /// <param name="applicationId">The application id</param>
     /// <param name="id">The id of object to delete</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpDelete("{id}")]
     public Task<ApplicationClaimModel> DeleteById(string applicationId, string id)
     {

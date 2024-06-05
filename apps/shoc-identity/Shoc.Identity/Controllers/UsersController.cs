@@ -42,7 +42,7 @@ public class UsersController : ControllerBase
     /// <param name="page">The page number</param>
     /// <param name="size">The page size</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_LIST)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_LIST)]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] string search, [FromQuery] string type, [FromQuery] int? page, [FromQuery] int? size)
     {
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
     /// <param name="page">The page number</param>
     /// <param name="size">The page size</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_LIST_REFERENCES)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_LIST_REFERENCES)]
     [HttpGet("referential-values")]
     public async Task<UserReferentialValuePageResult> GetReferentialValuesPageBy([FromQuery] string search, [FromQuery] string type, [FromQuery] int page, [FromQuery] int? size)
     {
@@ -83,7 +83,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="email">The email of the user</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ, AllowedScopes = new []{ KnownScopes.SVC })]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ, AllowedScopes = new []{ KnownScopes.SVC })]
     [HttpGet("by-email/{email}")]
     public Task<UserModel> GetByEmail(string email)
     {
@@ -95,7 +95,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The id of user to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}")]
     public Task<UserModel> GetById(string id)
     {
@@ -107,7 +107,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The of user to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}/profile")]
     public Task<UserProfileModel> GetProfileById(string id)
     {
@@ -119,7 +119,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The of user to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}/picture")]
     public Task<UserPictureModel> GetPictureById(string id)
     {
@@ -133,7 +133,7 @@ public class UsersController : ControllerBase
     /// <param name="page">The page number</param>
     /// <param name="size">The page size</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}/sign-in-history")]
     public async Task<IActionResult> GetSigninHistoryById(string id, [FromQuery] int page, int? size)
     {
@@ -145,7 +145,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The id of user to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}/groups")]
     public Task<IEnumerable<UserGroupReferentialValueModel>> GetGroupsById(string id)
     {
@@ -157,7 +157,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The id of user to request.</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet("{id}/roles")]
     public Task<IEnumerable<UserRoleReferentialValueModel>> GetRolesById(string id)
     {
@@ -169,7 +169,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="input">The user input</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_CREATE, AllowedScopes = new []{ KnownScopes.SVC })]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_CREATE, AllowedScopes = new []{ KnownScopes.SVC })]
     [HttpPost]
     public Task<UserUpdateResultModel> Create([FromBody] UserCreateModel input)
     {
@@ -182,7 +182,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The profile update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_EDIT_IDENTITY)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_EDIT_IDENTITY)]
     [HttpPut("{id}")]
     public Task<UserUpdateResultModel> UpdateById(string id, UserUpdateModel input)
     {
@@ -195,7 +195,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The picture update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_EDIT_PROFILE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_EDIT_PROFILE)]
     [HttpPut("{id}/picture")]
     public Task<UserPictureModel> UpdatePictureById(string id, UserPictureUpdateModel input)
     {
@@ -208,7 +208,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The profile update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_EDIT_PROFILE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_EDIT_PROFILE)]
     [HttpPut("{id}/profile")]
     public Task<UserProfileModel> UpdateProfileById(string id, UserProfileUpdateModel input)
     {
@@ -221,7 +221,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The password update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_MANAGE)]
     [HttpPut("{id}/password")]
     public Task<UserUpdateResultModel> UpdatePasswordById(string id, UserPasswordUpdateModel input)
     {
@@ -234,7 +234,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The type update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_MANAGE_ACCESS)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_MANAGE_ACCESS)]
     [HttpPut("{id}/type")]
     public Task<UserUpdateResultModel> UpdateTypeById(string id, UserTypeUpdateModel input)
     {
@@ -247,7 +247,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The state update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_MANAGE)]
     [HttpPut("{id}/state")]
     public Task<UserUpdateResultModel> UpdateUserStateById(string id, UserStateUpdateModel input)
     {
@@ -260,7 +260,7 @@ public class UsersController : ControllerBase
     /// <param name="id">The id of user to request</param>
     /// <param name="input">The lockout update model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_MANAGE)]
     [HttpPut("{id}/lockout")]
     public Task<UserUpdateResultModel> UpdateLockoutById(string id, UserLockoutUpdateModel input)
     {
@@ -272,7 +272,7 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <param name="id">The id of user to delete</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_DELETE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_DELETE)]
     [HttpDelete("{id}")]
     public Task<UserModel> DeleteById(string id)
     {

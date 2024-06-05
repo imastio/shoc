@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { SignInMethods } from "./types";
 
-export default function useMethod(): SignInMethods {
+export default function useSignInMethod(): SignInMethods {
     const [searchParams] = useSearchParams();
 
     switch(searchParams.get('method')){

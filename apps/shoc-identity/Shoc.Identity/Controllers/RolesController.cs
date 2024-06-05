@@ -36,7 +36,7 @@ public class RolesController : ControllerBase
     /// Get all roles.
     /// </summary>
     /// <returns>A task containing all roles.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_LIST)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_LIST)]
     [HttpGet]
     public Task<IEnumerable<RoleModel>> GetAll()
     {
@@ -47,7 +47,7 @@ public class RolesController : ControllerBase
     /// Get all privilege referential values.
     /// </summary>
     /// <returns>A task containing all privilege references.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_LIST_REFERENCES)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_LIST_REFERENCES)]
     [HttpGet("referential-values")]
     public async Task<IEnumerable<RoleReferentialValueModel>> GetAllReferentialValues()
     {
@@ -59,7 +59,7 @@ public class RolesController : ControllerBase
     /// </summary>
     /// <param name="id">The role id.</param>
     /// <returns>A task containing the role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_READ)]
     [HttpGet("{id}")]
     public Task<RoleModel> GetById(string id)
     {
@@ -71,7 +71,7 @@ public class RolesController : ControllerBase
     /// </summary>
     /// <param name="input">The role creation input.</param>
     /// <returns>A task containing the newly created role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_CREATE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_CREATE)]
     [HttpPost]
     public Task<RoleModel> Create([FromBody] RoleCreateModel input)
     {
@@ -84,7 +84,7 @@ public class RolesController : ControllerBase
     /// <param name="id">The role id.</param>
     /// <param name="input">The role update input.</param>
     /// <returns>A task containing the updated role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_EDIT)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_EDIT)]
     [HttpPut("{id}")]
     public Task<RoleModel> UpdateById(string id, RoleUpdateModel input)
     {
@@ -96,7 +96,7 @@ public class RolesController : ControllerBase
     /// </summary>
     /// <param name="id">The role id.</param>
     /// <returns>A task containing the deleted role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_DELETE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_DELETE)]
     [HttpDelete("{id}")]
     public Task<RoleModel> DeleteById(string id)
     {

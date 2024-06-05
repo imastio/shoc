@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import AuthProvider from '@/providers/auth-provider/auth-provider';
-import PageRouter from './page-router';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
+import AuthProvider from './providers/auth-provider/auth-provider';
 
 export default function App() {
 
     return <>
         <AuthProvider>
-            <PageRouter />
+            <RouterProvider router={router} />
         </AuthProvider>
     </>
 };

@@ -38,7 +38,7 @@ public class RoleMembersController : ControllerBase
     /// </summary>
     /// <param name="roleId">The role id.</param>
     /// <returns>A task containing the users of the specified role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_READ)]
     [HttpGet]
     public Task<IEnumerable<UserReferentialValueModel>> GetAll(string roleId)
     {
@@ -51,7 +51,7 @@ public class RoleMembersController : ControllerBase
     /// <param name="roleId">The role id.</param>
     /// <param name="userId">The user id.</param>
     /// <returns>A task containing the role user.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_READ)]
     [HttpGet("{userId}")]
     public Task<UserReferentialValueModel> GetById(string roleId, string userId)
     {
@@ -64,7 +64,7 @@ public class RoleMembersController : ControllerBase
     /// <param name="roleId">The role id.</param>
     /// <param name="input">The role user membership input.</param>
     /// <returns>A task containing the created role user membership.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_MANAGE)]
     [HttpPost]
     public Task<UserReferentialValueModel> Create(string roleId, RoleMembership input)
     {
@@ -77,7 +77,7 @@ public class RoleMembersController : ControllerBase
     /// <param name="roleId">The role id.</param>
     /// <param name="userId">The user id.</param>
     /// <returns>A task containing the deleted user from the role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_MANAGE)]
     [HttpDelete("{userId}")]
     public Task<UserReferentialValueModel> DeleteById(string roleId, string userId)
     {

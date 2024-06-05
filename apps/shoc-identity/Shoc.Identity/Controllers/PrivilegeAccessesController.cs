@@ -37,7 +37,7 @@ public class PrivilegeAccessesController : ControllerBase
     /// </summary>
     /// <param name="privilegeId">The privilege id.</param>
     /// <returns>A task containing the privilege accesses.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_READ)]
     [HttpGet]
     public Task<IEnumerable<PrivilegeAccessModel>> Get(string privilegeId)
     {
@@ -50,7 +50,7 @@ public class PrivilegeAccessesController : ControllerBase
     /// <param name="privilegeId">The privilege id.</param>
     /// <param name="input">The privilege access update input.</param>
     /// <returns>A task containing the privilege access update result.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGE_MANAGE_ACCESS)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGE_MANAGE_ACCESS)]
     [HttpPost]
     [HttpPut]
     public Task<PrivilegeAccessUpdateResultModel> Update(string privilegeId, PrivilegeAccessUpdateModel input)

@@ -36,7 +36,7 @@ public class PrivilegesController : ControllerBase
     /// Get all privileges.
     /// </summary>
     /// <returns>A task containing all privileges.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_LIST)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_LIST)]
     [HttpGet]
     public Task<IEnumerable<PrivilegeModel>> GetAll()
     {
@@ -47,7 +47,7 @@ public class PrivilegesController : ControllerBase
     /// Get all privilege referential values.
     /// </summary>
     /// <returns>A task containing all privilege references.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_LIST_REFERENCES)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_LIST_REFERENCES)]
     [HttpGet("referential-values")]
     public async Task<IEnumerable<PrivilegeReferentialValueModel>> GetAllReferentialValues()
     {
@@ -59,7 +59,7 @@ public class PrivilegesController : ControllerBase
     /// </summary>
     /// <param name="id">The privilege id.</param>
     /// <returns>A task containing the privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_READ)]
     [HttpGet("{id}")]
     public Task<PrivilegeModel> GetById(string id)
     {
@@ -71,7 +71,7 @@ public class PrivilegesController : ControllerBase
     /// </summary>
     /// <param name="input">The privilege creation input.</param>
     /// <returns>A task containing the newly created privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_CREATE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_CREATE)]
     [HttpPost]
     public Task<PrivilegeModel> Create([FromBody] PrivilegeCreateModel input)
     {
@@ -84,7 +84,7 @@ public class PrivilegesController : ControllerBase
     /// <param name="id">The privilege id.</param>
     /// <param name="input">The privilege update input model.</param>
     /// <returns>A task containing the updated privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_EDIT)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_EDIT)]
     [HttpPut("{id}")]
     public Task<PrivilegeModel> UpdateById(string id, PrivilegeUpdateModel input)
     {
@@ -96,7 +96,7 @@ public class PrivilegesController : ControllerBase
     /// </summary>
     /// <param name="id">The privilege id.</param>
     /// <returns>A task containing the deleted privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_PRIVILEGES_DELETE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_PRIVILEGES_DELETE)]
     [HttpDelete("{id}")]
     public Task<PrivilegeModel> DeleteById(string id)
     {

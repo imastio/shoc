@@ -38,7 +38,7 @@ public class RolePrivilegesController : ControllerBase
     /// </summary>
     /// <param name="roleId">The role id.</param>
     /// <returns>A task containing all privileges of the role.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_READ)]
     [HttpGet]
     public Task<IEnumerable<PrivilegeReferentialValueModel>> GetAll(string roleId)
     {
@@ -51,7 +51,7 @@ public class RolePrivilegesController : ControllerBase
     /// <param name="roleId">The role id.</param>
     /// <param name="input">The role privilege creation input.</param>
     /// <returns>A task containing an added role privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_MANAGE)]
     [HttpPost]
     public Task<PrivilegeReferentialValueModel> Create(string roleId, RolePrivilegeCreateModel input)
     {
@@ -64,7 +64,7 @@ public class RolePrivilegesController : ControllerBase
     /// <param name="roleId">The role id.</param>
     /// <param name="privilegeId">The privilege id.</param>
     /// <returns>A task containing an added role privilege.</returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_ROLES_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_ROLES_MANAGE)]
     [HttpDelete("{privilegeId}")]
     public Task<PrivilegeReferentialValueModel> DeleteById(string roleId, string privilegeId)
     {

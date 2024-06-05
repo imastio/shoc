@@ -21,7 +21,8 @@ public class OperationsInitializer
         // create new connection string builder
         var connectionStringBuilder = new MySqlConnectionStringBuilder(settings.ConnectionString)
         {
-            Database = settings.Database
+            Database = settings.Database,
+            AllowUserVariables = true
         };
 
         // build and init new ops object

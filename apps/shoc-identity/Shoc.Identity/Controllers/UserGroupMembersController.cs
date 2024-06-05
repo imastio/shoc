@@ -38,7 +38,7 @@ public class UserGroupMembersController : ControllerBase
     /// </summary>
     /// <param name="groupId">The group id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_READ)]
     [HttpGet]
     public Task<IEnumerable<UserReferentialValueModel>> GetAll(string groupId)
     {
@@ -51,7 +51,7 @@ public class UserGroupMembersController : ControllerBase
     /// <param name="groupId">The group id</param>
     /// <param name="userId">The user id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_READ)]
     [HttpGet("{userId}")]
     public Task<UserReferentialValueModel> GetById(string groupId, string userId)
     {
@@ -64,7 +64,7 @@ public class UserGroupMembersController : ControllerBase
     /// <param name="groupId">The group id</param>
     /// <param name="input"></param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_MANAGE)]
     [HttpPost]
     public Task<UserReferentialValueModel> Create(string groupId, UserGroupMembership input)
     {
@@ -77,7 +77,7 @@ public class UserGroupMembersController : ControllerBase
     /// <param name="groupId">The group id</param>
     /// <param name="userId">The user id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USER_GROUPS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USER_GROUPS_MANAGE)]
     [HttpDelete("{userId}")]
     public Task<UserReferentialValueModel> DeleteById(string groupId, string userId)
     {

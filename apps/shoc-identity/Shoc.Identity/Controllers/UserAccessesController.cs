@@ -38,7 +38,7 @@ public class UserAccessesController : ControllerBase
     /// </summary>
     /// <param name="userId">The user id</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_READ)]
     [HttpGet]
     public Task<IEnumerable<UserAccessModel>> Get(string userId)
     {
@@ -51,7 +51,7 @@ public class UserAccessesController : ControllerBase
     /// <param name="userId">The user id</param>
     /// <param name="input">The input to update</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_USERS_MANAGE_ACCESS)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_USERS_MANAGE_ACCESS)]
     [HttpPost]
     [HttpPut]
     public Task<UserAccessUpdateResultModel> Update(string userId, UserAccessUpdateModel input)

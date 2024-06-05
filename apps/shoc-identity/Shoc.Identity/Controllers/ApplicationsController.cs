@@ -36,7 +36,7 @@ public class ApplicationsController : ControllerBase
     /// Gets all the objects
     /// </summary>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_LIST)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_LIST)]
     [HttpGet]
     public Task<IEnumerable<ApplicationModel>> GetAll()
     {
@@ -48,7 +48,7 @@ public class ApplicationsController : ControllerBase
     /// </summary>
     /// <param name="id">The id of object to request</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_READ)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_READ)]
     [HttpGet("{id}")]
     public Task<ApplicationModel> GetById(string id)
     {
@@ -60,7 +60,7 @@ public class ApplicationsController : ControllerBase
     /// </summary>
     /// <param name="input">The object input</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpPost]
     public Task<ApplicationModel> Create([FromBody] ApplicationCreateModel input)
     {
@@ -73,7 +73,7 @@ public class ApplicationsController : ControllerBase
     /// <param name="id">The id of object to request</param>
     /// <param name="input">The update input model</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpPut("{id}")]
     public Task<ApplicationModel> UpdateById(string id, ApplicationModel input)
     {
@@ -85,7 +85,7 @@ public class ApplicationsController : ControllerBase
     /// </summary>
     /// <param name="id">The id of object to delete</param>
     /// <returns></returns>
-    [AuthorizeAnyAccess(IdentityAccesses.CONNECT_APPLICATIONS_MANAGE)]
+    [AuthorizeAnyAccess(IdentityAccesses.IDENTITY_APPLICATIONS_MANAGE)]
     [HttpDelete("{id}")]
     public Task<ApplicationModel> DeleteById(string id)
     {

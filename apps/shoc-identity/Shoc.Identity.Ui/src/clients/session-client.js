@@ -1,9 +1,9 @@
 import BaseAxiosClient from "./base-axios-client";
 
 /**
- * Thhe current user client
+ * Thhe session client
  */
-export default class CurrentUserClient extends BaseAxiosClient {
+export default class SessionClient extends BaseAxiosClient {
   /**
    * Creates new instance of the client
    *
@@ -15,7 +15,7 @@ export default class CurrentUserClient extends BaseAxiosClient {
 
   get() {
     const url = this.urlify({
-      api: "connect/userinfo"
+      api: "api/session"
     });
 
     return this.webClient.get(url, {
