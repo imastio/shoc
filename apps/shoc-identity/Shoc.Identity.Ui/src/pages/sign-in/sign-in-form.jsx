@@ -49,10 +49,8 @@ export default function SignInForm() {
 
         const result = await clientGuard(() => authClient.signin({ email, password, returnUrl }));
 
-        setProgress(false);
         
         if(result.error){
-
             if (result.payload?.errors?.some(e => e.code === "IDENTITY_UNVERIFIED_EMAIL")) {
                 navigateExt({
                   pathname: "/confirm",
@@ -61,10 +59,16 @@ export default function SignInForm() {
               }
 
             setErrors(result.payload?.errors || []);
+            setProgress(false);
             return;
         }
+        const payload = result.payload || {};
 
-        setFlowResult(result.payload || {});
+        setFlowResult(payload);
+
+        const redirectTo = payload.returnUrl || '/';
+
+        window.location.href = redirectTo;
 
     }, [navigateExt]);
 

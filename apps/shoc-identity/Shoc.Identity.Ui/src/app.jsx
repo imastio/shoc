@@ -1,12 +1,16 @@
 import { RouterProvider } from 'react-router-dom';
 import router from './router';
-import AuthProvider from './providers/auth-provider/auth-provider';
+import AuthProvider from './providers/session-provider/session-provider';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export default function App() {
 
     return <>
-        <AuthProvider>
-            <RouterProvider router={router} />
-        </AuthProvider>
+        <HelmetProvider>
+            <Helmet titleTemplate='%s | Shoc Identity'></Helmet>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
+        </HelmetProvider>
     </>
 };

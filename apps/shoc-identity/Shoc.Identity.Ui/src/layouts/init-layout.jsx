@@ -1,11 +1,11 @@
 import Loader from "@/components/generic/loader";
-import useAuth from "@/providers/auth-provider/use-auth";
+import useSession from "@/providers/session-provider/use-session";
 import { Outlet } from "react-router-dom";
 
 export default function InitLayout(){
-    const auth = useAuth();
+    const session = useSession();
 
-    if(auth.progress){
+    if(session.progress){
         return <Loader />
     }
 

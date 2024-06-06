@@ -18,6 +18,7 @@ const InitLayout = lazy(() => import('@/layouts/init-layout'));
 
 const IndexPage = lazy(() => import('@/pages/index'));
 const SignInPage = lazy(() => import('@/pages/sign-in'));
+const SignUpPage = lazy(() => import('@/pages/sign-up'));
 
 export const allRoutes = [
     {
@@ -28,6 +29,7 @@ export const allRoutes = [
                 children: [
                     { index: true, element: page(<IndexPage />) },
                     { path: '/sign-in', element: page(<SignInPage />) },
+                    { path: '/sign-up', element: page(<SignUpPage />) },
                 ]
             }
         ]

@@ -54,7 +54,6 @@ export default function SignUpForm({ className, ...props }) {
         setErrors([]);
 
         const result = await clientGuard(() => authClient.signup({ email, password, fullName, returnUrl }));
-
         
         if(result.error){
             setErrors(result.payload?.errors || []);
@@ -77,12 +76,7 @@ export default function SignUpForm({ className, ...props }) {
 
         const redirectTo = payload.returnUrl || '/';
 
-        if (redirectTo.startsWith("/") && !payload.continueFlow) {
-            navigateExt(redirectTo)
-        }
-        else {
-            window.location.href = redirectTo;
-        }
+        window.location.href = redirectTo;
 
     }, [navigateExt]);
 

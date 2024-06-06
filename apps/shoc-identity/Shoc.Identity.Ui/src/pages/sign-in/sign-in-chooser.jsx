@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import SignInForm from "./sign-in-form"
 import useSignInMethod from "./use-sign-in-method"
+import SignInMagicLinkForm from "./sign-in-magic-link-form"
 
 export default function SignInChooser({ className, ...props }) {
     const [progress, setProgress] = useState(false);
@@ -22,7 +23,7 @@ export default function SignInChooser({ className, ...props }) {
     
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            {method === 'magic-link' && <div>Passwordless</div>}
+            {method === 'magic-link' && <SignInMagicLinkForm />}
             {method === 'password' && <SignInForm />}
 
             <div className="relative">
