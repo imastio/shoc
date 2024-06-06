@@ -14,6 +14,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import SignInForm from "./sign-in-form"
 import useSignInMethod from "./use-sign-in-method"
 import SignInMagicLinkForm from "./sign-in-magic-link-form"
+import RequestOtpButton from "./request-otp-button"
 
 export default function SignInChooser({ className, ...props }) {
     const [progress, setProgress] = useState(false);

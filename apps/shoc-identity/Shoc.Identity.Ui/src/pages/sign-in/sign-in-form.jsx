@@ -16,6 +16,7 @@ import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
+import RequestOtpButton from "./request-otp-button"
 
 
 export default function SignInForm() {
@@ -41,6 +42,8 @@ export default function SignInForm() {
         },
         shouldUseNativeValidation: false
     })
+
+    const email = form.watch('email');
 
     const signIn = useCallback(async ({ email, password, returnUrl }) => {
         
@@ -135,6 +138,7 @@ export default function SignInForm() {
                         )}
                         Continue
                     </Button>
+                    <RequestOtpButton email={email} />
                 </div>
             </form>
         </Form>

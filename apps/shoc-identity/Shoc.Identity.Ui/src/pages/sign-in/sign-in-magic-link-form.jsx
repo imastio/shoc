@@ -109,10 +109,10 @@ export default function SignInMagicLinkForm() {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage />
                                         <FormDescription>
                                             We will send you an email with a special link to sign in with.
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
