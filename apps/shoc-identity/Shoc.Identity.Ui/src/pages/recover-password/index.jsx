@@ -9,9 +9,10 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ConfirmForm from "./recover-password-form";
+import useSignIn from "@/hooks/auth/use-sign-in";
 
 export default function RecoverPasswordPage({ }) {
-
+    
     const [searchParams] = useSearchParams();
     const authorizeContext = useAuthorizeContext();
     const navigateSearch = useNavigateSearch();

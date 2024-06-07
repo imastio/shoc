@@ -12,6 +12,9 @@ import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import SignOutForm from "./sign-out-form"
+import { Action } from "@radix-ui/react-toast"
+
+const x = 4;
 
 export default function SignOutPage() {
   const authorizeContext = useAuthorizeContext();

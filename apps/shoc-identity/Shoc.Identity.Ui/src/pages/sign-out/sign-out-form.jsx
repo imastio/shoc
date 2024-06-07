@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useCountdown } from "usehooks-ts";
-
+    
 export default function SignOutForm() {
     const authorizeContext = useAuthorizeContext();
     const [progress, setProgress] = useState(authorizeContext.logoutId.length > 0);

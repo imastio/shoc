@@ -12,6 +12,7 @@ import ConfirmForm from "./confirm-form";
 
 export default function ConfirmPage({ }) {
 
+  const x = 40;
     const [searchParams] = useSearchParams();
     const authorizeContext = useAuthorizeContext();
     const navigateSearch = useNavigateSearch();
