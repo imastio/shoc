@@ -13,6 +13,8 @@ export default function useAuthorizeContext(){
 
     let loginHint = searchParams.get('login_hint') || searchParams.get('loginHint') || '';
 
+    let logoutId = searchParams.get('logout_id') || searchParams.get('logoutId') || '';
+
     let prompt = searchParams.get('prompt') || 'login';
     if(!allowedPrompts.includes(prompt)){
         prompt = 'login';
@@ -21,6 +23,7 @@ export default function useAuthorizeContext(){
     return useMemo(() => ({
         returnUrl,
         loginHint,
-        prompt
+        prompt,
+        logoutId
     }), [searchParams])
 }

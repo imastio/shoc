@@ -9,7 +9,7 @@ import { useCountdown } from "usehooks-ts";
 
 const EMAIL_REGEX = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-export default function RequestOtpButton({ email }) {
+export default function RequestRecoveryButton({ email }) {
     const { toast } = useToast();
     const [progress, setProgress] = useState(false);
     const [sent, setSent] = useState(false);
@@ -28,22 +28,20 @@ export default function RequestOtpButton({ email }) {
 
     const isValid = EMAIL_REGEX.test(email);
 
-    const requestOtp = useCallback(async () => {
+    const requestRecovery = useCallback(async () => {
 
         setProgress(true);
 
-        const result = await clientGuard(() => authClient.requestOtp({
-            email,
-            returnUrl: authorizeContext.returnUrl,
-            signinMethod: "otp",
-            deliveryMethod: "email"
+        const result = await clientGuard(() => authClient.requestPasswordRecovery({
+            target: email,
+            returnUrl: authorizeContext.returnUrl
         }));
 
         setProgress(false);
 
         toast({
-            title: 'One-time password sent',
-            description: 'Please check your email to get your one-time password!',
+            title: 'Recovery code sent',
+            description: 'Please check your email to get your recovery code!',
             duration: 5000
         });
         startCountdown();
@@ -52,17 +50,16 @@ export default function RequestOtpButton({ email }) {
     }, [email, authorizeContext.returnUrl, toast, startCountdown]);
 
     return <Button
-        className={cn(isValid ? '' : 'hidden')}
         variant="outline"
         type="button"
-        title="Enter a valid email to request one-time password!"
+        title="Enter a valid email to request recovery code!"
         disabled={progress || !isValid || sent}
-        onClick={() => requestOtp()}
+        onClick={() => requestRecovery()}
     >
         <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
-        <Icons.otp className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
+        <Icons.email className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
         {" "}
-        One-time password {(sent && count > 0) ? `(${count}s)` : ''}
+        Request recovery code {(sent && count > 0) ? `(${count}s)` : ''}
     </Button>
 
 }

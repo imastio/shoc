@@ -11,78 +11,83 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useSignInMethod from "./use-sign-in-method"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
-import RequestOtpButton from "./request-otp-button"
+import RequestConfirmationButton from "./request-recovery-button"
 
-
-export default function SignInForm() {
+export default function RecoverPasswordForm() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
     const [flowResult, setFlowResult] = useState({});
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
-    const method = useSignInMethod();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
         email: z.string().email('Enter a valid email!'),
-        password: z.string().min(6, 'Password must have at least 6 characters!')
-    })
+        code: z.string().min(6, 'The code have at least 6 characters!'),
+        password: z.string().min(6, 'Password must have at least 6 characters!'),
+        passwordConfirmation: z.string().min(6, 'Password must have at least 6 characters!')
+    }).refine((data) => data.password === data.passwordConfirmation, {
+        message: "Passwords don't match",
+        path: ["passwordConfirmation"],
+    });
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: authorizeContext.loginHint,
-            password: ''
+            code: '',
+            password: '',
+            passwordConfirmation: ''
+            
         },
         shouldUseNativeValidation: false
     })
 
     const email = form.watch('email');
+    const code = form.watch('code');
 
-    const signIn = useCallback(async ({ email, password, returnUrl }) => {
+    const recover = useCallback(async ({ email, code, password }) => {
         
         setProgress(true);
         setErrors([]);
 
-        const result = await clientGuard(() => authClient.signin({ email, password, returnUrl }));
+        const result = await clientGuard(() => authClient.processPasswordRecovery({
+            email,
+            code,
+            password
+        }));
 
         
         if(result.error){
-            if (result.payload?.errors?.some(e => e.code === "IDENTITY_UNVERIFIED_EMAIL")) {
-                navigateExt({
-                  pathname: "/confirm",
-                  search: `?${searchParams.toString()}`,
-                  searchOverrides: { login_hint: email }
-                })
-              }
-
             setErrors(result.payload?.errors || []);
-            setProgress(false);
             return;
         }
-        const payload = result.payload || {};
+        setProgress(false);
 
-        setFlowResult(payload);
+        navigateExt({
+            pathname: "/sign-in",
+            search: `?${searchParams.toString()}`,
+            searchOverrides: { login_hint: email }
+        })
 
-        const redirectTo = payload.returnUrl || '/';
-
-        window.location.href = redirectTo;
-
-    }, [navigateExt]);
+    }, []);
 
     async function onSubmit(values) {
-        await signIn({ email: values.email, password: values.password, returnUrl: authorizeContext.returnUrl });
+        await recover({
+            email: values.email, 
+            code: values.code, 
+            password: values.password 
+        });
     }
 
     return (
         <>
-        <ErrorAlert errors={errors} title={intl.formatMessage({id: 'auth.signIn.unable'})} />
+        <ErrorAlert errors={errors} title={intl.formatMessage({id: 'auth.confirm.unable'})} />
         <Form {...form} autoComplete="off">
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
@@ -114,14 +119,14 @@ export default function SignInForm() {
                     <div className="grid gap-1">
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="code"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>Code</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="**********"
-                                            type="password"
+                                            placeholder="Your confirmation code"
+                                            type="text"
                                             autoComplete="off"
                                             aria-autocomplete="none"
                                             disabled={progress}
@@ -129,17 +134,64 @@ export default function SignInForm() {
                                         />
                                     </FormControl>
                                     <FormMessage />
+                                    <FormDescription>
+                                        The code you've recieved to your email.
+                                    </FormDescription>
                                 </FormItem>
                             )}
                         />
                     </div>
-                    <Button type="submit" disabled={progress}>
+                    <div className="grid gap-1">
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>New Password</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="**********"
+                                                type="password"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                disabled={progress || code?.length === 0}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-1">
+                            <FormField
+                                control={form.control}
+                                name="passwordConfirmation"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password Confirmation</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="**********"
+                                                type="password"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                disabled={progress || code?.length === 0}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    <Button type="submit" disabled={progress} className="mt-2">
                         {progress && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Continue
                     </Button>
-                    <RequestOtpButton email={email} />
+                    <RequestConfirmationButton email={email} />
                 </div>
             </form>
         </Form>

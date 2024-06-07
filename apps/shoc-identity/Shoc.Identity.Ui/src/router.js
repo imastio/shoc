@@ -19,6 +19,9 @@ const InitLayout = lazy(() => import('@/layouts/init-layout'));
 const IndexPage = lazy(() => import('@/pages/index'));
 const SignInPage = lazy(() => import('@/pages/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/sign-up'));
+const ConfirmPage = lazy(() => import('@/pages/confirm'));
+const RecoverPasswordPage = lazy(() => import('@/pages/recover-password'));
+const SignOutPage = lazy(() => import('@/pages/sign-out'));
 
 export const allRoutes = [
     {
@@ -30,13 +33,14 @@ export const allRoutes = [
                     { index: true, element: page(<IndexPage />) },
                     { path: '/sign-in', element: page(<SignInPage />) },
                     { path: '/sign-up', element: page(<SignUpPage />) },
+                    { path: '/confirm', element: page(<ConfirmPage />) },
+                    { path: '/recover-password', element: page(<RecoverPasswordPage />) },
+                    { path: '/sign-out', element: page(<SignOutPage />) },
                 ]
             }
         ]
     }
 ]
-
-
 
 const router = createBrowserRouter(allRoutes);
 export default router;
