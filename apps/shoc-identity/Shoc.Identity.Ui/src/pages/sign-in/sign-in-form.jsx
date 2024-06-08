@@ -1,32 +1,25 @@
 import Icons from "@/components/generic/icons"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useCallback, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import useNavigateSearch from "@/hooks/use-navigate-search"
+import { useSearchParams } from "react-router-dom"
 import useAuthorizeContext from "@/hooks/use-authorize-context"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useSignInMethod from "./use-sign-in-method"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import RequestOtpButton from "./request-otp-button"
 
-
 export default function SignInForm() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
-    const [flowResult, setFlowResult] = useState({});
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
-    const method = useSignInMethod();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({

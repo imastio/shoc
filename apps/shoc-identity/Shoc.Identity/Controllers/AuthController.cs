@@ -64,6 +64,17 @@ public class AuthController : ControllerBase
     }
     
     /// <summary>
+    /// The public auth error resolution endpoint
+    /// </summary>
+    /// <param name="input">The error details request</param>
+    /// <returns></returns>
+    [HttpPost("error-details")]
+    public Task<ErrorDetailsResponse> SignInContext(ErrorDetailsRequest input)
+    {
+        return this.authService.GetErrorDetails(input);
+    }
+    
+    /// <summary>
     /// The public magic-link sign in endpoint
     /// </summary>
     /// <param name="link">The link fragment</param>

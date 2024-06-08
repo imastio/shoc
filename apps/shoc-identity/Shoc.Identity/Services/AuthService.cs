@@ -186,6 +186,25 @@ public class AuthService
             LoginHint = ctx?.LoginHint
         };
     }
+    
+    /// <summary>
+    /// The public auth error resolution endpoint
+    /// </summary>
+    /// <param name="input">The details request input</param>
+    /// <returns></returns>
+    public async Task<ErrorDetailsResponse> GetErrorDetails(ErrorDetailsRequest input)
+    {
+        // get error context
+        var error = await this.identityInteraction.GetErrorContextAsync(input.ErrorId);
+
+        // build error response
+        return new ErrorDetailsResponse
+        {
+            Error = error?.Error ?? "Server Error",
+            ErrorDescription = error?.ErrorDescription ?? "Unknown server error",
+            ClientId = error?.ClientId
+        };
+    }
 
     /// <summary>
     /// The magic-link sign in flow

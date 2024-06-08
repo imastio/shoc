@@ -1,12 +1,12 @@
 ﻿namespace Shoc.Identity.Model.Flow;
 
 /// <summary>
-/// The sign-in context request
+/// The error details request
 /// </summary>
-public class SignInContextRequest
+public class ErrorDetailsRequest
 {
     /// <summary>
-    /// The return url 
+    /// The error id
     /// </summary>
-    public string ReturnUrl { get; set; }
+    public string ErrorId { get; set; }
 }

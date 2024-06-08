@@ -11,7 +11,7 @@ namespace Shoc.Identity.Controllers;
 /// <summary>
 /// The current session controller
 /// </summary>
-[Route("api/session")]
+[Route("api-auth/session")]
 [ApiController]
 [ShocExceptionHandler]
 [Authorize(AuthenticationSchemes = IdentityServerConstants.DefaultCookieAuthenticationScheme)]

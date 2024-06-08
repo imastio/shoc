@@ -261,6 +261,7 @@ public static class IdentityExtended
         return new Client
         {
             ClientId = clientId,
+            ClientSecrets = new List<Secret> { new (clientId.Sha512()) },
             AllowedGrantTypes = GrantTypes.Code,
             RequireClientSecret = false,
             RequirePkce = true,  
