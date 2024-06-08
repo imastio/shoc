@@ -9,16 +9,20 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ConfirmForm from "./confirm-form";
+import AuthenticatedRedirect from "@/components/auth/authenticated-redirect";
 
 export default function ConfirmPage({ }) {
 
-  const x = 40;
     const [searchParams] = useSearchParams();
     const authorizeContext = useAuthorizeContext();
     const navigateSearch = useNavigateSearch();
     const navigate = useNavigate();
     const navigateExt = useNavigateExt();
     const session = useSession();
+
+    if (session.authenticated) {
+      return <AuthenticatedRedirect />;
+    }
     
     return <>
     <Helmet title="Confirm your email address" />

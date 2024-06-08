@@ -15,6 +15,8 @@ export default function useAuthorizeContext(){
 
     let logoutId = searchParams.get('logout_id') || searchParams.get('logoutId') || '';
 
+    let errorId = searchParams.get('error_id') || searchParams.get('errorId') || '';
+
     let prompt = searchParams.get('prompt') || 'login';
     if(!allowedPrompts.includes(prompt)){
         prompt = 'login';
@@ -24,6 +26,7 @@ export default function useAuthorizeContext(){
         returnUrl,
         loginHint,
         prompt,
-        logoutId
+        logoutId,
+        errorId
     }), [searchParams])
 }

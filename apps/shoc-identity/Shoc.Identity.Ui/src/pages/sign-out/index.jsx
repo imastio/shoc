@@ -12,9 +12,6 @@ import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import SignOutForm from "./sign-out-form"
-import { Action } from "@radix-ui/react-toast"
-
-const x = 4;
 
 export default function SignOutPage() {
   const authorizeContext = useAuthorizeContext();
@@ -23,10 +20,13 @@ export default function SignOutPage() {
   const navigateExt = useNavigateExt();
   const session = useSession();
 
+  useEffect(() => {
+    if(!session.authenticated){
+      navigate('/sign-in', { replace: true })
+    }
+  }, [session.authenticated, navigate])
+
   if (!session.authenticated) {
-    navigateExt({
-      pathname: "/sign-in"
-    })
     return false;
   }
 
@@ -40,16 +40,15 @@ export default function SignOutPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-left">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Hey, {session.user?.fullName || 'Anonymous'}!
+                Sign out
               </h1>
             </div>
             <p className="text-left text-sm text-muted-foreground">
-              You are about to sign out from your <b>{session.user?.email}</b> account.
+              You are about to sign out from the Shoc Platform.
             </p>
             <p className="text-left text-sm text-muted-foreground">
-              Feel free to sign in back whenever you want!
+              Are you sure you want to terminate your current session?
             </p>
-
             <SignOutForm />
           </div>
         </div>

@@ -2,10 +2,8 @@ import Icons from "@/components/generic/icons"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useCallback, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import useNavigateSearch from "@/hooks/use-navigate-search"
 import useAuthorizeContext from "@/hooks/use-authorize-context"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,13 +13,13 @@ import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
-import RequestConfirmationButton from "./request-recovery-button"
+import { validateEmail } from "@/lib/validation"
+import RequestRecoveryButton from "./request-recovery-button"
 
 export default function RecoverPasswordForm() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
-    const [flowResult, setFlowResult] = useState({});
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
     const navigateExt = useNavigateExt();
@@ -43,7 +41,7 @@ export default function RecoverPasswordForm() {
             code: '',
             password: '',
             passwordConfirmation: ''
-            
+
         },
         shouldUseNativeValidation: false
     })
@@ -51,8 +49,11 @@ export default function RecoverPasswordForm() {
     const email = form.watch('email');
     const code = form.watch('code');
 
+    const emailValid = validateEmail(email);
+    const codeValid = code.length >= 6;
+
     const recover = useCallback(async ({ email, code, password }) => {
-        
+
         setProgress(true);
         setErrors([]);
 
@@ -62,12 +63,12 @@ export default function RecoverPasswordForm() {
             password
         }));
 
-        
-        if(result.error){
+        setProgress(false);
+
+        if (result.error) {
             setErrors(result.payload?.errors || []);
             return;
         }
-        setProgress(false);
 
         navigateExt({
             pathname: "/sign-in",
@@ -79,69 +80,72 @@ export default function RecoverPasswordForm() {
 
     async function onSubmit(values) {
         await recover({
-            email: values.email, 
-            code: values.code, 
-            password: values.password 
+            email: values.email,
+            code: values.code,
+            password: values.password
         });
     }
 
     return (
         <>
-        <ErrorAlert errors={errors} title={intl.formatMessage({id: 'auth.confirm.unable'})} />
-        <Form {...form} autoComplete="off">
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="grid gap-2">
-                    <div className="grid gap-1">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            autoFocus
-                                            placeholder="name@example.com"
-                                            type="email"
-                                            autoCapitalize="none"
-                                            autoComplete="off"
-                                            aria-autocomplete="none"
-                                            autoCorrect="off"
-                                            disabled={progress}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid gap-1">
-                        <FormField
-                            control={form.control}
-                            name="code"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Code</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Your confirmation code"
-                                            type="text"
-                                            autoComplete="off"
-                                            aria-autocomplete="none"
-                                            disabled={progress}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    <FormDescription>
-                                        The code you've recieved to your email.
-                                    </FormDescription>
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid gap-1">
+            <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'auth.confirm.unable' })} />
+            <Form {...form} autoComplete="off">
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <div className="grid gap-2">
+                        <div className="grid gap-1">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                autoFocus
+                                                placeholder="name@example.com"
+                                                type="email"
+                                                autoCapitalize="none"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                autoCorrect="off"
+                                                disabled={progress}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                        <FormDescription>
+                                            We will send you a confirmation code to this email.
+                                        </FormDescription>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className={cn("grid gap-1", emailValid ? "" : "hidden")}>
+                            <FormField
+                                control={form.control}
+                                name="code"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Code</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Your confirmation code"
+                                                type="text"
+                                                autoComplete="off"
+                                                aria-autocomplete="none"
+                                                disabled={progress || !emailValid}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                        <FormDescription>
+                                            The code you've recieved to your email.
+                                        </FormDescription>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className={cn("grid gap-1", emailValid && codeValid ? "" : "hidden")}>
                             <FormField
                                 control={form.control}
                                 name="password"
@@ -154,7 +158,7 @@ export default function RecoverPasswordForm() {
                                                 type="password"
                                                 autoComplete="off"
                                                 aria-autocomplete="none"
-                                                disabled={progress || code?.length === 0}
+                                                disabled={progress || !emailValid || !codeValid}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -163,7 +167,7 @@ export default function RecoverPasswordForm() {
                                 )}
                             />
                         </div>
-                        <div className="grid gap-1">
+                        <div className={cn("grid gap-1", emailValid && codeValid ? "" : "hidden")}>
                             <FormField
                                 control={form.control}
                                 name="passwordConfirmation"
@@ -176,7 +180,7 @@ export default function RecoverPasswordForm() {
                                                 type="password"
                                                 autoComplete="off"
                                                 aria-autocomplete="none"
-                                                disabled={progress || code?.length === 0}
+                                                disabled={progress || !emailValid || !codeValid}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -185,16 +189,17 @@ export default function RecoverPasswordForm() {
                                 )}
                             />
                         </div>
-                    <Button type="submit" disabled={progress} className="mt-2">
-                        {progress && (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Continue
-                    </Button>
-                    <RequestConfirmationButton email={email} />
-                </div>
-            </form>
-        </Form>
+                        <RequestRecoveryButton email={email} />
+                        <Button type="submit" disabled={progress || !emailValid || !codeValid} className="mt-2">
+                            {progress && (
+                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Continue
+                        </Button>
+
+                    </div>
+                </form>
+            </Form>
         </>
     )
 }

@@ -7,7 +7,7 @@ export default function App() {
 
     return <>
         <HelmetProvider>
-            <Helmet titleTemplate='%s | Shoc Identity'></Helmet>
+            <Helmet titleTemplate='%s | Shoc Platform'></Helmet>
             <AuthProvider>
                 <RouterProvider router={router} />
             </AuthProvider>

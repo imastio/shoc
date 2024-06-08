@@ -15,7 +15,7 @@ export default class SessionClient extends BaseAxiosClient {
 
   get() {
     const url = this.urlify({
-      api: "api/session"
+      api: "api-auth/session"
     });
 
     return this.webClient.get(url, {

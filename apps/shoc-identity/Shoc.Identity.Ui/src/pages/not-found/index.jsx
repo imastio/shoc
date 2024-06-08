@@ -6,42 +6,26 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
-export default function IndexPage({ }) {
+export default function NotFoundPage({ }) {
 
     const navigate = useNavigate();
-    const session = useSession();
-
-    useEffect(() => {
-        if(!session.authenticated){
-            navigate('/sign-in')
-        }
-    }, [navigate, session.authenticated]);
-
-    if(!session.authenticated){
-        return false;
-    }
-
+    
     return <>
-    <Helmet title={session.user?.fullName} />
+    <Helmet title="Page not found" />
       <div className="container relative grid h-dvh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
         <AuthLeftCard />
-
-        <div className={cn("lg:p-8", session.authenticated ? "" : "hidden")}>
+        <div className={cn("lg:p-8")}>
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-left">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Hi, {session.user?.fullName || 'Anonymous'}!
+                Page not found
               </h1>
             </div>
             <p className="text-left text-sm text-muted-foreground">
-              You are successfully signed in to the Shoc Platform with your email <b>{session.user?.email}</b>.
+              The content you are looking for could not be found.
             </p>
-            <p className="text-left text-sm text-muted-foreground">
-              If you want to sign out, please use the following button.
-            </p>
-            
-            <Button variant="default" onClick={() => navigate('/sign-out')}>
-              Sign out
+            <Button variant="default" onClick={() => navigate('/')}>
+              Homepage
             </Button>
           </div>
         </div>

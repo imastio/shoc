@@ -59,7 +59,7 @@ export default function SignOutForm() {
             <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
             <Icons.signOut className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
             {" "}
-            Sign out
+            Continue
         </Button>
 
         {iframeUrl && <iframe key="signout-notification-iframe"

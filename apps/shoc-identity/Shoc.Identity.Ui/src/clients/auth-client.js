@@ -46,6 +46,23 @@ import BaseAxiosClient from "./base-axios-client";
         }
       });
     }
+
+    /**
+     * Resolves the error details
+     * 
+     * @returns {object} The error response
+     */
+    getErrorDetails(input) {
+      
+      const url = this.urlify({
+        api: "api-auth/error-details"
+      });
+  
+      return this.webClient.post(url, input, {
+        headers: {
+        }
+      });
+    }
     
     /**
      * Sign-in with given input

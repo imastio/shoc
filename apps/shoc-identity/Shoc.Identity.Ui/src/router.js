@@ -1,4 +1,4 @@
-import React, { lazy as reactLazy, Suspense } from 'react';
+import { Suspense, lazy as reactLazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import LoadingPage from '@/pages/loading';
 
@@ -17,6 +17,8 @@ const GlobalLayout = lazy(() => import('@/layouts/global-layout'));
 const InitLayout = lazy(() => import('@/layouts/init-layout'));
 
 const IndexPage = lazy(() => import('@/pages/index'));
+const NotFoundPage = lazy(() => import('@/pages/not-found'));
+const ErrorPage = lazy(() => import('@/pages/error'));
 const SignInPage = lazy(() => import('@/pages/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/sign-up'));
 const ConfirmPage = lazy(() => import('@/pages/confirm'));
@@ -36,6 +38,8 @@ export const allRoutes = [
                     { path: '/confirm', element: page(<ConfirmPage />) },
                     { path: '/recover-password', element: page(<RecoverPasswordPage />) },
                     { path: '/sign-out', element: page(<SignOutPage />) },
+                    { path: '/error', element: page(<ErrorPage />) },
+                    { path: '*', element: page(<NotFoundPage />) }
                 ]
             }
         ]

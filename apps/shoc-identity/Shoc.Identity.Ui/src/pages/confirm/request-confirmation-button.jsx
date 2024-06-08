@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useAuthorizeContext from "@/hooks/use-authorize-context";
 import { cn } from "@/lib/utils";
+import { validateEmail } from "@/lib/validation";
 import { useCallback, useEffect, useState } from "react"
 import { useCountdown } from "usehooks-ts";
 
-const EMAIL_REGEX = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 export default function RequestConfirmationButton({ email }) {
     const { toast } = useToast();
@@ -26,7 +26,7 @@ export default function RequestConfirmationButton({ email }) {
         }
     }, [count, resetCountdown])
 
-    const isValid = EMAIL_REGEX.test(email);
+    const isValid = validateEmail(email);
 
     const requestConfirmation = useCallback(async () => {
 

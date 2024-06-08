@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCallback, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import useNavigateSearch from "@/hooks/use-navigate-search"
 import useAuthorizeContext from "@/hooks/use-authorize-context"
 import { z } from "zod"
@@ -133,6 +133,14 @@ export default function SignInForm() {
                             )}
                         />
                     </div>
+                    <p className="text-left text-sm text-muted-foreground">
+                        <Button className="m-0 p-0" type="button" variant="link" onClick={() => {
+                            navigateExt({
+                                pathname: "/recover-password",
+                                search: `?${searchParams.toString()}`
+                            })
+                        }}>Forgot password?</Button>
+                    </p>
                     <Button type="submit" disabled={progress}>
                         {progress && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
