@@ -8,12 +8,12 @@ import { validateEmail } from "@/lib/validation";
 import { useCallback, useEffect, useState } from "react"
 import { useCountdown } from "usehooks-ts";
 
-export default function RequestOtpButton({ email }) {
+export default function RequestConfirmationButton({ email }) {
     const { toast } = useToast();
     const [progress, setProgress] = useState(false);
     const [sent, setSent] = useState(false);
     const authorizeContext = useAuthorizeContext();
-    const [count, { startCountdown, stopCountdown, resetCountdown }] = useCountdown({
+    const [count, { startCountdown, resetCountdown }] = useCountdown({
         countStart: 60,
         intervalMs: 1000,
     });
@@ -27,22 +27,21 @@ export default function RequestOtpButton({ email }) {
 
     const isValid = validateEmail(email);
 
-    const requestOtp = useCallback(async () => {
+    const requestConfirmation = useCallback(async () => {
 
         setProgress(true);
 
-        const result = await clientGuard(() => authClient.requestOtp({
-            email,
-            returnUrl: authorizeContext.returnUrl,
-            signinMethod: "otp",
-            deliveryMethod: "email"
+        await clientGuard(() => authClient.requestConfirmation({
+            target: email,
+            targetType: "email",
+            returnUrl: authorizeContext.returnUrl
         }));
 
         setProgress(false);
 
         toast({
-            title: 'One-time password sent',
-            description: 'Please check your email to get your one-time password!',
+            title: 'Confirmation code sent',
+            description: 'Please check your email to get your confirmation code!',
             duration: 5000
         });
         startCountdown();
@@ -51,17 +50,16 @@ export default function RequestOtpButton({ email }) {
     }, [email, authorizeContext.returnUrl, toast, startCountdown]);
 
     return <Button
-        className={cn(isValid ? '' : 'hidden')}
         variant="outline"
         type="button"
-        title="Enter a valid email to request one-time password!"
+        title="Enter a valid email to request confirmation code!"
         disabled={progress || !isValid || sent}
-        onClick={() => requestOtp()}
+        onClick={() => requestConfirmation()}
     >
         <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
-        <Icons.otp className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
+        <Icons.email className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
         {" "}
-        One-time password {(sent && count > 0) ? `(${count}s)` : ''}
+        Request confirmation code {(sent && count > 0) ? `(${count}s)` : ''}
     </Button>
 
 }

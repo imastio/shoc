@@ -15,7 +15,7 @@ export default function SignInPage() {
   const navigateSearch = useNavigateSearch();
   const session = useSession();
 
-  let title = null;
+  let title = '';
   if (authorizeContext.prompt === 'create') {
     title = 'Create an account'
   }

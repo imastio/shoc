@@ -1,11 +1,8 @@
 import AuthLeftCard from "@/components/auth/auth-left-card";
 import { Button } from "@/components/ui/button";
 import useNavigateExt from "@/hooks/auth/use-navigate-ext";
-import useAuthorizeContext from "@/hooks/use-authorize-context";
-import useNavigateSearch from "@/hooks/use-navigate-search";
 import { cn } from "@/lib/utils";
 import useSession from "@/providers/session-provider/use-session";
-import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ConfirmForm from "./confirm-form";
@@ -14,8 +11,6 @@ import AuthenticatedRedirect from "@/components/auth/authenticated-redirect";
 export default function ConfirmPage({ }) {
 
     const [searchParams] = useSearchParams();
-    const authorizeContext = useAuthorizeContext();
-    const navigateSearch = useNavigateSearch();
     const navigate = useNavigate();
     const navigateExt = useNavigateExt();
     const session = useSession();

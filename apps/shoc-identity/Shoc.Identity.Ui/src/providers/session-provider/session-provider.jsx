@@ -1,7 +1,7 @@
 import { clientGuard, sessionClient } from "@/clients";
 import SessionContext from "./session-context";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useInterval, useTimeout } from 'usehooks-ts';
+import { useInterval } from 'usehooks-ts';
 
 export default function AuthProvider({ children }) {
 

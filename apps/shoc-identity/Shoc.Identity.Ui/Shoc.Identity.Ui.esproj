@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.271090-alpha">
   <PropertyGroup>
-    <BuildCommand>pnpm i</BuildCommand>
     <StartupCommand>pnpm dev</StartupCommand>
+    <BuildCommand>pnpm build</BuildCommand>
     <PublishCommand>pnpm build</PublishCommand>
     <JavaScriptTestRoot>src\</JavaScriptTestRoot>
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
     <!-- Allows the build (or compile) script located on package.json to run on Build -->
     <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
-    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <ShouldRunBuildScript>true</ShouldRunBuildScript>
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>

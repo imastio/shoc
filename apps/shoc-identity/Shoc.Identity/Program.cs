@@ -67,6 +67,7 @@ builder.Services.AddScoped<ConfirmationService>();
 // build the application
 var app = builder.Build();
 
+app.UseMiddleware<NonApiSpaMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
@@ -81,12 +82,14 @@ else
     app.UseForwardedHeaders();
     app.UseHsts();
 }
+
 app.UseCookiePolicy();
 app.UseRouting();
 app.UseIdentityServer();
 app.UseAccessEnrichment();
 app.UseAuthorization();
-app.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
+app.MapControllers();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
+
 app.UseResponseCompression();
 app.Run();

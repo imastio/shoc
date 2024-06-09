@@ -8,13 +8,12 @@ import { validateEmail } from "@/lib/validation";
 import { useCallback, useEffect, useState } from "react"
 import { useCountdown } from "usehooks-ts";
 
-
-export default function RequestConfirmationButton({ email }) {
+export default function RequestRecoveryButton({ email }) {
     const { toast } = useToast();
     const [progress, setProgress] = useState(false);
     const [sent, setSent] = useState(false);
     const authorizeContext = useAuthorizeContext();
-    const [count, { startCountdown, stopCountdown, resetCountdown }] = useCountdown({
+    const [count, { startCountdown, resetCountdown }] = useCountdown({
         countStart: 60,
         intervalMs: 1000,
     });
@@ -28,21 +27,20 @@ export default function RequestConfirmationButton({ email }) {
 
     const isValid = validateEmail(email);
 
-    const requestConfirmation = useCallback(async () => {
+    const requestRecovery = useCallback(async () => {
 
         setProgress(true);
 
-        const result = await clientGuard(() => authClient.requestConfirmation({
+        await clientGuard(() => authClient.requestPasswordRecovery({
             target: email,
-            targetType: "email",
             returnUrl: authorizeContext.returnUrl
         }));
 
         setProgress(false);
 
         toast({
-            title: 'Confirmation code sent',
-            description: 'Please check your email to get your confirmation code!',
+            title: 'Recovery code sent',
+            description: 'Please check your email to get your recovery code!',
             duration: 5000
         });
         startCountdown();
@@ -53,14 +51,14 @@ export default function RequestConfirmationButton({ email }) {
     return <Button
         variant="outline"
         type="button"
-        title="Enter a valid email to request confirmation code!"
+        title="Enter a valid email to request recovery code!"
         disabled={progress || !isValid || sent}
-        onClick={() => requestConfirmation()}
+        onClick={() => requestRecovery()}
     >
         <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
         <Icons.email className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
         {" "}
-        Request confirmation code {(sent && count > 0) ? `(${count}s)` : ''}
+        Request recovery code {(sent && count > 0) ? `(${count}s)` : ''}
     </Button>
 
 }

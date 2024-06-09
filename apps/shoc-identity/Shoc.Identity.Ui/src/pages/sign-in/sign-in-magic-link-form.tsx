@@ -2,16 +2,13 @@ import Icons from "@/components/generic/icons"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useCallback, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import useNavigateSearch from "@/hooks/use-navigate-search"
 import useAuthorizeContext from "@/hooks/use-authorize-context"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useSignInMethod from "./use-sign-in-method"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
@@ -20,13 +17,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { RocketIcon } from "@radix-ui/react-icons"
 
 export default function SignInMagicLinkForm() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
     const [done, setDone] = useState(false);
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
-    const method = useSignInMethod();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
@@ -86,7 +82,7 @@ export default function SignInMagicLinkForm() {
                     You should receive an email with a magic link!
                 </AlertDescription>
             </Alert>
-            <Form {...form} autoComplete="off">
+            <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="grid gap-2">
                         <div className="grid gap-1">

@@ -3,12 +3,11 @@ import AuthLeftCard from "@/components/auth/auth-left-card";
 import { Button } from "@/components/ui/button";
 import useAuthorizeContext from "@/hooks/use-authorize-context";
 import { cn } from "@/lib/utils";
-import useSession from "@/providers/session-provider/use-session";
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
-export default function NotFoundPage({ }) {
+export default function ErrorPage({ }) {
 
     const navigate = useNavigate();
     const authorizeContext = useAuthorizeContext();
@@ -51,7 +50,7 @@ export default function NotFoundPage({ }) {
             {data.error && <p className="text-left text-sm text-muted-foreground">
                 Error: {data.error}
             </p>}
-            <Button variant="default" onClick={() => navigate('/')}>
+            <Button variant="default" onClick={() => navigate('/')} disabled={progress}>
               Homepage
             </Button>
           </div>

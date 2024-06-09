@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/alert"
 import { useIntl } from "react-intl";
 
-export default function ErrorAlert({ title, errors = [], className }) {
+export default function ErrorAlert({ title = '', errors = [], className = '' }) {
 
     const intl = useIntl();
 

@@ -1,8 +1,6 @@
 import AuthLeftCard from "@/components/auth/auth-left-card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import useSession from "@/providers/session-provider/use-session";
-import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 

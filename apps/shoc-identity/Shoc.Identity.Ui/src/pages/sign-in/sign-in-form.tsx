@@ -1,87 +1,80 @@
 import Icons from "@/components/generic/icons"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useCallback, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import useNavigateSearch from "@/hooks/use-navigate-search"
 import useAuthorizeContext from "@/hooks/use-authorize-context"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
-import RequestConfirmationButton from "./request-confirmation-button"
+import RequestOtpButton from "./request-otp-button"
 
-export default function ConfirmForm() {
-    const [searchParams, setSearchParams] = useSearchParams();
+export default function SignInForm() {
+    const [searchParams] = useSearchParams();
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
-    const [flowResult, setFlowResult] = useState({});
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
         email: z.string().email('Enter a valid email!'),
-        code: z.string().min(6, 'The code have at least 6 characters!')
+        password: z.string().min(6, 'Password must have at least 6 characters!')
     })
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: authorizeContext.loginHint,
-            code: ''
+            password: ''
         },
         shouldUseNativeValidation: false
     })
 
     const email = form.watch('email');
 
-    const confirm = useCallback(async ({ email, code, returnUrl }) => {
+    const signIn = useCallback(async ({ email, password, returnUrl }) => {
         
         setProgress(true);
         setErrors([]);
 
-        const result = await clientGuard(() => authClient.processConfirmation({
-            target: email,
-            targetType: 'email',
-            code,
-            returnUrl
-        }));
+        const result = await clientGuard(() => authClient.signin({ email, password, returnUrl }));
 
         
         if(result.error){
+            if (result.payload?.errors?.some(e => e.code === "IDENTITY_UNVERIFIED_EMAIL")) {
+                navigateExt({
+                  pathname: "/confirm",
+                  search: `?${searchParams.toString()}`,
+                  searchOverrides: { login_hint: email }
+                })
+              }
+
             setErrors(result.payload?.errors || []);
             setProgress(false);
             return;
         }
         const payload = result.payload || {};
 
-        setFlowResult(payload);
-
         const redirectTo = payload.returnUrl || '/';
 
         window.location.href = redirectTo;
 
-    }, []);
+    }, [navigateExt]);
 
     async function onSubmit(values) {
-        await confirm({
-            email: values.email, 
-            code: values.code, 
-            returnUrl: authorizeContext.returnUrl 
-        });
+        await signIn({ email: values.email, password: values.password, returnUrl: authorizeContext.returnUrl });
     }
 
     return (
         <>
-        <ErrorAlert errors={errors} title={intl.formatMessage({id: 'auth.confirm.unable'})} />
-        <Form {...form} autoComplete="off">
+        <ErrorAlert errors={errors} title={intl.formatMessage({id: 'auth.signIn.unable'})} />
+        <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">
@@ -112,14 +105,14 @@ export default function ConfirmForm() {
                     <div className="grid gap-1">
                         <FormField
                             control={form.control}
-                            name="code"
+                            name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Code</FormLabel>
+                                    <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Your confirmation code"
-                                            type="text"
+                                            placeholder="**********"
+                                            type="password"
                                             autoComplete="off"
                                             aria-autocomplete="none"
                                             disabled={progress}
@@ -127,20 +120,25 @@ export default function ConfirmForm() {
                                         />
                                     </FormControl>
                                     <FormMessage />
-                                    <FormDescription>
-                                        You should recieve the code your email.
-                                    </FormDescription>
                                 </FormItem>
                             )}
                         />
                     </div>
-                    <Button type="submit" disabled={progress} className="mt-2">
+                    <p className="text-left text-sm text-muted-foreground">
+                        <Button className="m-0 p-0" type="button" variant="link" onClick={() => {
+                            navigateExt({
+                                pathname: "/recover-password",
+                                search: `?${searchParams.toString()}`
+                            })
+                        }}>Forgot password?</Button>
+                    </p>
+                    <Button type="submit" disabled={progress}>
                         {progress && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Continue
                     </Button>
-                    <RequestConfirmationButton email={email} />
+                    <RequestOtpButton email={email} />
                 </div>
             </form>
         </Form>

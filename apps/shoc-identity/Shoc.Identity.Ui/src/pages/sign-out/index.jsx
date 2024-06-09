@@ -1,23 +1,13 @@
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import AuthLeftCard from "@/components/auth/auth-left-card"
-import PrivacyNotice from "@/components/auth/privacy-notice"
-import SignInChooser from "./sign-in-chooser"
-import useAuthorizeContext from "@/hooks/use-authorize-context"
-import useNavigateSearch from "@/hooks/use-navigate-search"
-import SignUpForm from "./sign-up-form"
 import useSession from "@/providers/session-provider/use-session"
 import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
-import useNavigateExt from "@/hooks/auth/use-navigate-ext"
 import SignOutForm from "./sign-out-form"
 
 export default function SignOutPage() {
-  const authorizeContext = useAuthorizeContext();
-  const navigateSearch = useNavigateSearch();
   const navigate = useNavigate();
-  const navigateExt = useNavigateExt();
   const session = useSession();
 
   useEffect(() => {

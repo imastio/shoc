@@ -1,24 +1,12 @@
 import Icons from "@/components/generic/icons"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
-import { useSearchParams } from "react-router-dom"
 import useNavigateSearch from "@/hooks/use-navigate-search"
-import useAuthorizeContext from "@/hooks/use-authorize-context"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import SignInForm from "./sign-in-form"
 import useSignInMethod from "./use-sign-in-method"
 import SignInMagicLinkForm from "./sign-in-magic-link-form"
-import RequestOtpButton from "./request-otp-button"
 
-export default function SignInChooser({ className, ...props }) {
-    const [progress, setProgress] = useState(false);
-    const authorizeContext = useAuthorizeContext();
+export default function SignInChooser({ className = '', ...props }) {
     const method = useSignInMethod();
     const navigateSearch = useNavigateSearch();
     
@@ -41,7 +29,6 @@ export default function SignInChooser({ className, ...props }) {
                 <Button
                     variant="outline"
                     type="button"
-                    disabled={progress}
                     onClick={() => navigateSearch({ method: 'magic-link' })}>
                     <Icons.magicLink className="mr-2 h-4 w-4" />
                     {" "}
@@ -52,7 +39,6 @@ export default function SignInChooser({ className, ...props }) {
                 <Button
                     variant="outline"
                     type="button"
-                    disabled={progress}
                     onClick={() => navigateSearch({ method: 'password' })}>
                     <Icons.password className="mr-2 h-4 w-4" />
                     {" "}
