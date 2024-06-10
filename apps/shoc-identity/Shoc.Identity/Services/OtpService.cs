@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.ApiCore;
@@ -10,7 +9,6 @@ using Shoc.Core.Security;
 using Shoc.Identity.Model;
 using Shoc.Identity.Model.Flow;
 using Shoc.Identity.Provider.Data;
-using Shoc.Identity.Utility;
 using Shoc.Mailing;
 using Shoc.Mailing.Model;
 
@@ -32,7 +30,7 @@ public class OtpService
     private static readonly int MAX_ACTIVE_OTPS = 5;
 
     /// <summary>
-    /// Give a short period of time for OTP as life time
+    /// Give a short period of time for OTP as lifetime
     /// </summary>
     private static readonly TimeSpan OTP_LIFETIME = TimeSpan.FromHours(1);
 
@@ -179,7 +177,7 @@ public class OtpService
         {
             sent = (await this.Send(otp, password, input.SigninMethod)).Sent;
         }
-        catch 
+        catch(Exception)
         {
             // just ignore
         }
@@ -211,11 +209,8 @@ public class OtpService
         var fullUrl =
             $"{UrlExt.EnsureSlash(selfSettings.ExternalBaseAddress)}api-auth/sign-in-magic/{otp.Link}/crypto-proof/{proof}";
 
-        // the language
-        var lang = otp.Lang ?? this.intlService.GetDefaultLocale();
-
         // the magic link headline
-        var title = this.intlService.Format(isOtp ? "signin.email.otp.title" : "signin.email.magicLink.title", lang);
+        var title = isOtp ? "One-time password" : "Magic link";
 
         // the proper template to use
         var template = isOtp ? "~/Email/OtpEmail.cshtml" : "~/Email/MagicLinkEmail.cshtml";
@@ -223,9 +218,7 @@ public class OtpService
         // build and render an email with template
         var content = await this.razorEngine.Render<dynamic>(template, new
         {
-            Language = lang,
             Title = title,
-            Headline = title,
             OneTimePassword = password,
             MagicLink = fullUrl
         });
@@ -234,17 +227,8 @@ public class OtpService
         return await this.emailSender.SendAsync(new EmailMessage
         {
             Subject = title,
-            To = new List<string> { otp.Target },
-            Body = content,
-            Resources = new List<ContentResource>
-            {
-                new()
-                {
-                    Id = "header_logo",
-                    Path = AssemblyUtility.ResolveRelative("Email", "Img", "header_logo.png"),
-                    Type = "image/png"
-                }
-            }
+            To = [otp.Target],
+            Body = content
         });
     }
 }

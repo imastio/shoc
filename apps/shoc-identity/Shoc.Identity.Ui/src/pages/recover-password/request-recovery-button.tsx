@@ -32,7 +32,7 @@ export default function RequestRecoveryButton({ email }) {
         setProgress(true);
 
         await clientGuard(() => authClient.requestPasswordRecovery({
-            target: email,
+            email,
             returnUrl: authorizeContext.returnUrl
         }));
 

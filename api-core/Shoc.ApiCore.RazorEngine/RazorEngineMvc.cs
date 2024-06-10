@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Shoc.ApiCore.RazorEngine;
 
@@ -55,8 +56,11 @@ public class RazorEngineMvc : IRazorEngine
     /// <returns>The rendered razor page string</returns>
     public async Task<string> Render<TModel>(string view, TModel model)
     {
+        // create a scope
+        using var scope = this.serviceProvider.CreateScope();
+        
         // gets the action context
-        var actionContext = this.GetActionContext();
+        var actionContext = this.GetActionContext(scope);
         
         // try find razor view with name and action context
         var razorView = this.FindView(actionContext, view);
@@ -113,12 +117,12 @@ public class RazorEngineMvc : IRazorEngine
     /// Gets a new action context
     /// </summary>
     /// <returns></returns>
-    private ActionContext GetActionContext()
+    private ActionContext GetActionContext(IServiceScope scope)
     {
         // create a default http context with service provider 
         var httpContext = new DefaultHttpContext
         {
-            RequestServices = this.serviceProvider
+            RequestServices = scope.ServiceProvider
         };
         
         // build new action context 

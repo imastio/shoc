@@ -1,9 +1,4 @@
-﻿@using Shoc.ApiCore.Intl
-@model dynamic
-@inject IIntlService intlService
-@{
-    var lang = Model.Language.ToString() ?? this.intlService.GetDefaultLocale();
-}
+﻿@model dynamic
 
 @{
     Layout = "Shared/_Layout.cshtml";
@@ -11,12 +6,11 @@
 
 <!-- START: MAIN CONTENT -->
 
-<p style="margin-bottom: 20px;">@this.intlService.Format("global.email.greeting", lang),</p>
-<p style="margin-bottom: 20px;">
-    @this.intlService.Format("confirm.email.linkNotice", lang) <a href="@Model.ConfirmationLink" style="color: #08c; text-decoration: none;">
-        @this.intlService.Format("confirm.email.link", lang)
-    </a>
-</p>
-<p style="margin-bottom: 20px;">@this.intlService.Format("confirm.email.codeNotice", lang) <b>@Model.ConfirmationCode</b></p>
+<p>Hello,</p>
+<p>Thank you for creating an account with us. Please confirm your email address by clicking the link below:</p>
+<p><a href="@Model.ConfirmationLink">Confirm Account</a></p>
+<p>Alternatively, you can use the confirmation code <b>@Model.ConfirmationCode</b> to activate your account.</p>
+<p>Best regards,</p>
+<p>Shoc Platform</p>
 
 <!-- END: MAIN CONTENT -->

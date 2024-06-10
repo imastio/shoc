@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Services;
@@ -13,7 +12,6 @@ using Shoc.Identity.Model;
 using Shoc.Identity.Model.Flow;
 using Shoc.Identity.Model.User;
 using Shoc.Identity.Provider.Data;
-using Shoc.Identity.Utility;
 using Shoc.Mailing;
 using Shoc.Mailing.Model;
 
@@ -35,7 +33,7 @@ public class ConfirmationService
     private static readonly int MAX_ACTIVE_CONFIRMATION_CODES = 5;
 
     /// <summary>
-    /// Give a short period of time for confirmation code as life time
+    /// Give a short period of time for confirmation code as lifetime
     /// </summary>
     private static readonly TimeSpan CONFIRMATION_CODE_LIFETIME = TimeSpan.FromHours(1);
 
@@ -225,19 +223,14 @@ public class ConfirmationService
         // build confirmation URL
         var fullUrl =
             $"{UrlExt.EnsureSlash(selfSettings.ExternalBaseAddress)}api-auth/confirmation/confirm/{confirmation.Link}/crypto-proof/{proof}";
-
-        // the language
-        var lang = confirmation.Lang ?? this.intlService.GetDefaultLocale();
-
+        
         // the confirmation headline
-        var title = this.intlService.Format("confirm.email.title", confirmation.Lang);
+        var title = "Account Confirmation";
 
         // build and render an email with template
         var content = await this.razorEngine.Render<dynamic>("~/Email/ConfirmationEmail.cshtml", new
         {
-            Language = lang,
             Title = title,
-            Headline = title,
             ConfirmationLink = fullUrl,
             ConfirmationCode = code
         });
@@ -246,17 +239,8 @@ public class ConfirmationService
         return await this.emailSender.SendAsync(new EmailMessage
         {
             Subject = title,
-            To = new List<string> { confirmation.Target },
-            Body = content,
-            Resources = new List<ContentResource>
-            {
-                new()
-                {
-                    Id = "header_logo",
-                    Path = AssemblyUtility.ResolveRelative("Email", "Img", "header_logo.png"),
-                    Type = "image/png"
-                }
-            }
+            To = [confirmation.Target],
+            Body = content
         });
     }
 

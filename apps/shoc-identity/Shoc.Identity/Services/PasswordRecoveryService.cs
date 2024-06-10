@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.ApiCore.Intl;
@@ -10,7 +9,6 @@ using Shoc.Identity.Model;
 using Shoc.Identity.Model.Flow;
 using Shoc.Identity.Model.User;
 using Shoc.Identity.Provider.Data;
-using Shoc.Identity.Utility;
 using Shoc.Mailing;
 using Shoc.Mailing.Model;
 
@@ -32,7 +30,7 @@ public class PasswordRecoveryService
     private static readonly int PASSWORD_RECOVERY_CODE_LENGTH = 8;
 
     /// <summary>
-    /// Give a short period of time for recovery code as life time
+    /// Give a short period of time for recovery code as lifetime
     /// </summary>
     private static readonly TimeSpan PASSWORD_RECOVERY_CODE_LIFETIME = TimeSpan.FromHours(1);
 
@@ -222,18 +220,13 @@ public class PasswordRecoveryService
     /// <returns></returns>
     private async Task<EmailResult> Send(ConfirmationCodeModel confirmation, string code)
     {
-        // the language
-        var lang = confirmation.Lang ?? this.intlService.GetDefaultLocale();
-
         // the confirmation headline
-        var title = this.intlService.Format("recovery.email.title", confirmation.Lang);
+        var title = "Recover password";
         
         // build and render an email with template
         var content = await this.razorEngine.Render<dynamic>("~/Email/RecoverPasswordEmail.cshtml", new
         {
-            Language = lang,
             Title = title,
-            Headline = title,
             RecoveryCode = code
         });
 
@@ -241,17 +234,8 @@ public class PasswordRecoveryService
         return await this.emailSender.SendAsync(new EmailMessage
         {
             Subject = title,
-            To = new List<string> { confirmation.Target },
-            Body = content,
-            Resources = new List<ContentResource>
-            {
-                new()
-                {
-                    Id = "header_logo",
-                    Path = AssemblyUtility.ResolveRelative("Email", "Img", "header_logo.png"),
-                    Type = "image/png"
-                }
-            }
+            To = [confirmation.Target],
+            Body = content
         });
     }
 }

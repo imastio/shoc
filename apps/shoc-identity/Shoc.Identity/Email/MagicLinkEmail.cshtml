@@ -1,9 +1,4 @@
-﻿@using Shoc.ApiCore.Intl
-@model dynamic
-@inject IIntlService intlService
-@{
-    var lang = Model.Language.ToString() ?? this.intlService.GetDefaultLocale();
-}
+﻿@model dynamic
 
 @{
     Layout = "Shared/_Layout.cshtml";
@@ -11,15 +6,11 @@
 
 <!-- START: MAIN CONTENT -->
 
-<p style="margin-bottom: 20px;">@this.intlService.Format("global.email.greeting", lang),</p>
-
-<p style="margin-bottom: 20px;">
-     @this.intlService.Format("signin.email.magicLink.linkNotice", lang) <a href="@Model.MagicLink" style="color: #08c; text-decoration: none;">
-        @this.intlService.Format("signin.email.magicLink.signin", lang)
-    </a>
-</p>
-<p style="margin-bottom: 20px;">@this.intlService.Format("signin.email.magicLink.alternativeNotice", lang) <b>@Model.OneTimePassword</b></p>
-<p style="margin-bottom: 20px;"></p>
-<p style="margin-bottom: 20px;">@this.intlService.Format("signin.email.magicLink.ignoreNotice", lang)</p>
+<p>Hello,</p>
+<p>You have requested a magic link to sign in to your account without using your password.</p>
+<p>Click <a href="@Model.MagicLink">Sign in</a> to continue.</p>
+<p>You can also use one-time password <b>@Model.OneTimePassword</b> if you have any problems with the link above.</p>
+<p>Best regards,</p>
+<p>Shoc Platform</p>
 
 <!-- END: MAIN CONTENT -->
