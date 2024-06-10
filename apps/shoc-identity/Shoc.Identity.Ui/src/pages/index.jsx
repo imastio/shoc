@@ -4,12 +4,14 @@ import { cn } from "@/lib/utils";
 import useSession from "@/providers/session-provider/use-session";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 
 export default function IndexPage({ }) {
 
     const navigate = useNavigate();
     const session = useSession();
+    const intl = useIntl();
 
     useEffect(() => {
         if(!session.authenticated){
@@ -30,18 +32,18 @@ export default function IndexPage({ }) {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-left">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Hi, {session.user?.fullName || 'Anonymous'}!
+                {intl.formatMessage({id: 'auth.signedIn.greeting'}, { name: session.user?.fullName || 'Anonymous' })}
               </h1>
             </div>
             <p className="text-left text-sm text-muted-foreground">
-              You are successfully signed in to the Shoc Platform with your email <b>{session.user?.email}</b>.
+              {intl.formatMessage({id: 'auth.signedIn.successNotice'}, { email: <b>{session.user?.email}</b> })}
             </p>
             <p className="text-left text-sm text-muted-foreground">
-              If you want to sign out, please use the following button.
+              {intl.formatMessage({id: 'auth.signedIn.continueNotice'})}
             </p>
             
             <Button variant="default" onClick={() => navigate('/sign-out')}>
-              Sign out
+              {intl.formatMessage({id: 'auth.signOut'})}
             </Button>
           </div>
         </div>

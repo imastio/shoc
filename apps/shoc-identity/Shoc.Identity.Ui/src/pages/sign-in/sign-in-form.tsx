@@ -8,11 +8,13 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useNavigateExt from "@/hooks/auth/use-navigate-ext"
+import useNavigateExt from "@/hooks/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import RequestOtpButton from "./request-otp-button"
+
+const MIN_PASSWORD_LENGTH = 6;
 
 export default function SignInForm() {
     const [searchParams] = useSearchParams();
@@ -23,8 +25,8 @@ export default function SignInForm() {
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
-        email: z.string().email('Enter a valid email!'),
-        password: z.string().min(6, 'Password must have at least 6 characters!')
+        email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
+        password: z.string().min(MIN_PASSWORD_LENGTH, intl.formatMessage({id: 'auth.validation.password'}, {num: MIN_PASSWORD_LENGTH}))
     })
 
     const form = useForm({
@@ -43,9 +45,8 @@ export default function SignInForm() {
         setProgress(true);
         setErrors([]);
 
-        const result = await clientGuard(() => authClient.signin({ email, password, returnUrl }));
-
-        
+        const result = await clientGuard(() => authClient.signin({ email, password, returnUrl, lang: intl.locale }));
+    
         if(result.error){
             if (result.payload?.errors?.some(e => e.code === "IDENTITY_UNVERIFIED_EMAIL")) {
                 navigateExt({
@@ -65,7 +66,7 @@ export default function SignInForm() {
 
         window.location.href = redirectTo;
 
-    }, [navigateExt]);
+    }, [navigateExt, intl]);
 
     async function onSubmit(values) {
         await signIn({ email: values.email, password: values.password, returnUrl: authorizeContext.returnUrl });
@@ -83,7 +84,7 @@ export default function SignInForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{intl.formatMessage({id: 'auth.labels.email'})}</FormLabel>
                                     <FormControl>
                                         <Input
                                             autoFocus
@@ -108,7 +109,7 @@ export default function SignInForm() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{intl.formatMessage({id: 'auth.labels.password'})}</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="**********"
@@ -130,13 +131,13 @@ export default function SignInForm() {
                                 pathname: "/recover-password",
                                 search: `?${searchParams.toString()}`
                             })
-                        }}>Forgot password?</Button>
+                        }}>{intl.formatMessage({id: 'auth.signIn.forgotPassword'})}</Button>
                     </p>
                     <Button type="submit" disabled={progress}>
                         {progress && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Continue
+                        {intl.formatMessage({id: 'auth.common.continue'})}
                     </Button>
                     <RequestOtpButton email={email} />
                 </div>

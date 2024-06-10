@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import useAuthorizeContext from "@/hooks/use-authorize-context";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react"
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
     
 export default function SignOutForm() {
@@ -13,6 +14,7 @@ export default function SignOutForm() {
     const [iframeUrl, setIframeUrl] = useState(null);
     const [redirectUri, setRedirectUri] = useState("/");
     const [continueFlow, setContinueFlow] = useState(true);
+    const intl = useIntl();
     const navigate = useNavigate();
 
     const signOut = useCallback(async () => {
@@ -57,7 +59,7 @@ export default function SignOutForm() {
             <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
             <Icons.signOut className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
             {" "}
-            Continue
+            {intl.formatMessage({id: 'auth.common.continue'})}
         </Button>
 
         {iframeUrl && <iframe key="signout-notification-iframe"

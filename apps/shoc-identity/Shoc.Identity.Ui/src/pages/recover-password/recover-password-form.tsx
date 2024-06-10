@@ -9,12 +9,15 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useNavigateExt from "@/hooks/auth/use-navigate-ext"
+import useNavigateExt from "@/hooks/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import { validateEmail } from "@/lib/validation"
 import RequestRecoveryButton from "./request-recovery-button"
+
+const MIN_PASSWORD_LENGTH = 6;
+const MIN_CODE_LENGTH = 6;
 
 export default function RecoverPasswordForm() {
     const [searchParams] = useSearchParams();
@@ -25,12 +28,12 @@ export default function RecoverPasswordForm() {
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
-        email: z.string().email('Enter a valid email!'),
-        code: z.string().min(6, 'The code have at least 6 characters!'),
-        password: z.string().min(6, 'Password must have at least 6 characters!'),
-        passwordConfirmation: z.string().min(6, 'Password must have at least 6 characters!')
+        email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
+        code: z.string().min(MIN_CODE_LENGTH, intl.formatMessage({id: 'auth.validation.recoveryCode'}, {num: MIN_CODE_LENGTH})),
+        password: z.string().min(MIN_CODE_LENGTH, intl.formatMessage({id: 'auth.validation.password'}, {num: MIN_PASSWORD_LENGTH})),
+        passwordConfirmation: z.string().min(MIN_CODE_LENGTH, intl.formatMessage({id: 'auth.validation.password'}, {num: MIN_PASSWORD_LENGTH}))
     }).refine((data) => data.password === data.passwordConfirmation, {
-        message: "Passwords don't match",
+        message: intl.formatMessage({id: 'auth.validation.passwordConfirmation'}),
         path: ["passwordConfirmation"],
     });
 
@@ -50,9 +53,9 @@ export default function RecoverPasswordForm() {
     const code = form.watch('code');
 
     const emailValid = validateEmail(email);
-    const codeValid = code.length >= 6;
+    const codeValid = code.length >= MIN_CODE_LENGTH;
 
-    const recover = useCallback(async ({ email, code, password }) => {
+    const recover = useCallback(async ({ email, code, password, returnUrl }) => {
 
         setProgress(true);
         setErrors([]);
@@ -60,7 +63,9 @@ export default function RecoverPasswordForm() {
         const result = await clientGuard(() => authClient.processPasswordRecovery({
             email,
             code,
-            password
+            password,
+            returnUrl,
+            lang: intl.locale
         }));
 
         setProgress(false);
@@ -76,19 +81,20 @@ export default function RecoverPasswordForm() {
             searchOverrides: { login_hint: email }
         })
 
-    }, []);
+    }, [intl]);
 
     async function onSubmit(values) {
         await recover({
             email: values.email,
             code: values.code,
-            password: values.password
+            password: values.password,
+            returnUrl: authorizeContext.returnUrl
         });
     }
 
     return (
         <>
-            <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'auth.confirm.unable' })} />
+            <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'auth.recover.unable' })} />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="grid gap-2">
@@ -98,7 +104,7 @@ export default function RecoverPasswordForm() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.email'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoFocus
@@ -114,7 +120,7 @@ export default function RecoverPasswordForm() {
                                         </FormControl>
                                         <FormMessage />
                                         <FormDescription>
-                                            We will send you a confirmation code to this email.
+                                            {intl.formatMessage({id: 'auth.recover.emailDescription'})}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -129,7 +135,7 @@ export default function RecoverPasswordForm() {
                                         <FormLabel>Code</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="Your confirmation code"
+                                                placeholder={intl.formatMessage({id: 'auth.placeholders.recoveryCode'})}
                                                 type="text"
                                                 autoComplete="off"
                                                 aria-autocomplete="none"
@@ -139,7 +145,7 @@ export default function RecoverPasswordForm() {
                                         </FormControl>
                                         <FormMessage />
                                         <FormDescription>
-                                            The code you've recieved to your email.
+                                        {intl.formatMessage({id: 'auth.recover.codeDescription'})}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -151,7 +157,7 @@ export default function RecoverPasswordForm() {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>New Password</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.newPassword'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="**********"
@@ -173,7 +179,7 @@ export default function RecoverPasswordForm() {
                                 name="passwordConfirmation"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password Confirmation</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.passwordConfirmation'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="**********"
@@ -194,9 +200,8 @@ export default function RecoverPasswordForm() {
                             {progress && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            Continue
+                            {intl.formatMessage({id: 'auth.common.continue'})}
                         </Button>
-
                     </div>
                 </form>
             </Form>

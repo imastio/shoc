@@ -6,6 +6,7 @@ import useAuthorizeContext from "@/hooks/use-authorize-context";
 import { cn } from "@/lib/utils";
 import { validateEmail } from "@/lib/validation";
 import { useCallback, useEffect, useState } from "react"
+import { useIntl } from "react-intl";
 import { useCountdown } from "usehooks-ts";
 
 export default function RequestOtpButton({ email }) {
@@ -13,6 +14,7 @@ export default function RequestOtpButton({ email }) {
     const [progress, setProgress] = useState(false);
     const [sent, setSent] = useState(false);
     const authorizeContext = useAuthorizeContext();
+    const intl = useIntl();
     const [count, { startCountdown, resetCountdown }] = useCountdown({
         countStart: 60,
         intervalMs: 1000,
@@ -35,33 +37,34 @@ export default function RequestOtpButton({ email }) {
             email,
             returnUrl: authorizeContext.returnUrl,
             signinMethod: "otp",
-            deliveryMethod: "email"
+            deliveryMethod: "email",
+            lang: intl.locale
         }));
 
         setProgress(false);
 
         toast({
-            title: 'One-time password sent',
-            description: 'Please check your email to get your one-time password!',
+            title: intl.formatMessage({id: 'auth.otp.requestSuccess'}),
+            description: intl.formatMessage({id: 'auth.otp.requestSuccess'}),
             duration: 5000
         });
         startCountdown();
         setSent(true);
 
-    }, [email, authorizeContext.returnUrl, toast, startCountdown]);
+    }, [email, authorizeContext.returnUrl, toast, startCountdown, intl]);
 
     return <Button
         className={cn(isValid ? '' : 'hidden')}
         variant="outline"
         type="button"
-        title="Enter a valid email to request one-time password!"
+        title={intl.formatMessage({id: 'auth.otp.request.hint'})}
         disabled={progress || !isValid || sent}
         onClick={() => requestOtp()}
     >
         <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
         <Icons.otp className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
         {" "}
-        One-time password {(sent && count > 0) ? `(${count}s)` : ''}
+        {intl.formatMessage({id: 'auth.otp.request.button'})} {(sent && count > 0) ? `(${intl.formatMessage({id: 'auth.common.seconds'}, {seconds: count})})` : ''}
     </Button>
 
 }

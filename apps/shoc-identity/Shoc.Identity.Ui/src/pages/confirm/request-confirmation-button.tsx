@@ -6,6 +6,7 @@ import useAuthorizeContext from "@/hooks/use-authorize-context";
 import { cn } from "@/lib/utils";
 import { validateEmail } from "@/lib/validation";
 import { useCallback, useEffect, useState } from "react"
+import { useIntl } from "react-intl";
 import { useCountdown } from "usehooks-ts";
 
 export default function RequestConfirmationButton({ email }) {
@@ -13,6 +14,7 @@ export default function RequestConfirmationButton({ email }) {
     const [progress, setProgress] = useState(false);
     const [sent, setSent] = useState(false);
     const authorizeContext = useAuthorizeContext();
+    const intl = useIntl();
     const [count, { startCountdown, resetCountdown }] = useCountdown({
         countStart: 60,
         intervalMs: 1000,
@@ -34,32 +36,33 @@ export default function RequestConfirmationButton({ email }) {
         await clientGuard(() => authClient.requestConfirmation({
             target: email,
             targetType: "email",
-            returnUrl: authorizeContext.returnUrl
+            returnUrl: authorizeContext.returnUrl,
+            lang: intl.locale
         }));
 
         setProgress(false);
 
         toast({
-            title: 'Confirmation code sent',
-            description: 'Please check your email to get your confirmation code!',
+            title: intl.formatMessage({id: 'auth.confirm.requestSuccess'}),
+            description: intl.formatMessage({id: 'auth.confirm.requestSuccess'}),
             duration: 5000
         });
         startCountdown();
         setSent(true);
 
-    }, [email, authorizeContext.returnUrl, toast, startCountdown]);
+    }, [email, authorizeContext.returnUrl, toast, startCountdown, intl]);
 
     return <Button
         variant="outline"
         type="button"
-        title="Enter a valid email to request confirmation code!"
+        title={intl.formatMessage({id: 'auth.confirm.request.hint'})}
         disabled={progress || !isValid || sent}
         onClick={() => requestConfirmation()}
     >
         <Icons.spinner className={cn("mr-2", "h-4", "w-4", "animate-spin", progress ? "" : "hidden")} />
         <Icons.email className={cn("mr-2", "h-4", "w-4", progress ? "hidden" : "")} />
         {" "}
-        Request confirmation code {(sent && count > 0) ? `(${count}s)` : ''}
+        {intl.formatMessage({id: 'auth.confirm.request.button'})} {(sent && count > 0) ? `(${intl.formatMessage({id: 'auth.common.seconds'}, {seconds: count})})` : ''}
     </Button>
 
 }

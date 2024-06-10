@@ -1,4 +1,4 @@
-import useNavigateExt from "@/hooks/auth/use-navigate-ext";
+import useNavigateExt from "@/hooks/use-navigate-ext";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 

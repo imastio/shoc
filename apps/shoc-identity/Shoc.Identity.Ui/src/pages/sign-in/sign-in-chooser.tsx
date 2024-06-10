@@ -5,11 +5,13 @@ import useNavigateSearch from "@/hooks/use-navigate-search"
 import SignInForm from "./sign-in-form"
 import useSignInMethod from "./use-sign-in-method"
 import SignInMagicLinkForm from "./sign-in-magic-link-form"
+import { useIntl } from "react-intl"
 
 export default function SignInChooser({ className = '', ...props }) {
     const method = useSignInMethod();
     const navigateSearch = useNavigateSearch();
-    
+    const intl = useIntl();
+
     return (
         <div className={cn("grid gap-6", className)} {...props}>
             {method === 'magic-link' && <SignInMagicLinkForm />}
@@ -21,7 +23,7 @@ export default function SignInChooser({ className = '', ...props }) {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
+                        {intl.formatMessage({id: 'auth.signIn.methods.choose'})}
                     </span>
                 </div>
             </div>
@@ -32,7 +34,7 @@ export default function SignInChooser({ className = '', ...props }) {
                     onClick={() => navigateSearch({ method: 'magic-link' })}>
                     <Icons.magicLink className="mr-2 h-4 w-4" />
                     {" "}
-                    Magic link
+                    {intl.formatMessage({id: 'auth.signIn.methods.magicLink'})}
                 </Button>
             )}
             {method === 'magic-link' && (
@@ -42,7 +44,7 @@ export default function SignInChooser({ className = '', ...props }) {
                     onClick={() => navigateSearch({ method: 'password' })}>
                     <Icons.password className="mr-2 h-4 w-4" />
                     {" "}
-                    Password
+                    {intl.formatMessage({id: 'auth.signIn.methods.password'})}
                 </Button>
             )}
         </div>

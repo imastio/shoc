@@ -9,10 +9,13 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useNavigateExt from "@/hooks/auth/use-navigate-ext"
+import useNavigateExt from "@/hooks/use-navigate-ext"
 import { useIntl } from "react-intl"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
+
+const MIN_FULL_NAME_LENGTH = 5;
+const MIN_PASSWORD_LENGTH = 6
 
 export default function SignUpForm({ className = '', ...props }) {
 
@@ -24,12 +27,12 @@ export default function SignUpForm({ className = '', ...props }) {
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
-        fullName: z.string().min(5, 'Please enter your full name!'),
-        email: z.string().email('Enter a valid email!'),
-        password: z.string().min(6, 'Password must have at least 6 characters!'),
-        passwordConfirmation: z.string().min(6, 'Password must have at least 6 characters!')
+        fullName: z.string().min(MIN_FULL_NAME_LENGTH, intl.formatMessage({id: 'auth.validation.fullName'})),
+        email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
+        password: z.string().min(MIN_PASSWORD_LENGTH, intl.formatMessage({id: 'auth.validation.password'}, {num: MIN_PASSWORD_LENGTH})),
+        passwordConfirmation: z.string().min(MIN_PASSWORD_LENGTH, intl.formatMessage({id: 'auth.validation.password'}, {num: MIN_PASSWORD_LENGTH}))
     }).refine((data) => data.password === data.passwordConfirmation, {
-        message: "Passwords don't match",
+        message: intl.formatMessage({id: 'auth.validation.passwordConfirmation'}),
         path: ["passwordConfirmation"],
     });
     const form = useForm({
@@ -96,7 +99,7 @@ export default function SignUpForm({ className = '', ...props }) {
                                 name="fullName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Full name</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.fullName'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoFocus
@@ -121,7 +124,7 @@ export default function SignUpForm({ className = '', ...props }) {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.email'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="name@example.com"
@@ -145,7 +148,7 @@ export default function SignUpForm({ className = '', ...props }) {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.password'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="**********"
@@ -167,7 +170,7 @@ export default function SignUpForm({ className = '', ...props }) {
                                 name="passwordConfirmation"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password Confirmation</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.passwordConfirmation'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="**********"
@@ -187,7 +190,7 @@ export default function SignUpForm({ className = '', ...props }) {
                             {progress && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            Continue
+                            {intl.formatMessage({id: 'auth.common.continue'})}
                         </Button>
                     </div>
                 </form>

@@ -9,7 +9,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import useNavigateExt from "@/hooks/auth/use-navigate-ext"
+import useNavigateExt from "@/hooks/use-navigate-ext"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
@@ -26,7 +26,7 @@ export default function SignInMagicLinkForm() {
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
-        email: z.string().email('Enter a valid email!'),
+        email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
     })
 
     const form = useForm({
@@ -47,7 +47,8 @@ export default function SignInMagicLinkForm() {
             email,
             returnUrl,
             signinMethod: "magic_link",
-            deliveryMethod: "email"
+            deliveryMethod: "email",
+            lang: intl.locale
         }));
 
         setProgress(false);
@@ -66,7 +67,7 @@ export default function SignInMagicLinkForm() {
 
         setDone(true);
 
-    }, [navigateExt]);
+    }, [navigateExt, intl]);
 
     async function onSubmit(values) {
         await requestLink({ email: values.email, returnUrl: authorizeContext.returnUrl });
@@ -77,9 +78,9 @@ export default function SignInMagicLinkForm() {
             <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'auth.signIn.requestLink.unable' })} />
             <Alert className={cn(done ? "" : "hidden")}>
                 <RocketIcon className="h-4 w-4" />
-                <AlertTitle>Great!</AlertTitle>
+                <AlertTitle>{intl.formatMessage({id: 'auth.signIn.magicLink.success'})}</AlertTitle>
                 <AlertDescription>
-                    You should receive an email with a magic link!
+                {intl.formatMessage({id: 'auth.signIn.magicLink.successNotice'})}
                 </AlertDescription>
             </Alert>
             <Form {...form}>
@@ -91,7 +92,7 @@ export default function SignInMagicLinkForm() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{intl.formatMessage({id: 'auth.labels.email'})}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoFocus
@@ -107,7 +108,7 @@ export default function SignInMagicLinkForm() {
                                         </FormControl>
                                         <FormMessage />
                                         <FormDescription>
-                                            We will send you an email with a special link to sign in with.
+                                            {intl.formatMessage({id: 'auth.signIn.magicLink.emailDescription'})}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -118,7 +119,7 @@ export default function SignInMagicLinkForm() {
                             {progress && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            Continue
+                            {intl.formatMessage({id: 'auth.common.continue'})}
                         </Button>
                     </div>
                 </form>

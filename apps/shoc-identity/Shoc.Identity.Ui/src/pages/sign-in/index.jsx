@@ -9,19 +9,21 @@ import SignUpForm from "./sign-up-form"
 import useSession from "@/providers/session-provider/use-session"
 import { Helmet } from "react-helmet-async"
 import AuthenticatedRedirect from "@/components/auth/authenticated-redirect"
+import { useIntl } from "react-intl"
 
 export default function SignInPage() {
   const authorizeContext = useAuthorizeContext();
   const navigateSearch = useNavigateSearch();
   const session = useSession();
+  const intl = useIntl();
 
   let title = '';
   if (authorizeContext.prompt === 'create') {
-    title = 'Create an account'
+    title = intl.formatMessage({id: 'auth.signUp'})
   }
 
   if (authorizeContext.prompt === 'login') {
-    title = 'Sign in'
+    title = intl.formatMessage({id: 'auth.signIn'})
   }
 
   if (session.authenticated) {
@@ -43,7 +45,7 @@ export default function SignInPage() {
             "absolute right-4 top-4 md:right-8 md:top-8"
           )}
         >
-          Create account
+          {intl.formatMessage({id: 'auth.signUp.title'})}
         </Button>
         }
 
@@ -56,7 +58,7 @@ export default function SignInPage() {
             "absolute right-4 top-4 md:right-8 md:top-8"
           )}
         >
-          Sign in
+          {intl.formatMessage({id: 'auth.signIn'})}
         </Button>
         }
 
@@ -64,8 +66,8 @@ export default function SignInPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-left">
               <h1 className="text-2xl font-semibold tracking-tight">
-                {authorizeContext.prompt === 'login' && 'Sign in to continue'}
-                {authorizeContext.prompt === 'create' && 'Create an account'}
+                {authorizeContext.prompt === 'login' && intl.formatMessage({id: 'auth.signIn.title'})}
+                {authorizeContext.prompt === 'create' && intl.formatMessage({id: 'auth.signUp.title'})}
               </h1>
             </div>
             {authorizeContext.prompt === 'login' && <SignInChooser />}

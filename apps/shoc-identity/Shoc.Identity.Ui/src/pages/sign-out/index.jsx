@@ -5,10 +5,12 @@ import useSession from "@/providers/session-provider/use-session"
 import { useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import SignOutForm from "./sign-out-form"
+import { useIntl } from "react-intl"
 
 export default function SignOutPage() {
   const navigate = useNavigate();
   const session = useSession();
+  const intl = useIntl();
 
   useEffect(() => {
     if(!session.authenticated){
@@ -22,7 +24,7 @@ export default function SignOutPage() {
 
   return (
     <>
-      <Helmet title="Sign out" />
+      <Helmet title={intl.formatMessage({id: 'auth.signOut'})} />
       <div className="container relative grid h-dvh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
         <AuthLeftCard />
 
@@ -30,14 +32,14 @@ export default function SignOutPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-left">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Sign out
+                {intl.formatMessage({id: 'auth.signOut'})}
               </h1>
             </div>
             <p className="text-left text-sm text-muted-foreground">
-              You are about to sign out from the Shoc Platform.
+              {intl.formatMessage({id: 'auth.signOut.notice'})}
             </p>
             <p className="text-left text-sm text-muted-foreground">
-              Are you sure you want to terminate your current session?
+            {intl.formatMessage({id: 'auth.signOut.confirmationNotice'})}
             </p>
             <SignOutForm />
           </div>

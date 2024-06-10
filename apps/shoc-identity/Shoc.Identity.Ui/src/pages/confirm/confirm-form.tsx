@@ -12,6 +12,8 @@ import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import RequestConfirmationButton from "./request-confirmation-button"
 
+const MIN_CODE_LENGTH = 6;
+
 export default function ConfirmForm() {
     const [progress, setProgress] = useState(false);
     const [errors, setErrors] = useState([]);
@@ -19,8 +21,8 @@ export default function ConfirmForm() {
     const authorizeContext = useAuthorizeContext();
 
     const formSchema = z.object({
-        email: z.string().email('Enter a valid email!'),
-        code: z.string().min(6, 'The code have at least 6 characters!')
+        email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
+        code: z.string().min(MIN_CODE_LENGTH, intl.formatMessage({id: 'auth.validation.confirmationCode'}, {num: MIN_CODE_LENGTH}))
     })
 
     const form = useForm({
@@ -43,7 +45,8 @@ export default function ConfirmForm() {
             target: email,
             targetType: 'email',
             code,
-            returnUrl
+            returnUrl,
+            lang: intl.locale
         }));
 
         
@@ -58,7 +61,7 @@ export default function ConfirmForm() {
 
         window.location.href = redirectTo;
 
-    }, []);
+    }, [intl]);
 
     async function onSubmit(values) {
         await confirm({
@@ -80,7 +83,7 @@ export default function ConfirmForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{intl.formatMessage({id: 'auth.labels.email'})}</FormLabel>
                                     <FormControl>
                                         <Input
                                             autoFocus
@@ -105,10 +108,10 @@ export default function ConfirmForm() {
                             name="code"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Code</FormLabel>
+                                    <FormLabel>{intl.formatMessage({id: 'auth.labels.code'})}</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Your confirmation code"
+                                            placeholder={intl.formatMessage({id: 'auth.placeholders.confirmationCode'})}
                                             type="text"
                                             autoComplete="off"
                                             aria-autocomplete="none"
@@ -118,7 +121,7 @@ export default function ConfirmForm() {
                                     </FormControl>
                                     <FormMessage />
                                     <FormDescription>
-                                        You should recieve the code your email.
+                                        {intl.formatMessage({id: 'auth.confirm.codeDescription'})}
                                     </FormDescription>
                                 </FormItem>
                             )}
@@ -128,7 +131,7 @@ export default function ConfirmForm() {
                         {progress && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Continue
+                        {intl.formatMessage({id: 'auth.common.continue'})}
                     </Button>
                     <RequestConfirmationButton email={email} />
                 </div>
