@@ -268,9 +268,12 @@ public static class IdentityExtended
             AllowPlainTextPkce = false,
             AllowedScopes = new List<string> { KnownScopes.OPENID, KnownScopes.EMAIl, KnownScopes.PROFILE, KnownScopes.SHOC },
             RedirectUris = allowedRedirectUris,
-            AllowOfflineAccess = false,
+            AllowOfflineAccess = true,
+            RefreshTokenUsage = TokenUsage.ReUse,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
             AlwaysIncludeUserClaimsInIdToken = true,
             AccessTokenLifetime = tokenExpiration,
+            SlidingRefreshTokenLifetime = tokenExpiration * 2,
             PostLogoutRedirectUris = allowedLogoutRedirectUris
         };
     }

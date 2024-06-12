@@ -26,7 +26,7 @@ const frameSrc = [
 export default async function cspMiddleware(context: NextContext, next: NextMiddlewareDelegate): Promise<void> {
 
     // skip /api and /handle routes
-    if (context.request.nextUrl.pathname.startsWith('/api') || context.request.nextUrl.pathname.startsWith('/handle')) {
+    if (context.request.nextUrl.pathname.startsWith('/api')) {
         await next(context);
         return;
     }

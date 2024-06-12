@@ -27,8 +27,8 @@ importers:
         specifier: ^14.2.3
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
-        specifier: 5.0.0-beta.16
-        version: 5.0.0-beta.16(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: 5.0.0-beta.19
+        version: 5.0.0-beta.19(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       nextjs-toploader:
         specifier: ^1.6.12
         version: 1.6.12(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -104,20 +104,6 @@ packages:
     resolution: {integrity: sha512-EzlvzE6xQUBrZuuhSAFTdsr4P2bBBHGZwKFemEfq8gIGyIQCxalYfZW/T2ORbtQx5rU69o+WycP3exY/7T1hGA==}
     peerDependencies:
       react: '>=16.9.0'
-
-  '@auth/core@0.28.1':
-    resolution: {integrity: sha512-gvp74mypYZADpTlfGRp6HE0G3pIHWvtJpy+KZ+8FvY0cmlIpHog+jdMOdd29dQtLtN25kF2YbfHsesCFuGUQbg==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      nodemailer: ^6.8.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
 
   '@auth/core@0.32.0':
     resolution: {integrity: sha512-3+ssTScBd+1fd0/fscAyQN1tSygXzuhysuVVzB942ggU4mdfiTbv36P0ccVnExKWYJKvu3E2r3/zxXCCAmTOrg==}
@@ -1245,14 +1231,14 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  next-auth@5.0.0-beta.16:
-    resolution: {integrity: sha512-dX2snB+ezN23tFzSes3n3uosT9iBf0eILPYWH/R2fd9n3ZzdMQlRzq7JIOPeS1aLc84IuRlyuyXyx9XmmZB6og==}
+  next-auth@5.0.0-beta.19:
+    resolution: {integrity: sha512-YHu1igcAxZPh8ZB7GIM93dqgY6gcAzq66FOhQFheAdOx1raxNcApt05nNyNCSB6NegSiyJ4XOPsaNow4pfDmsg==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
-      next: ^14
+      next: ^14 || ^15.0.0-0
       nodemailer: ^6.6.5
-      react: ^18.2.0
+      react: ^18.2.0 || ^19.0.0-0
     peerDependenciesMeta:
       '@simplewebauthn/browser':
         optional: true
@@ -2064,16 +2050,6 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.0
 
-  '@auth/core@0.28.1':
-    dependencies:
-      '@panva/hkdf': 1.1.1
-      '@types/cookie': 0.6.0
-      cookie: 0.6.0
-      jose: 5.4.0
-      oauth4webapi: 2.10.4
-      preact: 10.11.3
-      preact-render-to-string: 5.2.3(preact@10.11.3)
-
   '@auth/core@0.32.0':
     dependencies:
       '@panva/hkdf': 1.1.1
@@ -2812,7 +2788,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.57.0)
       eslint-plugin-react: 7.34.2(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -2836,7 +2812,7 @@ snapshots:
       enhanced-resolve: 5.17.0
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.5
       is-core-module: 2.13.1
@@ -2858,7 +2834,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -3414,9 +3390,9 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next-auth@5.0.0-beta.16(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.19(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.28.1
+      '@auth/core': 0.32.0
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 

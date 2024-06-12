@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { chainMiddleware } from './middlewares';
 import cspMiddleware from './middlewares/csp-middleware';
-import apiForwardMiddleware from './middlewares/api-forward-middleware';
 
 const terminalMiddleware = async (context, next) => {
   await next(context)
 }
 
-const middlewaresChain = chainMiddleware([apiForwardMiddleware, cspMiddleware, terminalMiddleware])
+const middlewaresChain = chainMiddleware([cspMiddleware, terminalMiddleware])
 
 export async function middleware(request, event) {
 

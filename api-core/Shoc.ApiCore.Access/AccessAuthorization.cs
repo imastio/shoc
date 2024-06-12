@@ -61,7 +61,7 @@ public static class AccessAuthorization
         {
             return true;
         }
-
+        
         // root and admin is allowed for everything
         if (types.Contains(KnownUserTypes.ROOT) || types.Contains(KnownUserTypes.ADMIN))
         {
@@ -71,7 +71,7 @@ public static class AccessAuthorization
         // get all granted accesses
         var grantedAccesses = context.HttpContext.GetItemOrDefault("Accesses", EMPTY_SET);
         
-        // allow access if given a access that is in allowed access set
+        // allow access if given an access that is in allowed access set
         if (!requireAll && definedAccesses.Any(grantedAccesses.Contains))
         {
             return true;

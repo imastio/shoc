@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 11043 --experimental-https",
-    "dev:http": "next dev -p 11042",
+    "dev": "next dev -p 11042",
+    "dev:https": "next dev -p 11043 --experimental-https",
     "build": "next build",
-    "start": "next start -p 11043 --experimental-https",
-    "start:http": "next start -p 11042",
+    "start": "next start -p 11042",
+    "start:https": "next start -p 11043 --experimental-https",
     "lint": "next lint"
   },
   "dependencies": {
@@ -17,7 +17,7 @@
     "axios": "^1.7.2",
     "http-proxy": "^1.18.1",
     "next": "^14.2.3",
-    "next-auth": "5.0.0-beta.16",
+    "next-auth": "5.0.0-beta.19",
     "nextjs-toploader": "^1.6.12",
     "node-cache": "^5.1.2",
     "react": "^18",

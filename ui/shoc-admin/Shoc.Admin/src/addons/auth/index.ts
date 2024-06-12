@@ -5,26 +5,7 @@ import { JWT } from "next-auth/jwt";
 import { getToken } from "@auth/core/jwt";
 import { headers } from "next/headers";
 import { Awaitable, User } from "@auth/core/types";
-
-function getClientId(){
-    return process.env.SHOC_ADMIN_NEXT_AUTH_CLIENT_ID || '';
-}
-
-function getClientSecret(){
-    return process.env.SHOC_ADMIN_NEXT_AUTH_CLIENT_SECRET || '';
-}
-
-function getIssuer(){
-    return process.env.SHOC_ADMIN_NEXT_AUTH_CLIENT_ISSUER || '';
-}
-
-function getAuthSecret(){
-    return process.env.SHOC_ADMIN_NEXT_AUTH_SECRET || '';
-}
-
-function getBaseUrl(){
-    return process.env.SHOC_ADMIN_BASE_URL || 'http://localhost:3000'
-}
+import { getAuthSecret, getBaseUrl, getClientId, getClientSecret, getIssuer } from "./config";
 
 function profileMapper(profile: Profile): Awaitable<User & any>{
     return {
@@ -45,7 +26,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             clientId: getClientId(),
             clientSecret: getClientSecret(),
             issuer: getIssuer(),
-            profile: profileMapper
+            profile: profileMapper,
+            authorization: { params: { scope: 'openid email profile shoc offline_access' } }
         })
     ],
     pages: {
@@ -66,7 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             session.user = token.user as any;
             return {
                 ...session,
-                user: token?.error ? token.user as any : null,
+                user: token?.error ? null : token.user as any,
                 error: token?.error
             }
 
@@ -111,7 +93,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }
 })
 
-export async function getJwt(headersOverride?: Headers): Promise<JWT  | null> {
+export async function getJwt(headersOverride?: Headers): Promise<JWT | null> {
 
     const secure = getBaseUrl().startsWith('https://')
 
@@ -121,5 +103,4 @@ export async function getJwt(headersOverride?: Headers): Promise<JWT  | null> {
         secureCookie: secure,
         salt: `${secure ? '__Secure-' : ''}authjs.session-token`
     });
-
 }
