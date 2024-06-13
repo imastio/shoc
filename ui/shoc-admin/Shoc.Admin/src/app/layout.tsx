@@ -4,7 +4,11 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import NextTopLoader from 'nextjs-toploader'
 import { SessionProvider } from "next-auth/react";
 import { DEFAULT_FONT } from '@/addons/fonts'
-import ProtectedLayout from "./components/protected-layout";
+import ThemeProvider from "@/providers/theme-provider/theme-provider";
+import InitLayout from "./(layouts)/init-layout";
+import AccessGuardLayout from "./(layouts)/access-guard-layout";
+import AccessProvider from "@/providers/access-provider/access-provider";
+import ApiAuthenticationProvider from "@/providers/api-authentication/api-authentication-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,11 +26,17 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <NextTopLoader color='rgb(39 39 42)' height={2} shadow={false} showSpinner={false} />
         <SessionProvider>
-          <ProtectedLayout>
-            <AntdRegistry>
-              {children}
-            </AntdRegistry>
-          </ProtectedLayout>
+          <ApiAuthenticationProvider>
+            <AccessProvider>
+              <AntdRegistry>
+                <ThemeProvider>
+                  <InitLayout>
+                      {children}
+                  </InitLayout>
+                </ThemeProvider>
+              </AntdRegistry>
+            </AccessProvider>
+          </ApiAuthenticationProvider>
         </SessionProvider>
       </body>
     </html>

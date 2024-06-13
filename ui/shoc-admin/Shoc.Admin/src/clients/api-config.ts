@@ -11,8 +11,8 @@ type ApiConfig = {
 export function selfApiConfig(): ApiConfig {
     return {
         root: '/',
-        gateway: '',
-        serviceRouting: false,
+        gateway: 'api/fwd-shoc',
+        serviceRouting: true,
         client: 'space',
         timeout: 60000
     }

@@ -1,23 +1,24 @@
+import { openidConfiguration } from "./well-known";
+
 export async function refreshToken(
     refreshToken: string,
+    accessToken: string,
     options: { 
         issuer: string, 
         clientId: string, 
         clientSecret: string 
     }): Promise<any> {
 
-    const issuerWithSlash = options.issuer.endsWith("/") ? options.issuer : `${options.issuer}/`;
-    const metadataUrl = `${issuerWithSlash}.well-known/openid-configuration`
-    const metadataResponse = await fetch(metadataUrl);
-    const tokenUri = (await metadataResponse.json()).token_endpoint;
+   const openIdConfig = await openidConfiguration(options.issuer);
 
-    const response = await fetch(tokenUri, {
+    const response = await fetch(openIdConfig.token_endpoint, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
             client_id: options.clientId,
             client_secret: options.clientSecret,
             grant_type: "refresh_token",
-            refresh_token: refreshToken
+            refresh_token: refreshToken,
+            access_token: accessToken
         }),
         method: "POST",
     })

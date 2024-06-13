@@ -6,6 +6,7 @@ import { getToken } from "@auth/core/jwt";
 import { headers } from "next/headers";
 import { Awaitable, User } from "@auth/core/types";
 import { getAuthSecret, getBaseUrl, getClientId, getClientSecret, getIssuer } from "./config";
+import { openidConfiguration } from "./well-known";
 
 function profileMapper(profile: Profile): Awaitable<User & any>{
     return {
@@ -14,7 +15,7 @@ function profileMapper(profile: Profile): Awaitable<User & any>{
         email: profile.email,
         emailVerified: profile.emailVerified,
         username: profile.preferred_username,
-        type: profile.user_type
+        userType: profile.user_type
     }
 }
 
@@ -57,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // on the first call when account is available based on OIDC response save the tokens
             if (account) {    
                 return {
+                    id_token: account.id_token,
                     access_token: account.access_token,
                     expires_at: account.expires_at,
                     refresh_token: account.refresh_token,
@@ -72,7 +74,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
             // otherwise token is expired
             try {
-                const refreshed = await refreshToken(String(token.refresh_token || ''), {
+                const refreshed = await refreshToken(String(token.refresh_token || ''), String(token.access_token || ''), {
                     clientId: getClientId(),
                     clientSecret: getClientSecret(),
                     issuer: getIssuer()
@@ -80,6 +82,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 return {
                     ...token,
+                    id_token: refreshed.id_token || token.id_token || null,
                     access_token: refreshed.access_token,
                     expires_at: Math.floor(Date.now() / 1000 + (Number(refreshed.expires_in) || 0)),
                     refresh_token: refreshed.refresh_token ?? token.refresh_token,
@@ -87,11 +90,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
             }
             catch(error){
-                return { ...token, access_token: null, error: "refresh_error" as const }
+                return { ...token, access_token: null, id_token: null, error: "refresh_error" as const }
             }
         }
     }
 })
+
+export async function singleSignOut({ postLogoutRedirectUri, state }: { postLogoutRedirectUri: string, state?: string }){
+    const openIdConfig = await openidConfiguration(getIssuer());
+
+    const jwt = await getJwt();
+
+    const endSession = openIdConfig.end_session_endpoint;
+
+    const urlParams = new URLSearchParams({ id_token_hint: String(jwt?.id_token || '') });
+
+    if(jwt?.id_token){
+        urlParams.set('id_token_hint', String(jwt?.id_token || ''))
+    }
+
+    if(postLogoutRedirectUri){
+        urlParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+    }
+
+    if(state){
+        urlParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+    }
+
+    return { redirectUri: `${endSession}?${urlParams.toString()}` }
+}
+
 
 export async function getJwt(headersOverride?: Headers): Promise<JWT | null> {
 
