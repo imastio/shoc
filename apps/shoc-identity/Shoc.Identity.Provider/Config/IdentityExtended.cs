@@ -256,6 +256,9 @@ public static class IdentityExtended
 
         // get expiration time in seconds
         var tokenExpiration = settings.InteractiveClient?.AccessTokenExpiration ?? (int)TimeSpan.FromMinutes(5).TotalSeconds;
+        
+        // get expiration time of refresh token in seconds
+        var refreshTokenExpiration = settings.InteractiveClient?.RefreshTokenExpiration ?? (int)TimeSpan.FromDays(30).TotalSeconds;
 
         // build the client
         return new Client
@@ -273,7 +276,7 @@ public static class IdentityExtended
             RefreshTokenExpiration = TokenExpiration.Sliding,
             AlwaysIncludeUserClaimsInIdToken = true,
             AccessTokenLifetime = tokenExpiration,
-            SlidingRefreshTokenLifetime = tokenExpiration * 2,
+            SlidingRefreshTokenLifetime = refreshTokenExpiration,
             PostLogoutRedirectUris = allowedLogoutRedirectUris
         };
     }

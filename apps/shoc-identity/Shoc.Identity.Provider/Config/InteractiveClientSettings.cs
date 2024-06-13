@@ -29,4 +29,9 @@ public class InteractiveClientSettings
     /// The access token expiration in seconds
     /// </summary>
     public int? AccessTokenExpiration { get; set; }
+    
+    /// <summary>
+    /// The refresh token expiration in seconds
+    /// </summary>
+    public int? RefreshTokenExpiration { get; set; }
 }
