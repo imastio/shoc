@@ -13,8 +13,10 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@ant-design/pro-layout": "^7.19.8",
     "@auth/core": "^0.32.0",
     "antd": "^5.18.0",
+    "antd-img-crop": "^4.22.0",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "http-proxy": "^1.18.1",
@@ -24,6 +26,7 @@
     "node-cache": "^5.1.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-helmet-async": "^2.0.5",
     "server-only": "^0.0.1",
     "sharp": "0.32.6"
   },

@@ -3,16 +3,31 @@ const routeAccess: Record<string, any> = {
     "/dashboard": { oneOf: [] },
     "/myself": { oneOf: [] },
     "/myself/profile": { oneOf: [] },
-    "/team": { oneOf: ['identity:users:list', 'identity:user_groups:list', 'identity:roles:list', 'identity:privileges:list'] },
-    "/team/users": { oneOf: ['identity:users:list'] },
-    "/team/users/:id": { oneOf: ['identity:users:read'] },
-    "/team/groups": { oneOf: ['identity:user_groups:list'] },
-    "/team/groups/:id": { oneOf: ['identity:user_groups:read'] },
-    "/team/roles": { oneOf: ['identity:roles:list'] },
-    "/team/roles/:id": { oneOf: ['identity:roles:read'] },
-    "/team/privileges": { oneOf: ['identity:privileges:list'] },
-    "/team/privileges/:id": { oneOf: ['identity:privileges:read'] },
+    "/users": { oneOf: ['identity:users:list'] },
+    "/users/[any]": { oneOf: ['identity:users:read'] },
+    "/groups": { oneOf: ['identity:user_groups:list'] },
+    "/groups/[any]": { oneOf: ['identity:user_groups:read'] },
+    "/roles": { oneOf: ['identity:roles:list'] },
+    "/roles/[any]": { oneOf: ['identity:roles:read'] },
+    "/privileges": { oneOf: ['identity:privileges:list'] },
+    "/privileges/[any]": { oneOf: ['identity:privileges:read'] },
 }
 
-export default routeAccess;
+function asRegex(original: string): string {
 
+    let result: string = original;
+
+    // replace slashes to escaped slashes
+    result.replaceAll('/', '\\/')
+
+    // replace [any] placeholders
+    result = result.replaceAll('[any]', '[^\\/]+')
+
+    // require strict match
+    result = `^${result}$`
+
+    return result;
+}
+
+const transformed: Record<string, any> = Object.fromEntries(Object.entries(routeAccess).map(entry => [asRegex(entry[0]), entry[1]]));
+export default transformed;

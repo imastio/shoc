@@ -3,7 +3,8 @@ import { Dropdown, Button, Space } from "antd"
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { rpc } from "@/server-actions/rpc";
+import { rpc, rpcDirect } from "@/server-actions/rpc";
+import { ItemType } from "antd/es/menu/interface";
 
 export default function ConsoleHeaderRightMenu() {
     const session = useSession()
@@ -11,7 +12,7 @@ export default function ConsoleHeaderRightMenu() {
     const name = session?.data?.user?.name || "Unknown User";
     const firstName = name.split(" ")[0];
 
-    const items = [
+    const items: ItemType[] = [
         {
             key: "welcome-group",
             label: `Welcome, ${firstName}`,
@@ -26,7 +27,7 @@ export default function ConsoleHeaderRightMenu() {
                     key: "sign-out",
                     icon: <LogoutOutlined />,
                     label: <span onClick={async () => {
-                        const { data, errors } = await rpc('auth/signleSignOut', { postLogoutRedirectUri: new URL('/signed-out', window.location.href) })
+                        const { data, errors } = await rpc('auth/signleSignOut', { postLogoutRedirectUri: new URL('/', window.location.href).toString() })
 
                         if (!errors) {
                             await rpcDirect('auth/signOut', { endSessionUri: data.redirectUri })

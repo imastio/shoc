@@ -10,7 +10,12 @@ export default function AccessGuardLayout({ children } : { children: ReactNode }
    const { isAllowed } = useRouteAccess();
    const router = useRouter();
 
+   if(!pathname){
+      return false;
+   }
+
    if(!isAllowed(pathname)){
+      console.log(`No access to ${pathname}, forbidden.`)
       router.replace('/access-denied');
       return false;
    }

@@ -5,11 +5,17 @@ import { useSession } from "next-auth/react";
 
 const bypassTypes = ['root', 'admin'];
 
+function resolveRequirements(path: string): any[]{
+    return Object.entries(routeAccess)
+        .filter(entry => RegExp(entry[0]).test(path))
+        .map(entry => entry[1]);
+}
+
 export default function useRouteAccess(){
 
     const { hasAny, hasAll } = useAccess();
     const session = useSession();
-    const type = (session.data?.user as any).userType;
+    const type = (session.data?.user as any)?.userType;
     
     const isAllowed = useCallback((resolvedPath: string | null) => {
 
@@ -17,7 +23,7 @@ export default function useRouteAccess(){
             return false;
         }
 
-        const requirements = routeAccess[resolvedPath];
+        const requirements = resolveRequirements(resolvedPath)[0];
 
         if(!requirements){
             return true;
