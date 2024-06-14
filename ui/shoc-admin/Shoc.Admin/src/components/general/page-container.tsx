@@ -14,7 +14,7 @@ export default function PageContainer({ fluid = false, title, onBack, children, 
         if(title as string){
             setTitle(title as string)
         }
-    }, [title])
+    }, [title, setTitle])
 
 
     return <>

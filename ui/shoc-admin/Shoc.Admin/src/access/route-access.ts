@@ -5,12 +5,14 @@ const routeAccess: Record<string, any> = {
     "/myself/profile": { oneOf: [] },
     "/users": { oneOf: ['identity:users:list'] },
     "/users/[any]": { oneOf: ['identity:users:read'] },
-    "/groups": { oneOf: ['identity:user_groups:list'] },
-    "/groups/[any]": { oneOf: ['identity:user_groups:read'] },
+    "/user-groups": { oneOf: ['identity:user_groups:list'] },
+    "/user-groups/[any]": { oneOf: ['identity:user_groups:read'] },
     "/roles": { oneOf: ['identity:roles:list'] },
     "/roles/[any]": { oneOf: ['identity:roles:read'] },
     "/privileges": { oneOf: ['identity:privileges:list'] },
     "/privileges/[any]": { oneOf: ['identity:privileges:read'] },
+    "/applications": { oneOf: ['identity:applications:list'] },
+    "/applications/[any]": { oneOf: ['identity:applications:read'] },
 }
 
 function asRegex(original: string): string {

@@ -1,7 +1,6 @@
 import useRouteAccess from "@/access/use-route-access";
-import { DashboardOutlined, TeamOutlined } from "@ant-design/icons";
+import { DashboardOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
 import { MenuDataItem } from "@ant-design/pro-layout";
-
 
 const menuPrototypes: MenuDataItem[] = [
     {
@@ -16,6 +15,28 @@ const menuPrototypes: MenuDataItem[] = [
             {
                 path: '/users',
                 name: 'Users'
+            },
+            {
+                path: '/user-groups',
+                name: 'User Groups'
+            },
+            {
+                path: '/roles',
+                name: 'Roles'
+            },
+            {
+                path: '/privileges',
+                name: 'Privileges'
+            }
+        ]
+    },
+    {
+        name: 'Settings',
+        icon: <SettingOutlined />,
+        children: [
+            {
+                path: '/applications',
+                name: 'Applications'
             }
         ]
     }

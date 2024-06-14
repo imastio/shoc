@@ -53,7 +53,9 @@ export default function SingleUserClientPage() {
     }, [withToken])
 
     useEffect(() => {
-        load(userId);
+        if(userId){
+            load(userId);
+        }
     }, [userId, load]);
 
     const verified = user.id && (user.emailVerified || user.phoneVerified);
