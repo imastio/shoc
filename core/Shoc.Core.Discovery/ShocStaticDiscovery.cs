@@ -50,6 +50,7 @@ public class ShocStaticDiscovery : StaticDiscoveryClient
         {
             { "shoc-identity", useHttps ? 11015 : 11014},
             { "shoc-database-migrator", useHttps ? 11013 : 11012},
+            { "shoc-settings", useHttps ? 11019 : 11018}
         };
 
         return services;

@@ -13,6 +13,8 @@ const routeAccess: Record<string, any> = {
     "/privileges/[any]": { oneOf: ['identity:privileges:read'] },
     "/applications": { oneOf: ['identity:applications:list'] },
     "/applications/[any]": { oneOf: ['identity:applications:read'] },
+    "/mailing-profiles": { oneOf: ['settings:mailing_profiles:list'] },
+    "/mailing-profiles/[any]": { oneOf: ['settings:mailing_profiles:read'] },
 }
 
 function asRegex(original: string): string {

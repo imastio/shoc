@@ -89,6 +89,24 @@ services:
     networks:
       - shoc-network
 
+  shoc-settings:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-settings:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-settings/Shoc.Settings
+    container_name: shoc-settings
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-settings.env
+    ports:
+      - '11018:11018'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
   shoc-webgtw:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}
     restart: always

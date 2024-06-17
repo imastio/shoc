@@ -99,12 +99,12 @@ export default function UserSignInHistoryCard(props: any) {
                                 scroll={{ x: '100%' }}
                                 pagination={{
                                     onChange: (page, size) => setPaging({ page: page - 1, size }),
-                                    showTotal: () => false,
                                     total: signinHistory.totalCount,
                                     hideOnSinglePage: false,
                                     showPrevNextJumpers: true,
                                     showLessItems: false,
                                     defaultPageSize: paging.size,
+                                    current: paging.page + 1,
                                     pageSize: paging.size
                                 }}
                             />

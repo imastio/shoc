@@ -37,6 +37,10 @@ const menuPrototypes: MenuDataItem[] = [
             {
                 path: '/applications',
                 name: 'Applications'
+            },
+            {
+                path: '/mailing-profiles',
+                name: 'Mailing Profiles'
             }
         ]
     }
