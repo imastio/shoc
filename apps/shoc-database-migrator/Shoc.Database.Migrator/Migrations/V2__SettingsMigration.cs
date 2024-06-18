@@ -4,17 +4,17 @@ using FluentMigrator;
 namespace Shoc.Database.Migrator.Migrations;
 
 /// <summary>
-/// User Management Migration
+/// Settings Migration
 /// </summary>
-[Migration(3, TransactionBehavior.Default, "Add user management essentials")]
-public class V3__UserManagementMigration : Migration
+[Migration(2, TransactionBehavior.Default, "Add settings tables")]
+public class V2__SettingsMigration : Migration
 {
     /// <summary>
     /// Migrate database up
     /// </summary>
     public override void Up()
     {
-        this.Execute.Script("Migrations.Sql/V3__UserManagementMigration.sql");
+        this.Execute.Script("Migrations.Sql/V2__SettingsMigration.sql");
     }
 
     /// <summary>

@@ -23,6 +23,7 @@ $AllServices = @(
     "shoc-database-migrator",
     "shoc-identity",
     "shoc-settings",
+    "shoc-workspace",
     "shoc-webgtw",
     "shoc-ingress"
 )

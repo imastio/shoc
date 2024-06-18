@@ -25,12 +25,16 @@
 	  <None Update="Migrations.Sql\V1__InfrastructureMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Migrations.Sql\V2__IdentityServerMigration.sql">
+		<None Update="Migrations.Sql\V2__SettingsMigration.sql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  <None Update="Migrations.Sql\V3__IdentityServerMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Migrations.Sql\V3__UserManagementMigration.sql">
+	  <None Update="Migrations.Sql\V4__UserManagementMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  
 	</ItemGroup>
 
 </Project>

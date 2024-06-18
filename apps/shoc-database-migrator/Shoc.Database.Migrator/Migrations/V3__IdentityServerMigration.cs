@@ -6,15 +6,15 @@ namespace Shoc.Database.Migrator.Migrations;
 /// <summary>
 /// Identity Server Migration
 /// </summary>
-[Migration(2, TransactionBehavior.Default, "Add essentials for Identity Server")]
-public class V2__IdentityServerMigration : Migration
+[Migration(3, TransactionBehavior.Default, "Add essentials for Identity Server")]
+public class V3__IdentityServerMigration : Migration
 {
     /// <summary>
     /// Migrate database up
     /// </summary>
     public override void Up()
     {
-        this.Execute.Script("Migrations.Sql/V2__IdentityServerMigration.sql");
+        this.Execute.Script("Migrations.Sql/V3__IdentityServerMigration.sql");
     }
 
     /// <summary>

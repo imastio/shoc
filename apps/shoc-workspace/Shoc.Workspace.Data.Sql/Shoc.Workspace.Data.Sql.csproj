@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="../../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <ProjectReference Include="../Shoc.Workspace.Model/Shoc.Workspace.Model.csproj" />
+        <ProjectReference Include="..\..\..\core\Shoc.Core\Shoc.Core.csproj" />
+        <ProjectReference Include="..\..\..\core\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
+        <ProjectReference Include="..\Shoc.Workspace.Data\Shoc.Workspace.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Operations/DataOps.xsd">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Operations/Workspace.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

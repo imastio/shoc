@@ -13,6 +13,10 @@ export default function AuthenticatedRedirect(){
         if(!authenticated){
             return;
         }
+        
+        if(returnUrl?.startsWith('/connect/authorize/callback')){
+            return;
+        }
 
         if(returnUrl?.startsWith('/')){
             navigate(returnUrl, { replace: true })

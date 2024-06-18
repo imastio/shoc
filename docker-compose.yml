@@ -106,6 +106,24 @@ services:
       - shoc-database
     networks:
       - shoc-network
+  
+  shoc-workspace:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-workspace:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-workspace/Shoc.Workspace
+    container_name: shoc-workspace
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-workspace.env
+    ports:
+      - '11020:11020'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
 
   shoc-webgtw:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}

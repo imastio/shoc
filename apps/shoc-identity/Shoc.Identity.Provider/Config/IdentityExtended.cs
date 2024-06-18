@@ -259,7 +259,7 @@ public static class IdentityExtended
         
         // get expiration time of refresh token in seconds
         var refreshTokenExpiration = settings.InteractiveClient?.RefreshTokenExpiration ?? (int)TimeSpan.FromDays(30).TotalSeconds;
-
+        
         // build the client
         return new Client
         {

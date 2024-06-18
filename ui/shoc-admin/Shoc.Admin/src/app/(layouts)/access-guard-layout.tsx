@@ -15,7 +15,6 @@ export default function AccessGuardLayout({ children } : { children: ReactNode }
    }
 
    if(!isAllowed(pathname)){
-      console.log(`No access to ${pathname}, forbidden.`)
       router.replace('/access-denied');
       return false;
    }

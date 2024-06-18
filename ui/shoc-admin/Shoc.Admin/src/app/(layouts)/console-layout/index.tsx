@@ -22,6 +22,7 @@ export default function ConsoleLayout({ children } : { children: ReactNode }){
             locale="en-US"
             title={defaultTitle} 
             logo={false}
+            headerTitleRender={(_, title) => <h1><Link href="/">{title}</Link></h1>}
             siderWidth={270}
             menu={{ request: async () => menu }}
             location={{ pathname: pathname || undefined }}

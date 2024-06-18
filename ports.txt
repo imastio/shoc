@@ -19,6 +19,7 @@ shoc-database-migrator - 11012/11013
 shoc-identity (server) - 11014/11015
 shoc-identity-ui (spa) - 11016/11017
 shoc-settings - 11018/11019
+shoc-settings - 11020/11021
 RESERVED - 11022-11039
 ----
 
