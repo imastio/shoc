@@ -34,6 +34,9 @@
 	  <None Update="Migrations.Sql\V4__UserManagementMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Migrations.Sql\V5__WorkspacesMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  
 	</ItemGroup>
 

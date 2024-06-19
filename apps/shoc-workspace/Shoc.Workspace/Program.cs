@@ -7,8 +7,8 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
-using Shoc.Settings.Services;
 using Shoc.Workspace.Config;
+using Shoc.Workspace.Services;
 
 // start building web application
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +23,7 @@ builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
 builder.Services.AddAuthenticationClient(builder.Configuration);
-builder.Services.AddSingleton<MailingProfileService>();
+builder.Services.AddSingleton<WorkspaceService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

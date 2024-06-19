@@ -37,6 +37,27 @@ public class WorkspaceRepository : IWorkspaceRepository
     }
 
     /// <summary>
+    /// Gets the objects by userId
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<WorkspaceModel>> GetAllByUserId(string userId)
+    {
+        return this.dataOps.Connect().Query("Workspace.Workspace", "GetAllByUserId").ExecuteAsync<WorkspaceModel>(new
+        {
+            UserId = userId
+        });
+    }
+
+    /// <summary>
+    /// Get all referential values
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<WorkspaceReferentialValueModel>> GetAllReferentialValues()
+    {
+        return this.dataOps.Connect().Query("Workspace.Workspace", "GetAllReferentialValues").ExecuteAsync<WorkspaceReferentialValueModel>();
+    }
+    
+    /// <summary>
     /// Gets the application by id
     /// </summary>
     /// <returns></returns>
@@ -45,6 +66,18 @@ public class WorkspaceRepository : IWorkspaceRepository
         return this.dataOps.Connect().QueryFirst("Workspace.Workspace", "GetById").ExecuteAsync<WorkspaceModel>(new
         {
             Id = id
+        });
+    }
+
+    /// <summary>
+    /// Gets the object by name
+    /// </summary>
+    /// <returns></returns>
+    public Task<WorkspaceModel> GetByName(string name)
+    {
+        return this.dataOps.Connect().QueryFirst("Workspace.Workspace", "GetByName").ExecuteAsync<WorkspaceModel>(new
+        {
+            Name = name.ToLowerInvariant()
         });
     }
 
@@ -60,6 +93,9 @@ public class WorkspaceRepository : IWorkspaceRepository
         
         // assign the id
         input.Id ??= StdIdGenerator.Next(WorkspaceObjects.WORKSPACE).ToLowerInvariant();
+
+        // lowercase the name
+        input.Name = input.Name?.ToLowerInvariant();
         
         // add input to argument
         argument.AddDynamicParams(input);
@@ -68,8 +104,7 @@ public class WorkspaceRepository : IWorkspaceRepository
         argument.AddDynamicParams(new
         {
             OwnerMembershipId = StdIdGenerator.Next(WorkspaceObjects.WORKSPACE_MEMBER).ToLowerInvariant(),
-            UserId = input.CreatedBy,
-            Role = WorkspaceRoles.OWNER
+            OwnerRole = WorkspaceRoles.OWNER
         });
         
         // create in the store

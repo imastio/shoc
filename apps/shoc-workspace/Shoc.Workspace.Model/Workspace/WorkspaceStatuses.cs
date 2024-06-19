@@ -10,6 +10,11 @@ namespace Shoc.Workspace.Model.Workspace;
 public class WorkspaceStatuses
 {
     /// <summary>
+    /// The workspace is pending
+    /// </summary>
+    public const string PENDING = "pending";
+    
+    /// <summary>
     /// The workspace is active
     /// </summary>
     public const string ACTIVE = "active";

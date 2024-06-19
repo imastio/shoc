@@ -10,137 +10,55 @@
 
     <SqlOperation Name="GetAll">
       <TextCommand>
-        SELECT * FROM `org_employees`
-        ORDER BY `FirstName` ASC;
+        SELECT * FROM `wspc_workspaces`
+        ORDER BY `Name` ASC;
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetAllExtended">
+    <SqlOperation Name="GetAllByUserId">
       <TextCommand>
-        SELECT 
-          emp.*, 
-          emt.*, 
-          CONCAT(mgr.FirstName, ' ', mgr.LastName) as ManagerName, 
-          dpt.Name as DepartmentName,
-          dmgr.ManagerId as DepartmentManagerId,
-          CONCAT(depmgr.FirstName, ' ', depmgr.LastName) as DepartmentManagerName
-        FROM `org_employees` emp 
-        INNER JOIN `org_employees_employment` emt
-        ON emp.Id = emt.EmployeeId
-        LEFT JOIN `org_employees` mgr
-        ON emt.ManagerId = mgr.Id
-        LEFT JOIN `org_departments` dpt
-        ON emt.DepartmentId = dpt.Id
-        LEFT JOIN `org_departments_manager` dmgr
-        ON emt.DepartmentId = dmgr.DepartmentId
-        LEFT JOIN `org_employees` depmgr
-        ON dmgr.ManagerId = depmgr.Id
-        ORDER BY `FirstName` ASC;
+        SELECT w.* FROM
+        `wspc_workspaces` w
+        INNER JOIN
+        `wspc_workspace_members` wm
+        ON w.Id = wm.WorkspaceId
+        WHERE wm.UserId = @UserId
       </TextCommand>
     </SqlOperation>
 
     <SqlOperation Name="GetAllReferentialValues">
       <TextCommand>
-        SELECT `Id`, `FirstName`, `LastName` FROM `org_employees`
-        ORDER BY `FirstName` ASC;
+        SELECT `Id`, `Name`, `Title` FROM `wspc_workspaces`
+        ORDER BY `Name` ASC;
       </TextCommand>
     </SqlOperation>
-
     
     <SqlOperation Name="GetById">
       <TextCommand>
-        SELECT * FROM `org_employees`
+        SELECT * FROM `wspc_workspaces`
         WHERE `Id` = @Id;
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetExtendedById">
+    <SqlOperation Name="GetByName">
       <TextCommand>
-        SELECT 
-          emp.*,
-          emt.*, 
-          CONCAT(mgr.FirstName, ' ', mgr.LastName) as ManagerName, 
-          dpt.Name as DepartmentName,
-          dmgr.ManagerId as DepartmentManagerId,
-          CONCAT(depmgr.FirstName, ' ', depmgr.LastName) as DepartmentManagerName
-        FROM `org_employees` emp
-        INNER JOIN `org_employees_employment` emt
-        ON emp.Id = emt.EmployeeId
-        LEFT JOIN `org_employees` mgr
-        ON emt.ManagerId = mgr.Id
-        LEFT JOIN `org_departments` dpt
-        ON emt.DepartmentId = dpt.Id
-        LEFT JOIN `org_departments_manager` dmgr
-        ON emt.DepartmentId = dmgr.DepartmentId
-        LEFT JOIN `org_employees` depmgr
-        ON dmgr.ManagerId = depmgr.Id
-        WHERE emp.`Id` = @Id;
+        SELECT * FROM `wspc_workspaces`
+        WHERE `Name` = @Name;
       </TextCommand>
     </SqlOperation>
-
-    <SqlOperation Name="GetByEmail">
-      <TextCommand>
-        SELECT * FROM `org_employees`
-        WHERE `Email` = @Email;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetByPhone">
-      <TextCommand>
-        SELECT * FROM `org_employees`
-        WHERE `PhoneNumber` = @PhoneNumber;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetByUserId">
-      <TextCommand>
-        SELECT * FROM `org_employees`
-        WHERE `UserId` = @UserId;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetExtendedByUserId">
-      <TextCommand>
-        SELECT
-        emp.*,
-        emt.*,
-        CONCAT(mgr.FirstName, ' ', mgr.LastName) as ManagerName,
-        dpt.Name as DepartmentName,
-        dmgr.ManagerId as DepartmentManagerId,
-        CONCAT(depmgr.FirstName, ' ', depmgr.LastName) as DepartmentManagerName
-        FROM `org_employees` emp
-        INNER JOIN `org_employees_employment` emt
-        ON emp.Id = emt.EmployeeId
-        LEFT JOIN `org_employees` mgr
-        ON emt.ManagerId = mgr.Id
-        LEFT JOIN `org_departments` dpt
-        ON emt.DepartmentId = dpt.Id
-        LEFT JOIN `org_departments_manager` dmgr
-        ON emt.DepartmentId = dmgr.DepartmentId
-        LEFT JOIN `org_employees` depmgr
-        ON dmgr.ManagerId = depmgr.Id
-        WHERE emp.`UserId` = @UserId;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetPictureById">
-      <TextCommand>
-        SELECT * FROM `org_employees_picture` WHERE `EmployeeId` = @Id;
-      </TextCommand>
-    </SqlOperation>
-
+    
     <SqlOperation Name="Create">
 
       <TextCommand>
-        INSERT INTO `org_employees`
-        (`Id`, `FirstName`, `LastName`, `Email`, `PhoneNumber`, `Headline`, `Type`, `UserId`)
+        INSERT INTO `wspc_workspaces`
+        (`Id`, `Name`, `Title`, `Type`, `Status`, `CreatedBy`)
         VALUES
-        (@Id, @FirstName, @LastName, @Email, @PhoneNumber, @Headline, @Type, @UserId);
+        (@Id, @Name, @Title, @Type, @Status, @CreatedBy);
 
-        INSERT INTO `org_employees_employment`
-        (`EmployeeId`, `Status`, `Position`, `ManagerId`, `DepartmentId`, `Balance`, `MembershipStatus`)
+        INSERT INTO `wspc_workspace_members`
+        (`Id`, `WorkspaceId`, `UserId`, `Role`)
         VALUES
-        (@Id, @Status, @Position, @ManagerId, @DepartmentId, @Balance, @MembershipStatus);
+        (@OwnerMembershipId, @Id, @CreatedBy, @OwnerRole);
 
         SELECT * FROM `org_employees`
         WHERE `Id` = @Id;
@@ -150,60 +68,23 @@
 
     <SqlOperation Name="UpdateById">
       <TextCommand>
-        UPDATE `org_employees`
+        UPDATE `wspc_workspaces`
         SET
-        `FirstName` = @FirstName,
-        `LastName` = @LastName,
-        `Email` = @Email,
-        `PhoneNumber` = @PhoneNumber,
-        `Headline` = @Headline,
-        `Type` = @Type
+        `Title` = @Title,
+        `Status` = @Status
         WHERE
         `Id` = @Id;
 
-        SELECT * FROM `org_employees`
+        SELECT * FROM `wspc_workspaces`
         WHERE `Id` = @Id;
 
       </TextCommand>
     </SqlOperation>
-
-    <SqlOperation Name="UpdateUserById">
-      <TextCommand>
-        UPDATE `org_employees`
-        SET
-        `UserId` = @UserId
-        WHERE
-        `Id` = @Id;
-
-        SELECT * FROM `org_employees`
-        WHERE `Id` = @Id;
-
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="UpdatePictureById">
-      <TextCommand>
-        REPLACE INTO `org_employees_picture`
-        (`EmployeeId`, `PictureUri`)
-        VALUES
-        (@Id, @PictureUri);
-
-        UPDATE `org_employees`
-        SET
-        `Updated` = CURRENT_TIMESTAMP
-        WHERE
-        `Id` = @Id;
-
-        SELECT * FROM `org_employees_picture` WHERE `EmployeeId` = @Id;
-
-      </TextCommand>
-    </SqlOperation>
-
+    
     <SqlOperation Name="DeleteById">
       <TextCommand>
-        SELECT * FROM `org_employees`
-        WHERE `Id` = @Id;
-        DELETE FROM `org_employees` WHERE `Id` = @Id;
+        SELECT * FROM `wspc_workspaces` WHERE `Id` = @Id;
+        DELETE FROM `wspc_workspaces` WHERE `Id` = @Id;
       </TextCommand>
     </SqlOperation>
 

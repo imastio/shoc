@@ -16,10 +16,28 @@ public interface IWorkspaceRepository
     Task<IEnumerable<WorkspaceModel>> GetAll();
     
     /// <summary>
-    /// Gets the application by id
+    /// Gets the objects by userId
+    /// </summary>
+    /// <returns></returns>
+    Task<IEnumerable<WorkspaceModel>> GetAllByUserId(string userId);
+    
+    /// <summary>
+    /// Get all referential values
+    /// </summary>
+    /// <returns></returns>
+    Task<IEnumerable<WorkspaceReferentialValueModel>> GetAllReferentialValues();
+    
+    /// <summary>
+    /// Gets the object by id
     /// </summary>
     /// <returns></returns>
     Task<WorkspaceModel> GetById(string id);
+    
+    /// <summary>
+    /// Gets the object by name
+    /// </summary>
+    /// <returns></returns>
+    Task<WorkspaceModel> GetByName(string name);
     
     /// <summary>
     /// Creates the object with given input
