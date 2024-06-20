@@ -11,6 +11,11 @@ public class WorkspaceUpdateModel
     public string Id { get; set; }
     
     /// <summary>
+    /// The workspace name
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
     /// The workspace title
     /// </summary>
     public string Title { get; set; }

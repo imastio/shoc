@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Shoc.Core;
 using Shoc.Workspace.Data;
@@ -12,17 +13,29 @@ namespace Shoc.Workspace.Services;
 public abstract class WorkspaceServiceBase
 {
     /// <summary>
+    /// The name pattern for workspace
+    /// </summary>
+    private static readonly Regex NAME_PATTERN = new(@"^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$");
+    
+    /// <summary>
     /// The object repository
     /// </summary>
     protected readonly IWorkspaceRepository workspaceRepository;
 
     /// <summary>
+    /// The workspace user repository
+    /// </summary>
+    protected readonly IWorkspaceUserRepository workspaceUserRepository;
+
+    /// <summary>
     /// The base implementation of the service
     /// </summary>
     /// <param name="workspaceRepository">The object repository</param>
-    protected WorkspaceServiceBase(IWorkspaceRepository workspaceRepository)
+    /// <param name="workspaceUserRepository">The workspace user repository</param>
+    protected WorkspaceServiceBase(IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository)
     {
         this.workspaceRepository = workspaceRepository;
+        this.workspaceUserRepository = workspaceUserRepository;
     }
 
     /// <summary>
@@ -49,6 +62,28 @@ public abstract class WorkspaceServiceBase
 
         // return the object
         return result;
+    }
+    
+    /// <summary>
+    /// Validate user by id
+    /// </summary>
+    /// <param name="id">The id to validate</param>
+    protected async Task RequireUser(string id)
+    {
+        // no user id given
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_USER).AsException();
+        }
+        
+        // try getting object
+        var result = await this.workspaceUserRepository.GetById(id);
+
+        // the user does not exist
+        if (result == null)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_USER).AsException();
+        }
     }
 
     /// <summary>
@@ -79,5 +114,20 @@ public abstract class WorkspaceServiceBase
         }
 
         throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_STATUS).AsException();
+    }
+
+    /// <summary>
+    /// Validate object name
+    /// </summary>
+    /// <param name="name">The name to validate</param>
+    protected static void ValidateName(string name)
+    {
+        // name matches the pattern
+        if (NAME_PATTERN.IsMatch(name))
+        {
+            return;
+        }
+
+        throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_NAME).AsException();
     }
 }

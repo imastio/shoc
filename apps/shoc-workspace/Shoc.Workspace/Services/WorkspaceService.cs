@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Core;
 using Shoc.Workspace.Data;
+using Shoc.Workspace.Model;
 using Shoc.Workspace.Model.Workspace;
 
 namespace Shoc.Workspace.Services;
@@ -15,7 +16,8 @@ public class WorkspaceService : WorkspaceServiceBase
     /// Creates new instance of the service
     /// </summary>
     /// <param name="workspaceRepository">The object repository</param>
-    public WorkspaceService(IWorkspaceRepository workspaceRepository) : base(workspaceRepository)
+    /// <param name="workspaceUserRepository">The workspace user repository</param>
+    public WorkspaceService(IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository) : base(workspaceRepository, workspaceUserRepository)
     {
     }
 
@@ -47,32 +49,6 @@ public class WorkspaceService : WorkspaceServiceBase
     {
         return this.RequireWorkspaceById(id);
     }
-    
-    /// <summary>
-    /// Gets the object by name
-    /// </summary>
-    /// <param name="name">The name of the object</param>
-    /// <returns></returns>
-    public async Task<WorkspaceModel> GetByName(string name)
-    {
-        // name should be a valid string
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw ErrorDefinition.NotFound().AsException();
-        }
-
-        // try getting object by name
-        var result = await this.workspaceRepository.GetByName(name);
-
-        // make sure object exists
-        if (result == null)
-        {
-            throw ErrorDefinition.NotFound().AsException();
-        }
-
-        // return the object
-        return result;
-    }
         
     /// <summary>
     /// Creates new object
@@ -84,21 +60,36 @@ public class WorkspaceService : WorkspaceServiceBase
         // validate type
         ValidateType(input.Type);
         
+        // validate name
+        ValidateName(input.Name);
+        
         // initialize the status
         input.Status = WorkspaceStatuses.ACTIVE;
 
-        // TODO: Implement
-        throw ErrorDefinition.Data().AsException();
+        // make sure title exists otherwise use name
+        input.Title = string.IsNullOrWhiteSpace(input.Title) ? input.Name : input.Title;
+
+        // try getting by name
+        var existing = await this.workspaceRepository.GetByName(input.Name);
+
+        // already exists
+        if (existing != null)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.EXISTING_NAME).AsException();
+        }
+
+        // require user to be there
+        await this.RequireUser(input.CreatedBy);
         
         // perform the operation
         return await this.workspaceRepository.Create(input);
     }
 
     /// <summary>
-    /// Updates the employee 
+    /// Updates the object 
     /// </summary>
-    /// <param name="id">The employee id</param>
-    /// <param name="input">The employee update model</param>
+    /// <param name="id">The object id</param>
+    /// <param name="input">The object update model</param>
     /// <returns></returns>
     public async Task<WorkspaceModel> UpdateById(string id, WorkspaceUpdateModel input)
     {
@@ -106,11 +97,26 @@ public class WorkspaceService : WorkspaceServiceBase
         input.Id = id;
 
         // make sure object exists 
-        await this.GetById(id);
+        var existing = await this.GetById(id);
+        
+        // validate the name
+        ValidateName(input.Name);
+        
+        // validate status
+        ValidateStatus(input.Status);
+        
+        // make sure title exists otherwise use name
+        input.Title = string.IsNullOrWhiteSpace(input.Title) ? input.Name : input.Title;
 
-        // TODO: Implement
-        throw ErrorDefinition.Data().AsException();
+        // try getting by name
+        var byName = await this.workspaceRepository.GetByName(input.Name);
 
+        // if exists object by the name and is not the same object then throw error
+        if (byName != null && existing.Id != byName.Id)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.EXISTING_NAME).AsException();
+        }
+        
         // perform the operation
         return await this.workspaceRepository.UpdateById(id, input);
     }

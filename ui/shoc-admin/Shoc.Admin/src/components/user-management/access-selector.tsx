@@ -1,6 +1,7 @@
 import { selfClient } from "@/clients/shoc";
 import IdentityAccessClient from "@/clients/shoc/identity/identity-accesses-client";
 import SettingsAccessesClient from "@/clients/shoc/settings/settings-accesses-client";
+import WorkspaceAccessesClient from "@/clients/shoc/workspace/workspace-accesses-client";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { Select } from "antd";
 import { useEffect } from "react";
@@ -11,6 +12,11 @@ const getFetcher = (area: string) => {
 
     if(area === 'identity'){
         const client = selfClient(IdentityAccessClient);
+        return client.getAll.bind(client);
+    }
+
+    if(area === 'workspace'){
+        const client = selfClient(WorkspaceAccessesClient);
         return client.getAll.bind(client);
     }
 

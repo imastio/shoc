@@ -25,6 +25,11 @@ public class WorkspaceRoles
     public const string MEMBER = "member";
     
     /// <summary>
+    /// The guest of the workspace
+    /// </summary>
+    public const string GUEST = "guest";
+    
+    /// <summary>
     /// Get and initialize all the constants
     /// </summary>
     public static readonly ISet<string> ALL = GetAll();

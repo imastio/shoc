@@ -108,7 +108,7 @@ public class WorkspaceRepository : IWorkspaceRepository
         });
         
         // create in the store
-        return this.dataOps.Connect().QueryFirst("Workspace.Workspace", "Create").ExecuteAsync<WorkspaceModel>(input);
+        return this.dataOps.Connect().QueryFirst("Workspace.Workspace", "Create").ExecuteAsync<WorkspaceModel>(argument);
     }
 
     /// <summary>

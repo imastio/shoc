@@ -1,5 +1,5 @@
 import useRouteAccess from "@/access/use-route-access";
-import { DashboardOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
+import { DashboardOutlined, FolderOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
 import { MenuDataItem } from "@ant-design/pro-layout";
 
 const menuPrototypes: MenuDataItem[] = [
@@ -7,6 +7,11 @@ const menuPrototypes: MenuDataItem[] = [
         path: '/',
         name: 'Dashboard',
         icon: <DashboardOutlined />,
+    },
+    {
+        path: '/workspaces',
+        name: 'Workspaces',
+        icon: <FolderOutlined />,
     },
     {
         name: 'User Management',

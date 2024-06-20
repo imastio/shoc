@@ -43,6 +43,8 @@ public static class DataConfiguration
         services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
         services.AddSingleton<IAccessRepository, AccessRepository>();
         services.AddSingleton<IWorkspaceRepository, WorkspaceRepository>();
+        services.AddSingleton<IWorkspaceUserRepository, WorkspaceUserRepository>();
+        services.AddSingleton<IWorkspaceMemberRepository, WorkspaceMemberRepository>();
             
         // chain services
         return services;

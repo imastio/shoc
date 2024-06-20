@@ -18,6 +18,11 @@ public class WorkspaceAccesses
     /// The list access to workspace objects
     /// </summary>
     public const string WORKSPACE_WORKSPACES_LIST = "workspace:workspaces:list";
+    
+    /// <summary>
+    /// The list references access to workspace object references
+    /// </summary>
+    public const string WORKSPACE_WORKSPACES_LIST_REFERENCES = "workspace:workspaces:list_references";
 
     /// <summary>
     /// A 'create' access to workspace objects
@@ -28,6 +33,11 @@ public class WorkspaceAccesses
     /// An edit access to workspace objects
     /// </summary>
     public const string WORKSPACE_WORKSPACES_EDIT = "workspace:workspaces:edit";
+    
+    /// <summary>
+    /// The manage access to workspace objects
+    /// </summary>
+    public const string WORKSPACE_WORKSPACES_MANAGE = "workspace:workspaces:manage";
     
     /// <summary>
     /// A delete access to workspace objects

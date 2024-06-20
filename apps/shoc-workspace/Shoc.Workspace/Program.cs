@@ -24,6 +24,7 @@ builder.Services.AddPersistenceDataProtection();
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddSingleton<WorkspaceService>();
+builder.Services.AddSingleton<WorkspaceMemberService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

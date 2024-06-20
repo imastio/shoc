@@ -15,6 +15,8 @@ const routeAccess: Record<string, any> = {
     "/applications/[any]": { oneOf: ['identity:applications:read'] },
     "/mailing-profiles": { oneOf: ['settings:mailing_profiles:list'] },
     "/mailing-profiles/[any]": { oneOf: ['settings:mailing_profiles:read'] },
+    "/workspaces": { oneOf: ['workspace:workspaces:list'] },
+    "/workspaces/[any]": { oneOf: ['workspace:workspaces:read'] },
 }
 
 function asRegex(original: string): string {

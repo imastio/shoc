@@ -60,7 +60,7 @@
         VALUES
         (@OwnerMembershipId, @Id, @CreatedBy, @OwnerRole);
 
-        SELECT * FROM `org_employees`
+        SELECT * FROM `wspc_workspaces`
         WHERE `Id` = @Id;
       </TextCommand>
 
@@ -70,6 +70,7 @@
       <TextCommand>
         UPDATE `wspc_workspaces`
         SET
+        `Name` = @Name,
         `Title` = @Title,
         `Status` = @Status
         WHERE

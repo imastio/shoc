@@ -4,6 +4,10 @@ export const accessAreas = [
         display: 'Identity and User Management'
     },
     {
+        key: 'workspace', 
+        display: 'Workspace'
+    },
+    {
         key: 'settings', 
         display: 'Settings'
     }
