@@ -5,6 +5,9 @@ import { SessionProvider } from "next-auth/react";
 import { DEFAULT_FONT } from '@/addons/fonts'
 import ApiAuthenticationProvider from "@/providers/api-authentication/api-authentication-provider";
 import TitleProvider from "@/providers/title-provider/title-provider";
+import IntlProvider from "@/addons/intl-provider";
+import localeConfig from "@/i18n/locale-config";
+import { getLocaleSource } from "@/i18n";
 
 export const metadata: Metadata = {
   title: "Shoc Platform",
@@ -17,6 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const localeSource = getLocaleSource(localeConfig.defaultLocale);
+
   return (
     <html lang="en" suppressHydrationWarning className={DEFAULT_FONT.className}>
       <body suppressHydrationWarning>
@@ -24,7 +29,9 @@ export default function RootLayout({
         <SessionProvider>
           <ApiAuthenticationProvider>
                 <TitleProvider>
-                      {children}
+                  <IntlProvider locale={localeSource.locale} defaultLocale={localeSource.defaultLocale} messages={localeSource.messages}>
+                    {children}
+                  </IntlProvider>
                 </TitleProvider>
           </ApiAuthenticationProvider>
         </SessionProvider>

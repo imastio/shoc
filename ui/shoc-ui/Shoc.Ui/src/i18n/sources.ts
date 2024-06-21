@@ -17,11 +17,13 @@ declare global {
     }
 }
 
-export function getLocaleSource(locale: string) {
+export function getLocaleSource(locale?: string) {
 
     if(!localeConfig.availableLocales.some(item => item === locale)){
         locale = localeConfig.defaultLocale;
     }
+
+    locale = locale || localeConfig.defaultLocale;
 
     return {
         locale,
