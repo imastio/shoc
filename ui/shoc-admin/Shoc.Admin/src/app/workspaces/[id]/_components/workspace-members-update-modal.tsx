@@ -67,7 +67,7 @@ export default function WorkspaceMembersUpdateModal({workspaceId, existing, open
             onCancel={onCloseWrapper}
             destroyOnClose={true}
             forceRender
-            title="Add member to workspace"
+            title="Edit member of workspace"
             confirmLoading={progress}
             onOk={() => form.submit()}
         >

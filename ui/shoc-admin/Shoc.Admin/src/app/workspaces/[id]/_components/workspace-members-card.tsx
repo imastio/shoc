@@ -87,8 +87,8 @@ export function WorkspaceMembersCard({workspaceId, loading, onUpdate = () => {}}
                         rowKey={item => item.id}
                         renderItem={item => <List.Item key={item.id}
                             actions={[
-                                <Button key="edit-button" size="small" icon={<EditOutlined />} onClick={() => setEditingItem(item)} />,
-                                <Button key="delete-button" size="small" icon={<DeleteOutlined />} danger onClick={() => setDeletingItem(item)} />
+                                <Button key="edit-button" size="small" icon={<EditOutlined />} disabled={item.role === 'owner'} onClick={() => setEditingItem(item)} />,
+                                <Button key="delete-button" size="small" icon={<DeleteOutlined />} danger disabled={item.role === 'owner'} onClick={() => setDeletingItem(item)} />
                             ]}>
                             <List.Item.Meta title={`${item.fullName} (${workspaceRolesMap[item.role] || item.role})`} description={item.email} />
                         </List.Item>

@@ -135,7 +135,13 @@ public class WorkspaceMemberService : WorkspaceServiceBase
         
         // ensure role is valid
         ValidateRole(input.Role);
-        
+
+        // owner cannot be added as a member
+        if (input.Role == WorkspaceRoles.OWNER)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_ROLE).AsException();
+        }
+         
         // try get existing membership record for the user
         var existing = await this.workspaceMemberRepository.GetByUserId(workspaceId, input.UserId);
 
@@ -167,7 +173,22 @@ public class WorkspaceMemberService : WorkspaceServiceBase
         
         // validate role
         ValidateRole(input.Role);
+        
+        // owner cannot be added as a member
+        if (input.Role == WorkspaceRoles.OWNER)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_ROLE).AsException();
+        }
 
+        // try get existing object
+        var existing = await this.GetById(workspaceId, id);
+
+        // if modifying owner record we cannot downgrade it
+        if (existing.Role == WorkspaceRoles.OWNER && input.Role != WorkspaceRoles.OWNER)
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_ROLE).AsException();
+        }
+        
         // perform the operation
         return await this.workspaceMemberRepository.UpdateById(workspaceId, id, input);
     }
@@ -181,13 +202,19 @@ public class WorkspaceMemberService : WorkspaceServiceBase
     public async Task<WorkspaceMemberModel> DeleteById(string workspaceId, string id)
     {
         // make sure record exists
-        await this.GetById(workspaceId, id);
+        var existing = await this.GetById(workspaceId, id);
 
+        // you cannot remove the owner
+        if (existing.Role == WorkspaceRoles.OWNER)
+        {
+            throw ErrorDefinition.Validation().AsException();
+        }
+        
         // perform the operation
-        var existing = await this.workspaceMemberRepository.DeleteById(workspaceId, id);
+        var deleted = await this.workspaceMemberRepository.DeleteById(workspaceId, id);
 
         // no such object 
-        if (existing == null)
+        if (deleted == null)
         {
             throw ErrorDefinition.NotFound().AsException();
         }
