@@ -31,8 +31,12 @@ function GetCsharpProject ($serviceName) {
 
 function GetNodeProject ($serviceName) {
 
+	if($serviceName -eq "shoc-admin"){
+		return "$PSScriptRoot/ui/shoc-admin/Shoc.Admin/"
+	}
+	
 	if($serviceName -eq "shoc-ui"){
-		return "$PSScriptRoot/Shoc.Ui/"
+		return "$PSScriptRoot/ui/shoc-ui/Shoc.Ui/"
 	}
 	
 	return ""
@@ -52,7 +56,7 @@ if(-not [string]::IsNullOrWhiteSpace($CsharpProj)){
 } 
 elseif(-not [string]::IsNullOrWhiteSpace($NodeProj)) {
 	Write-Host "Detected package.json at $NodeProj to publish..."
-    yarn --cwd $NodeProj build  
+    pnpm --dir $NodeProj build  
     Exit
 }
 else {
