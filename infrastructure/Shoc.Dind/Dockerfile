@@ -1,4 +1,4 @@
-FROM docker:26-dind
+FROM docker:dind-rootless
 
 ENV DOCKER_TLS_CERTDIR=
 
