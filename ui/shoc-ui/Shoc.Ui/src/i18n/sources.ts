@@ -1,10 +1,12 @@
+import globalEn from "./messages/en/global.json";
 import errorsEn from "./messages/en/errors.json";
 import localeConfig from "./locale-config";
 
 export const localeMessages = {
    
     en: {
-        ...errorsEn
+        ...globalEn,
+        ...errorsEn,
     }
 };
 

@@ -7,13 +7,8 @@
     <Import Project="../../Shoc.Shared.proj" />
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <ProjectReference Include="../../foundation/Shoc.Access/Shoc.Access.csproj" />
-        <ProjectReference Include="../../core/Shoc.Core.OpenId/Shoc.Core.OpenId.csproj" />
         <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+        <ProjectReference Include="../../foundation/Shoc.ObjectAccess/Shoc.ObjectAccess.csproj" />
+        <ProjectReference Include="../../foundation/Shoc.ObjectAccess.Sql/Shoc.ObjectAccess.Sql.csproj" />
     </ItemGroup>
-
 </Project>

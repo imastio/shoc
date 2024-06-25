@@ -7,6 +7,7 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
+using Shoc.ApiCore.ObjectAccess;
 using Shoc.Workspace.Config;
 using Shoc.Workspace.Services;
 
@@ -23,8 +24,10 @@ builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
 builder.Services.AddAuthenticationClient(builder.Configuration);
+builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<WorkspaceService>();
 builder.Services.AddSingleton<WorkspaceMemberService>();
+builder.Services.AddSingleton<UserWorkspaceService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

@@ -19,6 +19,7 @@
     <ProjectReference Include="../../../foundation/Shoc.DataProtection/Shoc.DataProtection.csproj" />
     <ProjectReference Include="../../../foundation/Shoc.DataProtection.Sql/Shoc.DataProtection.Sql.csproj" />
     <ProjectReference Include="../../../foundation/Shoc.Mailing.Sql/Shoc.Mailing.Sql.csproj" />
+    <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.ObjectAccess\Shoc.ApiCore.ObjectAccess.csproj" />
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
     <ProjectReference Include="..\Shoc.Workspace.Data.Sql\Shoc.Workspace.Data.Sql.csproj" />
     <ProjectReference Include="..\Shoc.Workspace.Model\Shoc.Workspace.Model.csproj" />

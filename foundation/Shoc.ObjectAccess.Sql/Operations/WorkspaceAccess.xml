@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="WorkspaceAccess">
+
+    <SqlOperation Name="GetRoles">
+      <TextCommand>
+          SELECT 
+            wm.WorkspaceId, wm.UserId, wm.Role 
+          FROM
+            `wspc_workspace_members` wm
+          WHERE 
+            wm.UserId = @UserId
+          AND 
+            wm.`WorkspaceId` = @WorkspaceId;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+</DataOperations>

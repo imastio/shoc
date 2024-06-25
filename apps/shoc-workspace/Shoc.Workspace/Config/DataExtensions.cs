@@ -7,6 +7,8 @@ using Shoc.ApiCore;
 using Shoc.Data.Sql;
 using Shoc.DataProtection;
 using Shoc.DataProtection.Sql;
+using Shoc.ObjectAccess.Sql.Workspace;
+using Shoc.ObjectAccess.Workspace;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Data.Sql;
 
@@ -42,7 +44,9 @@ public static class DataConfiguration
         // add domain repositories
         services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
         services.AddSingleton<IAccessRepository, AccessRepository>();
+        services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
         services.AddSingleton<IWorkspaceRepository, WorkspaceRepository>();
+        services.AddSingleton<IUserWorkspaceRepository, UserWorkspaceRepository>();
         services.AddSingleton<IWorkspaceUserRepository, WorkspaceUserRepository>();
         services.AddSingleton<IWorkspaceMemberRepository, WorkspaceMemberRepository>();
             
