@@ -28,7 +28,7 @@
 
     <SqlOperation Name="GetAllReferentialValues">
       <TextCommand>
-        SELECT `Id`, `Name`, `Title` FROM `wspc_workspaces`
+        SELECT `Id`, `Name`, `Description` FROM `wspc_workspaces`
         ORDER BY `Name` ASC;
       </TextCommand>
     </SqlOperation>
@@ -51,9 +51,9 @@
 
       <TextCommand>
         INSERT INTO `wspc_workspaces`
-        (`Id`, `Name`, `Title`, `Type`, `Status`, `CreatedBy`)
+        (`Id`, `Name`, `Description`, `Type`, `Status`, `CreatedBy`)
         VALUES
-        (@Id, @Name, @Title, @Type, @Status, @CreatedBy);
+        (@Id, @Name, @Description, @Type, @Status, @CreatedBy);
 
         INSERT INTO `wspc_workspace_members`
         (`Id`, `WorkspaceId`, `UserId`, `Role`)
@@ -71,7 +71,7 @@
         UPDATE `wspc_workspaces`
         SET
         `Name` = @Name,
-        `Title` = @Title,
+        `Description` = @Description,
         `Status` = @Status
         WHERE
         `Id` = @Id;

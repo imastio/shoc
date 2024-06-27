@@ -1,5 +1,6 @@
 import globalEn from "./messages/en/global.json";
 import errorsEn from "./messages/en/errors.json";
+import workspacesEn from "./messages/en/workspaces.json";
 import localeConfig from "./locale-config";
 
 export const localeMessages = {
@@ -7,17 +8,20 @@ export const localeMessages = {
     en: {
         ...globalEn,
         ...errorsEn,
+        ...workspacesEn
     }
 };
 
+export type IntlMessageId = keyof typeof localeMessages.en
 
 declare global {
     namespace FormatjsIntl {
         interface Message {
-            ids: keyof typeof localeMessages.en
+            ids: IntlMessageId
         }
     }
 }
+
 
 export function getLocaleSource(locale?: string) {
 

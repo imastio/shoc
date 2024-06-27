@@ -1,13 +1,13 @@
 'use server'
 
-import { ServerActionContext, ServerActionInput, ServerActionResult } from "./types";
+import { ServerActionContext, ServerActionFunction, ServerActionInput, ServerActionResult } from "./types";
 import allRpc from "./registry";
 import toServerActionErrors from "@/addons/error-handling/error-utility";
 
 type ServerActionName = keyof typeof allRpc
 
 function rpcImpl(name: ServerActionName, input?: ServerActionInput, context?: ServerActionContext): Promise<any> {
-    const resolvedRpc = allRpc[name];
+    const resolvedRpc: ServerActionFunction = allRpc[name];
 
     if(!resolvedRpc){
         return allRpc['index/noServerAction'](input || {}, context || {});

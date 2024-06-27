@@ -30,7 +30,7 @@ public class AuthorizeAllAccessAttribute : AuthorizeAttribute, IAsyncAuthorizati
     /// </summary>
     public AuthorizeAllAccessAttribute(params string[] accesses)
     {
-        this.AllowedScopes = Array.Empty<string>();
+        this.AllowedScopes = [];
         this.accesses = accesses.ToHashSet();
     }
 
@@ -47,7 +47,7 @@ public class AuthorizeAllAccessAttribute : AuthorizeAttribute, IAsyncAuthorizati
         }
 
         // forbid access if role requirement is not satisfied
-        context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKind.Access))
+        context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKinds.ACCESS_DENIED))
         {
             StatusCode = 403
         };

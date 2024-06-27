@@ -45,3 +45,11 @@ export default function toServerActionErrors(error: Error | AxiosError | unknown
 
     return [mapError(ErrorDefinitions.unknown())];
 }
+
+export function assertErrors(errors?: any[] | null){
+    if(!errors || errors.length === 0){
+        return;
+    }
+
+    throw new Error(JSON.stringify({ errors }));
+}

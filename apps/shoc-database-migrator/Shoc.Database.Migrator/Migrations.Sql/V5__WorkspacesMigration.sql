@@ -1,7 +1,7 @@
 ﻿CREATE TABLE `wspc_workspaces` (
     `Id` varchar(100) NOT NULL,
     `Name` varchar(100) NOT NULL,
-    `Title` text NOT NULL,
+    `Description` text NOT NULL,
     `Type` varchar(64) NOT NULL,
     `Status` varchar(64) NOT NULL,
     `CreatedBy` varchar(100) NOT NULL,

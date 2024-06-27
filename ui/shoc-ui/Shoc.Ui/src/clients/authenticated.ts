@@ -1,4 +1,4 @@
-import { getJwt } from '@/addons/auth';
+import { auth, getJwt } from '@/addons/auth';
 import { CacheStorage } from '@/addons/cache';
 import ErrorDefinitions from '@/addons/error-handling/error-definitions';
 import ClientCredentialsGrant from '@/addons/oauth2/client-credentials-grant';
@@ -54,7 +54,11 @@ async function authenticatedImpl<TResult>(action: (token: string) => Promise<TRe
 
 async function authenticatedUserImpl<TResult>(action: (token: string) => Promise<TResult>): Promise<TResult>{
 
+    // refresh session if needed
+    await auth()
+
     const jwt = await getJwt();
+    
     return await action(jwt?.access_token as string || '');
 }
 
@@ -64,10 +68,8 @@ export async function authenticated<TResult>(action: (token: string) => Promise<
         return await authenticatedImpl(action);
     }
     catch(error){
-
         if(error instanceof AxiosError){
-            
-            throw ErrorDefinitions.notAuthenticated(error.message, undefined, error.response?.data)
+            throw error;
         }
 
         throw ErrorDefinitions.notAuthenticated();
@@ -83,8 +85,7 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
     catch(error){
 
         if(error instanceof AxiosError){
-            
-            throw ErrorDefinitions.notAuthenticated(error.message, undefined, error.response?.data)
+            throw error;            
         }
 
         throw ErrorDefinitions.notAuthenticated();

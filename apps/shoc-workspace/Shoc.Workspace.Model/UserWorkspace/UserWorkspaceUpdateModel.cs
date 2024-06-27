@@ -16,7 +16,7 @@ public class UserWorkspaceUpdateModel
     public string Name { get; set; }
     
     /// <summary>
-    /// The workspace title
+    /// The workspace description
     /// </summary>
-    public string Title { get; set; }
+    public string Description { get; set; }
 }

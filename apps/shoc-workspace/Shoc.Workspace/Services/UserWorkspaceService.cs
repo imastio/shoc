@@ -48,6 +48,23 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
 
         return result;
     }
+    
+    /// <summary>
+    /// Gets the object by name
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="name">The name of the object</param>
+    /// <returns></returns>
+    public async Task<UserWorkspaceModel> GetByName(string userId, string name)
+    {
+        // get the result
+        var result = await this.RequireByName(userId, name);
+
+        // ensure the access
+        await this.workspaceAccessEvaluator.Ensure(userId, result.Id, WorkspacePermissions.WORKSPACE_VIEW);
+
+        return result;
+    }
 
     /// <summary>
     /// Creates new object
@@ -61,9 +78,9 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
         var result =  await this.workspaceService.Create(new WorkspaceCreateModel
         {
             Name = input.Name,
-            Title = input.Title,
+            Description = input.Description,
             Type = input.Type,
-            Status = input.Status,
+            Status = WorkspaceStatuses.ACTIVE,
             CreatedBy = userId
         });
 
@@ -98,7 +115,7 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
         {
             Id = input.Id,
             Name = input.Name,
-            Title = input.Title,
+            Description = input.Description,
             Status = existing.Status
         });
         

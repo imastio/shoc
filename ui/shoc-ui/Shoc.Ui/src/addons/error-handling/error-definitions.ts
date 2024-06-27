@@ -15,11 +15,11 @@ export default class ErrorDefinitions {
     }
 
     static accessDenied(message?: string, code?: string, payload: any = {}) {
-        return new ApiError('access_denied', code || 'ACCESS_DENIED_ERROR', message || 'Access Denied', payload);
+        return new ApiError('access_denied', code || 'ACCESS_ERROR', message || 'Access Denied', payload);
     }
 
     static notAuthenticated(message?: string, code?: string, payload: any = {}) {
-        return new ApiError('not_authenticated', code || 'NOT_AUTHENTICATED_ERROR', message || 'Not Authenticated', payload);
+        return new ApiError('not_authenticated', code || 'AUTHENTICATION_ERROR', message || 'Not Authenticated', payload);
     }
 
     static notAllowed(message?: string, code?: string, payload: any = {}) {

@@ -29,7 +29,7 @@ public class AuthorizeMinUserTypeAttribute : AuthorizeAttribute, IAuthorizationF
     /// </summary>
     public AuthorizeMinUserTypeAttribute(string type)
     {
-        this.AllowedScopes = Array.Empty<string>();
+        this.AllowedScopes = [];
         this.type = type;
     }
 
@@ -46,7 +46,7 @@ public class AuthorizeMinUserTypeAttribute : AuthorizeAttribute, IAuthorizationF
         }
         
         // forbid access if role requirement is not satisfied
-        context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKind.Access))
+        context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKinds.ACCESS_DENIED))
         {
             StatusCode = 403
         };

@@ -27,9 +27,9 @@ export default function WorkspacesTable() {
             ellipsis: true
         },
         {
-            title: "Title",
-            key: "title",
-            dataIndex: "title",
+            title: "Description",
+            key: "description",
+            dataIndex: "description",
             ellipsis: true
         },
         {

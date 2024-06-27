@@ -1,4 +1,4 @@
-import { auth, getJwt } from "@/addons/auth"
+import { auth } from "@/addons/auth"
 import AppHeader from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
 import WorkspaceSidebar from "@/components/workspace/workspace-sidebar";

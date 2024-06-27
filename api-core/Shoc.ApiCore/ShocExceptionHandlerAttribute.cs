@@ -37,11 +37,12 @@ public class ShocExceptionHandlerAttribute : ExceptionFilterAttribute
         // deduce the code
         var statusCode = errorKind switch
         {
-            ErrorKind.Unknown => 400,
-            ErrorKind.Data => 404,
-            ErrorKind.NotFound => 404,
-            ErrorKind.Validation => 400,
-            ErrorKind.Access => 403,
+            ErrorKinds.UNKNOWN => 400,
+            ErrorKinds.DATA => 404,
+            ErrorKinds.NOT_FOUND => 404,
+            ErrorKinds.VALIDATION => 400,
+            ErrorKinds.ACCESS_DENIED => 403,
+            ErrorKinds.NOT_AUTHENTICATED => 401,
             null => 500,
             _ => 500
         };

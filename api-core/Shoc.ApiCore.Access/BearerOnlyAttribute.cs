@@ -64,7 +64,7 @@ public class BearerOnlyAttribute : Attribute, IAuthorizeData, IAuthorizationFilt
         if (!authenticated)
         {
             // forbid access if role requirement is not satisfied
-            context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKind.Access))
+            context.Result = new JsonResult(AggregateErrorDefinition.Of(ErrorKinds.ACCESS_DENIED))
             {
                 StatusCode = 403
             };

@@ -57,6 +57,9 @@ public class WorkspaceService : WorkspaceServiceBase
     /// <returns></returns>
     public async Task<WorkspaceModel> Create(WorkspaceCreateModel input)
     {
+        // name should be lowercase always
+        input.Name = input.Name?.ToLowerInvariant();
+        
         // validate type
         ValidateType(input.Type);
         
@@ -67,7 +70,7 @@ public class WorkspaceService : WorkspaceServiceBase
         input.Status = WorkspaceStatuses.ACTIVE;
 
         // make sure title exists otherwise use name
-        input.Title = string.IsNullOrWhiteSpace(input.Title) ? input.Name : input.Title;
+        input.Description = string.IsNullOrWhiteSpace(input.Description) ? input.Name : input.Description;
 
         // try getting by name
         var existing = await this.workspaceRepository.GetByName(input.Name);
@@ -95,6 +98,9 @@ public class WorkspaceService : WorkspaceServiceBase
     {
         // make sure referring the proper object
         input.Id = id;
+        
+        // name should be lowercase always
+        input.Name = input.Name?.ToLowerInvariant();
 
         // make sure object exists 
         var existing = await this.GetById(id);
@@ -106,7 +112,7 @@ public class WorkspaceService : WorkspaceServiceBase
         ValidateStatus(input.Status);
         
         // make sure title exists otherwise use name
-        input.Title = string.IsNullOrWhiteSpace(input.Title) ? input.Name : input.Title;
+        input.Description = string.IsNullOrWhiteSpace(input.Description) ? input.Name : input.Description;
 
         // try getting by name
         var byName = await this.workspaceRepository.GetByName(input.Name);

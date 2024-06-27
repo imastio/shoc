@@ -1,22 +1,39 @@
-import { Button } from "@/components/ui/button";
+import WorkspacesHeader from "./_components/workspaces-header";
+import { rpc } from "@/server-actions/rpc";
+import ErrorScreen from "@/components/error/error-screen";
+import NoWorkspace from "./_components/no-workspace";
+import WorkspaceCard from "./_components/workspace-card";
+import WorkspaceAddDialogButton from "./_components/workspace-add-dialog-button";
+import type { Metadata, ResolvingMetadata } from 'next'
+import getIntl from "@/i18n/get-intl";
+
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+   
+    const intl = await getIntl();
+
+    return {
+      title: intl.formatMessage({id: 'workspaces'})
+    }
+  }
 
 export default async function WorkspacesPage() {
 
+    const { data: items, errors } = await rpc('workspace/user-workspaces/getAll');
+
+    if (errors) {
+        return <ErrorScreen errors={errors} />
+    }
+
     return <>
-        <div className="flex w-full md:w-3/5 mx-auto flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-            <div className="flex items-center">
-                <h1 className="text-lg font-semibold md:text-2xl">Inventory</h1>
-            </div>
-            <div
-                className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
-                x-chunk="dashboard-02-chunk-1"
-            >
-                <div className="flex flex-col items-center gap-1 text-center">
-                    <h3 className="text-2xl font-bold tracking-tight">You have no products</h3>
-                    <p className="text-sm text-muted-foreground">You can start selling as soon as you add a product.</p>
-                    <Button className="mt-4">Add Product</Button>
-                </div>
-            </div>
+        <div className="flex mx-auto w-full lg:w-3/5 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            <WorkspacesHeader actions={items.length > 0 ? [<WorkspaceAddDialogButton />] : []} />
+            { items.length === 0 && <NoWorkspace /> }
+            {
+                items.length > 0 && items.map((item: any) => <WorkspaceCard key={item.id} workspace={item} />)
+            }
         </div>
     </>
+
 }

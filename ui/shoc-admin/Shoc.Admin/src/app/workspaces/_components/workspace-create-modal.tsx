@@ -82,8 +82,8 @@ export default function WorkspaceCreateModal(props: any){
                     ]}>
                     <Input placeholder="Please enter the name" />
                 </Form.Item>          
-                <Form.Item name="title" label="Title" rules={[{ required: true, min: 2, max: 128, message: 'Please enter valid title' }]}>
-                    <Input placeholder="Please enter the title" />
+                <Form.Item name="description" label="Description" rules={[{ required: true, min: 2, max: 128, message: 'Please enter valid description' }]}>
+                    <Input placeholder="Please enter the description" />
                 </Form.Item> 
                 <Form.Item name="type" label="Type" rules={[{ required: true, message: 'Please select a valid type' }]}>
                     <Select placeholder="Select the type ">

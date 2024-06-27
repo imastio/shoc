@@ -1,4 +1,23 @@
 {
-    "errors.ACCESS_DENIED_ERROR": "Access Denied",
+    "errors.kinds.not_found.title": "Not Found",
+    "errors.kinds.not_found.description": "The resource you are looking for could not be found.",
+    "errors.kinds.data.title": "Data Error",
+    "errors.kinds.data.description": "The data you refer to is not available.",
+    "errors.kinds.validation.title": "Could not validate",
+    "errors.kinds.validation.description": "Your request could not be validated.",
+    "errors.kinds.access_denied.title": "Access Denied",
+    "errors.kinds.access_denied.description": "You don't have sufficient level of access for this resource.",
+    "errors.kinds.not_authenticated.title": "Not Authenticated",
+    "errors.kinds.not_authenticated.description": "We could not authenticate you for your request.",
+    "errors.kinds.not_allowed.title": "Not Allowed",
+    "errors.kinds.not_allowed.description": "The operation is not allowed.",
+    "errors.kinds.unknown.title": "System Error",
+    "errors.kinds.unknown.description": "Something went wrong while responding to your request.",
+
+    "errors.ACCESS_ERROR": "Access denied",
+    "errors.DATA_ERROR": "Wrong data",
+    "errors.VALIDATION_ERROR": "Validation failed",
+    "errors.NOT_FOUND_ERROR": "Not found",
+    "errors.AUTHENTICATION_ERROR": "Not Authenticated",
     "errors.UNKNOWN_ERROR": "Unknown system error"
 }

@@ -13,7 +13,7 @@ export function selfApiConfig(): ApiConfig {
         root: '/',
         gateway: 'api/fwd-shoc',
         serviceRouting: true,
-        client: 'space',
+        client: 'ui',
         timeout: 60000
     }
 }
@@ -24,7 +24,7 @@ export function shocApiConfig(): ApiConfig {
         root: options.root || '',
         gateway: options.gateway || '',
         serviceRouting: true,
-        client: 'space',
+        client: 'ui',
         timeout: 60000
     }
 }

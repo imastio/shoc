@@ -29,4 +29,9 @@ public static class Errors
     /// The access error
     /// </summary>
     public static readonly string ACCESS_ERROR = "ACCESS_ERROR";
+    
+    /// <summary>
+    /// Not authentication error
+    /// </summary>
+    public static readonly string AUTHENTICATION_ERROR = "AUTHENTICATION_ERROR";
 }

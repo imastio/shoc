@@ -18,14 +18,15 @@ public class AggregateErrorDefinition
     /// <param name="kind">The kind</param>
     /// <param name="message">The message</param>
     /// <returns></returns>
-    public static AggregateErrorDefinition Of(ErrorKind kind, string message = null)
+    public static AggregateErrorDefinition Of(string kind, string message = null)
     {
         var error = kind switch
         {
-            ErrorKind.Data => ErrorDefinition.Unknown(Core.Errors.DATA_ERROR, message),
-            ErrorKind.NotFound => ErrorDefinition.Unknown(Core.Errors.NOT_FOUND_ERROR, message),
-            ErrorKind.Validation => ErrorDefinition.Unknown(Core.Errors.VALIDATION_ERROR, message),
-            ErrorKind.Access => ErrorDefinition.Unknown(Core.Errors.ACCESS_ERROR, message),
+            ErrorKinds.DATA => ErrorDefinition.Data(Core.Errors.DATA_ERROR, message),
+            ErrorKinds.NOT_FOUND => ErrorDefinition.NotFound(Core.Errors.NOT_FOUND_ERROR, message),
+            ErrorKinds.VALIDATION => ErrorDefinition.Validation(Core.Errors.VALIDATION_ERROR, message),
+            ErrorKinds.ACCESS_DENIED => ErrorDefinition.Access(Core.Errors.ACCESS_ERROR, message),
+            ErrorKinds.NOT_AUTHENTICATED => ErrorDefinition.Authentication(Core.Errors.AUTHENTICATION_ERROR, message),
             _ => ErrorDefinition.Unknown(Core.Errors.UNKNOWN_ERROR, message)
         };
 

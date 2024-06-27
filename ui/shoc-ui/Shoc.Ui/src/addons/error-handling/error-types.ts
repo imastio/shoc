@@ -13,6 +13,15 @@ export class ApiError extends Error {
     }
 }
 
+export class AggregatedError extends Error {
+    errors: any[]
+
+    constructor(errors: any[] = []) {
+        super();
+        this.errors = errors;
+    }
+}
+
 export type ServerActionError = {
     kind: ErrorKind,
     code: string,

@@ -10,7 +10,7 @@ public class ErrorDefinition
     /// <summary>
     /// The error kind
     /// </summary>
-    public ErrorKind Kind { get; set; }
+    public string Kind { get; set; }
 
     /// <summary>
     /// The code of error
@@ -37,12 +37,12 @@ public class ErrorDefinition
     }
 
     /// <summary>
-    /// Returns the exception of the error
+    /// Returns the exception for the error
     /// </summary>
     /// <returns></returns>
     public ShocException AsException(string message = null)
     {
-        return new ShocException(new List<ErrorDefinition> { this }, message);
+        return new ShocException([this], message);
     }
     
     /// <summary>
@@ -56,7 +56,7 @@ public class ErrorDefinition
     {
         return new ErrorDefinition
         {
-            Kind = ErrorKind.Unknown,
+            Kind = ErrorKinds.UNKNOWN,
             Code = code ?? Errors.UNKNOWN_ERROR,
             Message = message ?? string.Empty,
             Payload = payload
@@ -71,7 +71,7 @@ public class ErrorDefinition
     /// <param name="message">The error message</param>
     /// <param name="payload">The payload</param>
     /// <returns></returns>
-    public static ErrorDefinition From(ErrorKind kind, string code, string message, Dictionary<string, object> payload = null)
+    public static ErrorDefinition From(string kind, string code, string message, Dictionary<string, object> payload = null)
     {
         return new ErrorDefinition
         {
@@ -93,7 +93,7 @@ public class ErrorDefinition
     {
         return new ErrorDefinition
         {
-            Kind = ErrorKind.Data,
+            Kind = ErrorKinds.DATA,
             Code = code ?? Errors.DATA_ERROR,
             Message = message ?? string.Empty,
             Payload = payload
@@ -111,7 +111,7 @@ public class ErrorDefinition
     {
         return new ErrorDefinition
         {
-            Kind = ErrorKind.NotFound,
+            Kind = ErrorKinds.NOT_FOUND,
             Code = code ?? Errors.NOT_FOUND_ERROR,
             Message = message ?? string.Empty,
             Payload = payload
@@ -129,7 +129,7 @@ public class ErrorDefinition
     {
         return new ErrorDefinition
         {
-            Kind = ErrorKind.Validation,
+            Kind = ErrorKinds.VALIDATION,
             Code = code ?? Errors.VALIDATION_ERROR,
             Message = message ?? string.Empty,
             Payload = payload
@@ -147,7 +147,25 @@ public class ErrorDefinition
     {
         return new ErrorDefinition
         {
-            Kind = ErrorKind.Access,
+            Kind = ErrorKinds.ACCESS_DENIED,
+            Code = code ?? Errors.ACCESS_ERROR,
+            Message = message ?? string.Empty,
+            Payload = payload
+        };
+    }
+    
+    /// <summary>
+    /// Shortcut for creating access error
+    /// </summary>
+    /// <param name="code">The code of error</param>
+    /// <param name="message">The error message</param>
+    /// <param name="payload">The payload</param>
+    /// <returns></returns>
+    public static ErrorDefinition Authentication(string code = null, string message = null, Dictionary<string, object> payload = null)
+    {
+        return new ErrorDefinition
+        {
+            Kind = ErrorKinds.NOT_AUTHENTICATED,
             Code = code ?? Errors.ACCESS_ERROR,
             Message = message ?? string.Empty,
             Payload = payload
