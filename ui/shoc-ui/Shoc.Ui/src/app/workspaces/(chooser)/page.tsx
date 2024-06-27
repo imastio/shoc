@@ -28,7 +28,7 @@ export default async function WorkspacesPage() {
 
     return <>
         <div className="flex mx-auto w-full lg:w-3/5 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-            <WorkspacesHeader actions={items.length > 0 ? [<WorkspaceAddDialogButton />] : []} />
+            <WorkspacesHeader actions={items.length > 0 ? [<WorkspaceAddDialogButton key="add-workspace" />] : []} />
             { items.length === 0 && <NoWorkspace /> }
             {
                 items.length > 0 && items.map((item: any) => <WorkspaceCard key={item.id} workspace={item} />)

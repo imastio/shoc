@@ -63,12 +63,12 @@ export default function WorkspaceAddDialogButton({ className }: { className?: st
       setErrors(errors || []);
       return;
     }
-    
+
     setOpen(false);
-    toast(intl.formatMessage({id: 'workspaces.messages.created'}))
+    toast(intl.formatMessage({ id: 'workspaces.messages.created' }))
     router.push(`/workspaces/${input.name}`);
 
-  }, [router]);
+  }, [router, intl]);
 
   async function onSubmit(values: any) {
     await submit({
@@ -129,17 +129,17 @@ export default function WorkspaceAddDialogButton({ className }: { className?: st
               <FormField
                 control={form.control}
                 name="type"
-                render={({ field }) => (
+                render={({ field: { ref, ...fieldNoRef } }) => (
                   <FormItem>
                     <FormLabel>{intl.formatMessage({ id: 'workspaces.labels.type' })}</FormLabel>
-                    <Select onValueChange={field.onChange} {...field}>
+                    <Select onValueChange={fieldNoRef.onChange} {...fieldNoRef}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={intl.formatMessage({ id: 'workspaces.placeholders.type' })} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {workspaceTypes.map((item) => <SelectItem value={item.key}>{intl.formatMessage({ id: item.display })}</SelectItem>)}
+                        {workspaceTypes.map((item) => <SelectItem key={item.key} value={item.key}>{intl.formatMessage({ id: item.display })}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </FormItem>

@@ -56,11 +56,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
         async jwt({ token, account, user, profile }) {
             // on the first call when account is available based on OIDC response save the tokens
-            if (account) {    
+            if (account) {  
                 return {
                     id_token: account.id_token,
                     access_token: account.access_token,
-                    expires_at: account.expires_at,
+                    expires_at: (Number(token.iat || 0) + Number(account.expires_in || 0)),
                     refresh_token: account.refresh_token,
                     user: user,
                     error: null
@@ -79,6 +79,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     clientSecret: getClientSecret(),
                     issuer: getIssuer()
                 });
+                
                 return {
                     ...token,
                     id_token: refreshed.id_token || token.id_token || null,

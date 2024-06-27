@@ -15,7 +15,7 @@ public class WorkspacePermissionCalculator
     {
         {
             WorkspaceRoles.OWNER,
-            WorkspaceRoles.ALL
+            WorkspacePermissions.ALL
         },
         {
             WorkspaceRoles.ADMIN,

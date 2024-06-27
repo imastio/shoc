@@ -68,7 +68,7 @@ public abstract class UserWorkspaceServiceBase
     protected async Task<UserWorkspaceModel> RequireByName(string userId, string name)
     {
         // get the result
-        var result = await this.userWorkspaceRepository.GetById(userId, name);
+        var result = await this.userWorkspaceRepository.GetByName(userId, name);
 
         // not found
         if (result == null)

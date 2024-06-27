@@ -58,7 +58,6 @@ async function authenticatedUserImpl<TResult>(action: (token: string) => Promise
     await auth()
 
     const jwt = await getJwt();
-    
     return await action(jwt?.access_token as string || '');
 }
 

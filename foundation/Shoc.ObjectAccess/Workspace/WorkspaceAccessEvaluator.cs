@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Core;
@@ -42,10 +43,10 @@ public class WorkspaceAccessEvaluator : IWorkspaceAccessEvaluator
     {
         // try load the access model
         var workspaceRoles = (await this.accessRepository.GetRoles(workspaceId, userId)).Select(item => item.Role).ToHashSet();
-
+        
         // get all the granted permissions
         var granted = this.permissionCalculator.Calculate(workspaceRoles.ToArray());
-
+        
         // reject permissions that are not in the granted list
         var rejected = permissions.Where(permission => !granted.Contains(permission)).ToHashSet();
 

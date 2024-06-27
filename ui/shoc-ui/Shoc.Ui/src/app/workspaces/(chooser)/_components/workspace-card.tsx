@@ -17,7 +17,7 @@ export default function WorkspaceCard({ workspace }: any) {
         <div className="flex">
             <div className="flex-1">
                 <CardHeader>
-                    <CardTitle className="truncate leading-normal"> {workspace.name}</CardTitle>
+                    <Link href={`/workspaces/${workspace.name}`}><CardTitle className="truncate leading-normal hover:underline">{workspace.name}</CardTitle></Link>
                     <CardDescription className="text-balance">{workspace.description}</CardDescription>
                 </CardHeader>
 
@@ -25,17 +25,17 @@ export default function WorkspaceCard({ workspace }: any) {
                     <Badge variant="secondary">
                         {workspace.type === 'individual' && <UsersIcon className="w-4 h-4 mr-1" />}
                         {workspace.type === 'organization' && <OrganizationIcon className="w-4 h-4 mr-1" />}
-                        {intl.formatMessage({id: 'workspaces.labels.type'})}: {intl.formatMessage({ id: workspaceTypesMap[workspace.type] })}
+                        {intl.formatMessage({ id: 'workspaces.labels.type' })}: {intl.formatMessage({ id: workspaceTypesMap[workspace.type] })}
                     </Badge>
                     <Badge variant="secondary" className="ml-2">
                         <KeyIcon className="w-4 h-4 mr-1" />
-                        {intl.formatMessage({id: 'workspaces.labels.role'})}: {intl.formatMessage({ id: workspaceRolesMap[workspace.role] })}
+                        {intl.formatMessage({ id: 'workspaces.labels.role' })}: {intl.formatMessage({ id: workspaceRolesMap[workspace.role] })}
                     </Badge>
                 </CardFooter>
             </div>
             <div className="flex p-6">
                 <div className="flex m-auto p-0">
-                    <Link href={`/workspaces/${workspace.name}`}><Button variant="default">{intl.formatMessage({id: 'global.actions.select'})} <ArrowRightIcon className="w-4 h-4 ml-2" /></Button></Link>
+                    <Link href={`/workspaces/${workspace.name}`}><Button variant="default">{intl.formatMessage({ id: 'global.actions.select' })} <ArrowRightIcon className="w-4 h-4 ml-2" /></Button></Link>
                 </div>
             </div>
         </div>
