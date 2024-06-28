@@ -57,6 +57,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async jwt({ token, account, user, profile }) {
             // on the first call when account is available based on OIDC response save the tokens
             if (account) {  
+                console.log("First Sign In", {
+                    accessToken: account.access_token,
+                    refreshToken: account.refresh_token,
+                    expires_at: (Number(token.iat || 0) + Number(account.expires_in || 0))
+                })
                 return {
                     id_token: account.id_token,
                     access_token: account.access_token,
@@ -69,6 +74,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             
             // if no account available but token is not expired everything is ok
             if(Date.now() < Number(token.expires_at || 0) * 1000){
+                console.log("No need to refresh", {
+                    accessToken: token.access_token,
+                    refreshToken: token.refresh_token,
+                    expires_at: token.expires_at
+                })
                 return token;
             }
 
@@ -80,6 +90,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     issuer: getIssuer()
                 });
                 
+                console.log("Token is refreshed", {
+                    accessToken: refreshed.access_token,
+                    refreshToken: refreshed.refresh_token ?? token.refresh_token,
+                    expires_at: Math.floor(Date.now() / 1000 + (Number(refreshed.expires_in) || 0))
+                })
+
                 return {
                     ...token,
                     id_token: refreshed.id_token || token.id_token || null,
