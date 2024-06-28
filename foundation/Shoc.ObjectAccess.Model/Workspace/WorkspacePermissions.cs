@@ -10,19 +10,14 @@ namespace Shoc.ObjectAccess.Model.Workspace;
 public class WorkspacePermissions
 {
     /// <summary>
-    /// See the list of workspaces
-    /// </summary>
-    public const string WORKSPACES_LIST = "workspaces_list";
-
-    /// <summary>
     /// View the workspace
     /// </summary>
     public const string WORKSPACE_VIEW = "workspace_view";
     
     /// <summary>
-    /// Update the workspace
+    /// Edit the workspace
     /// </summary>
-    public const string WORKSPACE_UPDATE = "workspace_update";
+    public const string WORKSPACE_EDIT = "workspace_edit";
 
     /// <summary>
     /// Delete the workspace

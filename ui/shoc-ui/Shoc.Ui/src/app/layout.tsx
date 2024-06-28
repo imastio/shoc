@@ -9,6 +9,7 @@ import IntlProvider from "@/addons/intl-provider";
 import localeConfig from "@/i18n/locale-config";
 import { getLocaleSource } from "@/i18n";
 import { Toaster } from "@/components/ui/sonner";
+import PrivateInitLayout from "./_components/private-init-layout";
 
 export const metadata: Metadata = {
   title: "Shoc Platform",
@@ -29,12 +30,12 @@ export default function RootLayout({
         <NextTopLoader color='rgb(39 39 42)' height={2} shadow={false} showSpinner={false} />
         <SessionProvider>
           <ApiAuthenticationProvider>
-                <TitleProvider>
-                  <IntlProvider locale={localeSource.locale} defaultLocale={localeSource.defaultLocale} messages={localeSource.messages}>
-                    {children}
-                    <Toaster position="top-right" />
-                  </IntlProvider>
-                </TitleProvider>
+            <TitleProvider>
+              <IntlProvider locale={localeSource.locale} defaultLocale={localeSource.defaultLocale} messages={localeSource.messages}>
+                {children}
+                <Toaster position="top-right" />
+              </IntlProvider>
+            </TitleProvider>
           </ApiAuthenticationProvider>
         </SessionProvider>
       </body>

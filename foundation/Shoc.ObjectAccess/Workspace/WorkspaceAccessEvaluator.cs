@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Core;
@@ -31,6 +31,24 @@ public class WorkspaceAccessEvaluator : IWorkspaceAccessEvaluator
         this.accessRepository = accessRepository;
         this.permissionCalculator = permissionCalculator;
     }
+
+    /// <summary>
+    /// Gets the permissions of the given user to the given workspac
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    public async Task<ISet<string>> GetPermissions(string userId, string workspaceId)
+    {
+        // try load the access model
+        var workspaceRoles = (await this.accessRepository.GetRoles(workspaceId, userId)).Select(item => item.Role).ToHashSet();
+        
+        // get all the granted permissions
+        var granted = this.permissionCalculator.Calculate(workspaceRoles.ToArray());
+
+        // return resulting set
+        return granted;
+    }
     
     /// <summary>
     /// Evaluate workspace access based on requested permissions
@@ -40,12 +58,9 @@ public class WorkspaceAccessEvaluator : IWorkspaceAccessEvaluator
     /// <param name="permissions">The requested permissions</param>
     /// <returns></returns>
     public async Task<AccessEvaluationResult> Evaluate(string userId, string workspaceId, params string[] permissions)
-    {
-        // try load the access model
-        var workspaceRoles = (await this.accessRepository.GetRoles(workspaceId, userId)).Select(item => item.Role).ToHashSet();
-        
+    {   
         // get all the granted permissions
-        var granted = this.permissionCalculator.Calculate(workspaceRoles.ToArray());
+        var granted = await this.GetPermissions(userId, workspaceId);
         
         // reject permissions that are not in the granted list
         var rejected = permissions.Where(permission => !granted.Contains(permission)).ToHashSet();

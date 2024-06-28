@@ -1,4 +1,6 @@
 {
+    "shoc": "Shoc",
+    "shoc.platform": "Shoc Platform",
     "login": "Login",
     "logout": "Logout",
     "global.actions.goBack": "Go Back",

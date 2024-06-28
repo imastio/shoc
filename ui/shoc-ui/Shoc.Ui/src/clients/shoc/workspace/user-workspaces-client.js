@@ -39,6 +39,19 @@ export default class UserWorkspacesClient extends BaseAxiosClient {
     });
   }
 
+  getPermissionsById(token, id){
+
+    const url = this.urlify({
+      api: `api/user-workspaces/${id}/permissions`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
   getByName(token, name){
 
     const url = this.urlify({
@@ -52,6 +65,18 @@ export default class UserWorkspacesClient extends BaseAxiosClient {
     });
   }
 
+  getPermissionsByName(token, name){
+
+    const url = this.urlify({
+      api: `api/user-workspaces/by-name/${name}/permissions`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
   
    create(token, input){
     const url = this.urlify({

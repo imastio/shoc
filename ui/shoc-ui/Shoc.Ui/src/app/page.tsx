@@ -1,7 +1,6 @@
 import { auth } from "@/addons/auth"
 import AppHeader from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
-import WorkspaceSidebar from "@/components/workspace/workspace-sidebar";
 
 export default async function Home() {
 
@@ -12,7 +11,6 @@ export default async function Home() {
     <div className="flex flex-col w-full">
       <AppHeader />
       <main className="flex h-full">
-        <WorkspaceSidebar />
         <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <div className="flex items-center">
             <h1 className="text-lg font-semibold md:text-2xl">Inventory</h1>

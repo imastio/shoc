@@ -48,6 +48,34 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
 
         return result;
     }
+
+    /// <summary>
+    /// Gets object permissions by id
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="id">The id of object</param>
+    /// <returns></returns>
+    public async Task<ISet<string>> GetPermissionsById(string userId, string id)
+    {
+        // make sure object exists
+        await this.RequireById(userId, id);
+        
+        return await this.workspaceAccessEvaluator.GetPermissions(userId, id);
+    }
+    
+    /// <summary>
+    /// Gets object permissions by name
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="name">The name of object</param>
+    /// <returns></returns>
+    public async Task<ISet<string>> GetPermissionsByName(string userId, string name)
+    {
+        // make sure object exists
+        var result = await this.RequireByName(userId, name);
+        
+        return await this.workspaceAccessEvaluator.GetPermissions(userId, result.Id);
+    }
     
     /// <summary>
     /// Gets the object by name
@@ -108,7 +136,7 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
         var existing = await this.RequireById(userId, id);
         
         // ensure update permissions is given
-        await this.workspaceAccessEvaluator.Ensure(userId, id, WorkspacePermissions.WORKSPACE_UPDATE);
+        await this.workspaceAccessEvaluator.Ensure(userId, id, WorkspacePermissions.WORKSPACE_EDIT);
 
         // perform the operation
         var result = await this.workspaceService.UpdateById(id, new WorkspaceUpdateModel

@@ -5,11 +5,11 @@ export const workspaceNamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/
 export const workspaceTypes: { key: string, display: IntlMessageId }[] = [ 
     {
         key: 'individual', 
-        display: 'workspace.types.individual'
+        display: 'workspaces.types.individual'
     },
     {
         key: 'organization', 
-        display: 'workspace.types.organization'
+        display: 'workspaces.types.organization'
     }
 ]
 
@@ -18,15 +18,15 @@ export const workspaceTypesMap = Object.assign({}, ...workspaceTypes.map((entry)
 export const workspaceStatuses: { key: string, display: IntlMessageId }[] = [ 
     {
         key: 'pending', 
-        display: 'workspace.statuses.pending'
+        display: 'workspaces.statuses.pending'
     },
     {
         key: 'active', 
-        display: 'workspace.statuses.active'
+        display: 'workspaces.statuses.active'
     },
     {
         key: 'archived', 
-        display: 'workspace.statuses.archived'
+        display: 'workspaces.statuses.archived'
     }
 ]
 
@@ -35,19 +35,19 @@ export const workspaceStatusesMap = Object.assign({}, ...workspaceStatuses.map((
 export const workspaceRoles: { key: string, display: IntlMessageId }[] = [ 
     {
         key: 'owner', 
-        display: 'workspace.roles.owner'
+        display: 'workspaces.roles.owner'
     },
     {
         key: 'admin', 
-        display: 'workspace.roles.admin'
+        display: 'workspaces.roles.admin'
     },
     {
         key: 'member', 
-        display: 'workspace.roles.member'
+        display: 'workspaces.roles.member'
     },
     {
         key: 'guest', 
-        display: 'workspace.roles.member'
+        display: 'workspaces.roles.member'
     }
 ]
 

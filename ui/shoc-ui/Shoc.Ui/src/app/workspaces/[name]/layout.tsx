@@ -2,17 +2,33 @@ import AppHeader from "@/components/layout/app-header";
 import WorkspaceMobileSidebar from "@/components/workspace/workspace-mobile-sidebar";
 import WorkspaceSidebar from "@/components/workspace/workspace-sidebar";
 import { ReactNode } from "react";
-import { getByName } from "./cached-actions";
+import { getWorkspaceByName, getWorkspacePermissionsByName } from "./cached-actions";
+import ErrorScreen from "@/components/error/error-screen";
+import WorkspaceAccessProvider from "@/providers/workspace-access/workspace-access-provider";
+import { Metadata } from "next";
+
+export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+
+    const { data } = await getWorkspaceByName(name);
+  
+    return {
+      description: data?.description || ''
+    }
+  }
 
 export default async function SingleWorkspaceLayout({ params: { name }, children }: { children: ReactNode, params: any }) {
-    const { data } = await getByName(name)
-    return <div className="grid min-h-screen w-full">
-        <div className="flex flex-col w-full">
-            <AppHeader mobileSidebar={<WorkspaceMobileSidebar />} />
-            <main className="flex h-full">
-                <WorkspaceSidebar />
-                {children}
-            </main>
-        </div>
-    </div>
+
+    const [workspace, permissions] = await Promise.all([getWorkspaceByName(name), getWorkspacePermissionsByName(name)])
+
+    if (workspace.errors || permissions.errors) {
+        return <ErrorScreen errors={workspace.errors || permissions.errors} />
+    }
+
+    return <WorkspaceAccessProvider permissions={permissions.data || []}>
+        <AppHeader mobileSidebar={<WorkspaceMobileSidebar name={name} />} />
+        <main className="flex h-full">
+            <WorkspaceSidebar name={name} />
+            {children}
+        </main>
+    </WorkspaceAccessProvider>
 }

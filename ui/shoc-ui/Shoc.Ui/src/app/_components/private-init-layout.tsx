@@ -20,7 +20,7 @@ export default function PrivateInitLayout({ children }: { children: React.ReactN
 
     }, [session]);
 
-    if(progress){
+    if(progress || session.status === 'unauthenticated'){
         return <Loader />
     }
 

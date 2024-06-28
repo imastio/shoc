@@ -21,9 +21,8 @@ public class WorkspacePermissionCalculator
             WorkspaceRoles.ADMIN,
             new HashSet<string>
             {
-                WorkspacePermissions.WORKSPACES_LIST,
                 WorkspacePermissions.WORKSPACE_VIEW,
-                WorkspacePermissions.WORKSPACE_UPDATE,
+                WorkspacePermissions.WORKSPACE_EDIT,
                 WorkspacePermissions.WORKSPACE_DELETE
             }
         },
@@ -31,7 +30,6 @@ public class WorkspacePermissionCalculator
             WorkspaceRoles.MEMBER,
             new HashSet<string>
             {
-                WorkspacePermissions.WORKSPACES_LIST,
                 WorkspacePermissions.WORKSPACE_VIEW
             }
         },
@@ -39,7 +37,6 @@ public class WorkspacePermissionCalculator
             WorkspaceRoles.GUEST,
             new HashSet<string>
             {
-                WorkspacePermissions.WORKSPACES_LIST,
                 WorkspacePermissions.WORKSPACE_VIEW
             }
         }

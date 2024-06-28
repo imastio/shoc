@@ -56,6 +56,18 @@ public class UserWorkspacesController : ControllerBase
     }
     
     /// <summary>
+    /// Gets object permissions by id
+    /// </summary>
+    /// <param name="id">The id of object</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpGet("{id}/permissions")]
+    public Task<ISet<string>> GetPermissionsById(string id)
+    {
+        return this.userWorkspaceService.GetPermissionsById(this.HttpContext.GetPrincipal().Id, id);
+    }
+    
+    /// <summary>
     /// Gets object by name
     /// </summary>
     /// <param name="name">The name of object</param>
@@ -65,6 +77,18 @@ public class UserWorkspacesController : ControllerBase
     public Task<UserWorkspaceModel> GetByName(string name)
     {
         return this.userWorkspaceService.GetByName(this.HttpContext.GetPrincipal().Id, name);
+    }
+    
+    /// <summary>
+    /// Gets object permissions by name
+    /// </summary>
+    /// <param name="name">The name of object</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpGet("by-name/{name}/permissions")]
+    public Task<ISet<string>> GetPermissionsByName(string name)
+    {
+        return this.userWorkspaceService.GetPermissionsByName(this.HttpContext.GetPrincipal().Id, name);
     }
     
     /// <summary>

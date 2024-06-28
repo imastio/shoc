@@ -3,14 +3,15 @@
 import { ServerActionContext, ServerActionFunction, ServerActionInput, ServerActionResult } from "./types";
 import allRpc from "./registry";
 import toServerActionErrors from "@/addons/error-handling/error-utility";
+import { cache } from "react";
 
 type ServerActionName = keyof typeof allRpc
 
-function rpcImpl(name: ServerActionName, input?: ServerActionInput, context?: ServerActionContext): Promise<any> {
-    const resolvedRpc: ServerActionFunction = allRpc[name];
+function rpcImpl(registry: any,name: ServerActionName, input?: ServerActionInput, context?: ServerActionContext): Promise<any> {
+    const resolvedRpc: ServerActionFunction = registry[name];
 
     if(!resolvedRpc){
-        return allRpc['index/noServerAction'](input || {}, context || {});
+        return registry['index/noServerAction'](input || {}, context || {});
     }
 
     return resolvedRpc(input || {}, context || {});
@@ -20,7 +21,7 @@ export async function rpc(name: ServerActionName, input?: ServerActionInput, con
 
     try {
         return {
-            data: await rpcImpl(name, input, context),
+            data: await rpcImpl(allRpc, name, input, context),
             errors: null
         }
     }
@@ -33,5 +34,5 @@ export async function rpc(name: ServerActionName, input?: ServerActionInput, con
 }
 
 export async function rpcDirect(name: ServerActionName, input?: ServerActionInput, context?: ServerActionContext): Promise<any> {
-    return await rpcImpl(name, input, context);
+    return await rpcImpl(allRpc, name, input, context);
 }

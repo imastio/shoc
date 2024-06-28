@@ -1,59 +1,47 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
-import HomeIcon from "@/components/icons/home-icon";
-import { Badge } from "@/components/ui/badge";
-import MenuToggleButton from "@/components/layout/menu-toggle-button";
+import useWorkspaceMenu from "@/app/workspaces/[name]/use-workspace-menu";
+import { cn } from "@/lib/utils";
+import MenuIcon from "../icons/menu-icon";
+import { useIntl } from "react-intl";
+import { useState } from "react";
 
-export default function WorkspaceMobileSidebar(){
+export default function WorkspaceMobileSidebar({ name }: { name: string }) {
 
-    return <Sheet>
+  const menu = useWorkspaceMenu({ name });
+  const intl = useIntl();
+  const [open, setOpen] = useState(false);
+
+
+  return <Sheet open={open} onOpenChange={setOpen}>
     <SheetTrigger asChild>
-      <MenuToggleButton />
+      <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+        <MenuIcon className="h-5 w-5" />
+        <span className="sr-only">Toggle navigation menu</span>
+      </Button>
     </SheetTrigger>
     <SheetContent side="left" className="flex flex-col">
+      <SheetHeader>
+        <SheetTitle>{intl.formatMessage({ id: 'workspaces.workspace' })}</SheetTitle>
+        <SheetDescription>
+        </SheetDescription>
+      </SheetHeader>
       <nav className="grid gap-2 text-lg font-medium">
-        <Link href="#" className="flex items-center gap-2 text-lg font-semibold" prefetch={false}>
-          <span className="sr-only">Acme Inc</span>
-        </Link>
-        <Link
-          href="#"
-          className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+        {menu.map((item, index) => <Link
+          key={index}
+          href={item.path}
+          onClick={() => setOpen(false)}
+          className={cn("mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 transition-all hover:text-foreground", item.active ? "bg-muted text-primary" : "text-muted-foreground")}
           prefetch={false}
         >
-          <HomeIcon className="h-5 w-5" />
-          Dashboard
+          <item.icon className="h-5 w-5" />
+          {item.title}
         </Link>
-        <Link
-          href="#"
-          className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          Orders
-          <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">6</Badge>
-        </Link>
-        <Link
-          href="#"
-          className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          Products
-        </Link>
-        <Link
-          href="#"
-          className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          Customers
-        </Link>
-        <Link
-          href="#"
-          className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          Analytics
-        </Link>
+        )}
       </nav>
       <div className="mt-auto">
         <Card>

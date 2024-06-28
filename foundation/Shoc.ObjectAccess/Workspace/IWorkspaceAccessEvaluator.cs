@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.ObjectAccess.Model;
 
@@ -8,6 +9,14 @@ namespace Shoc.ObjectAccess.Workspace;
 /// </summary>
 public interface IWorkspaceAccessEvaluator
 {
+    /// <summary>
+    /// Gets the permissions of the given user to the given workspac
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    Task<ISet<string>> GetPermissions(string userId, string workspaceId);
+    
     /// <summary>
     /// Evaluate workspace access based on requested permissions
     /// </summary>
