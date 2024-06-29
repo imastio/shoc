@@ -50,7 +50,7 @@ export default function useWorkspaceMenu({ name }: { name: string }){
             icon: MixerHorizontalIcon,
             visible: hasAny(['workspace_edit'])
         }
-    ], [name, intl])
+    ], [name, hasAny, intl])
 
     const menu = useMemo(() => all.filter(item => item.visible).map(item => ({
         ...item,

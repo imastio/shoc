@@ -43,7 +43,10 @@ async function authenticatedImpl<TResult>(action: (token: string) => Promise<TRe
     clientCache.del('tokenSet');
 
     if(tokenSet.isRefreshable()){
-        const result = await clientCredentialsGrant.refreshToken(tokenSet);
+        const result = await clientCredentialsGrant.refreshToken({
+            accessToken: tokenSet.getAccessToken(),
+            refreshToken: tokenSet.getRefreshToken()
+        });
         clientCache.set('tokenSet', result, TOKEN_TTL);
         return await action(result.getAccessToken());
     }
@@ -53,9 +56,6 @@ async function authenticatedImpl<TResult>(action: (token: string) => Promise<TRe
 }
 
 async function authenticatedUserImpl<TResult>(action: (token: string) => Promise<TResult>): Promise<TResult>{
-
-    // refresh session if needed
-    await auth()
 
     const jwt = await getJwt();
     return await action(jwt?.access_token as string || '');

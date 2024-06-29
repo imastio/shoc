@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import { chainMiddleware } from './middlewares';
 import cspMiddleware from './middlewares/csp-middleware';
+import sessionMiddleware from './middlewares/session-middleware';
 
 const terminalMiddleware = async (context, next) => {
   await next(context)
 }
 
-const middlewaresChain = chainMiddleware([cspMiddleware, terminalMiddleware])
+const middlewaresChain = chainMiddleware([sessionMiddleware, cspMiddleware, terminalMiddleware])
 
 export async function middleware(request, event) {
 

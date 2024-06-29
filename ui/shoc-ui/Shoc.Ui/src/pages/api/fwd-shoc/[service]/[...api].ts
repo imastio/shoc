@@ -1,4 +1,3 @@
-import { auth } from "@/addons/auth";
 import { getJwtNode } from "@/addons/auth/jwt-node";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -10,10 +9,8 @@ export const config = {
   },
 };
 
-
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 
-  await auth(req, res);
   const jwt = await getJwtNode(req.headers);
   const proxy: httpProxy = httpProxy.createProxy();
 

@@ -1,8 +1,7 @@
 import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
-import { rpc } from "@/server-actions/rpc";
 import ErrorScreen from "@/components/error/error-screen";
-import { getWorkspaceByName } from "./cached-actions";
+import { getByName } from "./cached-workspace-actions";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +20,7 @@ export async function generateMetadata({ params: { name } }: { params: any }): P
 }
 
 export default async function WorkspaceDashboardPage({ params: { name } }: any) {
-  const { data, errors } = await getWorkspaceByName(name)
+  const { data, errors } = await getByName(name)
   if (errors) {
     return <ErrorScreen errors={errors} />
   }
