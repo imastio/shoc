@@ -1,4 +1,4 @@
-import { getJwtNode } from "@/addons/auth/jwt-node";
+import { getJwtNode } from "@/addons/auth/actions";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse } from "next";
 

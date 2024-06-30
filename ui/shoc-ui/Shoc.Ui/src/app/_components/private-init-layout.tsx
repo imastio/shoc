@@ -7,28 +7,29 @@ import { useEffect } from "react";
 
 export default function PrivateInitLayout({ children }: { children: React.ReactNode }) {
     const session = useSession();
-    const user = (session as any)?.data?.user;
+
+    const user = session.data?.user;
 
     const authProgress = session.status === 'loading';
 
     const progress = authProgress;
 
     useEffect(() => {
-        if(session.status === 'unauthenticated'){
+        if (session.status === 'unauthenticated') {
             rpcDirect('auth/signIn')
         }
 
-        if(session.status === 'authenticated' && !user){
+        if (session.status === 'authenticated' && !user) {
             rpcDirect('auth/signIn')
         }
 
     }, [session, user]);
 
-    if(progress || session.status === 'unauthenticated' || !user){
+    if (progress || session.status === 'unauthenticated' || !user) {
         return <Loader />
     }
 
     return <>
         {children}
-        </>
+    </>
 }

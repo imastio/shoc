@@ -9,14 +9,19 @@ export default class BaseGrant {
         this.config = config;
     }
 
-    public async getOpenidConfiguration(): Promise<any>{
+    public async getOpenidConfiguration(): Promise<{
+        token_endpoint: string,
+        authorization_endpoint: string,
+        end_session_endpoint: string
+    }> {
         const wellKnown = `${this.config.authority}/.well-known/openid-configuration`
         return (await axios.get(wellKnown)).data;
     }
 
-    public async refreshToken(token: RefreshTokenParams, hints?: TokenRequestHints): Promise<TokenResult>{
+    public async refreshToken(token: RefreshTokenParams, hints?: TokenRequestHints): Promise<TokenResult> {
+        console.log("Token expired, refreshing... ", new Date());
 
-        if(!token.refreshToken){
+        if (!token.refreshToken) {
             throw new Error("No refresh token available!");
         }
 
@@ -33,8 +38,8 @@ export default class BaseGrant {
         };
 
         const response: TokenEndpointResponse = (await axios.post<any, AxiosResponse<TokenEndpointResponse>>(
-            tokenEndpoint, 
-            request, 
+            tokenEndpoint,
+            request,
             {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -42,7 +47,7 @@ export default class BaseGrant {
             }
         )).data;
 
-
+        console.log("Refresh completed")
         return TokenResult.fromResponse(response);
     }
 }

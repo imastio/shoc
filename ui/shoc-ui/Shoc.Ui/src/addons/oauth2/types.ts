@@ -18,6 +18,6 @@ export interface TokenRequestHints {
 }
 
 export interface RefreshTokenParams {
-    accessToken: string;
-    refreshToken: string | null;
+    accessToken?: string | null;
+    refreshToken?: string | null;
 }

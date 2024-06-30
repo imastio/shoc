@@ -9,7 +9,6 @@ import IntlProvider from "@/addons/intl-provider";
 import localeConfig from "@/i18n/locale-config";
 import { getLocaleSource } from "@/i18n";
 import { Toaster } from "@/components/ui/sonner";
-import PrivateInitLayout from "./_components/private-init-layout";
 
 export const metadata: Metadata = {
   title: "Shoc Platform",

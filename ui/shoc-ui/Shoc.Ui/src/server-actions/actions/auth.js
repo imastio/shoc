@@ -1,7 +1,8 @@
 import 'server-only';
 
 import { defineServerAction } from '../define';
-import { signIn as authSignIn, signOut as authSignOut, singleSignOut as authSingleSignOut } from '@/addons/auth';
+import { signIn as authSignIn, signOut as authSignOut } from '@/addons/auth';
+import { singleSignOut as authSingleSignOut } from '@/addons/auth/actions';
 
 export const signIn = defineServerAction(({ }) => {
     return authSignIn('shoc', { redirect: true });

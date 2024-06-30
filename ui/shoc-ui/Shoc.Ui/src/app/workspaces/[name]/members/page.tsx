@@ -5,6 +5,7 @@ import ErrorScreen from "@/components/error/error-screen";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
+import { getByName, getMembersById } from "../cached-workspace-actions";
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +21,21 @@ export async function generateMetadata({ params: { name } }: { params: any }): P
   }
 
 export default async function WorkspaceMembersPage({ params: { name } }: any) {
-  return <p>members</p>
+
+  const { data: workspace, errors: workspaceErrors } = await getByName(name);
+
+  if (workspaceErrors) {
+      return <ErrorScreen errors={workspaceErrors} />
+  }
+
+  const { data: members, errors: membersErrors } = await getMembersById(workspace.id);
+
+  if (membersErrors) {
+    console.log(membersErrors)
+    return <ErrorScreen errors={membersErrors} />
+  
+  }
+  return <pre>{JSON.stringify(members, null, 4)}</pre>
     // const { data, errors } = await getWorkspaceByName(name)
     // if (errors) {
     //     return <ErrorScreen errors={errors} />

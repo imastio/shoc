@@ -23,7 +23,8 @@ public class WorkspacePermissionCalculator
             {
                 WorkspacePermissions.WORKSPACE_VIEW,
                 WorkspacePermissions.WORKSPACE_EDIT,
-                WorkspacePermissions.WORKSPACE_DELETE
+                WorkspacePermissions.WORKSPACE_DELETE,
+                WorkspacePermissions.WORKSPACE_LIST_MEMBERS
             }
         },
         {

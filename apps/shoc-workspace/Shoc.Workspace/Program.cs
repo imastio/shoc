@@ -28,6 +28,7 @@ builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<WorkspaceService>();
 builder.Services.AddSingleton<WorkspaceMemberService>();
 builder.Services.AddSingleton<UserWorkspaceService>();
+builder.Services.AddSingleton<UserWorkspaceMemberService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

@@ -25,6 +25,11 @@ public class WorkspacePermissions
     public const string WORKSPACE_DELETE = "workspace_delete";
     
     /// <summary>
+    /// View members of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_MEMBERS = "workspace_list_members";
+    
+    /// <summary>
     /// Get and initialize all the constants
     /// </summary>
     public static readonly ISet<string> ALL = GetAll();
