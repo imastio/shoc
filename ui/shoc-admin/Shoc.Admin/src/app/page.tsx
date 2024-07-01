@@ -1,4 +1,5 @@
-import { auth, getJwt } from "@/addons/auth"
+import { auth } from "@/addons/auth"
+import { getJwt } from "@/addons/auth/actions";
 
 export default async function Home() {
 

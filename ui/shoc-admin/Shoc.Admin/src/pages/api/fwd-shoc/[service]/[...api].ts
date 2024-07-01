@@ -1,5 +1,5 @@
 import { auth } from "@/addons/auth";
-import { getJwtNode } from "@/addons/auth/jwt-node";
+import { getJwtNode } from "@/addons/auth/actions";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -29,7 +29,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     target: apiRoot,
     secure: process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0',
     headers: {
-      'Authorization': `Bearer ${jwt?.access_token || ''}`,
+      'Authorization': `Bearer ${jwt?.actualAccessToken || ''}`,
       'Cookie': ''
     }
   }, () => { });

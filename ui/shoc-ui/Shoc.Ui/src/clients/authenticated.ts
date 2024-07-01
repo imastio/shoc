@@ -1,6 +1,5 @@
 import { auth } from '@/addons/auth';
 import { getJwt } from '@/addons/auth/actions';
-import { sessionAccessTokenCache } from '@/addons/auth/cache';
 import { CacheStorage } from '@/addons/cache';
 import ErrorDefinitions from '@/addons/error-handling/error-definitions';
 import ClientCredentialsGrant from '@/addons/oauth2/client-credentials-grant';
@@ -60,9 +59,8 @@ async function authenticatedImpl<TResult>(action: (token: string) => Promise<TRe
 async function authenticatedUserImpl<TResult>(action: (token: string) => Promise<TResult>): Promise<TResult>{
 
     await auth();
-    const jwt: any = await getJwt();
-    const accessToken = sessionAccessTokenCache.get(`${jwt.sid}.at`)
-    return await action(accessToken);
+    const jwt = await getJwt();
+    return await action(jwt?.actualAccessToken || '');
 }
 
 export async function authenticated<TResult>(action: (token: string) => Promise<TResult>): Promise<TResult> {

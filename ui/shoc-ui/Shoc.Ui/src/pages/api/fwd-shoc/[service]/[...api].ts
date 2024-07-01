@@ -1,3 +1,4 @@
+import { auth } from "@/addons/auth";
 import { getJwtNode } from "@/addons/auth/actions";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -11,6 +12,7 @@ export const config = {
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 
+  await auth(req, res);
   const jwt = await getJwtNode(req.headers);
   const proxy: httpProxy = httpProxy.createProxy();
 
@@ -26,7 +28,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     target: apiRoot,
     secure: process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0',
     headers: {
-      'Authorization': `Bearer ${jwt?.access_token || ''}`,
+      'Authorization': `Bearer ${jwt?.actualAccessToken || ''}`,
       'Cookie': ''
     }
   }, () => { });

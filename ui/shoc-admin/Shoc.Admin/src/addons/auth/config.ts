@@ -16,5 +16,21 @@ export function getAuthSecret(){
 }
 
 export function getBaseUrl(){
-    return process.env.SHOC_ADMIN_BASE_URL || 'http://localhost:3000'
+    return process.env.SHOC_ADMIN_BASE_URL || 'http://localhost:11042';
+}
+
+export function getOpenIdScopes(){
+    return 'openid email profile shoc offline_access';
+}
+
+export function getTokenExpirationSkew(){
+    return 60;
+}
+
+export function getTokenCacheLifetime(){
+    return 60;
+}
+
+export function getRefreshRequestLifetime(){
+    return 60;
 }
