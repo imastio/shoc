@@ -10,7 +10,6 @@ const mapError = (apiError: ApiError): ServerActionError => ({
 });
 
 export default function toServerActionErrors(error: Error | AxiosError | unknown): ServerActionError[] {
-
     if (error instanceof ApiError) {
         return [mapError(error)];
     }

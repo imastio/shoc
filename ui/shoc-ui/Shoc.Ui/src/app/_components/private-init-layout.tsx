@@ -16,8 +16,6 @@ export default function PrivateInitLayout({ children }: { children: React.ReactN
 
     useEffect(() => {
         if (session.status === 'unauthenticated' || session.data?.error) {
-            console.log("Need to sign in again", session)
-            console.log("JSON", JSON.stringify(session));
             rpcDirect('auth/signIn')
         }
 

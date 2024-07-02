@@ -60,6 +60,7 @@ async function authenticatedUserImpl<TResult>(action: (token: string) => Promise
 
     await auth();
     const jwt = await getJwt();
+    //console.log('calling with token', jwt?.actualAccessToken)
     return await action(jwt?.actualAccessToken || '');
 }
 
@@ -84,8 +85,10 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
         return await authenticatedUserImpl(action);
     }
     catch(error){
-
         if(error instanceof AxiosError){
+            if(error.status === 401){
+                console.log("Not authenticated with token", error.config?.headers?.Authorization)
+            }
             throw error;            
         }
 

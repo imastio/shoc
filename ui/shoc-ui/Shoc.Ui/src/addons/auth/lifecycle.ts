@@ -81,7 +81,7 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
 
         // wait for the completion
         const refreshed = await request;
-        console.log("Refreshed response", refreshed)
+
         // build the new token
         const newToken = {
             ...token,
@@ -99,7 +99,6 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
         return newToken;
     }
     catch(error){
-        console.log("Error while refreshing", error)
         return { 
             ...token, 
             sid: token.sid,

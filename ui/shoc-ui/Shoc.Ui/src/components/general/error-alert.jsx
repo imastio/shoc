@@ -18,9 +18,11 @@ export default function ErrorAlert({ title = '', errors = [], className = '' }) 
     const descriptionErrors = title ? errors : errors.slice(1);
 
     return <Alert className={className} variant="destructive">
-        <ExclamationTriangleIcon className="h-4 w-4" />
-        <AlertTitle>{effectiveTitle}</AlertTitle>
-        {descriptionErrors.length > 0 && <AlertDescription>
+        <AlertTitle className="flex mb-0">         
+            <ExclamationTriangleIcon className="h-4 w-4 mr-2" />
+            {effectiveTitle}
+        </AlertTitle>
+        {descriptionErrors.length > 0 && <AlertDescription className="mt-1">
             {descriptionErrors.length === 1 && intl.formatMessage({ id: 'errors.' + errors[0].code })}
             {descriptionErrors.length > 1 && <ul>
                 {descriptionErrors.map((error, index) => <li key={index}>{intl.formatMessage({ id: 'errors.' + error.code })}</li>)}

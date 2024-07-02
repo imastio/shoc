@@ -10,11 +10,11 @@ import { Metadata } from "next";
 export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
 
     const { data } = await getByName(name);
-  
+
     return {
-      description: data?.description || ''
+        description: data?.description || ''
     }
-  }
+}
 
 export default async function SingleWorkspaceLayout({ params: { name }, children }: { children: ReactNode, params: any }) {
 

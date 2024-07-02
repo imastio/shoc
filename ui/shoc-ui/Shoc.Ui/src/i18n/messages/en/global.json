@@ -5,8 +5,14 @@
     "logout": "Logout",
     "global.actions.goBack": "Go Back",
     "global.actions.create": "Create",
+    "global.actions.continue": "Continue",
+    "global.actions.delete": "Delete",
+    "global.actions.cancel": "Cancel",
     "global.actions.select": "Select",
+    "global.actions.selectAll": "Select all",
     "global.labels.name": "Name",
+    "global.labels.email": "Email",
     "global.labels.description": "Description",
+    "global.labels.actions": "Actions",
     "navigation.about": "About"
 }

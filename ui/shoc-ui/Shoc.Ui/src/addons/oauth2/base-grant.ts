@@ -19,7 +19,6 @@ export default class BaseGrant {
     }
 
     public async refreshToken(token: RefreshTokenParams, hints?: TokenRequestHints): Promise<TokenResult> {
-        console.log("Token expired, refreshing... ", new Date());
 
         if (!token.refreshToken) {
             throw new Error("No refresh token available!");
@@ -46,7 +45,6 @@ export default class BaseGrant {
                 }
             }
         )).data;
-        console.log("Refresh completed", response)
         return TokenResult.fromResponse(response);
     }
 }

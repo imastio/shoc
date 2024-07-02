@@ -34,5 +34,8 @@
     "workspaces.sidebar.clusters": "Clusters",
     "workspaces.sidebar.registries": "Registries",
     "workspaces.sidebar.members": "Members",
-    "workspaces.sidebar.settings": "Settings"
+    "workspaces.sidebar.settings": "Settings",
+    "workspaces.members.menu.members": "Members",
+    "workspaces.members.menu.invitations": "Invitations",
+    "workspace.members.labels.since": "Since"
 }
