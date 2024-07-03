@@ -61,4 +61,35 @@ public class UserWorkspaceMemberService : UserWorkspaceServiceBase
             Updated = item.Updated
         });
     }
+
+    /// <summary>
+    /// Deletes the member user from the workspace
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <returns></returns>
+    public async Task<UserWorkspaceMemberDeletedModel> DeleteById(string userId, string workspaceId, string id)
+    {
+        // get existing object
+        await this.memberService.GetById(workspaceId, id);
+
+        // ensure have required access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
+            WorkspacePermissions.WORKSPACE_DELETE_MEMBER);
+
+        // delete object
+        var result = await this.memberService.DeleteById(workspaceId, id);
+        
+        // return existing object
+        return new UserWorkspaceMemberDeletedModel
+        {
+            Id = result.Id,
+            WorkspaceId = result.WorkspaceId,
+            UserId = result.UserId
+        };
+    }
 }

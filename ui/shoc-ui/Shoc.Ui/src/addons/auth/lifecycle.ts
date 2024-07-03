@@ -58,7 +58,7 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
     }
 
     try {
-        
+       
         // use this key to send single request for (refresh, access) token pair
         const requestKey = `${token.refreshToken}_${token.accessToken}`
 
@@ -78,6 +78,9 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
             // store in the cache
             tokenRefreshRequests.set(requestKey, request, getRefreshRequestLifetime());
         }
+        console.log("Refresh request queue state", {
+            keys: Object.keys(tokenRefreshRequests.innerCache.data)
+        })
 
         // wait for the completion
         const refreshed = await request;
@@ -99,6 +102,7 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
         return newToken;
     }
     catch(error){
+        sessionAccessTokenCache.del(`${token.sid}.at`);
         return { 
             ...token, 
             sid: token.sid,

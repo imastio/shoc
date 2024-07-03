@@ -8,7 +8,7 @@ export const tokenRefreshRequests = new CacheStorage({
 });
 
 export const sessionAccessTokenCache = new CacheStorage({
-    prefix: 'session-access-tokens.',
+    prefix: 'session-access-tokens',
     defaultTtl: getTokenCacheLifetime(),
     checkEvery: 60
 })

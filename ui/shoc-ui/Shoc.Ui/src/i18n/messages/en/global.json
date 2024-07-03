@@ -14,5 +14,8 @@
     "global.labels.email": "Email",
     "global.labels.description": "Description",
     "global.labels.actions": "Actions",
+    "global.messages.sure": "Are you sure?",
+    "global.messages.noUndoneNotice": "This action cannot be undone.",
+    "global.messages.permanentRemove": "We will permanently remove the record.",
     "navigation.about": "About"
 }

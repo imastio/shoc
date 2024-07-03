@@ -43,5 +43,18 @@ public class UserWorkspaceMembersController : ControllerBase
     {
         return this.workspaceMemberService.GetAllExtended(this.HttpContext.GetPrincipal().Id, workspaceId);
     }
+    
+    /// <summary>
+    /// Deletes the member user from the workspace.
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpDelete("{id}")]
+    public Task<UserWorkspaceMemberDeletedModel> DeleteById(string workspaceId, string id)
+    {
+        return this.workspaceMemberService.DeleteById(this.HttpContext.GetPrincipal().Id, workspaceId, id);
+    }
 }
 

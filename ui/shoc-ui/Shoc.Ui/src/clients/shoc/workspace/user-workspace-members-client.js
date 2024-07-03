@@ -25,4 +25,17 @@ export default class UserWorkspaceMembersClient extends BaseAxiosClient {
       }
     });
   }
+
+  deleteById(token, workspaceId, id){
+
+    const url = this.urlify({
+      api: `api/user-workspaces/${workspaceId}/members/${id}`
+    });
+
+    return this.webClient.delete(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
 }

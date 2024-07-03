@@ -86,12 +86,12 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
     }
     catch(error){
         if(error instanceof AxiosError){
-            if(error.status === 401){
-                console.log("Not authenticated with token", error.config?.headers?.Authorization)
+            if(error.response?.status === 401){
+                console.error("Not authenticated with token", error.config?.headers?.Authorization)
             }
+
             throw error;            
         }
-
         throw ErrorDefinitions.notAuthenticated();
     }
 

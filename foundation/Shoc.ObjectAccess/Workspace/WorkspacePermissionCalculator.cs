@@ -24,13 +24,15 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_VIEW,
                 WorkspacePermissions.WORKSPACE_EDIT,
                 WorkspacePermissions.WORKSPACE_DELETE,
-                WorkspacePermissions.WORKSPACE_LIST_MEMBERS
+                WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
+                WorkspacePermissions.WORKSPACE_DELETE_MEMBER
             }
         },
         {
             WorkspaceRoles.MEMBER,
             new HashSet<string>
             {
+                WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
                 WorkspacePermissions.WORKSPACE_VIEW
             }
         },

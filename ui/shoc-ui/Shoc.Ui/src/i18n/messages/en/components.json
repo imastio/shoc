@@ -1,0 +1,9 @@
+{
+    "components.table.pages.rowsPerPage": "Rows per page",
+    "components.table.pages.goFirst": "Go to first page",
+    "components.table.pages.goNext": "Go to next page",
+    "components.table.pages.goLast": "Go to last page",
+    "components.table.pages.goPrevious": "Go to previous page",
+    "components.table.pages.current": "Page {current} of {all}",
+    "components.table.rows.selected": "{selected} of {all} row(s) selected."
+}

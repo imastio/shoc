@@ -30,7 +30,7 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
         setProgress(true);
 
         await sleeper(1000)
-        const { data, errors } = await rpc('workspace/user-workspace-members/getAll', { workspaceId: "123", id: item.id });
+        const { data, errors } = await rpc('workspace/user-workspace-members/deleteById', { workspaceId: item.workspaceId, id: item.id });
         setProgress(false);
 
         if (errors) {
@@ -60,11 +60,12 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
             }
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{intl.formatMessage({id: 'global.messages.sure'})}</AlertDialogTitle>
                     <ErrorAlert errors={errors} />
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
+                    {intl.formatMessage({id: 'global.messages.noUndoneNotice'})} 
+                    {' '}
+                    {intl.formatMessage({id: 'global.messages.permanentRemove'})}     
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -78,6 +79,7 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
                         onClick={async (e) => {
                             e.preventDefault();
                             await onOk()
+                            onOpenChangeWrapper(false);
                         }}
                     >
                         {progress && <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />}
