@@ -3,6 +3,7 @@ import { getJwt } from '@/addons/auth/actions';
 import { CacheStorage } from '@/addons/cache';
 import ErrorDefinitions from '@/addons/error-handling/error-definitions';
 import ClientCredentialsGrant from '@/addons/oauth2/client-credentials-grant';
+import { decodeJwt } from '@/addons/oauth2/utils';
 import { AxiosError } from 'axios';
 import 'server-only';
 
@@ -60,7 +61,15 @@ async function authenticatedUserImpl<TResult>(action: (token: string) => Promise
 
     await auth();
     const jwt = await getJwt();
-    //console.log('calling with token', jwt?.actualAccessToken)
+
+    if(jwt?.actualAccessToken){
+
+        const decoded = decodeJwt(jwt.actualAccessToken);
+        const expirationDate = new Date(decoded.exp * 1000);
+        const expired = expirationDate.getTime() < new Date().getTime()
+        console.log(`Latest token used: SID: ${jwt.sid}, JTI: ${decoded.jti}, Expired: ${expired}, Expiration: ${expirationDate}`)
+    }
+
     return await action(jwt?.actualAccessToken || '');
 }
 
@@ -87,7 +96,7 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
     catch(error){
         if(error instanceof AxiosError){
             if(error.response?.status === 401){
-                console.error("Not authenticated with token", error.config?.headers?.Authorization)
+                console.trace("Not authenticated with token", error.config?.headers?.Authorization)
             }
 
             throw error;            

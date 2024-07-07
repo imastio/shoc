@@ -9,7 +9,6 @@ export default async function sessionMiddleware(context: NextContext, next: Next
         return;
     }
 
-    // refresh session centrally
     await auth();
 
     // continue down the chain if need to 
