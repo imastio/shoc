@@ -1,11 +1,10 @@
-import { Account, Awaitable, DefaultSession, Profile, User } from "@auth/core/types";
+import { Account, Awaitable, Profile, User } from "@auth/core/types";
 import { AuthorizationCodeGrant } from "@/addons/oauth2/authorization-code-grant";
 import { getClientId, getClientSecret, getIssuer, getOpenIdScopes, getRefreshRequestLifetime, getTokenCacheLifetime, getTokenExpirationSkew } from "./config";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
 import { sessionAccessTokenCache, tokenRefreshRequests } from "./cache";
 import { AdapterUser } from "@auth/core/adapters";
-import { decodeJwt } from "../oauth2/utils";
 import TokenResult from "../oauth2/token-result";
 
 export const codeGrant = new AuthorizationCodeGrant({

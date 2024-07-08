@@ -139,6 +139,36 @@ services:
     networks:
       - shoc-network
 
+  shoc-admin:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-admin:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./ui/shoc-admin/Shoc.Admin
+    container_name: shoc-admin
+    profiles:
+      - ui
+    env_file: 
+      - ./env/shoc-admin.env
+      - ./ui/shoc-admin/Shoc.Admin/.env.local
+    ports:
+      - '11042:11042'
+    networks:
+      - shoc-network
+    
+  shoc-ui:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./ui/shoc-ui/Shoc.Ui
+    container_name: shoc-ui
+    profiles:
+      - ui
+    env_file: 
+      - ./env/shoc-ui.env
+      - ./ui/shoc-ui/Shoc.Ui/.env.local
+    ports:
+      - '11040:11040'
+    networks:
+      - shoc-network
+
   shoc-ingress:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ingress:${SHOC_PUBLIC_VERSION:-latest}
     build: ./infrastructure/Shoc.Ingress

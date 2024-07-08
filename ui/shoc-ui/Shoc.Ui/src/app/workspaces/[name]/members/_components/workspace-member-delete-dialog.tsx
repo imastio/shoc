@@ -28,8 +28,6 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
 
         setErrors([]);
         setProgress(true);
-
-        await sleeper(1000)
         const { data, errors } = await rpc('workspace/user-workspace-members/deleteById', { workspaceId: item.workspaceId, id: item.id });
         setProgress(false);
 
@@ -41,7 +39,6 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
         if (onSuccess) {
             onSuccess(data)
         }
-
     }
 
     const onOpenChangeWrapper = (openValue: boolean): void => {

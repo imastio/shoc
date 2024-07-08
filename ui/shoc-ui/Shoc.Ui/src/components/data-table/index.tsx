@@ -27,11 +27,17 @@ import {
 import DataTableToolbar from "./data-table-toolbar"
 import DataTablePagination from "./data-table-pagination"
 import { cn } from "@/lib/utils"
+import { Progress } from "../ui/progress"
+import { Skeleton } from "../ui/skeleton"
+import LoadingContainer from "../general/loading-container"
+import ErrorScreen from "../error/error-screen"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
   className?: string,
+  progress?: boolean,
+  errors?: any[],
   toolbar?: (table: TableType<TData>) => React.ReactNode
 }
 
@@ -39,6 +45,8 @@ export default function DataTable<TData, TValue>({
   columns,
   data,
   className,
+  progress = false,
+  errors = []
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -47,6 +55,9 @@ export default function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const hasErrors = errors && errors.length > 0;
+
   const table = useReactTable({
     data,
     columns,
@@ -70,58 +81,74 @@ export default function DataTable<TData, TValue>({
   })
 
   return (
-    <div className={cn("space-y-4", className)}>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
+    <LoadingContainer loading={progress}>
+
+      <div className={cn("space-y-4", className)}>
+        <div className={cn("rounded-md border")}>
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead className={cn(progress || hasErrors ? "pointer-events-none" : "")} key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                      </TableHead>
+                    )
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {!hasErrors && table.getRowModel().rows?.length > 0 && (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )}
+              {!hasErrors && !table.getRowModel().rows?.length && (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+
+              )}
+              {hasErrors && (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-[500px] bg-white text-center"
+                  >
+                    <ErrorScreen errors={errors} />
+                  </TableCell>
+                </TableRow>
+
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        {!hasErrors && <DataTablePagination table={table} />}
       </div>
-      <DataTablePagination table={table} />
-    </div>
+    </LoadingContainer>
   )
 }
