@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import Link from "next/link";
 import WorkspaceMembersMenu from "./workspace-members-menu";
 
 export default async function SingleWorkspaceMembersLayout({ params: { name }, children }: { children: ReactNode, params: any }) {

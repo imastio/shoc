@@ -1,4 +1,5 @@
 import globalEn from "./messages/en/global.json";
+import authEn from "./messages/en/auth.json";
 import componentsEn from "./messages/en/components.json";
 import errorsEn from "./messages/en/errors.json";
 import workspacesEn from "./messages/en/workspaces.json";
@@ -8,6 +9,7 @@ export const localeMessages = {
    
     en: {
         ...globalEn,
+        ...authEn,
         ...componentsEn,
         ...errorsEn,
         ...workspacesEn

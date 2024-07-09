@@ -34,6 +34,7 @@ export default function WorkspaceMembersMenu({ name }: { name: string }) {
             {menu.map((item, index) => <Link
                 key={index}
                 href={item.path}
+                prefetch={false}
                 className={cn("transition-colors hover:text-foreground", item.active ? "text-foreground" : "text-muted-foreground")}
             >
                 {item.title}

@@ -52,7 +52,7 @@ export async function jwtCallback({ token, account, user } : { token: JWT, accou
         
     // use this key to send single request for (refresh, access) token pair
     const requestKey = `${token.sid}`
-    
+
     // see if the session is being refreshed right now
     const ongoingRequest = tokenRefreshRequests.get(requestKey);
 

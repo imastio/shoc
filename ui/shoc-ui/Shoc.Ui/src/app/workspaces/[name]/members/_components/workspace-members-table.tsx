@@ -137,7 +137,7 @@ export default function WorkspaceMembersTable({ workspaceId, className }: { work
         )
       }
     }
-  ], [intl, load])
+  ], [intl, load, workspaceId])
 
   return (
     <DataTable

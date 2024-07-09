@@ -1,6 +1,5 @@
 import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
-import PrivateInitLayout from "../_components/private-init-layout";
 
 export async function generateMetadata(): Promise<Metadata> {
 
@@ -16,11 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function WorkspacesLayout({ children }: any) {
 
-    return <PrivateInitLayout>
+    return <>
         <div className="grid min-h-screen w-full">
             <div className="flex flex-col w-full">
                 {children}
             </div>
         </div>
-    </PrivateInitLayout>
+    </>
 }

@@ -3,7 +3,6 @@ import { getJwt } from '@/addons/auth/actions';
 import { CacheStorage } from '@/addons/cache';
 import ErrorDefinitions from '@/addons/error-handling/error-definitions';
 import ClientCredentialsGrant from '@/addons/oauth2/client-credentials-grant';
-import { decodeJwt } from '@/addons/oauth2/utils';
 import { AxiosError } from 'axios';
 import 'server-only';
 
@@ -61,15 +60,6 @@ async function authenticatedUserImpl<TResult>(action: (token: string) => Promise
 
     await auth();
     const jwt = await getJwt();
-
-    if(jwt?.actualAccessToken){
-
-        const decoded = decodeJwt(jwt.actualAccessToken);
-        const expirationDate = new Date(decoded.exp * 1000);
-        const expired = expirationDate.getTime() < new Date().getTime()
-        console.log(`Latest token used: SID: ${jwt.sid}, JTI: ${decoded.jti}, Expired: ${expired}, Expiration: ${expirationDate}`)
-    }
-
     return await action(jwt?.actualAccessToken || '');
 }
 

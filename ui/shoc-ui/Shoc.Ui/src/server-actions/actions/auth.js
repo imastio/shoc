@@ -4,8 +4,8 @@ import { defineServerAction } from '../define';
 import { signIn as authSignIn, signOut as authSignOut } from '@/addons/auth';
 import { singleSignOut as authSingleSignOut } from '@/addons/auth/actions';
 
-export const signIn = defineServerAction(({ }) => {
-    return authSignIn('shoc', { redirect: true });
+export const signIn = defineServerAction(({ redirectTo }) => {
+    return authSignIn('shoc', { redirect: true, redirectTo });
 });
 
 export const signOut = defineServerAction(({ endSessionUri }) => {

@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
 import SpinnerIcon from '@/components/icons/spinner-icon';
+import { cn } from '@/lib/utils';
 
-export default function LoadingContainer({ loading, children }: { loading?: boolean, children: ReactNode }) {
+export default function LoadingContainer({ loading, children, className }: { loading?: boolean, children: ReactNode, className?: string }) {
   return (
-    <div className="relative">
+    <div className={cn("relative", className)}>
       <div className={`${loading ? 'opacity-50 pointer-events-none' : ''}`}>
         {children}
       </div>
