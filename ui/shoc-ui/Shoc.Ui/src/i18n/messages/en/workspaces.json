@@ -37,5 +37,10 @@
     "workspaces.sidebar.settings": "Settings",
     "workspaces.members.menu.members": "Members",
     "workspaces.members.menu.invitations": "Invitations",
-    "workspace.members.labels.since": "Since"
+    "workspaces.members.labels.since": "Since",
+    "workspaces.members.placeholders.role": "Select a member role",
+    "workspaces.members.validation.invalidRole": "The role is not valid",
+    "workspaces.members.update": "Update membership",
+    "workspaces.members.updateNotice": "You can update the role of the member in the workspace.",
+    "workspaces.members.updateError": "Unable to update the membership"
 }

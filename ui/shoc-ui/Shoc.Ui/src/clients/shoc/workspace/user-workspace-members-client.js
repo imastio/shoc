@@ -13,8 +13,8 @@ export default class UserWorkspaceMembersClient extends BaseAxiosClient {
     super("shoc-workspace", config);
   }
 
- 
-  getAll(token, workspaceId){
+
+  getAll(token, workspaceId) {
     const url = this.urlify({
       api: `api/user-workspaces/${workspaceId}/members`
     });
@@ -26,7 +26,20 @@ export default class UserWorkspaceMembersClient extends BaseAxiosClient {
     });
   }
 
-  deleteById(token, workspaceId, id){
+  updateById(token, workspaceId, id, input) {
+
+    const url = this.urlify({
+      api: `api/user-workspaces/${workspaceId}/members/${id}`
+    });
+
+    return this.webClient.put(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+  deleteById(token, workspaceId, id) {
 
     const url = this.urlify({
       api: `api/user-workspaces/${workspaceId}/members/${id}`

@@ -1,9 +1,9 @@
 namespace Shoc.Workspace.Model.UserWorkspace;
 
 /// <summary>
-/// The user workspace member delete result model
+/// The user workspace member update result model
 /// </summary>
-public class UserWorkspaceMemberDeletedModel
+public class UserWorkspaceMemberUpdateModel
 {
     /// <summary>
     /// The workspace member id
@@ -14,4 +14,9 @@ public class UserWorkspaceMemberDeletedModel
     /// The workspace id
     /// </summary>
     public string WorkspaceId { get; set; }
+
+    /// <summary>
+    /// The membership role
+    /// </summary>
+    public string Role { get; set; }
 }

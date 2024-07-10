@@ -30,19 +30,19 @@ export default function useWorkspaceMenu({ name }: { name: string }){
             path: `/workspaces/${name}/members`, 
             title: intl.formatMessage({ id: 'workspaces.sidebar.members' }), 
             icon: UsersIcon,
-            visible: hasAny(['workspace_edit'])
+            visible: hasAny(['workspace_list_members'])
         },
         { 
             path: `/workspaces/${name}/clusters`, 
             title: intl.formatMessage({ id: 'workspaces.sidebar.clusters' }), 
             icon: ClusterIcon,
-            visible: hasAny(['workspace_edit'])
+            visible: hasAny(['workspace_list_clusters'])
         },
         { 
             path: `/workspaces/${name}/registries`, 
             title: intl.formatMessage({ id: 'workspaces.sidebar.registries' }), 
             icon: LayersIcon,
-            visible: hasAny(['workspace_edit'])
+            visible: hasAny(['workspace_list_registries'])
         },
         { 
             path: `/workspaces/${name}/settings`, 

@@ -47,7 +47,7 @@ export const workspaceRoles: { key: string, display: IntlMessageId }[] = [
     },
     {
         key: 'guest', 
-        display: 'workspaces.roles.member'
+        display: 'workspaces.roles.guest'
     }
 ]
 

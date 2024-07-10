@@ -5,6 +5,7 @@
     "logout": "Logout",
     "global.actions.goBack": "Go Back",
     "global.actions.create": "Create",
+    "global.actions.update": "Update",
     "global.actions.continue": "Continue",
     "global.actions.delete": "Delete",
     "global.actions.cancel": "Cancel",

@@ -26,3 +26,19 @@ CREATE TABLE `wspc_workspace_members` (
     CONSTRAINT `FK_WorkspaceMember_User` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_WorkspaceMember_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `wspc_workspace_invitations` (
+    `Id` varchar(100) NOT NULL,
+    `WorkspaceId` varchar(100) NOT NULL,
+    `Email` varchar(256) NOT NULL,
+    `Role` varchar(64) NOT NULL,
+    `InvitedBy` varchar(100) NOT NULL,
+    `Expiration` datetime NOT NULL,
+    `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY `Workspace_Email_UNIQUE` (`WorkspaceId`,`Email`),
+    KEY `WorkspaceInvitations_User_FK_idx` (`InvitedBy`),
+    CONSTRAINT `WorkspaceInvitations_User_FK` FOREIGN KEY (`InvitedBy`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `WorkspaceInvitations_Workspace_FK` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

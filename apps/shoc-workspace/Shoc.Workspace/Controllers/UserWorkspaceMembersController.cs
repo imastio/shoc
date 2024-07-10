@@ -45,6 +45,20 @@ public class UserWorkspaceMembersController : ControllerBase
     }
     
     /// <summary>
+    /// Updates the member user on the workspace
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <param name="input">The update input</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpPut("{id}")]
+    public Task<UserWorkspaceMemberUpdatedModel> UpdateById(string workspaceId, string id, UserWorkspaceMemberUpdateModel input)
+    {
+        return this.workspaceMemberService.UpdateById(this.HttpContext.GetPrincipal().Id, workspaceId, id, input);
+    }
+    
+    /// <summary>
     /// Deletes the member user from the workspace.
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

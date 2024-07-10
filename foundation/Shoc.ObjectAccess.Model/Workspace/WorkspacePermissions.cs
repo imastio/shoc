@@ -30,6 +30,11 @@ public class WorkspacePermissions
     public const string WORKSPACE_LIST_MEMBERS = "workspace_list_members";
     
     /// <summary>
+    /// Update members of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_MEMBER = "workspace_update_member";
+    
+    /// <summary>
     /// Delete members of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_MEMBER = "workspace_delete_member";

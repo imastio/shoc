@@ -5,6 +5,7 @@ using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Model.UserWorkspace;
+using Shoc.Workspace.Model.Workspace;
 
 namespace Shoc.Workspace.Services;
 
@@ -63,6 +64,46 @@ public class UserWorkspaceMemberService : UserWorkspaceServiceBase
     }
 
     /// <summary>
+    /// Updates the member user on the workspace
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <param name="input">The update input</param>
+    /// <returns></returns>
+    public async Task<UserWorkspaceMemberUpdatedModel> UpdateById(string userId, string workspaceId, string id, UserWorkspaceMemberUpdateModel input)
+    {
+        // get existing object
+        await this.memberService.GetById(workspaceId, id);
+
+        // ensure have required access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
+            WorkspacePermissions.WORKSPACE_UPDATE_MEMBER);
+        
+        // ensure referring to the correct object
+        input.Id = id;
+        input.WorkspaceId = workspaceId;
+
+        // update the object
+        var result = await this.memberService.UpdateById(workspaceId, id, new WorkspaceMemberUpdateModel
+        {
+            Id = input.Id,
+            WorkspaceId = input.WorkspaceId,
+            Role = input.Role
+        });
+        
+        // return existing object
+        return new UserWorkspaceMemberUpdatedModel
+        {
+            Id = result.Id,
+            WorkspaceId = result.WorkspaceId
+        };
+    }
+
+    /// <summary>
     /// Deletes the member user from the workspace
     /// </summary>
     /// <param name="userId">The user id</param>
@@ -88,8 +129,7 @@ public class UserWorkspaceMemberService : UserWorkspaceServiceBase
         return new UserWorkspaceMemberDeletedModel
         {
             Id = result.Id,
-            WorkspaceId = result.WorkspaceId,
-            UserId = result.UserId
+            WorkspaceId = result.WorkspaceId
         };
     }
 }

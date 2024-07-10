@@ -8,7 +8,6 @@ import { rpc } from "@/server-actions/rpc";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import SpinnerIcon from "@/components/icons/spinner-icon";
-import { sleeper } from "@/extended/dash";
 
 type DialogProps = {
     item: WorkspaceMember,
