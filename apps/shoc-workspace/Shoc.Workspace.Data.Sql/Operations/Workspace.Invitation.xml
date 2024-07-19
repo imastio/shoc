@@ -6,11 +6,11 @@
   <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
   <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
 
-  <OperationGroup Name="Workspace.Workspace.Member">
+  <OperationGroup Name="Workspace.Workspace.Invitation">
 
     <SqlOperation Name="GetAll">
       <TextCommand>
-        SELECT * FROM `wspc_workspace_members`
+        SELECT * FROM `wspc_workspace_invitations`
         WHERE `WorkspaceId` = @WorkspaceId
         ORDER BY `Name` ASC;
       </TextCommand>
@@ -18,7 +18,7 @@
 
     <SqlOperation Name="GetAllExtended">
       <TextCommand>
-        SELECT wm.*, u.Email, u.FullName  FROM `wspc_workspace_members` wm
+        SELECT wm.*, u.Email as InvitedByEmail, u.FullName as InvitedByFullName  FROM `wspc_workspace_invitations` wm
         INNER JOIN `idp_users` u
         ON wm.UserId = u.Id
         WHERE wm.`WorkspaceId` = @WorkspaceId
@@ -28,45 +28,27 @@
     
     <SqlOperation Name="GetById">
       <TextCommand>
-        SELECT * FROM `wspc_workspace_members`
+        SELECT * FROM `wspc_workspace_invitations`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetByUserId">
-      <TextCommand>
-        SELECT * FROM `wspc_workspace_members`
-        WHERE `WorkspaceId` = @WorkspaceId AND `UserId` = @UserId;
-      </TextCommand>
-    </SqlOperation>
-
-    <SqlOperation Name="GetExtendedById">
-      <TextCommand>
-        SELECT wm.*, u.Email, u.FullName FROM `wspc_workspace_members` wm
-        INNER JOIN `idp_users` u
-        ON wm.UserId = u.Id
-        WHERE wm.`WorkspaceId` = @WorkspaceId AND wm.`Id` = @Id;
       </TextCommand>
     </SqlOperation>
 
     <SqlOperation Name="GetByEmail">
       <TextCommand>
-        SELECT wm.* FROM `wspc_workspace_members` wm
-        INNER JOIN `idp_users` u
-        ON wm.UserId = u.Id
-        WHERE wm.`WorkspaceId` = @WorkspaceId AND wm.`u.Email` = @Email;
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Email` = @Email;
       </TextCommand>
     </SqlOperation>
 
     <SqlOperation Name="Create">
 
       <TextCommand>
-        INSERT INTO `wspc_workspace_members`
-        (`Id`, `WorkspaceId`, `UserId`, `Role`)
+        INSERT INTO `wspc_workspace_invitations`
+        (`Id`, `WorkspaceId`, `Email`, `Role`, `InvitedBy`, `Expiration`)
         VALUES
-        (@Id, @WorkspaceId, @UserId, @Role);
+        (@Id, @WorkspaceId, @Email, @Role, @InvitedBy, @Expiration);
 
-        SELECT * FROM `wspc_workspace_members`
+        SELECT * FROM `wspc_workspace_invitations`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
       </TextCommand>
 
@@ -74,13 +56,14 @@
 
     <SqlOperation Name="UpdateById">
       <TextCommand>
-        UPDATE `wspc_workspace_members`
+        UPDATE `wspc_workspace_invitations`
         SET
-        `Role` = @Role
+        `Role` = @Role,
+        `InvitedBy` = @InvitedBy
         WHERE
         `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
 
-        SELECT * FROM `wspc_workspace_members`
+        SELECT * FROM `wspc_workspace_invitations`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
 
       </TextCommand>
@@ -88,8 +71,8 @@
     
     <SqlOperation Name="DeleteById">
       <TextCommand>
-        SELECT * FROM `wspc_workspace_members` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
-        DELETE FROM `wspc_workspace_members` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        SELECT * FROM `wspc_workspace_invitations` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `wspc_workspace_invitations` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
       </TextCommand>
     </SqlOperation>
 

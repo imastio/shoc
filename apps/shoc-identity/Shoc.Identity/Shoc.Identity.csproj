@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>8.*-*</Version>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <Import Project="../../../Shoc.Shared.proj" />
@@ -34,6 +34,8 @@
     <ProjectReference Include="../../../foundation/Shoc.Mailing.Smtp/Shoc.Mailing.Smtp.csproj" />
     <ProjectReference Include="../../../foundation/Shoc.Mailing.Sql/Shoc.Mailing.Sql.csproj" />
     <ProjectReference Include="../Shoc.Identity.Provider/Shoc.Identity.Provider.csproj" />
+    <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
+    <ProjectReference Include="..\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

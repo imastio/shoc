@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>CS8981;CS2002</NoWarn>
+    </PropertyGroup>
+    
+    <Import Project="../../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.21.9" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.41.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.41.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Include all .proto files in the folder -->
+        <Protobuf Include="Proto/V1/Users/messages.proto" ProtoRoot="Proto" OutputDir="$(ProjectRoot)" GrpcServices="None" />
+        <Protobuf Include="Proto/V1/Users/services.proto" ProtoRoot="Proto" OutputDir="$(ProjectRoot)" GrpcServices="Both" />
+    </ItemGroup>
+
+</Project>

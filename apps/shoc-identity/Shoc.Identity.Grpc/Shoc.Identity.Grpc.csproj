@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>CS8981;CS2002</NoWarn>
+    </PropertyGroup>
+
+    <Import Project="../../../Shoc.Shared.proj"/>
+
+    <ItemGroup>
+        <!-- Include all .proto files in the folder -->
+        <Protobuf Include="protos/**/types.proto" ProtoRoot="protos" OutputDir="generated" GrpcServices="None"/>
+        <Protobuf Include="protos/**/services.proto" ProtoRoot="protos" OutputDir="generated" GrpcServices="Both"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.Tools" Version="2.41.0" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../../core/Shoc.Core.Grpc/Shoc.Core.Grpc.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="generated\" />
+    </ItemGroup>
+
+</Project>

@@ -15,7 +15,12 @@ public abstract class WorkspaceServiceBase
     /// <summary>
     /// The name pattern for workspace
     /// </summary>
-    private static readonly Regex NAME_PATTERN = new(@"^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$");
+    protected static readonly Regex NAME_PATTERN = new(@"^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$");
+    
+    /// <summary>
+    /// An email validation pattern
+    /// </summary>
+    protected static readonly Regex EMAIL_PATTERN = new (@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
     
     /// <summary>
     /// The object repository
@@ -129,5 +134,18 @@ public abstract class WorkspaceServiceBase
         }
 
         throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_NAME).AsException();
+    }
+    
+    /// <summary>
+    /// Validate the email address
+    /// </summary>
+    /// <param name="email">The email address to validate</param>
+    protected static void ValidateEmail(string email)
+    {
+        // check against the pattern
+        if (!EMAIL_PATTERN.IsMatch(email))
+        {
+            throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_EMAIL).AsException();
+        }
     }
 }

@@ -29,6 +29,9 @@
       <None Update="Operations\Workspace.UserWorkspace.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Operations\Workspace.Invitation.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

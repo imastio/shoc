@@ -46,7 +46,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/(api|connect|api-auth|.well-known)': {
+            '^/(api|connect|api-auth|.well-known|api.grpc|grpc)': {
                 target,
                 secure: false
             }

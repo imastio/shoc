@@ -14,4 +14,9 @@ public static class WorkspaceObjects
     /// The workspace member object
     /// </summary>
     public const string WORKSPACE_MEMBER = "wspc-mbm";
+    
+    /// <summary>
+    /// Workspace invitation
+    /// </summary>
+    public const string WORKSPACE_INVITATION = "wspc-inv";
 }

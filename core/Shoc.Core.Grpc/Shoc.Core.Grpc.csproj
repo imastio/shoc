@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>CS8981;CS2002</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.21.9" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.41.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.41.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="protos/**/types.proto" ProtoRoot="protos" OutputDir="generated" GrpcServices="None"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Shoc.Core\Shoc.Core.csproj" />
+    </ItemGroup>
+</Project>

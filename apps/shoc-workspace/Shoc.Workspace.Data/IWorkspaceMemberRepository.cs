@@ -38,7 +38,7 @@ public interface IWorkspaceMemberRepository
     /// <param name="userId">The user id</param>
     /// <returns></returns>
     Task<WorkspaceMemberModel> GetByUserId(string workspaceId, string userId);
-
+    
     /// <summary>
     /// Gets the particular extended membership record in the workspace
     /// </summary>
@@ -46,6 +46,14 @@ public interface IWorkspaceMemberRepository
     /// <param name="id">The membership id</param>
     /// <returns></returns>
     Task<WorkspaceMemberExtendedModel> GetExtendedById(string workspaceId, string id);
+    
+    /// <summary>
+    /// Gets the particular membership record in the workspace by email
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="email">The member email</param>
+    /// <returns></returns>
+    Task<WorkspaceMemberModel> GetByEmail(string workspaceId, string email);
     
     /// <summary>
     /// Creates new membership in the workspace

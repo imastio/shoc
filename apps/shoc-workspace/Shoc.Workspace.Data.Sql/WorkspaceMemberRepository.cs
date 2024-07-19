@@ -66,7 +66,7 @@ public class WorkspaceMemberRepository : IWorkspaceMemberRepository
             Id = id
         });
     }
-
+    
     /// <summary>
     /// Gets the particular membership record in the workspace
     /// </summary>
@@ -94,6 +94,21 @@ public class WorkspaceMemberRepository : IWorkspaceMemberRepository
         {
             WorkspaceId = workspaceId,
             Id = id
+        });
+    }
+    
+    /// <summary>
+    /// Gets the particular membership record in the workspace by email
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="email">The member email</param>
+    /// <returns></returns>
+    public Task<WorkspaceMemberModel> GetByEmail(string workspaceId, string email)
+    {
+        return this.dataOps.Connect().QueryFirst("Workspace.Workspace.Member", "GetByEmail").ExecuteAsync<WorkspaceMemberModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Email = email
         });
     }
 

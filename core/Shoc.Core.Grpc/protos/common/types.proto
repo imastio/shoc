@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Core.Grpc";
+package api.grpc.common;
+
+message GrpcErrorDefinition {
+  string kind = 1;
+  string code = 2;
+  string message = 3;
+  map<string, string> payload = 4;
+}

@@ -14,7 +14,7 @@ public class NonApiSpaMiddleware
     /// <summary>
     /// The set of known API path prefixes
     /// </summary>
-    private static readonly ISet<string> API_PATHS = new HashSet<string> { "/api", "/api-auth", "/connect", "/.well-known" };
+    private static readonly ISet<string> API_PATHS = new HashSet<string> { "/api", "/api-auth", "/connect", "/.well-known", "/api.grpc", "/grpc" };
     
     /// <summary>
     /// The next request delegate
@@ -40,7 +40,7 @@ public class NonApiSpaMiddleware
         var path = context.Request.Path;
 
         // indicate if API request
-        var apiRequest = API_PATHS.Any(apiPath => path.StartsWithSegments(apiPath));
+        var apiRequest = API_PATHS.Any(apiPath => path.ToString().StartsWith(apiPath));
         
         // indicate if file request
         var fileRequest = Path.HasExtension(path.Value);

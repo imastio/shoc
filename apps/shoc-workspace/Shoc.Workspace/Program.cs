@@ -24,11 +24,13 @@ builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
 builder.Services.AddAuthenticationClient(builder.Configuration);
+builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<WorkspaceService>();
 builder.Services.AddSingleton<WorkspaceMemberService>();
 builder.Services.AddSingleton<UserWorkspaceService>();
 builder.Services.AddSingleton<UserWorkspaceMemberService>();
+builder.Services.AddSingleton<WorkspaceInvitationService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

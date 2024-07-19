@@ -1,0 +1,32 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Shoc.Identity.Proto.Messages.Users.V1";
+package users.v1;
+
+message UserModel {
+  string id = 1;
+  string email = 2;
+  bool email_verified = 3;
+  string username = 4;
+  string type = 5;
+  string user_state = 6;
+  string full_name = 7;
+  string timezone = 8;
+  string last_up = 9;
+  google.protobuf.Timestamp last_login = 10;
+  bool multi_factor = 11;
+  google.protobuf.Timestamp locked_until = 12;
+  int32 failed_attempts = 13;
+  bool deleted = 14;
+  google.protobuf.Timestamp created = 15;
+  google.protobuf.Timestamp updated = 16;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}

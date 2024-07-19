@@ -21,6 +21,11 @@ public static class WorkspaceErrors
     public const string INVALID_NAME = "WORKSPACE_INVALID_NAME";
     
     /// <summary>
+    /// The email is invalid
+    /// </summary>
+    public const string INVALID_EMAIL = "WORKSPACE_INVALID_EMAIL";
+    
+    /// <summary>
     /// The name exists
     /// </summary>
     public const string EXISTING_NAME = "WORKSPACE_EXISTING_NAME";
@@ -39,6 +44,11 @@ public static class WorkspaceErrors
     /// The user is already a member
     /// </summary>
     public const string ALREADY_MEMBER = "WORKSPACE_ALREADY_MEMBER";
+    
+    /// <summary>
+    /// The user is already invited
+    /// </summary>
+    public const string ALREADY_INVITED = "WORKSPACE_ALREADY_INVITED";
     
     /// <summary>
     /// The unknown error

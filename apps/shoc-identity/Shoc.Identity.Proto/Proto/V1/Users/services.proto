@@ -1,0 +1,9 @@
+syntax = "proto3";
+import "V1/Users/messages.proto";
+
+option csharp_namespace = "Shoc.Identity.Proto.V1.Users";
+package v1.users;
+
+service UserService {
+  rpc GetById(v1.users.GetUserByIdRequest) returns (v1.users.UserModel);
+}
