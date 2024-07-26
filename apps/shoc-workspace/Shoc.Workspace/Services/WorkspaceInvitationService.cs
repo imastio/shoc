@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Model;
@@ -36,15 +37,15 @@ public class WorkspaceInvitationService : WorkspaceServiceBase
     /// The workspace member repository
     /// </summary>
     private readonly IWorkspaceMemberRepository workspaceMemberRepository;
-
+    
     /// <summary>
     /// Creates new instance of member workspace
     /// </summary>
     /// <param name="workspaceInvitationRepository">The workspace invitation repository</param>
     /// <param name="workspaceMemberRepository">The workspace member repository</param>
     /// <param name="workspaceRepository">The workspace repository</param>
-    /// <param name="workspaceUserRepository">The workspace user repository</param>
-    public WorkspaceInvitationService(IWorkspaceInvitationRepository workspaceInvitationRepository, IWorkspaceMemberRepository workspaceMemberRepository, IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository) : base(workspaceRepository, workspaceUserRepository)
+    /// <param name="grpcClientProvider">The grpc client provider</param>
+    public WorkspaceInvitationService(IWorkspaceInvitationRepository workspaceInvitationRepository, IWorkspaceMemberRepository workspaceMemberRepository, IWorkspaceRepository workspaceRepository, IGrpcClientProvider grpcClientProvider) : base(workspaceRepository, grpcClientProvider)
     {
         this.workspaceInvitationRepository = workspaceInvitationRepository;
         this.workspaceMemberRepository = workspaceMemberRepository;
@@ -148,6 +149,9 @@ public class WorkspaceInvitationService : WorkspaceServiceBase
         {
             throw ErrorDefinition.Validation(WorkspaceErrors.ALREADY_MEMBER).AsException();
         }
+        
+        // validate inviting party
+        await this.RequireUser(input.InvitedBy);
         
         // perform the operation
         return await this.workspaceInvitationRepository.Create(input);

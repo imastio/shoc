@@ -16,7 +16,7 @@ export function getAuthSecret(){
 }
 
 export function getBaseUrl(){
-    return process.env.SHOC_UI_BASE_URL || 'http://localhost:11040';
+    return process.env.SHOC_UI_BASE_URL || 'http://localhost:11050';
 }
 
 export function getOpenIdScopes(){

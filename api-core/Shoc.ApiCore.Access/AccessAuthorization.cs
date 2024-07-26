@@ -21,14 +21,11 @@ public static class AccessAuthorization
     private static readonly HashSet<string> EMPTY_SET = new();
 
     /// <summary>
-    /// Checks if claimed access modifiers are satisfying access requirement
+    /// Checks is anonymous access is allowed
     /// </summary>
-    /// <param name="context">The authorization context</param>
-    /// <param name="definedAccesses">The given accesses to check</param>
-    /// <param name="requireAll">Indicates if all accesses are required</param>
-    /// <param name="allowedScopes">Allow service scopes</param>
+    /// <param name="context">The context of filter</param>
     /// <returns></returns>
-    public static bool CheckAccess(AuthorizationFilterContext context, ISet<string> definedAccesses, bool requireAll, ISet<string> allowedScopes)
+    public static bool AnonymousAllowed(AuthorizationFilterContext context)
     {
         // make sure allow anonymous is not defined to proceed the authorization
         if (context.Filters.Any(item => item is IAllowAnonymousFilter))
@@ -42,8 +39,21 @@ public static class AccessAuthorization
             return true;
         }
 
+        return false;
+    }
+    
+    /// <summary>
+    /// Checks if claimed access modifiers are satisfying access requirement
+    /// </summary>
+    /// <param name="context">The authorization context</param>
+    /// <param name="definedAccesses">The given accesses to check</param>
+    /// <param name="requireAll">Indicates if all accesses are required</param>
+    /// <param name="allowedScopes">Allow service scopes</param>
+    /// <returns></returns>
+    public static bool CheckAccess(HttpContext context, ISet<string> definedAccesses, bool requireAll, ISet<string> allowedScopes)
+    {
         // group by claims type
-        var claims = context.HttpContext.User
+        var claims = context.User
             .Claims
             .GroupBy(claim => claim.Type)
             .ToDictionary(g => g.Key, g => g.Select(claim => claim.Value).ToHashSet());
@@ -69,7 +79,7 @@ public static class AccessAuthorization
         }
         
         // get all granted accesses
-        var grantedAccesses = context.HttpContext.GetItemOrDefault("Accesses", EMPTY_SET);
+        var grantedAccesses = context.GetItemOrDefault("Accesses", EMPTY_SET);
         
         // allow access if given an access that is in allowed access set
         if (!requireAll && definedAccesses.Any(grantedAccesses.Contains))

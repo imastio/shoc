@@ -11,18 +11,20 @@ public interface IOpenidCache
     /// Gets the cached token or fallback value
     /// </summary>
     /// <param name="client">The client</param>
+    /// <param name="scopes">The scopes to get token with</param>
     /// <param name="fallbackValue">The fallback value</param>
     /// <returns></returns>
-    string GetTokenOr(string client, string fallbackValue = null);
+    string GetTokenOr(string client, string[] scopes, string fallbackValue = null);
 
     /// <summary>
     /// Cache the given token value with the supplier
     /// </summary>
     /// <param name="client">The client</param>
+    /// <param name="scopes">The scopes to authorize with</param>
     /// <param name="supplier">The supplier</param>
     /// <param name="expirationUtc">The expiration time</param>
     /// <returns></returns>
-    string CacheToken(string client, Func<string> supplier, DateTimeOffset expirationUtc);
+    string CacheToken(string client, string[] scopes, Func<string> supplier, DateTimeOffset expirationUtc);
 
     /// <summary>
     /// Gets the cached token endpoint or fallback value

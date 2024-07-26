@@ -39,8 +39,14 @@ public class AuthorizeMinUserTypeAttribute : AuthorizeAttribute, IAuthorizationF
     /// <param name="context">The context</param>
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        // skip if allowing anonymous access
+        if (AccessAuthorization.AnonymousAllowed(context))
+        {
+            return;
+        }
+        
         // check if role authorization is satisfied pass the filter
-        if (UserTypeAuthorization.CheckType(context, this.type, this.AllowedScopes?.ToHashSet() ?? new HashSet<string>()))
+        if (UserTypeAuthorization.CheckType(context.HttpContext, this.type, this.AllowedScopes?.ToHashSet() ?? new HashSet<string>()))
         {
             return;
         }

@@ -18,7 +18,7 @@ public class ShocExceptionHandlerAttribute : ExceptionFilterAttribute
     public override void OnException(ExceptionContext context)
     {
         var exception = context.Exception;
-
+        
         // cast to specific exception
         var specificException = exception as ShocException;
 
@@ -32,7 +32,7 @@ public class ShocExceptionHandlerAttribute : ExceptionFilterAttribute
         }
 
         // the error kind
-        var errorKind = specificException?.Errors?.FirstOrDefault()?.Kind;
+        var errorKind = errors?.FirstOrDefault()?.Kind;
 
         // deduce the code
         var statusCode = errorKind switch

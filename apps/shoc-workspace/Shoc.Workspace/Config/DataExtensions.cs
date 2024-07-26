@@ -47,7 +47,6 @@ public static class DataConfiguration
         services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
         services.AddSingleton<IWorkspaceRepository, WorkspaceRepository>();
         services.AddSingleton<IUserWorkspaceRepository, UserWorkspaceRepository>();
-        services.AddSingleton<IWorkspaceUserRepository, WorkspaceUserRepository>();
         services.AddSingleton<IWorkspaceMemberRepository, WorkspaceMemberRepository>();
         services.AddSingleton<IWorkspaceInvitationRepository, WorkspaceInvitationRepository>();
             

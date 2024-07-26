@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Model;
@@ -22,8 +23,8 @@ public class WorkspaceMemberService : WorkspaceServiceBase
     /// </summary>
     /// <param name="workspaceMemberRepository">The workspace member repository</param>
     /// <param name="workspaceRepository">The workspace repository</param>
-    /// <param name="workspaceUserRepository">The workspace user repository</param>
-    public WorkspaceMemberService(IWorkspaceMemberRepository workspaceMemberRepository, IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository) : base(workspaceRepository, workspaceUserRepository)
+    /// <param name="grpcClientProvider">The grpc client provider</param>
+    public WorkspaceMemberService(IWorkspaceMemberRepository workspaceMemberRepository, IWorkspaceRepository workspaceRepository, IGrpcClientProvider grpcClientProvider) : base(workspaceRepository, grpcClientProvider)
     {
         this.workspaceMemberRepository = workspaceMemberRepository;
     }

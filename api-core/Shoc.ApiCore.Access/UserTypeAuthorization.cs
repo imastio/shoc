@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Shoc.Access.Model;
 using Shoc.Core.OpenId;
 
@@ -38,22 +35,10 @@ public static class UserTypeAuthorization
     /// <param name="minimumType">The given minimum type to check</param>
     /// <param name="allowedScopes">The list of allowed scopes</param>
     /// <returns></returns>
-    public static bool CheckType(AuthorizationFilterContext context, string minimumType, ISet<string> allowedScopes)
+    public static bool CheckType(HttpContext context, string minimumType, ISet<string> allowedScopes)
     {
-        // make sure allow anonymous is not defined to proceed the authorization
-        if (context.Filters.Any(item => item is IAllowAnonymousFilter))
-        {
-            return true;
-        }
-
-        // make sure allow anonymous attribute is considered
-        if (context.HttpContext.GetEndpoint()?.Metadata.GetMetadata<IAllowAnonymous>() != null)
-        {
-            return true;
-        }
-
         // group by claims type
-        var claims = context.HttpContext.User
+        var claims = context.User
             .Claims
             .GroupBy(claim => claim.Type)
             .ToDictionary(g => g.Key, g => g.Select(claim => claim.Value).ToHashSet());

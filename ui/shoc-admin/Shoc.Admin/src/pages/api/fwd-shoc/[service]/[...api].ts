@@ -17,13 +17,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   await auth(req, res);
   
   const jwt = await getJwtNode(req.headers);
-  if(jwt?.actualAccessToken){
-
-    const decoded = decodeJwt(jwt.actualAccessToken);
-    const expirationDate = new Date(decoded.exp * 1000);
-    const expired = expirationDate.getTime() < new Date().getTime()
-    console.log(`Latest token used: SID: ${jwt.sid}, JTI: ${decoded.jti}, Expired: ${expired}, Expiration: ${expirationDate}`)
-}
   const proxy: httpProxy = httpProxy.createProxy();
 
   let apiRoot = process.env.SHOC_ADMIN_API_ROOT || '';

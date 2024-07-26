@@ -1,6 +1,6 @@
 const availableLocales = ["en"];
 const defaultLocale = availableLocales[0];
-const localeCookie = 'ENLIGHT_LOCALE';
+const localeCookie = 'SHOC_LOCALE';
 
 const localeLabels = [
     {

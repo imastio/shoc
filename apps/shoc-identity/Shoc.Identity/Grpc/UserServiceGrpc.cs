@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Grpc.Core;
+using Shoc.ApiCore.Access;
+using Shoc.Core.OpenId;
 using Shoc.Identity.Grpc.Users;
 using Shoc.Identity.Model.User;
 using Shoc.Identity.Services;
@@ -9,8 +11,14 @@ namespace Shoc.Identity.Grpc;
 /// <summary>
 /// The Grpc service implementation
 /// </summary>
+[BearerOnly]
 public class UserServiceGrpc : Users.UserServiceGrpc.UserServiceGrpcBase
 {
+    /// <summary>
+    /// The access authorization service
+    /// </summary>
+    private readonly IAccessAuthorization accessAuthorization;
+
     /// <summary>
     /// The user service
     /// </summary>
@@ -19,9 +27,11 @@ public class UserServiceGrpc : Users.UserServiceGrpc.UserServiceGrpcBase
     /// <summary>
     /// Creates a new instance of the Grpc service
     /// </summary>
+    /// <param name="accessAuthorization">The access authorization service</param>
     /// <param name="userService">The user service</param>
-    public UserServiceGrpc(UserService userService)
+    public UserServiceGrpc(IAccessAuthorization accessAuthorization, UserService userService)
     {
+        this.accessAuthorization = accessAuthorization;
         this.userService = userService;
     }
     
@@ -33,6 +43,9 @@ public class UserServiceGrpc : Users.UserServiceGrpc.UserServiceGrpcBase
     /// <returns></returns>
     public override async Task<GetUserResponse> GetById(GetUserByIdRequest request, ServerCallContext context)
     {
+        // ensure authorization
+        await this.accessAuthorization.RequireScopesAll(context.GetHttpContext(), new []{ KnownScopes.SVC });
+        
         // get the resulting object
         var result = await this.userService.GetById(request.Id);
 
@@ -51,6 +64,9 @@ public class UserServiceGrpc : Users.UserServiceGrpc.UserServiceGrpcBase
     /// <returns></returns>
     public override async Task<GetUserResponse> GetByEmail(GetUserByEmailRequest request, ServerCallContext context)
     {
+        // ensure authorization
+        await this.accessAuthorization.CheckScopesAll(context.GetHttpContext(), new []{ KnownScopes.SVC });
+        
         // get the resulting object
         var result = await this.userService.GetByEmail(request.Email);
 

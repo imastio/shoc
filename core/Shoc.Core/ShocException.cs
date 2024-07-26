@@ -25,7 +25,7 @@ public class ShocException : Exception
     /// <summary>
     /// Creates new instance for error definition
     /// </summary>
-    public ShocException(string message) : this(new List<ErrorDefinition> { ErrorDefinition.Unknown(message) }, message)
+    public ShocException(string message) : this([ErrorDefinition.Unknown(message)], message)
     {
     }
 

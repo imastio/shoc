@@ -11,163 +11,6 @@ networks:
     name: shoc-network
 
 services:   
-  
-  shoc-database:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./infrastructure/Shoc.Database
-    container_name: shoc-database
-    env_file: 
-      - ./env/shoc-database.env
-    ports:
-      - '11001:11001'
-    networks:
-      - shoc-network
-    volumes:
-      - shoc-database-volume:/var/lib/mysql 
-
-  shoc-dind:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-dind:${SHOC_PUBLIC_VERSION:-latest}
-    build: ./infrastructure/Shoc.Dind
-    restart: always
-    container_name: shoc-dind
-    privileged: true
-    ports:
-      - '11006:11006'
-    networks:
-      - shoc-network
-    volumes:
-      - shoc-dind-data-volume:/var/lib/docker
-
-  shoc-kind:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-kind:${SHOC_PUBLIC_VERSION:-latest}
-    build: ./infrastructure/Shoc.Kind
-    restart: always
-    container_name: shoc-kind
-    privileged: true
-    ports:
-      - '11008:11008'
-    env_file:
-      - ./env/shoc-kind.env
-    networks:
-      - shoc-network
-    volumes:
-      - shoc-kind-data-volume:/var/lib/rancher/k3s
-
-  shoc-database-migrator:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database-migrator:${SHOC_PUBLIC_VERSION:-latest}
-    build: ./apps/shoc-database-migrator/Shoc.Database.Migrator
-    container_name: shoc-database-migrator
-    restart: "no"
-    ports:
-      - '11012:11012'
-    env_file:
-      - ./env/ref-api-datasource.env
-      - ./env/ref-api-discovery.env
-      - ./env/shoc-database-migrator.env
-    depends_on:
-      - shoc-database
-    networks:
-      - shoc-network
-
-  shoc-identity:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-identity:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./apps/shoc-identity/Shoc.Identity
-    container_name: shoc-identity
-    env_file: 
-      - ./env/ref-api-auth.env
-      - ./env/ref-api-discovery.env
-      - ./env/ref-api-datasource.env
-      - ./env/ref-api-mailing.env
-      - ./env/shoc-identity-provider.env
-      - ./env/shoc-identity.env
-    ports:
-      - '11014:11014'
-    depends_on:
-      - shoc-database
-    networks:
-      - shoc-network
-
-  shoc-settings:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-settings:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./apps/shoc-settings/Shoc.Settings
-    container_name: shoc-settings
-    env_file: 
-      - ./env/ref-api-auth.env
-      - ./env/ref-api-discovery.env
-      - ./env/ref-api-datasource.env
-      - ./env/ref-api-mailing.env
-      - ./env/shoc-settings.env
-    ports:
-      - '11018:11018'
-    depends_on:
-      - shoc-database
-    networks:
-      - shoc-network
-  
-  shoc-workspace:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-workspace:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./apps/shoc-workspace/Shoc.Workspace
-    container_name: shoc-workspace
-    env_file: 
-      - ./env/ref-api-auth.env
-      - ./env/ref-api-discovery.env
-      - ./env/ref-api-datasource.env
-      - ./env/ref-api-mailing.env
-      - ./env/shoc-workspace.env
-    ports:
-      - '11020:11020'
-    depends_on:
-      - shoc-database
-    networks:
-      - shoc-network
-
-  shoc-webgtw:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./apps/shoc-webgtw/Shoc.Webgtw
-    container_name: shoc-webgtw
-    env_file: 
-      - ./env/ref-api-auth.env
-      - ./env/ref-api-discovery.env
-      - ./env/shoc-webgtw.env
-    ports:
-      - '11010:11010'
-    networks:
-      - shoc-network
-
-  shoc-admin:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-admin:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./ui/shoc-admin/Shoc.Admin
-    container_name: shoc-admin
-    profiles:
-      - ui
-    env_file: 
-      - ./env/shoc-admin.env
-      - ./ui/shoc-admin/Shoc.Admin/.env.local
-    ports:
-      - '11042:11042'
-    networks:
-      - shoc-network
-    
-  shoc-ui:
-    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}
-    restart: always
-    build: ./ui/shoc-ui/Shoc.Ui
-    container_name: shoc-ui
-    profiles:
-      - ui
-    env_file: 
-      - ./env/shoc-ui.env
-      - ./ui/shoc-ui/Shoc.Ui/.env.local
-    ports:
-      - '11040:11040'
-    networks:
-      - shoc-network
 
   shoc-ingress:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ingress:${SHOC_PUBLIC_VERSION:-latest}
@@ -187,3 +30,151 @@ services:
          - api.shoc.local
          - cr.shoc.local
          - admin.shoc.local
+  
+  shoc-database:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./infrastructure/Shoc.Database
+    container_name: shoc-database
+    env_file: 
+      - ./env/shoc-database.env
+    ports:
+      - '11001:11001'
+    networks:
+      - shoc-network
+    volumes:
+      - shoc-database-volume:/var/lib/mysql 
+
+  shoc-ui:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./ui/shoc-ui/Shoc.Ui
+    container_name: shoc-ui
+    profiles:
+      - ui
+    env_file: 
+      - ./env/shoc-ui.env
+      - ./ui/shoc-ui/Shoc.Ui/.env.local
+    ports:
+      - '11050:11050'
+      - '11051:11051'
+    networks:
+      - shoc-network
+
+  shoc-admin:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-admin:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./ui/shoc-admin/Shoc.Admin
+    container_name: shoc-admin
+    profiles:
+      - ui
+    env_file: 
+      - ./env/shoc-admin.env
+      - ./ui/shoc-admin/Shoc.Admin/.env.local
+    ports:
+      - '11052:11052'
+      - '11053:11053'
+    networks:
+      - shoc-network
+
+  shoc-webgtw:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-webgtw/Shoc.Webgtw
+    container_name: shoc-webgtw
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/shoc-webgtw.env
+    ports:
+      - '11100:11100'
+      - '11101:11101'
+    networks:
+      - shoc-network
+
+  shoc-identity:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-identity:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-identity/Shoc.Identity
+    container_name: shoc-identity
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-identity-provider.env
+      - ./env/shoc-identity.env
+    ports:
+      - '11106:11106'
+      - '11107:11107'
+      - '11110:11110'
+      - '11111:11111'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
+  shoc-database-migrator:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-database-migrator:${SHOC_PUBLIC_VERSION:-latest}
+    build: ./apps/shoc-database-migrator/Shoc.Database.Migrator
+    container_name: shoc-database-migrator
+    restart: "no"
+    ports:
+      - '11112:11112'
+      - '11113:11113'
+    env_file:
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-discovery.env
+      - ./env/shoc-database-migrator.env
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
+  shoc-settings:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-settings:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-settings/Shoc.Settings
+    container_name: shoc-settings
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-settings.env
+    ports:
+      - '11116:11116'
+      - '11117:11117'
+      - '11118:11118'
+      - '11119:11119'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+  
+  shoc-workspace:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-workspace:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-workspace/Shoc.Workspace
+    container_name: shoc-workspace
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-workspace.env
+    ports:
+      - '11122:11122'
+      - '11123:11123'
+      - '11124:11124'
+      - '11125:11125'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
+
+    
+  
+
+  

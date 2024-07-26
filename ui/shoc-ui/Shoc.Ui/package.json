@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 11040",
-    "dev:https": "next dev -p 11041 --experimental-https",
+    "dev": "next dev -p 11050",
+    "dev:https": "next dev -p 11051 --experimental-https",
     "build": "next build",
-    "start": "next start -p 11040",
-    "start:https": "next start -p 11041 --experimental-https",
+    "start": "next start -p 11050",
+    "start:https": "next start -p 110451 --experimental-https",
     "lint": "next lint"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "dayjs": "^1.11.11",
     "http-proxy": "^1.18.1",
     "lucide-react": "^0.400.0",
-    "next": "15.0.0-rc.0",
+    "next": "15.0.0-canary.85",
     "next-auth": "5.0.0-beta.19",
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.6.12",

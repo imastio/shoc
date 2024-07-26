@@ -40,8 +40,14 @@ public class AuthorizeAllAccessAttribute : AuthorizeAttribute, IAsyncAuthorizati
     /// <param name="context">The context of authorization</param>
     public Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
+        // skip if allowing anonymous access
+        if (AccessAuthorization.AnonymousAllowed(context))
+        {
+            return Task.CompletedTask;
+        }
+        
         // check if role authorization is satisfied pass the filter
-        if (AccessAuthorization.CheckAccess(context, this.accesses, true, this.AllowedScopes?.ToHashSet() ?? new HashSet<string>()))
+        if (AccessAuthorization.CheckAccess(context.HttpContext, this.accesses, true, this.AllowedScopes?.ToHashSet() ?? new HashSet<string>()))
         {
             return Task.CompletedTask;
         }

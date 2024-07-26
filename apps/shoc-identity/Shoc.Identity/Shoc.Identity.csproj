@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <SpaRoot>../Shoc.Identity.Ui</SpaRoot>
     <SpaProxyLaunchCommand>pnpm dev</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:11017</SpaProxyServerUrl>
+    <SpaProxyServerUrl>https://localhost:11109</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>

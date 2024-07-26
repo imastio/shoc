@@ -25,11 +25,11 @@ public class GrpcServiceExceptionInterceptor : Interceptor
     /// <typeparam name="TRequest">The type of request</typeparam>
     /// <typeparam name="TResponse">The type of response</typeparam>
     /// <returns></returns>
-    public override Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
+    public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
     {
         try
         {
-            return continuation(request, context);
+            return await continuation(request, context);
         }
         catch (Exception e)
         {
@@ -46,11 +46,11 @@ public class GrpcServiceExceptionInterceptor : Interceptor
     /// <typeparam name="TRequest">The type of request</typeparam>
     /// <typeparam name="TResponse">The type of response</typeparam>
     /// <returns></returns>
-    public override Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, ServerCallContext context, ClientStreamingServerMethod<TRequest, TResponse> continuation)
+    public override async Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, ServerCallContext context, ClientStreamingServerMethod<TRequest, TResponse> continuation)
     {
         try
         {
-            return continuation(requestStream, context);
+            return await continuation(requestStream, context);
         }
         catch (Exception e)
         {
@@ -68,11 +68,11 @@ public class GrpcServiceExceptionInterceptor : Interceptor
     /// <typeparam name="TRequest">The type of request</typeparam>
     /// <typeparam name="TResponse">The type of response</typeparam>
     /// <returns></returns>
-    public override Task ServerStreamingServerHandler<TRequest, TResponse>(TRequest request, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, ServerStreamingServerMethod<TRequest, TResponse> continuation)
+    public override async Task ServerStreamingServerHandler<TRequest, TResponse>(TRequest request, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, ServerStreamingServerMethod<TRequest, TResponse> continuation)
     {
         try
         {
-            return continuation(request, responseStream, context);
+            await continuation(request, responseStream, context);
         }
         catch (Exception e)
         {
@@ -90,11 +90,11 @@ public class GrpcServiceExceptionInterceptor : Interceptor
     /// <typeparam name="TRequest">The type of request</typeparam>
     /// <typeparam name="TResponse">The type of response</typeparam>
     /// <returns></returns>
-    public override Task DuplexStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, DuplexStreamingServerMethod<TRequest, TResponse> continuation)
+    public override async Task DuplexStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, DuplexStreamingServerMethod<TRequest, TResponse> continuation)
     {
         try
         {
-            return continuation(requestStream, responseStream, context);
+            await continuation(requestStream, responseStream, context);
         }
         catch (Exception e)
         {
@@ -111,7 +111,7 @@ public class GrpcServiceExceptionInterceptor : Interceptor
     {
         // cast to specific exception
         var specificException = exception as ShocException;
-
+        
         // unknown error
         var errors = new List<ErrorDefinition> { ErrorDefinition.Unknown(Errors.UNKNOWN_ERROR, exception.Message) };
 

@@ -1,12 +1,4 @@
 ﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:11012",
-      "sslPort": 11013
-    }
-  },
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "Shoc.Database.Migrator": {
@@ -15,12 +7,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:11013;http://localhost:11012"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "publishAllPorts": true,
-      "useSSL": true
+      "externalUrlConfiguration": true,
+      "applicationUrl": "http://*:11112"
     }
   }
 }

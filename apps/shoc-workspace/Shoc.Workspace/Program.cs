@@ -23,6 +23,7 @@ builder.Services.AddRepositories(builder.Configuration);
 builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
+builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();

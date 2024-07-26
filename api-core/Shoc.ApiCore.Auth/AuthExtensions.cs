@@ -91,7 +91,7 @@ public static class AuthExtensions
         services.AddSingleton<IOpenidCache, DefaultOpenidCache>();
         
         // this will require Connect client to exist in the system
-        services.AddSingleton<AuthProvider>();
+        services.AddSingleton<IAuthProvider, AuthProvider>();
 
         return services;
     }

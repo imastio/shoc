@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Imast.Ext.DiscoveryCore;
 using Yarp.ReverseProxy.Forwarder;
 using System.Threading;
+using Shoc.Core.Discovery;
 
 namespace Shoc.Webgtw.Gateway;
 
@@ -56,7 +56,7 @@ public class RequestTransformer : HttpTransformer
         }
         
         // get the next url
-        var nextUrl = await this.discoveryClient.GetNextBaseUrl(service);
+        var nextUrl = await this.discoveryClient.GetApiBase(service);
 
         // keep original if no service is discovered
         if (string.IsNullOrWhiteSpace(nextUrl))

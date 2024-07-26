@@ -31,6 +31,7 @@ builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddSignOnEssentials(builder.Configuration);
 builder.Services.AddIdentityEssentials(builder.Configuration);
 builder.Services.AddAuthenticationMiddleware(builder.Configuration);
+builder.Services.AddAccessAuthorization();
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddMailing(builder.Configuration);
 builder.Services.AddIntlEssentials(builder.Configuration);

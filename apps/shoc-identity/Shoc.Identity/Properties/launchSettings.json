@@ -4,7 +4,8 @@
     "Shoc.Identity": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:11015;http://localhost:11014",
+      "externalUrlConfiguration": true,
+      "applicationUrl": "http://*:11106",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"

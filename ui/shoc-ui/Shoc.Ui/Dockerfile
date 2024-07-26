@@ -20,9 +20,10 @@ COPY --chown=nextjs:nodejs /.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 11040
+EXPOSE 11050
+EXPOSE 11051
 
-ENV PORT 11040
+ENV PORT 11050
 ENV HOSTNAME "0.0.0.0"
 
 WORKDIR /tmp

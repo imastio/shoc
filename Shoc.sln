@@ -102,6 +102,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Grpc", "core\Shoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.Grpc", "api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj", "{CD7DD9AC-7948-446C-9345-381206B1526C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.ApiCore.GrpcClient", "api-core\Shoc.ApiCore.GrpcClient\Shoc.ApiCore.GrpcClient.csproj", "{C8153B8F-57F9-4F58-A754-AA2541BC6170}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +266,10 @@ Global
 		{CD7DD9AC-7948-446C-9345-381206B1526C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD7DD9AC-7948-446C-9345-381206B1526C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD7DD9AC-7948-446C-9345-381206B1526C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8153B8F-57F9-4F58-A754-AA2541BC6170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8153B8F-57F9-4F58-A754-AA2541BC6170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8153B8F-57F9-4F58-A754-AA2541BC6170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8153B8F-57F9-4F58-A754-AA2541BC6170}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -316,5 +322,6 @@ Global
 		{C8748BB7-B092-44C4-AAB3-E2865294FD6C} = {513C1CA3-ED71-472C-8CF0-D7CB1EB3C3FB}
 		{93D373CA-EEC8-4D69-BA50-77077F5B06BD} = {16F3537F-3EA0-4158-8441-FFD81F8371E1}
 		{CD7DD9AC-7948-446C-9345-381206B1526C} = {7F8F6B8C-AC72-43ED-92D3-EBFA36CF7689}
+		{C8153B8F-57F9-4F58-A754-AA2541BC6170} = {7F8F6B8C-AC72-43ED-92D3-EBFA36CF7689}
 	EndGlobalSection
 EndGlobal

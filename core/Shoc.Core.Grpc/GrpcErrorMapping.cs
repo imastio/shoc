@@ -66,9 +66,26 @@ public static class GrpcErrorMapping
             Code = error.Code,
             Message = error.Message
         };
-        
-        result.Payload.Add(error.Payload.ToDictionary(kv => kv.Key, kv => kv.Value.ToString()));
+
+        // map the payload
+        var payload = error.Payload?.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+
+        // add payload if any
+        if (payload != null)
+        {
+            result.Payload.Add(payload);
+        }
 
         return result;
+    }
+    
+    /// <summary>
+    /// Maps the grpc error definition to the well known error type
+    /// </summary>
+    /// <param name="error">The error to map</param>
+    /// <returns></returns>
+    public static ErrorDefinition FromGrpcErrorDefinition(GrpcErrorDefinition error)
+    {
+        return ErrorDefinition.From(error.Kind, error.Code, error.Message, error.Payload?.ToDictionary(kv => kv.Key, kv => (object)kv.Value));
     }
 }

@@ -9,7 +9,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:11019;http://localhost:11018"
+      "externalUrlConfiguration": true,
+      "applicationUrl": "http://*:11116"
     }
   }
 }

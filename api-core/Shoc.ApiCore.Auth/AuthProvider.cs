@@ -10,7 +10,7 @@ namespace Shoc.ApiCore.Auth;
 /// <summary>
 /// The authorized connection module
 /// </summary>
-public class AuthProvider
+public class AuthProvider : IAuthProvider
 {
     /// <summary>
     /// The token expiration threshold
@@ -65,10 +65,22 @@ public class AuthProvider
     /// <typeparam name="T">The type of return value</typeparam>
     /// <param name="securedFunction">The secured operation to execute</param>
     /// <returns></returns>
-    public async Task<T> DoAuthorized<T>(Func<string, Task<T>> securedFunction)
+    public Task<T> DoAuthorized<T>(Func<string, Task<T>> securedFunction)
+    {
+        return this.DoAuthorized(securedFunction, []);
+    }
+
+    /// <summary>
+    /// Executes an operation with token supplied
+    /// </summary>
+    /// <typeparam name="T">The type of return value</typeparam>
+    /// <param name="securedFunction">The secured operation to execute</param>
+    /// <param name="scopes">The scopes to authorize with</param>
+    /// <returns></returns>
+    public async Task<T> DoAuthorized<T>(Func<string, Task<T>> securedFunction, string[] scopes)
     {
         // try get cached token
-        var token = this.openidCache.GetTokenOr(this.settings.ClientId) ?? await this.GetTokenAndCache();
+        var token = this.openidCache.GetTokenOr(this.settings.ClientId, scopes) ?? await this.GetTokenAndCache(scopes);
         
         // make sure we have a token
         if (token == null)
@@ -83,8 +95,14 @@ public class AuthProvider
     /// Gets a token and cache
     /// </summary>
     /// <returns></returns>
-    private async Task<string> GetTokenAndCache()
+    private async Task<string> GetTokenAndCache(string[] scopes)
     {
+        // if no scopes provided use the default scopes from settings as array
+        if (scopes == null || scopes.Length == 0)
+        {
+            scopes = this.settings.Scope.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        }
+        
         try
         {
             // get the token endpoint either from cache or request new one
@@ -94,7 +112,7 @@ public class AuthProvider
             var tokenResponse = await this.httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = endpoint,
-                Scope = this.settings.Scope,
+                Scope = string.Join(' ', scopes),
                 ClientId = this.settings.ClientId,
                 ClientSecret = this.settings.ClientSecret
             });
@@ -121,7 +139,7 @@ public class AuthProvider
             var cacheExpireAt = validUntil.Subtract(TOKEN_EXPIRE_THRESHOLD);
 
             // try cache the value with expiration
-            return this.openidCache.CacheToken(this.settings.ClientId, () => token, cacheExpireAt);
+            return this.openidCache.CacheToken(this.settings.ClientId, scopes, () => token, cacheExpireAt);
         }
         catch (Exception)
         {

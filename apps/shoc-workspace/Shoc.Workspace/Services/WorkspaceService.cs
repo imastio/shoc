@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Model;
@@ -16,8 +17,8 @@ public class WorkspaceService : WorkspaceServiceBase
     /// Creates new instance of the service
     /// </summary>
     /// <param name="workspaceRepository">The object repository</param>
-    /// <param name="workspaceUserRepository">The workspace user repository</param>
-    public WorkspaceService(IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository) : base(workspaceRepository, workspaceUserRepository)
+    /// <param name="grpcClientProvider">The grpc client provider</param>
+    public WorkspaceService(IWorkspaceRepository workspaceRepository, IGrpcClientProvider grpcClientProvider) : base(workspaceRepository, grpcClientProvider)
     {
     }
 

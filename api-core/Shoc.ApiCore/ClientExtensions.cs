@@ -1,6 +1,6 @@
 ﻿using System;
-using Imast.Ext.DiscoveryCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shoc.Core.Discovery;
 
 namespace Shoc.ApiCore;
 

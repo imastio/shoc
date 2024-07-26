@@ -16,11 +16,11 @@ export default function toServerActionErrors(error: Error | AxiosError | unknown
 
     if (error instanceof AxiosError) {
 
-        const isEnlightError = error.response &&
+        const isShocError = error.response &&
             error.response.headers &&
             error.response.headers['x-shoc-error'] === 'aggregate';
 
-        if (isEnlightError && error.response?.data?.errors) {
+        if (isShocError && error.response?.data?.errors) {
             return error.response.data.errors.map(mapError)
         }
 

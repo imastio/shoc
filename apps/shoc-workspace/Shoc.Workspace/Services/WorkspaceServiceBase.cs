@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
+using Shoc.Identity.Grpc.Users;
 using Shoc.Workspace.Data;
 using Shoc.Workspace.Model;
 using Shoc.Workspace.Model.Workspace;
@@ -26,21 +28,21 @@ public abstract class WorkspaceServiceBase
     /// The object repository
     /// </summary>
     protected readonly IWorkspaceRepository workspaceRepository;
-
+    
     /// <summary>
-    /// The workspace user repository
+    /// The grpc client provider
     /// </summary>
-    protected readonly IWorkspaceUserRepository workspaceUserRepository;
+    private readonly IGrpcClientProvider grpcClientProvider;
 
     /// <summary>
     /// The base implementation of the service
     /// </summary>
     /// <param name="workspaceRepository">The object repository</param>
-    /// <param name="workspaceUserRepository">The workspace user repository</param>
-    protected WorkspaceServiceBase(IWorkspaceRepository workspaceRepository, IWorkspaceUserRepository workspaceUserRepository)
+    /// <param name="grpcClientProvider">The grpc client provider</param>
+    protected WorkspaceServiceBase(IWorkspaceRepository workspaceRepository, IGrpcClientProvider grpcClientProvider)
     {
         this.workspaceRepository = workspaceRepository;
-        this.workspaceUserRepository = workspaceUserRepository;
+        this.grpcClientProvider = grpcClientProvider;
     }
 
     /// <summary>
@@ -82,7 +84,9 @@ public abstract class WorkspaceServiceBase
         }
         
         // try getting object
-        var result = await this.workspaceUserRepository.GetById(id);
+        var result = await this.grpcClientProvider
+            .Get<UserServiceGrpc.UserServiceGrpcClient>()
+            .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetUserByIdRequest{Id = id}, metadata));
 
         // the user does not exist
         if (result == null)

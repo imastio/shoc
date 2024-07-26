@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Shoc.ApiCore.Auth;
@@ -38,23 +39,25 @@ public class DefaultOpenidCache : IOpenidCache
     /// Gets the cached token or fallback value
     /// </summary>
     /// <param name="client">The client</param>
+    /// <param name="scopes">The scopes to authorize with</param>
     /// <param name="fallbackValue">The fallback value</param>
     /// <returns></returns>
-    public string GetTokenOr(string client, string fallbackValue = null)
+    public string GetTokenOr(string client, string[] scopes, string fallbackValue = null)
     {
-        return this.cache.TryGetValue(TokenKey(client), out var value) ? value as string : fallbackValue;
+        return this.cache.TryGetValue(TokenKey(client, scopes), out var value) ? value as string : fallbackValue;
     }
 
     /// <summary>
     /// Cache the given token value with the supplier
     /// </summary>
     /// <param name="client">The client</param>
+    /// <param name="scopes">The scopes to authorize with</param>
     /// <param name="supplier">The supplier</param>
     /// <param name="expirationUtc">The expiration time</param>
     /// <returns></returns>
-    public string CacheToken(string client, Func<string> supplier, DateTimeOffset expirationUtc)
+    public string CacheToken(string client, string[] scopes, Func<string> supplier, DateTimeOffset expirationUtc)
     {
-        return this.cache.Set(TokenKey(client), supplier?.Invoke(), expirationUtc);
+        return this.cache.Set(TokenKey(client, scopes), supplier?.Invoke(), expirationUtc);
     }
 
     /// <summary>
@@ -84,10 +87,11 @@ public class DefaultOpenidCache : IOpenidCache
     /// Builds the cache key for the token
     /// </summary>
     /// <param name="client">The client</param>
+    /// <param name="scopes">The scopes to of the token</param>
     /// <returns></returns>
-    private static string TokenKey(string client)
+    private static string TokenKey(string client, string[] scopes)
     {
-        return $"{TOKEN_KEY_PREFIX}{client}";
+        return $"{TOKEN_KEY_PREFIX}{client}-s-{string.Join('-', scopes.Order())}";
     }
 
     /// <summary>

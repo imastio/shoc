@@ -7,13 +7,17 @@
   <Import Project="../../Shoc.Shared.proj" />
 
   <ItemGroup>
-    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="3.2.8" />
-    <PackageReference Include="Steeltoe.Discovery.Eureka" Version="3.2.8" />
-    <PackageReference Include="Steeltoe.Management.EndpointBase" Version="3.2.8" />
+    <PackageReference Include="YamlDotNet" Version="16.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Definitions\services.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -29,8 +29,8 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 }
 
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:11015';
-
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:11106';
+console.log(target);
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react({})],
@@ -48,10 +48,11 @@ export default defineConfig({
         proxy: {
             '^/(api|connect|api-auth|.well-known|api.grpc|grpc)': {
                 target,
-                secure: false
-            }
+                secure: false,
+                xfwd: true
+            },
         },
-        port: 11017,
+        port: 11109,
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Shoc.ApiCore.Grpc;
+using Shoc.ApiCore.GrpcClient;
 using Shoc.Identity.Grpc.Users;
 
 namespace Shoc.Workspace.Config;
@@ -15,7 +15,7 @@ public static class GrpcClientExtensions
     /// <param name="services">The services collection</param>
     public static IServiceCollection AddGrpcClients(this IServiceCollection services)
     {
-        services.AddDiscoverableGrpcClient("shoc-identity", channel => new UserServiceGrpc.UserServiceGrpcClient(channel));
+        services.AddDiscoverableGrpcClient("shoc-identity", invoker => new UserServiceGrpc.UserServiceGrpcClient(invoker));
         return services;
     }
 }

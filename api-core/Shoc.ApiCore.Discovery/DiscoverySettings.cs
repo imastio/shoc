@@ -8,10 +8,5 @@ public class DiscoverySettings
     /// <summary>
     /// The primary type of discovery
     /// </summary>
-    public string Primary { get; set; }
-    
-    /// <summary>
-    /// The fallback discovery
-    /// </summary>
-    public string Fallback { get; set; }
+    public string Type { get; set; }
 }
