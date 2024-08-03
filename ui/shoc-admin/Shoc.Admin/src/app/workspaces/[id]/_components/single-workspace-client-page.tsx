@@ -3,7 +3,6 @@
 import { DownOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
 import { App, Button, Col, Descriptions, Dropdown, Row, Tabs } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import WorkspaceDetailsTab from "./workspace-members-tab";
 import { useParams, useRouter } from "next/navigation";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { selfClient } from "@/clients/shoc";
@@ -14,7 +13,8 @@ import WorkspacesClient from "@/clients/shoc/workspace/workspaces-client";
 import WorkspaceDeleteModal from "./workspace-delete-modal";
 import WorkspaceUpdateModal from "./workspace-update-modal";
 import { workspaceStatusesMap, workspaceTypesMap } from "@/well-known/workspaces";
-import WorkspaceMembersTab from "./workspace-members-tab";
+import { WorkspaceMembersTable } from "./workspace-members-table";
+import { WorkspaceInvitationsTable } from "./workspace-invitations-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -86,17 +86,26 @@ export default function SingleWorkspaceClientPage() {
                         </Dropdown>
                     ]}
                     tabProps={{
+                        destroyInactiveTabPane: true,
                         items: [
                             {
                                 key: "1",
                                 label: "Members",
-                                children: <WorkspaceMembersTab workspaceId={workspaceId} loading={progress} />
+                                children: <WorkspaceMembersTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "2",
+                                label: "Invitations",
+                                children: <WorkspaceInvitationsTable workspaceId={workspaceId} loading={progress} />
                             }
                         ]
                     }}
                     tabList={[
                         {
-                            tabKey: "1"
+                            tabKey: "1",
+                        },
+                        {
+                            tabKey: "2",
                         }
                     ]}
                     content={<>

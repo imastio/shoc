@@ -18,10 +18,10 @@
 
     <SqlOperation Name="GetAllExtended">
       <TextCommand>
-        SELECT wm.*, u.Email as InvitedByEmail, u.FullName as InvitedByFullName  FROM `wspc_workspace_invitations` wm
+        SELECT wi.*, u.Email as InvitedByEmail, u.FullName as InvitedByFullName  FROM `wspc_workspace_invitations` wi
         INNER JOIN `idp_users` u
-        ON wm.UserId = u.Id
-        WHERE wm.`WorkspaceId` = @WorkspaceId
+        ON wi.InvitedBy = u.Id
+        WHERE wi.`WorkspaceId` = @WorkspaceId
         ORDER BY u.`FullName` ASC;
       </TextCommand>
     </SqlOperation>
@@ -59,7 +59,7 @@
         UPDATE `wspc_workspace_invitations`
         SET
         `Role` = @Role,
-        `InvitedBy` = @InvitedBy
+        `Expiration` = @Expiration
         WHERE
         `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
 

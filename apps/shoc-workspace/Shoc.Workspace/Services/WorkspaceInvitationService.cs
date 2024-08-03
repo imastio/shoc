@@ -177,7 +177,7 @@ public class WorkspaceInvitationService : WorkspaceServiceBase
         await this.GetById(workspaceId, id);
 
         // build default invitation expiration
-        input.Expiration = DateTime.UtcNow.AddDays(INVITE_EXPIRATION_DAYS);
+        input.Expiration ??= DateTime.UtcNow.AddDays(INVITE_EXPIRATION_DAYS);
         
         // perform the operation
         return await this.workspaceInvitationRepository.UpdateById(workspaceId, id, input);

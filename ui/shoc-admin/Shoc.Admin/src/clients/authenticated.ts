@@ -76,7 +76,6 @@ export async function authenticated<TResult>(action: (token: string) => Promise<
 
         throw ErrorDefinitions.notAuthenticated();
     }
-
 }
 
 export async function authenticatedUser<TResult>(action: (token: string) => Promise<TResult>): Promise<TResult> {
@@ -86,10 +85,6 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
     }
     catch(error){
         if(error instanceof AxiosError){
-            if(error.response?.status === 401){
-                console.trace("Not authenticated with token", error.config?.headers?.Authorization)
-            }
-
             throw error;            
         }
         throw ErrorDefinitions.notAuthenticated();

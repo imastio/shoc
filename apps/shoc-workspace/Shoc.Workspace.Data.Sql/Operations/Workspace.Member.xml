@@ -54,7 +54,7 @@
         SELECT wm.* FROM `wspc_workspace_members` wm
         INNER JOIN `idp_users` u
         ON wm.UserId = u.Id
-        WHERE wm.`WorkspaceId` = @WorkspaceId AND wm.`u.Email` = @Email;
+        WHERE wm.`WorkspaceId` = @WorkspaceId AND u.`Email` = @Email;
       </TextCommand>
     </SqlOperation>
 

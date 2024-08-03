@@ -15,11 +15,10 @@ async function withErrorHandling(fn: () => Promise<any>): Promise<any>  {
         return { payload: result.data, error: null };
     }
     catch(error){
-
-        if(error instanceof AxiosError && error.response && error.response.data){
+        if(error instanceof AxiosError && error.response && error.response.data && Array.isArray(error.response.data.errors)){
             return { payload: error.response.data, error }
         }
-        return { payload: { errors: [{ code: "UNKNOWN_ERROR", kind: 1}] }, error };
+        return { payload: { errors: [{ code: "UNKNOWN_ERROR", kind: 'unknown'}] }, error };
     }
 }
 
