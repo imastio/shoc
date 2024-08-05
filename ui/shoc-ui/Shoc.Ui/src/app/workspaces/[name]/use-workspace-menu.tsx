@@ -30,7 +30,8 @@ export default function useWorkspaceMenu({ name }: { name: string }){
             path: `/workspaces/${name}/members`, 
             title: intl.formatMessage({ id: 'workspaces.sidebar.members' }), 
             icon: UsersIcon,
-            visible: hasAny(['workspace_list_members'])
+            visible: hasAny(['workspace_list_members']),
+            altPaths: [`/workspaces/${name}/members/invitations`]
         },
         { 
             path: `/workspaces/${name}/clusters`, 
@@ -54,7 +55,7 @@ export default function useWorkspaceMenu({ name }: { name: string }){
 
     const menu = useMemo(() => all.filter(item => item.visible).map(item => ({
         ...item,
-        active: item.path === pathname
+        active: item.path === pathname || item.altPaths?.includes(pathname || '')
     })), [all, pathname])
 
 

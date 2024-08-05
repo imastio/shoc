@@ -26,7 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 
-export default function WorkspaceAddDialogButton({ className }: { className?: string }) {
+export default function WorkspaceAddDialogButton({ className, disabled = false, onSuccess }: { className?: string, disabled?: boolean, onSuccess?: (result: any) => {} }) {
 
   const intl = useIntl();
   const [open, setOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function WorkspaceAddDialogButton({ className }: { className?: st
     setProgress(true);
     setErrors([]);
 
-    const { errors } = await rpc('workspace/user-workspaces/create', { input });
+    const { data, errors } = await rpc('workspace/user-workspaces/create', { input });
 
     setProgress(false);
 
@@ -66,7 +66,10 @@ export default function WorkspaceAddDialogButton({ className }: { className?: st
 
     setOpen(false);
     toast(intl.formatMessage({ id: 'workspaces.messages.created' }))
-    router.push(`/workspaces/${input.name}`);
+
+    if(onSuccess){
+      onSuccess(data)
+    }
 
   }, [router, intl]);
 
@@ -87,7 +90,9 @@ export default function WorkspaceAddDialogButton({ className }: { className?: st
 
   return <Dialog open={open} onOpenChange={onOpenChangeWrapper} modal>
     <DialogTrigger asChild>
-      <Button className={className}>{intl.formatMessage({ id: 'workspaces.add' })}</Button>
+      <Button className={className} disabled={disabled}>
+        {intl.formatMessage({ id: 'workspaces.add' })}
+      </Button>
     </DialogTrigger>
     <DialogContent className="w-4/5 md:w-1/2">
       <DialogHeader>

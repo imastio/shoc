@@ -24,11 +24,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import DataTableToolbar from "./data-table-toolbar"
 import DataTablePagination from "./data-table-pagination"
 import { cn } from "@/lib/utils"
-import { Progress } from "../ui/progress"
-import { Skeleton } from "../ui/skeleton"
 import LoadingContainer from "../general/loading-container"
 import ErrorScreen from "../error/error-screen"
 
@@ -46,7 +43,8 @@ export default function DataTable<TData, TValue>({
   data,
   className,
   progress = false,
-  errors = []
+  errors = [],
+  toolbar
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -84,6 +82,7 @@ export default function DataTable<TData, TValue>({
     <LoadingContainer loading={progress}>
 
       <div className={cn("space-y-4", className)}>
+        {toolbar && toolbar(table)}
         <div className={cn("rounded-md border")}>
           <Table>
             <TableHeader>

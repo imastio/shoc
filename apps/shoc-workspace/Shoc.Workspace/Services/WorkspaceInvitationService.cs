@@ -139,7 +139,7 @@ public class WorkspaceInvitationService : WorkspaceServiceBase
         }
         
         // build default invitation expiration
-        input.Expiration = DateTime.UtcNow.AddDays(INVITE_EXPIRATION_DAYS);
+        input.Expiration ??= DateTime.UtcNow.AddDays(INVITE_EXPIRATION_DAYS);
 
         // try to get member by the email we try to invite
         var member = await this.workspaceMemberRepository.GetByEmail(workspaceId, input.Email);

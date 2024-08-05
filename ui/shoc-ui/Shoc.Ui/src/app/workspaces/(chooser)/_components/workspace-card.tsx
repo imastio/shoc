@@ -39,7 +39,5 @@ export default function WorkspaceCard({ workspace }: any) {
                 </div>
             </div>
         </div>
-
     </Card>
-
 }

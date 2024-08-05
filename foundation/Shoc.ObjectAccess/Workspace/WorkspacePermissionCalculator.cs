@@ -26,7 +26,11 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_DELETE,
                 WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
                 WorkspacePermissions.WORKSPACE_UPDATE_MEMBER,
-                WorkspacePermissions.WORKSPACE_DELETE_MEMBER
+                WorkspacePermissions.WORKSPACE_DELETE_MEMBER,
+                WorkspacePermissions.WORKSPACE_LIST_INVITATIONS,
+                WorkspacePermissions.WORKSPACE_CREATE_INVITATION,
+                WorkspacePermissions.WORKSPACE_UPDATE_INVITATION,
+                WorkspacePermissions.WORKSPACE_DELETE_INVITATION
             }
         },
         {

@@ -1,11 +1,11 @@
 using System;
 
-namespace Shoc.Workspace.Model.Workspace;
+namespace Shoc.Workspace.Model.UserWorkspace;
 
 /// <summary>
-/// The workspace invitation model
+/// The user workspace invitation
 /// </summary>
-public class WorkspaceInvitationExtendedModel
+public class UserWorkspaceInvitationModel
 {
     /// <summary>
     /// The invitation id

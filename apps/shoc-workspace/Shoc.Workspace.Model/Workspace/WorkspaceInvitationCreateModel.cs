@@ -35,5 +35,5 @@ public class WorkspaceInvitationCreateModel
     /// <summary>
     /// The expiration time
     /// </summary>
-    public DateTime Expiration { get; set; }
+    public DateTime? Expiration { get; set; }
 }

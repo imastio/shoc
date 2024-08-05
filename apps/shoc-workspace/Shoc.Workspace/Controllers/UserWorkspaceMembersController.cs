@@ -26,7 +26,7 @@ public class UserWorkspaceMembersController : ControllerBase
     /// <summary>
     /// Creates new instance of the controller
     /// </summary>
-    /// <param name="workspaceMemberService">The employee skill service</param>
+    /// <param name="workspaceMemberService">The members service</param>
     public UserWorkspaceMembersController(UserWorkspaceMemberService workspaceMemberService)
     {
         this.workspaceMemberService = workspaceMemberService;

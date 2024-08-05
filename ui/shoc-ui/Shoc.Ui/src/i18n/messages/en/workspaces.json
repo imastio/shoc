@@ -42,5 +42,16 @@
     "workspaces.members.validation.invalidRole": "The role is not valid",
     "workspaces.members.update": "Update membership",
     "workspaces.members.updateNotice": "You can update the role of the member in the workspace.",
-    "workspaces.members.updateError": "Unable to update the membership"
+    "workspaces.members.updateError": "Unable to update the membership",
+    "workspaces.invitations.validation.invalidRole": "The role is not allowed",
+    "workspaces.invitations.update": "Update invitation",
+    "workspaces.invitations.updateNotice": "You can update the role of the membership invitation.",
+    "workspaces.invitations.updateError": "Unable to update the invitation",
+    "workspaces.invitations.labels.invitedBy": "Invited By",
+    "workspaces.invitations.placeholders.role": "The inviting role",
+    "workspaces.invitations.create": "Invite a member",
+    "workspaces.invitations.createNotice": "You can invite another user to this workspace by their email.",
+    "workspaces.invitations.createError": "Could not invite the user to the workspace.",
+    "workspaces.invitations.create.action": "Invite"
+
 }

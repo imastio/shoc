@@ -5,7 +5,6 @@ import { shocClient } from '@/clients/shoc';
 import { authenticatedUser } from '@/clients/authenticated';
 import UserWorkspacesClient from '@/clients/shoc/workspace/user-workspaces-client';
 import clientGuard from '@/clients/client-guard';
-import { cache } from 'react';
 
 export const getAll = defineServerAction(({ }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(UserWorkspacesClient).getAll(token)));

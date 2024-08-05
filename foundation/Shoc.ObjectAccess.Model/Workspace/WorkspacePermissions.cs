@@ -38,6 +38,26 @@ public class WorkspacePermissions
     /// Delete members of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_MEMBER = "workspace_delete_member";
+    
+    /// <summary>
+    /// View invitations of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_INVITATIONS = "workspace_list_invitations";
+    
+    /// <summary>
+    /// Create invitation of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_INVITATION = "workspace_create_invitation";
+    
+    /// <summary>
+    /// Update invitations of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_INVITATION = "workspace_update_invitation";
+    
+    /// <summary>
+    /// Delete invitations of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_INVITATION = "workspace_delete_invitation";
         
     /// <summary>
     /// Get and initialize all the constants

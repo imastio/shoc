@@ -77,21 +77,9 @@ export default function DataTableToolbar<TData>({
                 />
               )
           )}
-        {isFiltered && (
-          <Button
-            aria-label="Reset filters"
-            variant="ghost"
-            className="h-8 px-2 lg:px-3"
-            onClick={() => table.resetColumnFilters()}
-          >
-            Reset
-            <Cross2Icon className="ml-2 size-4" aria-hidden="true" />
-          </Button>
-        )}
       </div>
       <div className="flex items-center gap-2">
         {children}
-        <DataTableViewOptions table={table} />
       </div>
     </div>
   )
