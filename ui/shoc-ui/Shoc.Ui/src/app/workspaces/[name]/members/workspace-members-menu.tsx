@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils";
+import useWorkspaceAccess from "@/providers/workspace-access/use-workspace-access";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -10,19 +11,22 @@ export default function WorkspaceMembersMenu({ name }: { name: string }) {
 
     const intl = useIntl();
     const pathname = usePathname();
+    const { hasAny } = useWorkspaceAccess();
 
     const definitions = useMemo(() => [
         {
             path: `/workspaces/${name}/members`,
-            title: intl.formatMessage({ id: 'workspaces.members.menu.members' })
+            title: intl.formatMessage({ id: 'workspaces.members.menu.members' }),
+            visible: hasAny(['workspace_list_members'])
         },
         {
             path: `/workspaces/${name}/members/invitations`,
-            title: intl.formatMessage({ id: 'workspaces.members.menu.invitations' })
+            title: intl.formatMessage({ id: 'workspaces.members.menu.invitations' }),
+            visible: hasAny(['workspace_list_invitations'])
         }
-    ], [intl, name])
+    ], [intl, name, hasAny])
 
-    const menu = useMemo(() => definitions.map(item => ({
+    const menu = useMemo(() => definitions.filter(item => item.visible).map(item => ({
         path: item.path,
         title: item.title,
         active: item.path === pathname

@@ -44,7 +44,11 @@ export default function WorkspaceInvitationCreateDialog({ workspaceId, open, tri
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    shouldUseNativeValidation: false
+    shouldUseNativeValidation: false,
+    defaultValues: {
+      email: '',
+      role: ''
+    }
   })
 
   const onOk: SubmitHandler<FieldValues> = async (values) => {

@@ -1,11 +1,11 @@
 using System;
 
-namespace Shoc.Workspace.Model.Workspace;
+namespace Shoc.Workspace.Model.User;
 
 /// <summary>
-/// The workspace invitation model
+/// The user invitation model
 /// </summary>
-public class WorkspaceInvitationModel
+public class UserInvitationModel
 {
     /// <summary>
     /// The invitation id
@@ -33,17 +33,33 @@ public class WorkspaceInvitationModel
     public string InvitedBy { get; set; }
     
     /// <summary>
+    /// The inviting user email
+    /// </summary>
+    public string InvitedByEmail { get; set; }
+    
+    /// <summary>
+    /// The inviting user full name
+    /// </summary>
+    public string InvitedByFullName { get; set; }
+    
+    /// <summary>
     /// The expiration time
     /// </summary>
     public DateTime Expiration { get; set; }
+
+    /// <summary>
+    /// The name of workspace
+    /// </summary>
+    public string WorkspaceName { get; set; }
     
     /// <summary>
-    /// The creation time
+    /// The description of workspace
     /// </summary>
-    public DateTime Created { get; set; }
+    public string WorkspaceDescription { get; set; }
     
     /// <summary>
-    /// The update time
+    /// The type of workspace
     /// </summary>
-    public DateTime Updated { get; set; }
+    public string WorkspaceType { get; set; }
+
 }

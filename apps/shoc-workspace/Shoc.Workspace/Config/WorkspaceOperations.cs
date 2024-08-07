@@ -27,7 +27,8 @@ public static class WorkspaceOperations
             Path.Combine(sourceDirectory, "Operations", "Workspace.xml"),
             Path.Combine(sourceDirectory, "Operations", "Workspace.UserWorkspace.xml"),
             Path.Combine(sourceDirectory, "Operations", "Workspace.Member.xml"),
-            Path.Combine(sourceDirectory, "Operations", "Workspace.Invitation.xml")
+            Path.Combine(sourceDirectory, "Operations", "Workspace.Invitation.xml"),
+            Path.Combine(sourceDirectory, "Operations", "Workspace.UserInvitation.xml")
         };
     }
 }

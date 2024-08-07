@@ -33,6 +33,7 @@ builder.Services.AddSingleton<UserWorkspaceService>();
 builder.Services.AddSingleton<UserWorkspaceMemberService>();
 builder.Services.AddSingleton<WorkspaceInvitationService>();
 builder.Services.AddSingleton<UserWorkspaceInvitationService>();
+builder.Services.AddSingleton<UserInvitationService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

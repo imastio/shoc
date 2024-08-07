@@ -49,6 +49,11 @@ public static class WorkspaceErrors
     /// The user is already invited
     /// </summary>
     public const string ALREADY_INVITED = "WORKSPACE_ALREADY_INVITED";
+
+    /// <summary>
+    /// The expired invitation
+    /// </summary>
+    public const string EXPIRED_INVITATION = "WORKSPACE_EXPIRED_INVITATION";
     
     /// <summary>
     /// The unknown error

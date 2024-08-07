@@ -43,6 +43,9 @@
     "workspaces.members.update": "Update membership",
     "workspaces.members.updateNotice": "You can update the role of the member in the workspace.",
     "workspaces.members.updateError": "Unable to update the membership",
+    "workspaces.invitations": "Invitations",
+    "workspaces.invitations.noInvitations": "You're all caught up",
+    "workspaces.invitations.noInvitations.note": "You can continue working with your current workspaces or create a new one!",
     "workspaces.invitations.validation.invalidRole": "The role is not allowed",
     "workspaces.invitations.update": "Update invitation",
     "workspaces.invitations.updateNotice": "You can update the role of the membership invitation.",
@@ -52,6 +55,7 @@
     "workspaces.invitations.create": "Invite a member",
     "workspaces.invitations.createNotice": "You can invite another user to this workspace by their email.",
     "workspaces.invitations.createError": "Could not invite the user to the workspace.",
-    "workspaces.invitations.create.action": "Invite"
-
+    "workspaces.invitations.create.action": "Invite",
+    "workspaces.invitations.decline.notice": "You are about to decline the invitation. The operation cannot be undone.",
+    "workspaces.invitations.accept.notice": "Once accepted, you will be added to the workspace."
 }

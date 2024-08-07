@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { PlusIcon } from "@radix-ui/react-icons"
 
 export default function WorkspaceAddDialogButton({ className, disabled = false, onSuccess }: { className?: string, disabled?: boolean, onSuccess?: (result: any) => {} }) {
 
@@ -90,7 +91,8 @@ export default function WorkspaceAddDialogButton({ className, disabled = false, 
 
   return <Dialog open={open} onOpenChange={onOpenChangeWrapper} modal>
     <DialogTrigger asChild>
-      <Button className={className} disabled={disabled}>
+      <Button variant="outline" className={className} disabled={disabled}>
+        <PlusIcon className="w-4 h-4 mr-2" />
         {intl.formatMessage({ id: 'workspaces.add' })}
       </Button>
     </DialogTrigger>

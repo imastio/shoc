@@ -1,5 +1,4 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { WorkspaceMember } from "./types";
 import { AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { ReactNode, useState } from "react";
 import ErrorAlert from "@/components/general/error-alert";
@@ -10,14 +9,14 @@ import { buttonVariants } from "@/components/ui/button";
 import SpinnerIcon from "@/components/icons/spinner-icon";
 
 type DialogProps = {
-    item: WorkspaceMember,
+    item: any,
     open?: boolean,
     onClose?: () => void,
     trigger?: ReactNode,
     onSuccess?: (result: any) => void,
 }
 
-export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigger, onSuccess }: DialogProps) {
+export default function InvitationDeclineDialog({ item, open, onClose, trigger, onSuccess }: DialogProps) {
 
     const intl = useIntl();
     const [errors, setErrors] = useState<any[]>([]);
@@ -27,7 +26,7 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
 
         setErrors([]);
         setProgress(true);
-        const { data, errors } = await rpc('workspace/user-workspace-members/deleteById', { workspaceId: item.workspaceId, id: item.id });
+        const { data, errors } = await rpc('workspace/user-invitations/decline', { input: { workspaceId: item.workspaceId, id: item.id } });
         setProgress(false);
 
         if (errors) {
@@ -38,6 +37,8 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
         if (onSuccess) {
             onSuccess(data)
         }
+
+        onOpenChangeWrapper(false);
     }
 
     const onOpenChangeWrapper = (openValue: boolean): void => {
@@ -59,9 +60,7 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
                     <AlertDialogTitle>{intl.formatMessage({id: 'global.messages.sure'})}</AlertDialogTitle>
                     <ErrorAlert errors={errors} />
                     <AlertDialogDescription>
-                    {intl.formatMessage({id: 'global.messages.noUndoneNotice'})} 
-                    {' '}
-                    {intl.formatMessage({id: 'global.messages.permanentRemove'})}     
+                        {intl.formatMessage({id: 'workspaces.invitations.decline.notice'})}     
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -75,11 +74,10 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
                         onClick={async (e) => {
                             e.preventDefault();
                             await onOk()
-                            onOpenChangeWrapper(false);
                         }}
                     >
                         {progress && <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />}
-                        {intl.formatMessage({ id: 'global.actions.continue' })}
+                        {intl.formatMessage({ id: 'global.actions.decline' })}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
