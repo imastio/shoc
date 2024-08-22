@@ -76,7 +76,8 @@
         SET
         `Name` = @Name,
         `DisplayName` = @DisplayName,
-        `Uri` = @Uri,
+        `Status` = @Status,
+        `Registry` = @Registry,
         `Namespace` = @Namespace
         WHERE
         `Id` = @Id;
