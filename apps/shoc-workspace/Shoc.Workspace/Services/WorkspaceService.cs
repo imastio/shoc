@@ -50,6 +50,25 @@ public class WorkspaceService : WorkspaceServiceBase
     {
         return this.RequireWorkspaceById(id);
     }
+    
+    /// <summary>
+    /// Gets the object by name
+    /// </summary>
+    /// <param name="name">The name of the object</param>
+    /// <returns></returns>
+    public async Task<WorkspaceModel> GetByName(string name)
+    {
+        // try getting by name
+        var result = await this.workspaceRepository.GetByName(name);
+
+        // report not found
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        return result;
+    }
         
     /// <summary>
     /// Creates new object

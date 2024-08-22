@@ -18,15 +18,14 @@
     <ProjectReference Include="../../../api-core/Shoc.ApiCore/Shoc.ApiCore.csproj" />
     <ProjectReference Include="../../../foundation/Shoc.DataProtection/Shoc.DataProtection.csproj" />
     <ProjectReference Include="../../../foundation/Shoc.DataProtection.Sql/Shoc.DataProtection.Sql.csproj" />
-    <ProjectReference Include="../../../foundation/Shoc.Mailing.Sql/Shoc.Mailing.Sql.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.GrpcClient\Shoc.ApiCore.GrpcClient.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.ObjectAccess\Shoc.ApiCore.ObjectAccess.csproj" />
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
-    <ProjectReference Include="..\Shoc.Workspace.Data.Sql\Shoc.Workspace.Data.Sql.csproj" />
-    <ProjectReference Include="..\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
-    <ProjectReference Include="..\Shoc.Workspace.Model\Shoc.Workspace.Model.csproj" />
+    <ProjectReference Include="..\..\shoc-workspace\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
+    <ProjectReference Include="..\Shoc.Registry.Data.Sql\Shoc.Registry.Data.Sql.csproj" />
+    <ProjectReference Include="..\Shoc.Registry.Model\Shoc.Registry.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

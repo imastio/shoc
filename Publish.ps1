@@ -22,6 +22,10 @@ function GetCsharpProject ($serviceName) {
 		return "$PSScriptRoot/apps/shoc-workspace/Shoc.Workspace/Shoc.Workspace.csproj"
 	}
 
+	if($serviceName -eq "shoc-registry"){
+		return "$PSScriptRoot/apps/shoc-registry/Shoc.Registry/Shoc.Registry.csproj"
+	}
+
 	if($serviceName -eq "shoc-webgtw"){
 		return "$PSScriptRoot/apps/shoc-webgtw/Shoc.Webgtw/Shoc.Webgtw.csproj"
 	}

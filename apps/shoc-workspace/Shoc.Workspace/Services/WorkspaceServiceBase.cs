@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Shoc.ApiCore.GrpcClient;
@@ -84,12 +85,12 @@ public abstract class WorkspaceServiceBase
         }
         
         // try getting object
-        var result = await this.grpcClientProvider
+        try {
+            await this.grpcClientProvider
             .Get<UserServiceGrpc.UserServiceGrpcClient>()
             .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetUserByIdRequest{Id = id}, metadata));
-
-        // the user does not exist
-        if (result == null)
+        }
+        catch(Exception)
         {
             throw ErrorDefinition.Validation(WorkspaceErrors.INVALID_USER).AsException();
         }

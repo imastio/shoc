@@ -173,6 +173,27 @@ services:
     networks:
       - shoc-network
 
+  shoc-registry:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-registry:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-registry/Shoc.Registry
+    container_name: shoc-registry
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-registry.env
+    ports:
+      - '11130:11130'
+      - '11131:11131'
+      - '11132:11132'
+      - '11133:11133'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
 
     
   

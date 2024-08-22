@@ -122,3 +122,20 @@ services:
       - protocol: https
         roles: [ 'grpc' ]
         port: 11125
+        
+  # Registry service ports [11130 - 11137]
+  shoc-registry:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11130
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11131
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11132
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11133

@@ -7,11 +7,9 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
-using Shoc.ApiCore.Grpc;
 using Shoc.ApiCore.ObjectAccess;
-using Shoc.Workspace.Config;
-using Shoc.Workspace.Grpc;
-using Shoc.Workspace.Services;
+using Shoc.Registry.Config;
+using Shoc.Registry.Services;
 
 // start building web application
 var builder = WebApplication.CreateBuilder(args);
@@ -29,14 +27,7 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
-builder.Services.AddGrpcEssentials();
-builder.Services.AddSingleton<WorkspaceService>();
-builder.Services.AddSingleton<WorkspaceMemberService>();
-builder.Services.AddSingleton<UserWorkspaceService>();
-builder.Services.AddSingleton<UserWorkspaceMemberService>();
-builder.Services.AddSingleton<WorkspaceInvitationService>();
-builder.Services.AddSingleton<UserWorkspaceInvitationService>();
-builder.Services.AddSingleton<UserInvitationService>();
+builder.Services.AddSingleton<RegistryService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 
@@ -52,7 +43,5 @@ app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();
-app.MapGrpcReflectionService().AllowAnonymous();
-app.MapGrpcService<WorkspacesServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();
