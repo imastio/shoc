@@ -5,7 +5,11 @@ export const accessAreas = [
     },
     {
         key: 'workspace', 
-        display: 'Workspace'
+        display: 'Workspace Management'
+    },
+    {
+        key: 'registry', 
+        display: 'Registry Management'
     },
     {
         key: 'settings', 

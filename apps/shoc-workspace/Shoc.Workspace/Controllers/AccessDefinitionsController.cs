@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Shoc.Access.Model;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Access;
-using Shoc.Identity.Model.User;
 using Shoc.Workspace.Model;
 
 namespace Shoc.Workspace.Controllers;
@@ -14,7 +14,7 @@ namespace Shoc.Workspace.Controllers;
 [Route("api/access-definitions")]
 [ApiController]
 [ShocExceptionHandler]
-[AuthorizeMinUserType(UserTypes.EXTERNAL)]
+[AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
 public class AccessDefinitionsController : ControllerBase
 {
     /// <summary>

@@ -15,7 +15,7 @@ import { workspaceStatusesMap, workspaceTypesMap } from "@/well-known/workspaces
 export default function WorkspacesTable() {
     const { withToken } = useApiAuthentication();
     const [progress, setProgress] = useState(false);
-    const [roles, setRoles] = useState<any[]>([]);
+    const [items, setItems] = useState<any[]>([]);
     const [errors, setErrors] = useState([]);
     const [creatingActive, setCreatingActive] = useState(false)
 
@@ -81,7 +81,7 @@ export default function WorkspacesTable() {
             return;
         }
 
-        setRoles(result.payload)
+        setItems(result.payload)
     }, [withToken])
 
     useEffect(() => {
@@ -89,7 +89,7 @@ export default function WorkspacesTable() {
     }, [load]);
 
     return <>
-        <WorkspaceCreateModal open={creatingActive} onClose={() => setCreatingActive(false)} onSuccess={(entity: any) => setRoles([...roles, entity])} />
+        <WorkspaceCreateModal open={creatingActive} onClose={() => setCreatingActive(false)} onSuccess={() => load()} />
         <ConfigProvider renderEmpty={() => <Empty description={"No workspaces to display"}></Empty>}>
             <Row gutter={0} justify="end" align="middle" style={{ margin: '8px 0' }}>
                 <Space size="small">
@@ -100,7 +100,7 @@ export default function WorkspacesTable() {
                 <Table
                     rowKey={record => record.id}
                     columns={columns}
-                    dataSource={roles}
+                    dataSource={items}
                     loading={progress}
                     scroll={{ x: true }}
                 />

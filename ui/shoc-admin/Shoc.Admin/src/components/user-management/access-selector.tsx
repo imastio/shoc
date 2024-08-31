@@ -1,5 +1,6 @@
 import { selfClient } from "@/clients/shoc";
 import IdentityAccessClient from "@/clients/shoc/identity/identity-accesses-client";
+import RegistryAccessesClient from "@/clients/shoc/registry/registry-accesses-client";
 import SettingsAccessesClient from "@/clients/shoc/settings/settings-accesses-client";
 import WorkspaceAccessesClient from "@/clients/shoc/workspace/workspace-accesses-client";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
@@ -22,6 +23,11 @@ const getFetcher = (area: string) => {
 
     if(area === 'settings'){
         const client = selfClient(SettingsAccessesClient);
+        return client.getAll.bind(client);
+    }
+
+    if(area === 'registry'){
+        const client = selfClient(RegistryAccessesClient);
         return client.getAll.bind(client);
     }
 

@@ -32,8 +32,12 @@ namespace Shoc.Workspace.Grpc.Workspaces {
             "cy5HZXRXb3Jrc3BhY2VSZXNwb25zZRJ6CglHZXRCeU5hbWUSOC5hcGkuZ3Jw",
             "Yy53b3Jrc3BhY2Uud29ya3NwYWNlcy5HZXRXb3Jrc3BhY2VCeU5hbWVSZXF1",
             "ZXN0GjMuYXBpLmdycGMud29ya3NwYWNlLndvcmtzcGFjZXMuR2V0V29ya3Nw",
-            "YWNlUmVzcG9uc2VCIaoCHlNob2MuV29ya3NwYWNlLkdycGMuV29ya3NwYWNl",
-            "c2IGcHJvdG8z"));
+            "YWNlUmVzcG9uc2UyqQEKGldvcmtzcGFjZU1lbWJlclNlcnZpY2VHcnBjEooB",
+            "CgtHZXRCeVVzZXJJZBJALmFwaS5ncnBjLndvcmtzcGFjZS53b3Jrc3BhY2Vz",
+            "LkdldFdvcmtzcGFjZU1lbWJlckJ5VXNlcklkUmVxdWVzdBo5LmFwaS5ncnBj",
+            "LndvcmtzcGFjZS53b3Jrc3BhY2VzLkdldFdvcmtzcGFjZU1lbWJlclJlc3Bv",
+            "bnNlQiGqAh5TaG9jLldvcmtzcGFjZS5HcnBjLldvcmtzcGFjZXNiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Shoc.Workspace.Grpc.Workspaces.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

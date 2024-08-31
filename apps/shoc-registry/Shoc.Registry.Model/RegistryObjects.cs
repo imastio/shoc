@@ -9,4 +9,9 @@ public static class RegistryObjects
     /// The registry object
     /// </summary>
     public const string REGISTRY = "reg";
+    
+    /// <summary>
+    /// The registry credential object
+    /// </summary>
+    public const string REGISTRY_CREDENTIAL = "reg-cred";
 }

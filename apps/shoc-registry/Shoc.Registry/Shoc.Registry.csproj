@@ -22,7 +22,6 @@
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.ObjectAccess\Shoc.ApiCore.ObjectAccess.csproj" />
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
-    <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Model\Shoc.Identity.Model.csproj" />
     <ProjectReference Include="..\..\shoc-workspace\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Registry.Data.Sql\Shoc.Registry.Data.Sql.csproj" />
     <ProjectReference Include="..\Shoc.Registry.Model\Shoc.Registry.Model.csproj" />

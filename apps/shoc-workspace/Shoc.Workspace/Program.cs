@@ -54,5 +54,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGrpcReflectionService().AllowAnonymous();
 app.MapGrpcService<WorkspacesServiceGrpc>();
+app.MapGrpcService<WorkspaceMembersServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();

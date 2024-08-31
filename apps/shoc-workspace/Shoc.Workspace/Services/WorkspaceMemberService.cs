@@ -116,6 +116,36 @@ public class WorkspaceMemberService : WorkspaceServiceBase
         // return the object
         return result;
     }
+    
+    /// <summary>
+    /// Gets the particular membership record in the workspace by user id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="userId">The user id</param>
+    /// <returns></returns>
+    public async Task<WorkspaceMemberModel> GetByUserId(string workspaceId, string userId)
+    {
+        // make sure workspace exists
+        await this.RequireWorkspaceById(workspaceId);
+
+        // user id should be a valid string
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        // try getting object by user id
+        var result = await this.workspaceMemberRepository.GetByUserId(workspaceId, userId);
+
+        // make sure object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        // return the object
+        return result;
+    }
 
     /// <summary>
     /// Creates new membership in the workspace

@@ -25,7 +25,7 @@ public class WorkspacesController : ControllerBase
     /// <summary>
     /// Creates new instance of the controller
     /// </summary>
-    /// <param name="workspaceService">The objec service</param>
+    /// <param name="workspaceService">The object service</param>
     public WorkspacesController(WorkspaceService workspaceService)
     {
         this.workspaceService = workspaceService;

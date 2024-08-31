@@ -1,9 +1,10 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Imast.DataOps.Definitions;
+using Microsoft.AspNetCore.DataProtection;
 using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
+using Shoc.Identity.Grpc.Users;
 using Shoc.Registry.Data;
 using Shoc.Registry.Model;
 using Shoc.Registry.Model.Registry;
@@ -44,17 +45,24 @@ public abstract class RegistryServiceBase
     /// <summary>
     /// The grpc client provider
     /// </summary>
-    private readonly IGrpcClientProvider grpcClientProvider;
+    protected readonly IGrpcClientProvider grpcClientProvider;
+
+    /// <summary>
+    /// The data protection provider
+    /// </summary>
+    protected readonly IDataProtectionProvider dataProtectionProvider;
 
     /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
-    protected RegistryServiceBase(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider)
+    /// <param name="dataProtectionProvider">The data protection provider</param>
+    protected RegistryServiceBase(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider)
     {
         this.registryRepository = registryRepository;
         this.grpcClientProvider = grpcClientProvider;
+        this.dataProtectionProvider = dataProtectionProvider;
     }
     
     /// <summary>
@@ -89,7 +97,7 @@ public abstract class RegistryServiceBase
     /// <param name="id">The id to validate</param>
     protected async Task RequireWorkspace(string id)
     {
-        // no user id given
+        // no workspace id given
         if (string.IsNullOrWhiteSpace(id))
         {
             throw ErrorDefinition.Validation(RegistryErrors.INVALID_WORKSPACE).AsException();
@@ -104,6 +112,59 @@ public abstract class RegistryServiceBase
         catch(Exception)
         {
             throw ErrorDefinition.Validation(RegistryErrors.INVALID_WORKSPACE).AsException();
+        }
+    }
+    
+    /// <summary>
+    /// Validate user by id
+    /// </summary>
+    /// <param name="id">The id to validate</param>
+    protected async Task RequireUser(string id)
+    {
+        // no user id given
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw ErrorDefinition.Validation(RegistryErrors.INVALID_USER).AsException();
+        }
+        
+        // try getting object
+        try {
+            await this.grpcClientProvider
+                .Get<UserServiceGrpc.UserServiceGrpcClient>()
+                .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetUserByIdRequest{Id = id}, metadata));
+        }
+        catch(Exception)
+        {
+            throw ErrorDefinition.Validation(RegistryErrors.INVALID_USER).AsException();
+        }
+    }
+
+    /// <summary>
+    /// Validate user to be a member of the workspace
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="userId">The user id</param>
+    protected async Task RequireMembership(string workspaceId, string userId)
+    {
+        // no user id given
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw ErrorDefinition.Validation(RegistryErrors.INVALID_USER).AsException();
+        }
+        
+        // try getting object
+        try {
+            await this.grpcClientProvider
+                .Get<WorkspaceMemberServiceGrpc.WorkspaceMemberServiceGrpcClient>()
+                .DoAuthorized(async (client, metadata) => await client.GetByUserIdAsync(new GetWorkspaceMemberByUserIdRequest
+                {
+                    WorkspaceId = workspaceId,
+                    UserId = userId
+                }, metadata));
+        }
+        catch(Exception)
+        {
+            throw ErrorDefinition.Validation(RegistryErrors.INVALID_USER).AsException();
         }
     }
 
@@ -215,7 +276,7 @@ public abstract class RegistryServiceBase
         }
         
         // otherwise namespace should be a valid string matching the pattern
-        if (!NAMESPACE_PATTERN.IsMatch(ns))
+        if (provider != RegistryProviderTypes.SHOC && !NAMESPACE_PATTERN.IsMatch(ns))
         {
             throw ErrorDefinition.Validation(RegistryErrors.INVALID_NAMESPACE).AsException();
         }

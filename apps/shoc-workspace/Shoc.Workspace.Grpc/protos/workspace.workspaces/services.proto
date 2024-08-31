@@ -10,3 +10,9 @@ service WorkspaceServiceGrpc {
 
   rpc GetByName(GetWorkspaceByNameRequest) returns (GetWorkspaceResponse);
 }
+
+service WorkspaceMemberServiceGrpc {
+  
+  rpc GetByUserId(GetWorkspaceMemberByUserIdRequest) returns (GetWorkspaceMemberResponse);
+
+}

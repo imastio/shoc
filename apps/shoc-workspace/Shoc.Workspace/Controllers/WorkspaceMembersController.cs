@@ -23,7 +23,7 @@ public class WorkspaceMembersController : ControllerBase
     private readonly WorkspaceMemberService workspaceMemberService;
 
     /// <summary>
-    /// Creates new instance of employee skill controller
+    /// Creates new instance of controller
     /// </summary>
     /// <param name="workspaceMemberService">The members service</param>
     public WorkspaceMembersController(WorkspaceMemberService workspaceMemberService)

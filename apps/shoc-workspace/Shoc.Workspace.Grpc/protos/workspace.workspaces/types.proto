@@ -12,6 +12,13 @@ message WorkspaceGrpcModel {
   string createdBy = 6;
 }
 
+message WorkspaceMemberGrpcModel {
+  string id = 1;
+  string workspaceId = 2;
+  string userId = 3;
+  string role = 4;
+}
+
 message GetWorkspaceByIdRequest {
   string id = 1;
 }
@@ -22,4 +29,13 @@ message GetWorkspaceByNameRequest {
 
 message GetWorkspaceResponse {
   WorkspaceGrpcModel workspace = 1;
+}
+
+message GetWorkspaceMemberByUserIdRequest {
+  string workspaceId = 1;
+  string userId = 2;
+}
+
+message GetWorkspaceMemberResponse {
+  WorkspaceMemberGrpcModel member = 1;
 }

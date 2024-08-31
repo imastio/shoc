@@ -20,7 +20,7 @@
         SELECT r.*, w.Name as WorkspaceName 
         FROM 
           `reg_registries` r
-        INNER JOIN
+        LEFT JOIN
           `wspc_workspaces` w
         ON r.WorkspaceId = w.Id
         ORDER BY r.`Name` ASC;

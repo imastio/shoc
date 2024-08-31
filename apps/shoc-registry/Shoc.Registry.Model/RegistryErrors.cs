@@ -9,6 +9,11 @@ public static class RegistryErrors
     /// The name is invalid
     /// </summary>
     public const string INVALID_NAME = "REGISTRY_INVALID_NAME";
+
+    /// <summary>
+    /// The name already exists
+    /// </summary>
+    public const string EXISTING_NAME = "REGISTRY_EXISTING_NAME";
     
     /// <summary>
     /// The display name is invalid
@@ -44,7 +49,32 @@ public static class RegistryErrors
     /// The workspace is invalid
     /// </summary>
     public const string INVALID_WORKSPACE = "REGISTRY_INVALID_WORKSPACE";
-        
+       
+    /// <summary>
+    /// The user is invalid
+    /// </summary>
+    public const string INVALID_USER = "REGISTRY_INVALID_USER";
+    
+    /// <summary>
+    /// The credential source is invalid
+    /// </summary>
+    public const string INVALID_CREDENTIAL_SOURCE = "REGISTRY_INVALID_CREDENTIAL_SOURCE";
+
+    /// <summary>
+    /// The credential username is invalid
+    /// </summary>
+    public const string INVALID_CREDENTIAL_USERNAME = "REGISTRY_INVALID_CREDENTIAL_USERNAME";
+
+    /// <summary>
+    /// The credential email is invalid
+    /// </summary>
+    public const string INVALID_CREDENTIAL_EMAIL = "REGISTRY_INVALID_CREDENTIAL_EMAIL";
+    
+    /// <summary>
+    /// The credential password is invalid
+    /// </summary>
+    public const string INVALID_CREDENTIAL_PASSWORD = "REGISTRY_INVALID_CREDENTIAL_PASSWORD";
+    
     /// <summary>
     /// The unknown error
     /// </summary>
