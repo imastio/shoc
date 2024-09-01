@@ -23,6 +23,9 @@
         <None Update="Operations\Registry.Credential.xml">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Operations\Registry.SigningKey.xml">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

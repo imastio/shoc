@@ -18,7 +18,7 @@ namespace Shoc.Registry.Controllers;
 public class RegistryCredentialsController : ControllerBase
 {
     /// <summary>
-    /// The workspace members service
+    /// The registry credentials service
     /// </summary>
     private readonly RegistryCredentialService registryCredentialService;
 

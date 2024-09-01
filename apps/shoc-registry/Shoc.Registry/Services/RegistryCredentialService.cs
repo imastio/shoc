@@ -56,9 +56,12 @@ public class RegistryCredentialService : RegistryServiceBase
     /// </summary>
     /// <param name="registryId">The registry id</param>
     /// <returns></returns>
-    public Task<IEnumerable<RegistryCredentialModel>> GetAll(string registryId)
+    public async Task<IEnumerable<RegistryCredentialModel>> GetAll(string registryId)
     {
-        return this.registryCredentialRepository.GetAll(registryId);
+        // require parent object to exist
+        await this.RequireRegistryById(registryId);
+        
+        return await this.registryCredentialRepository.GetAll(registryId);
     }
 
     /// <summary>
@@ -67,9 +70,12 @@ public class RegistryCredentialService : RegistryServiceBase
     /// <param name="registryId">The registry id</param>
     /// <param name="filter">The filter to apply</param>
     /// <returns></returns>
-    public Task<IEnumerable<RegistryCredentialModel>> GetBy(string registryId, RegistryCredentialFilter filter)
+    public async Task<IEnumerable<RegistryCredentialModel>> GetBy(string registryId, RegistryCredentialFilter filter)
     {
-        return this.registryCredentialRepository.GetBy(registryId, filter);
+        // require parent object to exist
+        await this.RequireRegistryById(registryId);
+        
+        return await this.registryCredentialRepository.GetBy(registryId, filter);
     }
 
     /// <summary>
@@ -77,9 +83,12 @@ public class RegistryCredentialService : RegistryServiceBase
     /// </summary>
     /// <param name="registryId">The registry id</param>
     /// <returns></returns>
-    public Task<IEnumerable<RegistryCredentialExtendedModel>> GetAllExtended(string registryId)
+    public async Task<IEnumerable<RegistryCredentialExtendedModel>> GetAllExtended(string registryId)
     {
-        return this.registryCredentialRepository.GetAllExtended(registryId);
+        // require parent object to exist
+        await this.RequireRegistryById(registryId);
+        
+        return await this.registryCredentialRepository.GetAllExtended(registryId);
     }
 
     /// <summary>
@@ -88,9 +97,12 @@ public class RegistryCredentialService : RegistryServiceBase
     /// <param name="registryId">The registry id</param>
     /// <param name="filter">The filter to apply</param>
     /// <returns></returns>
-    public Task<IEnumerable<RegistryCredentialExtendedModel>> GetExtendedBy(string registryId, RegistryCredentialFilter filter)
+    public async Task<IEnumerable<RegistryCredentialExtendedModel>> GetExtendedBy(string registryId, RegistryCredentialFilter filter)
     {
-        return this.registryCredentialRepository.GetExtendedBy(registryId, filter);
+        // require parent object to exist
+        await this.RequireRegistryById(registryId);
+        
+        return await this.registryCredentialRepository.GetExtendedBy(registryId, filter);
     }
 
     /// <summary>

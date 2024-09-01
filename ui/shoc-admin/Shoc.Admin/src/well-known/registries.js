@@ -74,3 +74,21 @@ export const registryCredentialSources = [
 ]
 
 export const registryCredentialSourcesMap = Object.assign({}, ...registryCredentialSources.map((entry) => ({[entry.key]: entry.display})));
+
+export const registrySigningKeyUsages = [ 
+    {
+        key: 'signing', 
+        display: 'Signing'
+    }
+]
+
+export const registrySigningKeyUsagesMap = Object.assign({}, ...registrySigningKeyUsages.map((entry) => ({[entry.key]: entry.display})));
+
+export const registrySigningKeyAlgorithms = [ 
+    {
+        key: 'RSA256', 
+        display: 'RSA256'
+    }
+]
+
+export const registrySigningKeyAlgorithmsMap = Object.assign({}, ...registrySigningKeyAlgorithms.map((entry) => ({[entry.key]: entry.display})));

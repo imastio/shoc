@@ -47,6 +47,7 @@ public static class DataConfiguration
         services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
         services.AddSingleton<IRegistryRepository, RegistryRepository>();
         services.AddSingleton<IRegistryCredentialRepository, RegistryCredentialRepository>();
+        services.AddSingleton<IRegistrySigningKeyRepository, RegistrySigningKeyRepository>();
             
         // chain services
         return services;

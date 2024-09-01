@@ -16,6 +16,7 @@ import { registryProviderTypesMap, registryStatusesMap, registryUsageScopes, reg
 import RegistryStatus from "@/components/registry/registry-status";
 import Link from "antd/es/typography/Link";
 import { RegistryCredentialsTable } from "./registry-credentials-table";
+import { RegistrySigningKeysTable } from "./registry-signing-keys-table";
 
 export default function SingleRegistryClientPage() {
 
@@ -94,12 +95,20 @@ export default function SingleRegistryClientPage() {
                                 key: "1",
                                 label: "Credentials",
                                 children: <RegistryCredentialsTable registryId={registryId} loading={progress} />
+                            },
+                            {
+                                key: "2",
+                                label: "Keys",
+                                children: <RegistrySigningKeysTable registryId={registryId} loading={progress} />
                             }
                         ]
                     }}
                     tabList={[
                         {
                             tabKey: "1",
+                        },
+                        {
+                            tabKey: "2"
                         }
                     ]}
                     content={<>

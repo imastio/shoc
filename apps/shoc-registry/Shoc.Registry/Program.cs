@@ -29,6 +29,7 @@ builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<RegistryService>();
 builder.Services.AddSingleton<RegistryCredentialService>();
+builder.Services.AddSingleton<RegistrySigningKeyService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

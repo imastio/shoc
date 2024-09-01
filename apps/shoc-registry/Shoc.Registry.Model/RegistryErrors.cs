@@ -76,6 +76,16 @@ public static class RegistryErrors
     public const string INVALID_CREDENTIAL_PASSWORD = "REGISTRY_INVALID_CREDENTIAL_PASSWORD";
     
     /// <summary>
+    /// The signing key usage is invalid
+    /// </summary>
+    public const string INVALID_KEY_USAGE = "REGISTRY_INVALID_KEY_USAGE";
+    
+    /// <summary>
+    /// The signing key algorithm is invalid
+    /// </summary>
+    public const string INVALID_KEY_ALGORITHM = "REGISTRY_INVALID_KEY_ALGORITHM";
+    
+    /// <summary>
     /// The unknown error
     /// </summary>
     public const string UNKNOWN_ERROR = "REGISTRY_UNKNOWN_ERROR";

@@ -58,6 +58,7 @@ public static class IdentityExtended
             options.KeyManagement.RotationInterval = TimeSpan.FromDays(90);
             options.KeyManagement.PropagationTime = TimeSpan.FromDays(14);
             options.KeyManagement.RetentionDuration = TimeSpan.FromDays(30);
+            options.KeyManagement.DataProtectKeys = true;
             options.Authentication.CookieAuthenticationScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
         });
 
