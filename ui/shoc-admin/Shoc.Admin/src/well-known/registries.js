@@ -86,8 +86,16 @@ export const registrySigningKeyUsagesMap = Object.assign({}, ...registrySigningK
 
 export const registrySigningKeyAlgorithms = [ 
     {
-        key: 'RSA256', 
-        display: 'RSA256'
+        key: 'RS256', 
+        display: 'RS256'
+    },
+    {
+        key: 'ES256', 
+        display: 'ES256'
+    },
+    {
+        key: 'ES512', 
+        display: 'ES512'
     }
 ]
 

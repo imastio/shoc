@@ -10,9 +10,49 @@ namespace Shoc.Registry.Model.Key;
 public static class RegistrySigningKeyAlgorithms
 {
     /// <summary>
-    /// The RSA256 algorithm
+    /// The RS256 algorithm
     /// </summary>
-    public const string RSA256 = "RSA256";
+    public const string RS256 = "RS256";
+    
+    /// <summary>
+    /// The RS384 algorithm
+    /// </summary>
+    public const string RS384 = "RS384";
+    
+    /// <summary>
+    /// The RS512 algorithm
+    /// </summary>
+    public const string RS512 = "RS512";
+    
+    /// <summary>
+    /// The PS256 algorithm
+    /// </summary>
+    public const string PS256 = "PS256";
+    
+    /// <summary>
+    /// The PS384 algorithm
+    /// </summary>
+    public const string PS384 = "PS384";
+    
+    /// <summary>
+    /// The PS512 algorithm
+    /// </summary>
+    public const string PS512 = "PS512";
+    
+    /// <summary>
+    /// The ES256 algorithm
+    /// </summary>
+    public const string ES256 = "ES256";
+    
+    /// <summary>
+    /// The ES384 algorithm
+    /// </summary>
+    public const string ES384 = "ES384";
+    
+    /// <summary>
+    /// The ES512 algorithm
+    /// </summary>
+    public const string ES512 = "ES512";
     
     /// <summary>
     /// Get and initialize all the constants

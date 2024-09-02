@@ -5,6 +5,7 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Services.KeyManagement;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -58,7 +59,11 @@ public static class IdentityExtended
             options.KeyManagement.RotationInterval = TimeSpan.FromDays(90);
             options.KeyManagement.PropagationTime = TimeSpan.FromDays(14);
             options.KeyManagement.RetentionDuration = TimeSpan.FromDays(30);
-            options.KeyManagement.DataProtectKeys = true;
+            options.KeyManagement.DataProtectKeys = false;
+            options.KeyManagement.SigningAlgorithms = new List<SigningAlgorithmOptions>
+            {
+                new("ES512")
+            };
             options.Authentication.CookieAuthenticationScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
         });
 

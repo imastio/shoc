@@ -69,8 +69,8 @@ export default function RegistrySigningKeysAddModal({registryId, open, onClose =
                 form={form}
                 preserve={false}
                 onFinish={onSubmit}
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 18 }}   
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 20 }}   
                 layout="horizontal"
             >
                 <Form.Item name="algorithm" required label="Algorithm" rules={[{ required: true, message: 'Please select a valid algorithm' }]}>

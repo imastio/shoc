@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
 using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
+using Shoc.Registry.Crypto;
 using Shoc.Registry.Data;
 using Shoc.Registry.Model;
 using Shoc.Registry.Model.Key;
@@ -26,15 +28,22 @@ public class RegistrySigningKeyService : RegistryServiceBase
     private readonly IRegistrySigningKeyRepository registrySigningKeyRepository;
 
     /// <summary>
+    /// The key provider service
+    /// </summary>
+    private readonly KeyProviderService keyProviderService;
+
+    /// <summary>
     /// The registry signing key service
     /// </summary>
     /// <param name="registrySigningKeyRepository">The registry signing key repository</param>
+    /// <param name="keyProviderService">The key provider service</param>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
     /// <param name="dataProtectionProvider">The data protection provider</param>
-    public RegistrySigningKeyService(IRegistrySigningKeyRepository registrySigningKeyRepository, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider) : base(registryRepository, grpcClientProvider, dataProtectionProvider)
+    public RegistrySigningKeyService(IRegistrySigningKeyRepository registrySigningKeyRepository, KeyProviderService keyProviderService, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider) : base(registryRepository, grpcClientProvider, dataProtectionProvider)
     {
         this.registrySigningKeyRepository = registrySigningKeyRepository;
+        this.keyProviderService = keyProviderService;
     }
 
     /// <summary>
@@ -48,6 +57,29 @@ public class RegistrySigningKeyService : RegistryServiceBase
         await this.RequireRegistryById(registryId);
         
         return await this.registrySigningKeyRepository.GetAll(registryId);
+    }
+    
+    /// <summary>
+    /// Gets all the key payloads
+    /// </summary>
+    /// <param name="registryId">The registry id</param>
+    /// <returns></returns>
+    public async Task<IEnumerable<BaseKeyPayload>> GetAllPayloads(string registryId)
+    {
+        // load all the items
+        var items = await this.GetAll(registryId);
+        
+        // create a protector
+        var protector = this.dataProtectionProvider.CreateProtector(SIGNING_KEY_PROTECTION_PURPOSE);
+
+        return items.Select(item =>
+        {
+            // unprotect the payload JSON
+            var plain = protector.Unprotect(item.PayloadEncrypted);
+
+            // deserialize and return
+            return this.keyProviderService.Deserialize(item.Algorithm, plain);
+        });
     }
 
     /// <summary>
@@ -137,8 +169,11 @@ public class RegistrySigningKeyService : RegistryServiceBase
         // validate the algorithm
         ValidateKeyAlgorithm(input.Algorithm);
 
-        // TODO: write a logic to generate key and turn into payload
-        var payload = string.Empty;
+        // generate a new key based on the algorithm
+        var generated = this.keyProviderService.Generate(input.Algorithm, input.KeyId);
+
+        // serialize the payload
+        var payload = this.keyProviderService.Serialize(generated);
         
         // create a protector
         var protector = this.dataProtectionProvider.CreateProtector(SIGNING_KEY_PROTECTION_PURPOSE);
