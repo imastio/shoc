@@ -26,6 +26,11 @@ public class RegistryCredentialFilter
     public string UserId { get; set; }
     
     /// <summary>
+    /// The username to filter with
+    /// </summary>
+    public string Username { get; set; }
+    
+    /// <summary>
     /// Filter by pull access
     /// </summary>
     public bool? PullAllowed { get; set; }

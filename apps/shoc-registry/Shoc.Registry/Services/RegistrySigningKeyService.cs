@@ -18,11 +18,6 @@ namespace Shoc.Registry.Services;
 public class RegistrySigningKeyService : RegistryServiceBase
 {
     /// <summary>
-    /// The signing key protection purpose
-    /// </summary>
-    private const string SIGNING_KEY_PROTECTION_PURPOSE = "signing-key";
-    
-    /// <summary>
     /// The registry credential repository
     /// </summary>
     private readonly IRegistrySigningKeyRepository registrySigningKeyRepository;
@@ -33,17 +28,23 @@ public class RegistrySigningKeyService : RegistryServiceBase
     private readonly KeyProviderService keyProviderService;
 
     /// <summary>
+    /// The protection provider
+    /// </summary>
+    private readonly SigningKeyProtectionProvider signingKeyProtectionProvider;
+
+    /// <summary>
     /// The registry signing key service
     /// </summary>
     /// <param name="registrySigningKeyRepository">The registry signing key repository</param>
     /// <param name="keyProviderService">The key provider service</param>
+    /// <param name="signingKeyProtectionProvider">The protection provider</param>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
-    /// <param name="dataProtectionProvider">The data protection provider</param>
-    public RegistrySigningKeyService(IRegistrySigningKeyRepository registrySigningKeyRepository, KeyProviderService keyProviderService, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider) : base(registryRepository, grpcClientProvider, dataProtectionProvider)
+    public RegistrySigningKeyService(IRegistrySigningKeyRepository registrySigningKeyRepository, KeyProviderService keyProviderService, SigningKeyProtectionProvider signingKeyProtectionProvider, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider) : base(registryRepository, grpcClientProvider)
     {
         this.registrySigningKeyRepository = registrySigningKeyRepository;
         this.keyProviderService = keyProviderService;
+        this.signingKeyProtectionProvider = signingKeyProtectionProvider;
     }
 
     /// <summary>
@@ -70,7 +71,7 @@ public class RegistrySigningKeyService : RegistryServiceBase
         var items = await this.GetAll(registryId);
         
         // create a protector
-        var protector = this.dataProtectionProvider.CreateProtector(SIGNING_KEY_PROTECTION_PURPOSE);
+        var protector = this.signingKeyProtectionProvider.Create();
 
         return items.Select(item =>
         {
@@ -176,7 +177,7 @@ public class RegistrySigningKeyService : RegistryServiceBase
         var payload = this.keyProviderService.Serialize(generated);
         
         // create a protector
-        var protector = this.dataProtectionProvider.CreateProtector(SIGNING_KEY_PROTECTION_PURPOSE);
+        var protector = this.signingKeyProtectionProvider.Create();
         
         // encrypt payload and store
         input.PayloadEncrypted = protector.Protect(payload);

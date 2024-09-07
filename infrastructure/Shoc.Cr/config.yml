@@ -1,0 +1,20 @@
+version: 0.1
+log:
+  level: error
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :11004
+  headers:
+    X-Content-Type-Options: [nosniff]
+auth:
+  token:
+    realm: "https://api.shoc.local:11000/shoc-registry/api/authentication/_/default/token"
+    service: "cr.shoc.local:11000"
+    issuer: "https://api.shoc.local:11000/shoc-registry/api/authentication/_/default"
+    jwks: "/etc/certs/jwks/jwks.json"

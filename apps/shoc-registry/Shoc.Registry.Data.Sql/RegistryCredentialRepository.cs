@@ -52,6 +52,7 @@ public class RegistryCredentialRepository : IRegistryCredentialRepository
             .WithBinding("ByWorkspaceNull", filter.ByWorkspace && string.IsNullOrWhiteSpace(filter.WorkspaceId))
             .WithBinding("ByUser", filter.ByUser && !string.IsNullOrWhiteSpace(filter.UserId))
             .WithBinding("ByUserNull", filter.ByUser && string.IsNullOrWhiteSpace(filter.UserId))
+            .WithBinding("ByUsername", !string.IsNullOrWhiteSpace(filter.Username))
             .WithBinding("ByPullAllowed", filter.PullAllowed.HasValue)
             .WithBinding("ByPushAllowed", filter.PushAllowed.HasValue)
             .ExecuteAsync<RegistryCredentialModel>(new
@@ -59,6 +60,7 @@ public class RegistryCredentialRepository : IRegistryCredentialRepository
             RegistryId = registryId,
             filter.WorkspaceId,
             filter.UserId,
+            filter.Username,
             filter.PullAllowed,
             filter.PushAllowed
         });
@@ -90,6 +92,7 @@ public class RegistryCredentialRepository : IRegistryCredentialRepository
             .WithBinding("ByWorkspaceNull", filter.ByWorkspace && string.IsNullOrWhiteSpace(filter.WorkspaceId))
             .WithBinding("ByUser", filter.ByUser && !string.IsNullOrWhiteSpace(filter.UserId))
             .WithBinding("ByUserNull", filter.ByUser && string.IsNullOrWhiteSpace(filter.UserId))
+            .WithBinding("ByUsername", !string.IsNullOrWhiteSpace(filter.Username))
             .WithBinding("ByPullAllowed", filter.PullAllowed.HasValue)
             .WithBinding("ByPushAllowed", filter.PushAllowed.HasValue)
             .ExecuteAsync<RegistryCredentialExtendedModel>(new
@@ -97,6 +100,7 @@ public class RegistryCredentialRepository : IRegistryCredentialRepository
             RegistryId = registryId,
             filter.WorkspaceId,
             filter.UserId,
+            filter.Username,
             filter.PullAllowed,
             filter.PushAllowed
         });

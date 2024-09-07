@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Registry.Data;
@@ -19,8 +18,7 @@ public class RegistryService : RegistryServiceBase
     /// </summary>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
-    /// <param name="dataProtectionProvider">The data protection provider</param>
-    public RegistryService(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider) : base(registryRepository, grpcClientProvider, dataProtectionProvider)
+    public RegistryService(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider) : base(registryRepository, grpcClientProvider)
     {
     }
     

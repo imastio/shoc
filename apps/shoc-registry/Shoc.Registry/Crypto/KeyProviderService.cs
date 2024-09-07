@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json;
 using Microsoft.IdentityModel.Tokens;
 using Shoc.Core;
@@ -173,6 +176,114 @@ public class KeyProviderService
                 // not supported
                 throw ErrorDefinition.Validation(RegistryErrors.INVALID_KEY_ALGORITHM).AsException();
         }
+    }
+
+    /// <summary>
+    /// Converts key into an public JWK payload
+    /// </summary>
+    /// <param name="algorithm">The algorithm</param>
+    /// <param name="key">The key to convert</param>
+    /// <returns></returns>
+    public IDictionary<string, object> ToPublicJwk(string algorithm, AsymmetricSecurityKey key)
+    {
+        // convert to JWK
+        var jwk = JsonWebKeyConverter.ConvertFromSecurityKey(key);
+
+        // the resulting public key object
+        var result = new Dictionary<string, object>
+        {
+            ["kid"] = jwk.Kid,
+            ["kty"] = jwk.Kty,
+            ["alg"] = jwk.Alg ?? algorithm,
+            ["use"] = jwk.Use ?? "sig",
+        };
+
+        // add type specific parameters
+        switch (key)
+        {
+            // handle when key payload is RSA 
+            case RsaSecurityKey:
+                result["e"] = jwk.E;
+                result["n"] = jwk.N;
+                break;
+            
+            // handle when key payload is EC 
+            case ECDsaSecurityKey:
+                result["x"] = jwk.X;
+                result["y"] = jwk.Y;
+                result["crv"] = jwk.Crv;
+                break;
+        }
+
+        return result;
+    }
+    
+    /// <summary>
+    /// Converts the asymmetric security key to a certificate 
+    /// </summary>
+    /// <param name="key">The key</param>
+    /// <returns></returns>
+    public X509Certificate2 ToCertificate(JsonWebKey key)
+    {
+        // the subject name
+        var subjectName = "CN=RootCert";
+        
+        switch (key.Kty)
+        {
+            case "RSA":
+            {
+                var rsaParameters = new RSAParameters
+                {
+                    Modulus = Base64UrlEncoder.DecodeBytes(key.N),
+                    Exponent = Base64UrlEncoder.DecodeBytes(key.E)
+                };
+
+                using var rsa = RSA.Create();
+                rsa.ImportParameters(rsaParameters);
+                
+                var certRequest = new CertificateRequest(subjectName, rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                return certRequest.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
+            }
+            case "EC":
+            {
+                var ec = ECDsa.Create();
+                ec.ImportParameters(new ECParameters
+                {
+                    Q = new ECPoint
+                    {
+                        X = Base64UrlEncoder.DecodeBytes(key.X),
+                        Y = Base64UrlEncoder.DecodeBytes(key.Y)
+                    }
+                });
+
+                var certRequest = new CertificateRequest(subjectName, ec, HashAlgorithmName.SHA256);
+                return certRequest.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(10));
+            }
+            default:
+                throw ErrorDefinition.Validation(RegistryErrors.INVALID_KEY_ALGORITHM).AsException();
+        }
+    }
+    
+    /// <summary>
+    /// Creates a bundle from a set of certificates
+    /// </summary>
+    /// <param name="certificates">The set of certificates</param>
+    /// <returns></returns>
+    public string CreateBundle(IEnumerable<X509Certificate2> certificates)
+    {
+        // a string bundle string builder
+        var bundle = new StringBuilder();
+
+        // process every certificate
+        foreach (var cert in certificates)
+        {
+            var certPem = Convert.ToBase64String(cert.Export(X509ContentType.Cert));
+            bundle.AppendLine("-----BEGIN CERTIFICATE-----");
+            bundle.AppendLine(certPem);
+            bundle.AppendLine("-----END CERTIFICATE-----");
+        }
+
+        return bundle.ToString();
     }
     
     /// <summary>

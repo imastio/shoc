@@ -28,11 +28,14 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
+builder.Services.AddSingleton<CredentialProtectionProvider>();
+builder.Services.AddSingleton<SigningKeyProtectionProvider>();
 builder.Services.AddSingleton<KeyProviderService>();
 builder.Services.AddSingleton<RegistryService>();
 builder.Services.AddSingleton<RegistryCredentialService>();
 builder.Services.AddSingleton<RegistrySigningKeyService>();
 builder.Services.AddSingleton<JwkService>();
+builder.Services.AddSingleton<TokenAuthenticationService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

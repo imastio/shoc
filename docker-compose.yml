@@ -1,8 +1,8 @@
 volumes: 
   shoc-database-volume:
     name: "shoc-database-volume"
-  shoc-dind-data-volume:
-    name: "shoc-dind-data-volume"
+  shoc-cr-data-volume:
+    name: "shoc-cr-data-volume"
   shoc-kind-data-volume:
     name: "shoc-kind-data-volume"
 
@@ -43,7 +43,21 @@ services:
     networks:
       - shoc-network
     volumes:
-      - shoc-database-volume:/var/lib/mysql 
+      - shoc-cr-data-volume:/var/lib/mysql
+
+  shoc-cr:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-cr:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./infrastructure/Shoc.Cr
+    container_name: shoc-cr
+    env_file: 
+      - ./env/shoc-cr.env
+    ports:
+      - '11004:11004'
+    networks:
+      - shoc-network
+    volumes:
+      - shoc-database-volume:/var/lib/registry
 
   shoc-ui:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}

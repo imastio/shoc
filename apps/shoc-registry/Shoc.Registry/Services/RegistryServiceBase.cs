@@ -48,21 +48,14 @@ public abstract class RegistryServiceBase
     protected readonly IGrpcClientProvider grpcClientProvider;
 
     /// <summary>
-    /// The data protection provider
-    /// </summary>
-    protected readonly IDataProtectionProvider dataProtectionProvider;
-
-    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
-    /// <param name="dataProtectionProvider">The data protection provider</param>
-    protected RegistryServiceBase(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider)
+    protected RegistryServiceBase(IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider)
     {
         this.registryRepository = registryRepository;
         this.grpcClientProvider = grpcClientProvider;
-        this.dataProtectionProvider = dataProtectionProvider;
     }
     
     /// <summary>

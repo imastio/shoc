@@ -28,11 +28,6 @@ public class RegistryCredentialService : RegistryServiceBase
     /// The maximum password length
     /// </summary>
     private const int MAX_PASSWORD_LENGTH = 4096;
-
-    /// <summary>
-    /// The password protection purpose
-    /// </summary>
-    private const string PASSWORD_PROTECTION_PURPOSE = "password_protection";
     
     /// <summary>
     /// The registry credential repository
@@ -40,15 +35,21 @@ public class RegistryCredentialService : RegistryServiceBase
     private readonly IRegistryCredentialRepository registryCredentialRepository;
 
     /// <summary>
+    /// The credential protection provider
+    /// </summary>
+    private readonly CredentialProtectionProvider credentialProtectionProvider;
+
+    /// <summary>
     /// The registry credential service
     /// </summary>
     /// <param name="registryCredentialRepository">The registry credential repository</param>
+    /// <param name="credentialProtectionProvider">The credential protection provider</param>
     /// <param name="registryRepository">The registry repository</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
-    /// <param name="dataProtectionProvider">The data protection provider</param>
-    public RegistryCredentialService(IRegistryCredentialRepository registryCredentialRepository, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider, IDataProtectionProvider dataProtectionProvider) : base(registryRepository, grpcClientProvider, dataProtectionProvider)
+    public RegistryCredentialService(IRegistryCredentialRepository registryCredentialRepository, CredentialProtectionProvider credentialProtectionProvider, IRegistryRepository registryRepository, IGrpcClientProvider grpcClientProvider) : base(registryRepository, grpcClientProvider)
     {
         this.registryCredentialRepository = registryCredentialRepository;
+        this.credentialProtectionProvider = credentialProtectionProvider;
     }
 
     /// <summary>
@@ -161,7 +162,7 @@ public class RegistryCredentialService : RegistryServiceBase
         ValidatePassword(input.Password);
 
         // create a protector
-        var protector = this.dataProtectionProvider.CreateProtector(PASSWORD_PROTECTION_PURPOSE);
+        var protector = this.credentialProtectionProvider.Create();
         
         // protect and initialize the encrypted password field
         input.PasswordEncrypted = protector.Protect(input.Password);
@@ -234,7 +235,7 @@ public class RegistryCredentialService : RegistryServiceBase
         ValidatePassword(input.Password);
         
         // create a protector
-        var protector = this.dataProtectionProvider.CreateProtector(PASSWORD_PROTECTION_PURPOSE);
+        var protector = this.credentialProtectionProvider.Create();
         
         // protect and initialize the encrypted password field
         input.PasswordEncrypted = protector.Protect(input.Password);

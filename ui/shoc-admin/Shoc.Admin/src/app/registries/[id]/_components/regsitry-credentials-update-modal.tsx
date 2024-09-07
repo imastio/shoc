@@ -89,7 +89,7 @@ export default function RegistryCredentialsUpdateModal({registryId, existing, op
                 <Form.Item name="pullAllowed" label="Pull Access" valuePropName="checked">
                     <Switch checkedChildren="Allow" unCheckedChildren="Disallow" />
                 </Form.Item>
-                <Form.Item name="pushAllowed" label="Pull Access" valuePropName="checked">
+                <Form.Item name="pushAllowed" label="Push Access" valuePropName="checked">
                     <Switch checkedChildren="Allow" unCheckedChildren="Disallow" />
                 </Form.Item>
             </Form>
