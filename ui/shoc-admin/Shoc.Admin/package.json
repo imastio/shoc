@@ -11,32 +11,32 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.3.7",
+    "@ant-design/icons": "^5.4.0",
     "@ant-design/nextjs-registry": "^1.0.1",
-    "@ant-design/pro-layout": "^7.19.8",
+    "@ant-design/pro-layout": "^7.19.12",
     "@auth/core": "^0.32.0",
-    "antd": "^5.20.2",
+    "antd": "^5.20.6",
     "antd-img-crop": "^4.23.0",
-    "axios": "^1.7.4",
+    "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "http-proxy": "^1.18.1",
-    "next": "^14",
+    "next": "^14.2.8",
     "next-auth": "5.0.0-beta.20",
     "nextjs-toploader": "^1.6.12",
     "node-cache": "^5.1.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "server-only": "^0.0.1",
     "sharp": "0.32.6"
   },
   "devDependencies": {
-    "@types/http-proxy": "^1.17.14",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@types/http-proxy": "^1.17.15",
+    "@types/node": "^20.16.5",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
-    "typescript": "^5"
+    "typescript": "^5.5.4"
   }
 }
