@@ -139,3 +139,20 @@ services:
       - protocol: https
         roles: [ 'grpc' ]
         port: 11133
+        
+  # Cluster service ports [11138 - 11143]
+  shoc-cluster:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11138
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11139
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 111340
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11141

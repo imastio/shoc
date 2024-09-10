@@ -23,7 +23,7 @@ public class WorkspaceInvitationsController : ControllerBase
     private readonly WorkspaceInvitationService workspaceInvitationService;
 
     /// <summary>
-    /// Creates new instance of employee skill controller
+    /// Creates new instance of controller
     /// </summary>
     /// <param name="workspaceInvitationService">The reference to service</param>
     public WorkspaceInvitationsController(WorkspaceInvitationService workspaceInvitationService)

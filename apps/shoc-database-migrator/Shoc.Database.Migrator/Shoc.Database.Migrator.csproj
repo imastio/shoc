@@ -40,6 +40,9 @@
 	  <None Update="Migrations.Sql\V6__RegistriesMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Migrations.Sql\V7__ClustersMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  
 	</ItemGroup>
 

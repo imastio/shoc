@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="../../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <ProjectReference Include="../Shoc.Cluster.Model/Shoc.Cluster.Model.csproj" />
+    </ItemGroup>
+
+</Project>

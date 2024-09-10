@@ -12,6 +12,10 @@ export const accessAreas = [
         display: 'Registry Management'
     },
     {
+        key: 'cluster', 
+        display: 'Cluster Management'
+    },
+    {
         key: 'settings', 
         display: 'Settings'
     }

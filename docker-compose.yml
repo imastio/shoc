@@ -43,7 +43,7 @@ services:
     networks:
       - shoc-network
     volumes:
-      - shoc-cr-data-volume:/var/lib/mysql
+      - shoc-database-volume:/var/lib/mysql
 
   shoc-cr:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-cr:${SHOC_PUBLIC_VERSION:-latest}
@@ -57,7 +57,7 @@ services:
     networks:
       - shoc-network
     volumes:
-      - shoc-database-volume:/var/lib/registry
+      - shoc-cr-data-volume:/var/lib/registry
 
   shoc-ui:
     image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_PUBLIC_VERSION:-latest}
@@ -203,6 +203,27 @@ services:
       - '11131:11131'
       - '11132:11132'
       - '11133:11133'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
+  shoc-cluster:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-cluster:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-cluster/Shoc.Cluster
+    container_name: shoc-cluster
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-cluster.env
+    ports:
+      - '11138:11138'
+      - '11139:11139'
+      - '11140:11140'
+      - '11141:11141'
     depends_on:
       - shoc-database
     networks:

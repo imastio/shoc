@@ -4,17 +4,17 @@ using FluentMigrator;
 namespace Shoc.Database.Migrator.Migrations;
 
 /// <summary>
-/// Registry Management Migration
+/// Cluster Management Migration
 /// </summary>
-[Migration(6, TransactionBehavior.Default, "Add registry management essentials")]
-public class V6__RegistriesMigration : Migration
+[Migration(7, TransactionBehavior.Default, "Add cluster management essentials")]
+public class V7__ClustersMigration : Migration
 {
     /// <summary>
     /// Migrate database up
     /// </summary>
     public override void Up()
     {
-        this.Execute.Script("Migrations.Sql/V6__RegistriesMigration.sql");
+        this.Execute.Script("Migrations.Sql/V7__ClustersMigration.sql");
     }
 
     /// <summary>
