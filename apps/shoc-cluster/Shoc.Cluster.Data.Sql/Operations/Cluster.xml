@@ -11,7 +11,8 @@
     <SqlOperation Name="GetAll">
       <TextCommand>
         SELECT * FROM `clstr_clusters`
-        WHERE `WorkspaceId` = @WorkspaceId
+        WHERE 1=1
+        {if:ByWorkspace {and `WorkspaceId` = @WorkspaceId} else {}}
         ORDER BY `Name` ASC;
       </TextCommand>
     </SqlOperation>
@@ -21,10 +22,11 @@
         SELECT c.*, w.Name as WorkspaceName 
         FROM 
           `clstr_clusters` c
-        LEFT JOIN
+        INNER JOIN
           `wspc_workspaces` w
         ON c.WorkspaceId = w.Id
-        WHERE c.`WorkspaceId` = @WorkspaceId
+        WHERE 1=1
+        {if:ByWorkspace {and c.`WorkspaceId` = @WorkspaceId} else {}}
         ORDER BY c.`Name` ASC;
       </TextCommand>
     </SqlOperation>
@@ -45,6 +47,18 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetExtendedById">
+      <TextCommand>
+        SELECT c.*, w.Name as WorkspaceName
+        FROM
+        `clstr_clusters` c
+        INNER JOIN
+        `wspc_workspaces` w
+        ON c.WorkspaceId = w.Id
+        WHERE c.`WorkspaceId` = @WorkspaceId AND c.`Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
     <SqlOperation Name="GetByName">
       <TextCommand>
         SELECT * FROM `clstr_clusters`
@@ -98,8 +112,8 @@
     
     <SqlOperation Name="DeleteById">
       <TextCommand>
-        SELECT * FROM `clstr_clusters` WHERE WorkspaceId` = @WorkspaceId AND `Id` = @Id;
-        DELETE FROM `clstr_clusters` WHERE WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        SELECT * FROM `clstr_clusters` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `clstr_clusters` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
       </TextCommand>
     </SqlOperation>
 

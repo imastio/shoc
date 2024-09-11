@@ -32,7 +32,9 @@ public class ClusterRepository : IClusterRepository
     /// <returns></returns>
     public Task<IEnumerable<ClusterModel>> GetAll(string workspaceId)
     {
-        return this.dataOps.Connect().Query("Cluster", "GetAll").ExecuteAsync<ClusterModel>(new
+        return this.dataOps.Connect().Query("Cluster", "GetAll")
+            .WithBinding("ByWorkspace", !string.IsNullOrWhiteSpace(workspaceId))
+            .ExecuteAsync<ClusterModel>(new
         {
             WorkspaceId = workspaceId
         });
@@ -44,7 +46,9 @@ public class ClusterRepository : IClusterRepository
     /// <returns></returns>
     public Task<IEnumerable<ClusterExtendedModel>> GetAllExtended(string workspaceId)
     {
-        return this.dataOps.Connect().Query("Cluster", "GetAllExtended").ExecuteAsync<ClusterExtendedModel>(new
+        return this.dataOps.Connect().Query("Cluster", "GetAllExtended")
+            .WithBinding("ByWorkspace", !string.IsNullOrWhiteSpace(workspaceId))
+            .ExecuteAsync<ClusterExtendedModel>(new
         {
             WorkspaceId = workspaceId
         });
@@ -75,6 +79,19 @@ public class ClusterRepository : IClusterRepository
         });
     }
 
+    /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<ClusterExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        return this.dataOps.Connect().QueryFirst("Cluster", "GetExtendedById").ExecuteAsync<ClusterExtendedModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id
+        });
+    }
+    
     /// <summary>
     /// Gets the object by workspace id and the name 
     /// </summary>

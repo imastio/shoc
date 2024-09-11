@@ -34,6 +34,12 @@ public interface IClusterRepository
     Task<ClusterModel> GetById(string workspaceId, string id);
     
     /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    Task<ClusterExtendedModel> GetExtendedById(string workspaceId, string id);
+    
+    /// <summary>
     /// Gets the object by workspace id and the name 
     /// </summary>
     /// <returns></returns>

@@ -17,8 +17,11 @@ const routeAccess: Record<string, any> = {
     "/mailing-profiles/[any]": { oneOf: ['settings:mailing_profiles:read'] },
     "/workspaces": { oneOf: ['workspace:workspaces:list'] },
     "/workspaces/[any]": { oneOf: ['workspace:workspaces:read'] },
+    "/workspaces/[any]/clusters": { allOf: ['workspace:workspaces:read', 'cluster:clusters:list'] },
     "/registries": { oneOf: ['registry:registries:list'] },
     "/registries/[any]": { oneOf: ['registry:registries:read'] },
+    "/clusters": { oneOf: ['cluster:clusters:list'] },
+    "/clusters/[any]/[any]": { oneOf: ['cluster:clusters:read'] }
 }
 
 function asRegex(original: string): string {

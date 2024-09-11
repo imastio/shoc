@@ -50,6 +50,15 @@ public class ClusterService : ClusterServiceBase
     }
     
     /// <summary>
+    /// Gets all the extended objects
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IEnumerable<ClusterExtendedModel>> GetAllExtended()
+    {   
+        return await this.clusterRepository.GetAllExtended(string.Empty);
+    }
+    
+    /// <summary>
     /// Get all referential values
     /// </summary>
     /// <returns></returns>
@@ -72,7 +81,29 @@ public class ClusterService : ClusterServiceBase
         
         return await this.RequireClusterById(workspaceId, id);
     }
+    
+    /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<ClusterExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        // require the parent object
+        await this.RequireWorkspace(workspaceId);
+        
+        // try getting object by id
+        var result = await this.clusterRepository.GetExtendedById(workspaceId, id);
 
+        // make sure object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        // return the object
+        return result;
+    }
+    
     /// <summary>
     /// Gets the object by workspace id and the name 
     /// </summary>
@@ -115,10 +146,10 @@ public class ClusterService : ClusterServiceBase
         input.Status = ClusterStatuses.ACTIVE;
         
         // empty configuration
-        input.Configuration = string.Empty;
+        input.Configuration ??= string.Empty;
         
         // require the parent object
-        await this.RequireWorkspace(workspaceId); 
+        await this.RequireWorkspace(input.WorkspaceId); 
         
         // validate the name
         ValidateName(input.Name);
@@ -137,6 +168,12 @@ public class ClusterService : ClusterServiceBase
         {
             throw ErrorDefinition.Validation(ClusterErrors.EXISTING_NAME).AsException();
         }
+        
+        // create a protector
+        var protector = this.configurationProtectionProvider.Create();
+
+        // assign encrypted configuration
+        input.Configuration = protector.Protect(input.Configuration);
         
         // create in the storage
         return await this.clusterRepository.Create(workspaceId, input);

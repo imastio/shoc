@@ -15,6 +15,7 @@ import WorkspaceUpdateModal from "./workspace-update-modal";
 import { workspaceStatusesMap, workspaceTypesMap } from "@/well-known/workspaces";
 import { WorkspaceMembersTable } from "./workspace-members-table";
 import { WorkspaceInvitationsTable } from "./workspace-invitations-table";
+import ClustersTable from "@/app/clusters/_components/clusters-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -97,6 +98,11 @@ export default function SingleWorkspaceClientPage() {
                                 key: "2",
                                 label: "Invitations",
                                 children: <WorkspaceInvitationsTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "3",
+                                label: "Clusters",
+                                children: <ClustersTable workspaceId={workspaceId} loading={progress} />
                             }
                         ]
                     }}
@@ -106,6 +112,9 @@ export default function SingleWorkspaceClientPage() {
                         },
                         {
                             tabKey: "2",
+                        },
+                        {
+                            tabKey: "3"
                         }
                     ]}
                     content={<>

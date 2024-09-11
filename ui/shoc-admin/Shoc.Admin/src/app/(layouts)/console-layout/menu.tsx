@@ -1,5 +1,5 @@
 import useRouteAccess from "@/access/use-route-access";
-import { DashboardOutlined, DatabaseOutlined, FolderOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
+import { CloudOutlined, DashboardOutlined, DatabaseOutlined, FolderOutlined, SettingOutlined, TeamOutlined } from "@ant-design/icons";
 import { MenuDataItem } from "@ant-design/pro-layout";
 
 const menuPrototypes: MenuDataItem[] = [
@@ -17,6 +17,11 @@ const menuPrototypes: MenuDataItem[] = [
         path: '/registries',
         name: 'Registries',
         icon: <DatabaseOutlined />,
+    },
+    {
+        path: '/clusters',
+        name: 'Clusters',
+        icon: <CloudOutlined />,
     },
     {
         name: 'User Management',

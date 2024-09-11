@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description: 'Manage all the registries in the system.',
 }
 
-export default function WorkspacesPage() {
+export default function RegistriesPage() {
     return (
         <PageContainer fluid title="Registries">
             <RegistriesTable />
