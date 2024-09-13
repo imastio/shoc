@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Identity.Application.Uri">
+
+        <SqlOperation Name="GetAll">
+            <TextCommand>
+                SELECT * FROM `idp_applications_uris` WHERE `ApplicationId` = @ApplicationId ORDER BY `Type` DESC;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetById">
+            <TextCommand>
+                SELECT * FROM `idp_applications_uris` WHERE `ApplicationId` = @ApplicationId AND `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `idp_applications_uris`
+                (`Id`, `ApplicationId`, `Type`, `Uri`)
+                VALUES
+                (@Id, @ApplicationId, @Type, @Uri);
+
+                SELECT *
+                FROM `idp_applications_uris` WHERE `ApplicationId` = @ApplicationId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="UpdateById">
+            <TextCommand>
+                UPDATE `idp_applications_uris`
+                SET
+                `Type` = @Type,
+                `Uri` = @Uri
+                WHERE
+                `Id` = @Id AND `ApplicationId` = @ApplicationId;
+
+                SELECT * FROM `idp_applications_uris` WHERE `ApplicationId` = @ApplicationId AND `Id` = @Id;
+
+            </TextCommand>
+        </SqlOperation>
+               
+        <SqlOperation Name="DeleteById">
+
+            <TextCommand>
+                SELECT *
+                FROM `idp_applications_uris` 
+                WHERE `ApplicationId` = @ApplicationId AND `Id` = @Id;
+
+                DELETE FROM `idp_applications_uris` WHERE `ApplicationId` = @ApplicationId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

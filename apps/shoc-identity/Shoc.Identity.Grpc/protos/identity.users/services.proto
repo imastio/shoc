@@ -1,0 +1,12 @@
+syntax = "proto3";
+import "identity.users/types.proto";
+
+option csharp_namespace = "Shoc.Identity.Grpc.Users";
+package api.grpc.identity.users;
+
+service UserServiceGrpc {
+  
+  rpc GetById(GetUserByIdRequest) returns (GetUserResponse);
+  
+  rpc GetByEmail(GetUserByEmailRequest) returns (GetUserResponse);
+}

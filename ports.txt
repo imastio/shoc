@@ -1,12 +1,32 @@
+ENTRY POINTS
+----
 shoc-ingress - 11000
-shoc-database-sql - 11001
-shoc-webgtw - 11002
-shoc-dind - 11003
-shoc-docker-registry - 11004
-RESERVED - 11005
-shoc-builder - 11006/11007
-shoc-identity - 11008/11009
-shoc-database-migrator - 11010/11011
-shoc-executor - 11012/11013
-shoc-ui - 11014/11015
-shoc-kind - 11016 (RESERVED)/11017
+----
+
+INFRASTRUCTURE
+---- 
+shoc-database - 11001
+RESERVED - 11002 - 11005
+shoc-dind - 11006
+shoc-docker-registry - 11007
+shoc-kind - 11008 - 11009
+----
+
+APPS
+----
+shoc-webgtw - 11010/11011
+shoc-database-migrator - 11012/11013
+shoc-identity (server) - 11014/11015
+shoc-identity-ui (spa) - 11016/11017
+shoc-settings - 11018/11019
+shoc-settings - 11020/11021
+RESERVED - 11022-11039
+----
+
+UI
+----
+shoc-ui - 11040/11041
+shoc-admin - 11042/11043
+RESERVED - 11044 - 11049
+----
+ 

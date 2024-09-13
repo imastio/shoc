@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Workspace.Grpc.Workspaces";
+package api.grpc.workspace.workspaces;
+
+message WorkspaceGrpcModel {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string type = 4;
+  string status = 5;
+  string createdBy = 6;
+}
+
+message WorkspaceMemberGrpcModel {
+  string id = 1;
+  string workspaceId = 2;
+  string userId = 3;
+  string role = 4;
+}
+
+message GetWorkspaceByIdRequest {
+  string id = 1;
+}
+
+message GetWorkspaceByNameRequest {
+  string name = 1;
+}
+
+message GetWorkspaceResponse {
+  WorkspaceGrpcModel workspace = 1;
+}
+
+message GetWorkspaceMemberByUserIdRequest {
+  string workspaceId = 1;
+  string userId = 2;
+}
+
+message GetWorkspaceMemberResponse {
+  WorkspaceMemberGrpcModel member = 1;
+}

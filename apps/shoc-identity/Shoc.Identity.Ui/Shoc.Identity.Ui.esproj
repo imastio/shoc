@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.271090-alpha">
+  <PropertyGroup>
+    <StartupCommand>pnpm dev</StartupCommand>
+    <BuildCommand>pnpm build</BuildCommand>
+    <PublishCommand>pnpm build</PublishCommand>
+    <JavaScriptTestRoot>src\</JavaScriptTestRoot>
+    <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
+    <!-- Allows the build (or compile) script located on package.json to run on Build -->
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunBuildScript>true</ShouldRunBuildScript>
+    <!-- Folder where production build objects will be placed -->
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
+  </PropertyGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'pnpm'. This may take several minutes..." />
+    <Exec Command="pnpm install" />
+  </Target>
+</Project>

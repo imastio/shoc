@@ -6,24 +6,32 @@
 
 function GetCsharpProject ($serviceName) {
 
-	if($serviceName -eq "shoc-identity"){
-		return "$PSScriptRoot/Shoc.Identity/Shoc.Identity.csproj"
-	}
-	
-	if($serviceName -eq "shoc-builder"){
-		return "$PSScriptRoot/Shoc.Builder/Shoc.Builder.csproj"
-	}
-	
 	if($serviceName -eq "shoc-database-migrator"){
-		return "$PSScriptRoot/Shoc.Database.Migrator/Shoc.Database.Migrator.csproj"
+		return "$PSScriptRoot/apps/shoc-database-migrator/Shoc.Database.Migrator/Shoc.Database.Migrator.csproj"
 	}
-	
+
+	if($serviceName -eq "shoc-identity"){
+		return "$PSScriptRoot/apps/shoc-identity/Shoc.Identity/Shoc.Identity.csproj"
+	}
+
+	if($serviceName -eq "shoc-settings"){
+		return "$PSScriptRoot/apps/shoc-settings/Shoc.Settings/Shoc.Settings.csproj"
+	}
+
+	if($serviceName -eq "shoc-workspace"){
+		return "$PSScriptRoot/apps/shoc-workspace/Shoc.Workspace/Shoc.Workspace.csproj"
+	}
+
+	if($serviceName -eq "shoc-registry"){
+		return "$PSScriptRoot/apps/shoc-registry/Shoc.Registry/Shoc.Registry.csproj"
+	}
+
+	if($serviceName -eq "shoc-cluster"){
+		return "$PSScriptRoot/apps/shoc-cluster/Shoc.Cluster/Shoc.Cluster.csproj"
+	}
+
 	if($serviceName -eq "shoc-webgtw"){
-		return "$PSScriptRoot/Shoc.Webgtw/Shoc.Webgtw.csproj"
-	}
-	
-	if($serviceName -eq "shoc-executor"){
-		return "$PSScriptRoot/Shoc.Executor/Shoc.Executor.csproj"
+		return "$PSScriptRoot/apps/shoc-webgtw/Shoc.Webgtw/Shoc.Webgtw.csproj"
 	}
 
 	return ""
@@ -31,8 +39,12 @@ function GetCsharpProject ($serviceName) {
 
 function GetNodeProject ($serviceName) {
 
+	if($serviceName -eq "shoc-admin"){
+		return "$PSScriptRoot/ui/shoc-admin/Shoc.Admin/"
+	}
+	
 	if($serviceName -eq "shoc-ui"){
-		return "$PSScriptRoot/Shoc.Ui/"
+		return "$PSScriptRoot/ui/shoc-ui/Shoc.Ui/"
 	}
 	
 	return ""
@@ -52,7 +64,7 @@ if(-not [string]::IsNullOrWhiteSpace($CsharpProj)){
 } 
 elseif(-not [string]::IsNullOrWhiteSpace($NodeProj)) {
 	Write-Host "Detected package.json at $NodeProj to publish..."
-    yarn --cwd $NodeProj build  
+    pnpm --dir $NodeProj build  
     Exit
 }
 else {

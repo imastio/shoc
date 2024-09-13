@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="Duende.IdentityServer" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore/Shoc.ApiCore.csproj" />
+    <ProjectReference Include="../../../core/Shoc.Core/Shoc.Core.csproj" />
+    <ProjectReference Include="../../../core/Shoc.Data.Sql/Shoc.Data.Sql.csproj" />
+    <ProjectReference Include="../Shoc.Identity.Model/Shoc.Identity.Model.csproj" />
+    <ProjectReference Include="..\..\..\core\Shoc.Core.OpenId\Shoc.Core.OpenId.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Operations/DataOps.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.UserGroup.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.UserGroup.Access.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.User.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.User.Access.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.ConfirmationCode.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.User.Internal.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Grant.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Key.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Otp.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.SigninHistory.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.UserGroup.Member.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Application.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Application.Secret.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Application.Uri.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Application.Claim.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Privilege.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations/Identity.Privilege.Access.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+	<None Update="Operations/Identity.Role.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="Operations/Identity.Role.Privilege.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+    <None Update="Operations/Identity.Role.Member.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

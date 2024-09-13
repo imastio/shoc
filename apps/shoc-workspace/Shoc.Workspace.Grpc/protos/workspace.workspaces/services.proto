@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "workspace.workspaces/types.proto";
+
+option csharp_namespace = "Shoc.Workspace.Grpc.Workspaces";
+package api.grpc.workspace.workspaces;
+
+service WorkspaceServiceGrpc {
+
+  rpc GetById(GetWorkspaceByIdRequest) returns (GetWorkspaceResponse);
+
+  rpc GetByName(GetWorkspaceByNameRequest) returns (GetWorkspaceResponse);
+}
+
+service WorkspaceMemberServiceGrpc {
+  
+  rpc GetByUserId(GetWorkspaceMemberByUserIdRequest) returns (GetWorkspaceMemberResponse);
+
+}

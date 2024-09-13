@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <SpaRoot>../Shoc.Identity.Ui</SpaRoot>
+    <SpaProxyLaunchCommand>pnpm dev</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:11109</SpaProxyServerUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>8.*-*</Version>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <Import Project="../../../Shoc.Shared.proj" />
+  
+  <ItemGroup>
+    <ProjectReference Include="../Shoc.Identity.Ui/Shoc.Identity.Ui.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.Access/Shoc.ApiCore.Access.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.Auth/Shoc.ApiCore.Auth.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.DataProtection/Shoc.ApiCore.DataProtection.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.Discovery/Shoc.ApiCore.Discovery.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.Mailing/Shoc.ApiCore.Mailing.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore.RazorEngine/Shoc.ApiCore.RazorEngine.csproj" />
+    <ProjectReference Include="../../../api-core/Shoc.ApiCore/Shoc.ApiCore.csproj" />
+    <ProjectReference Include="../../../core/Shoc.Core.Security/Shoc.Core.Security.csproj" />
+    <ProjectReference Include="../../../core/Shoc.Data.Sql/Shoc.Data.Sql.csproj" />
+    <ProjectReference Include="../../../foundation/Shoc.Access/Shoc.Access.csproj" />
+    <ProjectReference Include="../../../foundation/Shoc.DataProtection.Sql/Shoc.DataProtection.Sql.csproj" />
+    <ProjectReference Include="../../../foundation/Shoc.Mailing.Smtp/Shoc.Mailing.Smtp.csproj" />
+    <ProjectReference Include="../../../foundation/Shoc.Mailing.Sql/Shoc.Mailing.Sql.csproj" />
+    <ProjectReference Include="../Shoc.Identity.Provider/Shoc.Identity.Provider.csproj" />
+    <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
+    <ProjectReference Include="..\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Translations\en-US.json" />
+    <_ContentIncludedByDefault Remove="Translations\hy-AM.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>

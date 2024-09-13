@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataOperations" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Root Element for Data Operations definitions -->
+	<xs:element name="DataOperations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DataConfiguration" minOccurs="0"/>
+				<xs:element ref="OperationGroup" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+
+	</xs:element>
+
+	<!-- The data configuration definition -->
+	<xs:element name="DataConfiguration">
+		<xs:complexType>
+
+			<!-- Optional: Provider specific attribute values -->
+			<xs:attributeGroup ref="Provider" />
+
+			<!-- Optional: Transaction specific attribute values -->
+			<xs:attributeGroup ref="Transactions" />
+
+		</xs:complexType>
+
+	</xs:element>
+
+	<!-- The single group of operations -->
+	<xs:element name="OperationGroup">
+		<xs:complexType>
+
+			<!-- A sequence of Sql Operations in a group -->
+			<xs:sequence>
+				<xs:element ref="SqlOperation" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+
+			<!-- Required: Name of the operation group -->
+			<xs:attribute name="Name" use="required" />
+
+			<!-- Optional: Provider specific attribute values -->
+			<xs:attributeGroup ref="Provider" />
+
+			<!-- Optional: Transaction specific attribute values -->
+			<xs:attributeGroup ref="Transactions" />
+
+		</xs:complexType>
+
+	</xs:element>
+
+	<!-- The stored procedure element definition.  -->
+	<xs:element name="StoredProcedure">
+		<xs:complexType>
+			<xs:attributeGroup ref="BaseCommand" />
+			<xs:attribute name="Name" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- The stored procedure element definition.  -->
+	<xs:element name="TextCommand">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:normalizedString">
+					<xs:attributeGroup ref="BaseCommand" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- A single Sql Operation Definition -->
+	<xs:element name="SqlOperation">
+		<xs:complexType>
+
+			<!-- Child Elements of Sql Operation -->
+			<xs:choice>
+
+				<!-- A reference to stored procedure definition  -->
+				<xs:element ref="StoredProcedure" />
+
+				<!-- A reference to text-based command definition  -->
+				<xs:element ref="TextCommand" />
+
+			</xs:choice>
+
+			<!-- Required: Name of the Sql Operation -->
+			<xs:attribute name="Name" type="xs:string" use="required" />
+
+			<!-- Optional: Provider specific attribute values -->
+			<xs:attributeGroup ref="Provider" />
+
+			<!-- Optional: Transaction specific attribute values -->
+			<xs:attributeGroup ref="Transactions" />
+
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Provider-related attributes for operation groups and operations -->
+	<xs:attributeGroup name="Provider">
+		<!-- Optional: Provider of the Sql Operation -->
+		<xs:attribute name="Compatibility" type="CompatibilityProviders" />
+
+		<!-- Optional: Timeout value for the operation -->
+		<xs:attribute name="Timeout" type="xs:duration" />
+	</xs:attributeGroup>
+
+	<!-- Command-specific common attributes  -->
+	<xs:attributeGroup name="BaseCommand">
+		<xs:attribute name="ExpectedResult" type="ExpectedResultOptions" default="Unknown" />
+	</xs:attributeGroup>
+
+	<!-- Transaction-related attributes for operation groups and operations -->
+	<xs:attributeGroup name="Transactions">
+		<!-- Optional: Transactional behavior of operation -->
+		<xs:attribute name="AutoTransaction" type="AutoTransactionMode" />
+
+	</xs:attributeGroup>
+
+	<!-- The options of expected results -->
+	<xs:simpleType name="ExpectedResultOptions" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Unknown" />
+			<xs:enumeration value="Table" />
+			<xs:enumeration value="MultipleTables" />
+			<xs:enumeration value="Scalar" />
+			<xs:enumeration value="RowCount" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Define if an Operation or Operation Group should be wrapped into a transaction -->
+	<xs:simpleType name="Transactional" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Yes" />
+			<xs:enumeration value="No" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Define what should transaction isolation level be for Operation or Operation Group -->
+	<xs:simpleType name="AutoTransactionMode" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="No" />
+			<xs:enumeration value="RepeatableRead" />
+			<xs:enumeration value="ReadUncommitted" />
+			<xs:enumeration value="ReadCommitted" />
+			<xs:enumeration value="Serializable" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Define supported providers for the Operation or an Operation group -->
+	<xs:simpleType name="CompatibilityProviders" final="list" >
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="SqlServer" />
+					<xs:enumeration value="MySQL" />
+					<xs:enumeration value="PostgreSQL" />
+					<xs:enumeration value="SQLite" />
+					<xs:enumeration value="Any" />
+					<xs:enumeration value="None" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+
+	</xs:simpleType>
+
+</xs:schema>

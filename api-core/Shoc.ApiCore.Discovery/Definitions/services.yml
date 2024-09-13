@@ -1,0 +1,158 @@
+services:
+  
+  # Single HTTPS port a for local usage only
+  shoc-ingress:
+    namespace: default
+    ports:
+      - protocol: HTTPS
+        roles: []
+        port: 11000
+        
+  # Infrastructure service ports [11001 - 11049]
+  
+  # Main Database service ports [11001 - 11003]
+  shoc-database:
+    namespace: default
+    ports:
+      - protocol: mysql
+        roles: []
+        port: 11001
+  
+  # UI service ports [11050 - 11099]
+  
+  # Main UI service ports [11050 - 11051]
+  shoc-ui:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: ['ui']
+        port: 11050
+      - protocol: https
+        roles: ['ui']
+        port: 11051
+        
+  # Admin UI service ports [11052 - 11053]
+  shoc-admin:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: ['ui']
+        port: 11052
+      - protocol: https
+        roles: ['ui']
+        port: 11053
+  
+  # Backend app service ports [11100 - 11999]
+  
+  # API Gateway service ports [11100 - 11103]
+  shoc-webgtw:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: []
+        port: 11100
+      - protocol: https
+        roles: []
+        port: 11101
+          
+  # Identity service ports [11106 - 11113]
+  shoc-identity:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: ['api']
+        port: 11106
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11107
+      - protocol: http
+        roles: [ 'ui' ]
+        port: 11108
+      - protocol: https
+        roles: [ 'ui' ]
+        port: 11109
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11110
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11111
+      
+  # Database migrator service ports [11112 - 11115]  
+  shoc-database-migrator:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11112
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11113
+        
+  # Settings service ports [11116 - 11121]
+  shoc-settings:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11116
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11117
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11118
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11119
+        
+  # Workspace service ports [11122 - 11129]
+  shoc-workspace:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11122
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11123
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11124
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11125
+        
+  # Registry service ports [11130 - 11137]
+  shoc-registry:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11130
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11131
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11132
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11133
+        
+  # Cluster service ports [11138 - 11143]
+  shoc-cluster:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11138
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11139
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 111340
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11141

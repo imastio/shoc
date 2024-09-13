@@ -1,0 +1,19 @@
+﻿@using Shoc.ApiCore.Intl
+@model dynamic
+@inject IIntlService intlService
+@{
+    var lang = Model.Language.ToString() ?? this.intlService.GetDefaultLocale();
+}
+
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<!-- START: MAIN CONTENT -->
+
+<p>Hello,</p>
+<p>We have generated a one-time password <b>@Model.OneTimePassword</b> for you to sign in as per your request.</p>
+<p>Best regards,</p>
+<p>Shoc Platform</p>
+
+<!-- END: MAIN CONTENT -->

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Registry.Registry">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `reg_registries`
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllExtended">
+      <TextCommand>
+        SELECT r.*, w.Name as WorkspaceName 
+        FROM 
+          `reg_registries` r
+        LEFT JOIN
+          `wspc_workspaces` w
+        ON r.WorkspaceId = w.Id
+        ORDER BY r.`Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllReferentialValues">
+      <TextCommand>
+        SELECT `Id`, `WorkspaceId`, `Name`, `DisplayName`, `Status`, `UsageScope`
+        FROM `reg_registries`
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `reg_registries`
+        WHERE `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByName">
+      <TextCommand>
+        SELECT * FROM `reg_registries`
+        WHERE  `WorkspaceId` = @WorkspaceId AND `Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByGlobalName">
+      <TextCommand>
+        SELECT * FROM `reg_registries`
+        WHERE `WorkspaceId` IS NULL AND `Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `reg_registries`
+        (`Id`, `WorkspaceId`, `Name`, `DisplayName`, `Status`, `Provider`, `UsageScope`, `Registry`, `Namespace`)
+        VALUES
+        (@Id, @WorkspaceId, @Name, @DisplayName, @Status, @Provider, @UsageScope, @Registry, @Namespace);
+
+        SELECT * FROM `reg_registries`
+        WHERE `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateById">
+      <TextCommand>
+        UPDATE `reg_registries`
+        SET
+        `Name` = @Name,
+        `DisplayName` = @DisplayName,
+        `Status` = @Status,
+        `Registry` = @Registry,
+        `Namespace` = @Namespace
+        WHERE
+        `Id` = @Id;
+
+        SELECT * FROM `reg_registries`
+        WHERE `Id` = @Id;
+
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `reg_registries` WHERE `Id` = @Id;
+        DELETE FROM `reg_registries` WHERE `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+  </OperationGroup>
+
+</DataOperations>

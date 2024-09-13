@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="16.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Definitions\services.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

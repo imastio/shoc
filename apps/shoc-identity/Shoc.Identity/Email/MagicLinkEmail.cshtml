@@ -1,0 +1,16 @@
+﻿@model dynamic
+
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<!-- START: MAIN CONTENT -->
+
+<p>Hello,</p>
+<p>You have requested a magic link to sign in to your account without using your password.</p>
+<p>Click <a href="@Model.MagicLink">Sign in</a> to continue.</p>
+<p>You can also use one-time password <b>@Model.OneTimePassword</b> if you have any problems with the link above.</p>
+<p>Best regards,</p>
+<p>Shoc Platform</p>
+
+<!-- END: MAIN CONTENT -->

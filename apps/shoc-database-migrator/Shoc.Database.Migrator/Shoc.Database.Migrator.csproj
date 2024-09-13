@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<Import Project="../../../Shoc.Shared.proj" />
+
+	<ItemGroup>
+		<ProjectReference Include="../../../api-core/Shoc.ApiCore.Discovery/Shoc.ApiCore.Discovery.csproj" />
+		<ProjectReference Include="../../../api-core/Shoc.ApiCore.Auth/Shoc.ApiCore.Auth.csproj" />
+		<ProjectReference Include="../../../api-core/Shoc.ApiCore.Access/Shoc.ApiCore.Access.csproj" />
+		<ProjectReference Include="../../../api-core/Shoc.ApiCore.DataProtection/Shoc.ApiCore.DataProtection.csproj" />
+		<ProjectReference Include="../../../foundation/Shoc.DataProtection/Shoc.DataProtection.csproj" />
+		<ProjectReference Include="../../../foundation/Shoc.DataProtection.Sql/Shoc.DataProtection.Sql.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentMigrator" Version="5.2.0" />
+		<PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
+		<PackageReference Include="FluentMigrator.Runner.MySql" Version="5.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Migrations.Sql\V1__InfrastructureMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+		<None Update="Migrations.Sql\V2__SettingsMigration.sql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  <None Update="Migrations.Sql\V3__IdentityServerMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Migrations.Sql\V4__UserManagementMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Migrations.Sql\V5__WorkspacesMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Migrations.Sql\V6__RegistriesMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Migrations.Sql\V7__ClustersMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  
+	</ItemGroup>
+
+</Project>

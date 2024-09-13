@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Identity.Grpc.Users";
+package api.grpc.identity.users;
+
+message UserGrpcModel {
+  string id = 1;
+  string email = 2;
+  bool email_verified = 3;
+  string username = 4;
+  string type = 5;
+  string user_state = 6;
+  string full_name = 7;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserResponse {
+  UserGrpcModel user = 1;
+}

@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Cluster">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `clstr_clusters`
+        WHERE 1=1
+        {if:ByWorkspace {and `WorkspaceId` = @WorkspaceId} else {}}
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllExtended">
+      <TextCommand>
+        SELECT c.*, w.Name as WorkspaceName 
+        FROM 
+          `clstr_clusters` c
+        INNER JOIN
+          `wspc_workspaces` w
+        ON c.WorkspaceId = w.Id
+        WHERE 1=1
+        {if:ByWorkspace {and c.`WorkspaceId` = @WorkspaceId} else {}}
+        ORDER BY c.`Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllReferentialValues">
+      <TextCommand>
+        SELECT `Id`, `WorkspaceId`, `Name`, `Type`, `Status`
+        FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetExtendedById">
+      <TextCommand>
+        SELECT c.*, w.Name as WorkspaceName
+        FROM
+        `clstr_clusters` c
+        INNER JOIN
+        `wspc_workspaces` w
+        ON c.WorkspaceId = w.Id
+        WHERE c.`WorkspaceId` = @WorkspaceId AND c.`Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="GetByName">
+      <TextCommand>
+        SELECT * FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetExtendedByName">
+      <TextCommand>
+        SELECT c.*, w.Name as WorkspaceName
+        FROM
+        `clstr_clusters` c
+        INNER JOIN
+        `wspc_workspaces` w
+        ON c.WorkspaceId = w.Id
+        WHERE c.`WorkspaceId` = @WorkspaceId AND c.`Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `clstr_clusters`
+        (`Id`, `WorkspaceId`, `Name`, `Type`, `Status`, `Configuration`)
+        VALUES
+        (@Id, @WorkspaceId, @Name, @Type, @Status, @Configuration);
+
+        SELECT * FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateById">
+      <TextCommand>
+        UPDATE `clstr_clusters`
+        SET
+        `Name` = @Name,
+        `Type` = @Type,
+        `Status` = @Status
+        WHERE
+        `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+        SELECT * FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateConfigurationById">
+      <TextCommand>
+        UPDATE `clstr_clusters`
+        SET
+        `Configuration` = @Configuration
+        WHERE
+        `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+        SELECT * FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `clstr_clusters` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `clstr_clusters` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+  </OperationGroup>
+
+</DataOperations>

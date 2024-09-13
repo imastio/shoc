@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Workspace.UserInvitation">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT 
+        wi.*, 
+        iu.Email as InvitedByEmail, iu.FullName as InvitedByFullName, 
+        w.Name as WorkspaceName, w.Description as WorkspaceDescription, w.Type as WorkspaceType
+        FROM 
+          `wspc_workspace_invitations` wi
+        INNER JOIN
+          `wspc_workspaces` w
+        ON wi.WorkspaceId = w.Id
+        INNER JOIN 
+          `idp_users` u
+        ON wi.Email = u.Email
+        INNER JOIN
+          `idp_users` iu
+        ON wi.InvitedBy = iu.Id
+        WHERE u.Id = @UserId
+        ORDER BY wi.`Expiration` DESC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="CountAll">
+      <TextCommand>
+        SELECT
+        COUNT(wi.Id) as InvitationsCount
+        FROM
+        `wspc_workspace_invitations` wi
+        INNER JOIN
+        `idp_users` u
+        ON wi.Email = u.Email
+        WHERE u.Id = @UserId
+        ORDER BY wi.`Expiration` DESC;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

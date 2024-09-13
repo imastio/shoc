@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Registry.SigningKey">
+
+        <SqlOperation Name="GetAll">
+            <TextCommand>
+                SELECT *
+                FROM `reg_registries_signing_keys`
+                WHERE `RegistryId` = @RegistryId
+                ORDER BY `Created` DESC;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetById">
+            <TextCommand>
+                SELECT * FROM `reg_registries_signing_keys`
+                WHERE `RegistryId` = @RegistryId AND `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetByKeyId">
+            <TextCommand>
+                SELECT * FROM `reg_registries_signing_keys`
+                WHERE `RegistryId` = @RegistryId AND `KeyId` = @KeyId;
+            </TextCommand>
+        </SqlOperation>
+        
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `reg_registries_signing_keys`
+                (`Id`, `RegistryId`, `KeyId`, `Algorithm`, `PayloadEncrypted`, `IsX509Certificate`, `Usage`)
+                VALUES
+                (@Id, @RegistryId, @KeyId, @Algorithm, @PayloadEncrypted, @IsX509Certificate, @Usage);
+
+                SELECT * FROM `reg_registries_signing_keys`
+                WHERE `RegistryId` = @RegistryId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteById">
+            <TextCommand>
+                SELECT * FROM `reg_registries_signing_keys` WHERE `RegistryId` = @RegistryId AND `Id` = @Id;
+                DELETE FROM `reg_registries_signing_keys` WHERE `RegistryId` = @RegistryId AND `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

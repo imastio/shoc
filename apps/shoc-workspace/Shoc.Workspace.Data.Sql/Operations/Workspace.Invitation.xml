@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Workspace.Workspace.Invitation">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllExtended">
+      <TextCommand>
+        SELECT wi.*, u.Email as InvitedByEmail, u.FullName as InvitedByFullName  FROM `wspc_workspace_invitations` wi
+        INNER JOIN `idp_users` u
+        ON wi.InvitedBy = u.Id
+        WHERE wi.`WorkspaceId` = @WorkspaceId
+        ORDER BY u.`FullName` ASC;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByEmail">
+      <TextCommand>
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Email` = @Email;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `wspc_workspace_invitations`
+        (`Id`, `WorkspaceId`, `Email`, `Role`, `InvitedBy`, `Expiration`)
+        VALUES
+        (@Id, @WorkspaceId, @Email, @Role, @InvitedBy, @Expiration);
+
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateById">
+      <TextCommand>
+        UPDATE `wspc_workspace_invitations`
+        SET
+        `Role` = @Role,
+        `Expiration` = @Expiration
+        WHERE
+        `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+        SELECT * FROM `wspc_workspace_invitations`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `wspc_workspace_invitations` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `wspc_workspace_invitations` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+  </OperationGroup>
+
+</DataOperations>

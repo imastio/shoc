@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+	<OperationGroup Name="Identity.Privilege.Access">
+
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT * FROM `idp_privileges_accesses`;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT * FROM `idp_privileges_accesses` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetByPrivilegeId">
+			<TextCommand>
+				SELECT * FROM `idp_privileges_accesses` WHERE `PrivilegeId` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="Create">
+
+			<TextCommand>
+				INSERT INTO `idp_privileges_accesses`
+				(`Id`, `PrivilegeId`, `Access`)
+				VALUES
+				(@Id, @PrivilegeId, @Access)
+				ON DUPLICATE KEY UPDATE `Updated` = CURRENT_TIMESTAMP;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteByAccess">
+
+			<TextCommand>
+				DELETE FROM `idp_privileges_accesses`
+				WHERE
+				`Access` in @Revoke AND `PrivilegeId` = @PrivilegeId;
+
+				SELECT ROW_COUNT();
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteById">
+
+			<TextCommand>
+				SELECT * FROM `idp_privileges_accesses` WHERE `Id` = @Id;
+				DELETE FROM `idp_privileges_accesses` WHERE `Id` = @Id;
+			</TextCommand>
+
+		</SqlOperation>
+
+	</OperationGroup>
+
+</DataOperations>

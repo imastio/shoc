@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+    <ProjectReference Include="../../core/Shoc.Core.OpenId/Shoc.Core.OpenId.csproj" />
+  </ItemGroup>
+
+</Project>

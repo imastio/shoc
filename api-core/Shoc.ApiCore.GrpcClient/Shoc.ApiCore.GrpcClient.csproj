@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shoc.ApiCore.Auth\Shoc.ApiCore.Auth.csproj" />
+      <ProjectReference Include="..\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
+    </ItemGroup>
+
+    <Import Project="../../Shoc.Shared.proj"/>
+
+</Project>

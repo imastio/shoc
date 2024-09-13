@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+	<OperationGroup Name="Identity.Role.Member">
+
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT
+				u.Id, u.Email, u.FullName
+				FROM `idp_role_membership` m
+				INNER JOIN `idp_users` u on m.UserId = u.Id
+				WHERE m.RoleId = @RoleId;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT
+				u.Id, u.Email, u.FullName
+				FROM `idp_role_membership` m
+				INNER JOIN `idp_users` u on m.UserId = u.Id
+				WHERE m.RoleId = @RoleId AND u.Id = @UserId;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="Create">
+
+			<TextCommand>
+				REPLACE INTO `idp_role_membership`
+				(`RoleId`, `UserId`)
+				VALUES
+				(@RoleId, @UserId);
+
+				SELECT
+				u.Id, u.Email, u.FullName
+				FROM `idp_role_membership` m
+				INNER JOIN `idp_users` u on m.UserId = u.Id
+				WHERE m.RoleId = @RoleId AND u.Id = @UserId;
+			</TextCommand>
+
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteById">
+
+			<TextCommand>
+				SELECT
+				u.Id, u.Email, u.FullName
+				FROM `idp_role_membership` m
+				INNER JOIN `idp_users` u on m.UserId = u.Id
+				WHERE m.RoleId = @RoleId AND u.Id = @UserId;
+
+				DELETE FROM `idp_role_membership` WHERE `RoleId` = @RoleId AND `UserId` = @UserId;
+			</TextCommand>
+
+		</SqlOperation>
+
+	</OperationGroup>
+
+</DataOperations>

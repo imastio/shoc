@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+	<OperationGroup Name="Identity.Role">
+
+		<SqlOperation Name="GetAll">
+			<TextCommand>
+				SELECT * FROM `idp_roles`;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetById">
+			<TextCommand>
+				SELECT * FROM `idp_roles` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetAllReferentialValues">
+			<TextCommand>
+				SELECT `Id`, `Name` FROM `idp_roles`;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="GetByName">
+			<TextCommand>
+				SELECT * FROM `idp_roles` WHERE `Name` = @Name;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="Create">
+			<TextCommand>
+				INSERT INTO `idp_roles`
+				(`Id`, `Name`, `Description`)
+				VALUES
+				(@Id, @Name, @Description);
+				SELECT * FROM `idp_roles` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="UpdateById">
+			<TextCommand>
+				UPDATE `idp_roles`
+				SET
+				`Name` = @Name,
+				`Description` = @Description
+				WHERE
+				`Id` = @Id;
+
+				SELECT * FROM `idp_roles` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+		<SqlOperation Name="DeleteById">
+			<TextCommand>
+				SELECT * FROM `idp_roles` WHERE `Id` = @Id;
+				DELETE FROM `idp_roles` WHERE `Id` = @Id;
+			</TextCommand>
+		</SqlOperation>
+
+	</OperationGroup>
+
+</DataOperations>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+        <ProjectReference Include="../../foundation/Shoc.ObjectAccess/Shoc.ObjectAccess.csproj" />
+        <ProjectReference Include="../../foundation/Shoc.ObjectAccess.Sql/Shoc.ObjectAccess.Sql.csproj" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Workspace.UserWorkspace">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT w.*, wm.UserId, wm.Role FROM
+        `wspc_workspaces` w
+        INNER JOIN
+        `wspc_workspace_members` wm
+        ON w.Id = wm.WorkspaceId
+        WHERE wm.UserId = @UserId
+        ORDER BY `Name` ASC;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT w.*, wm.UserId, wm.Role FROM
+        `wspc_workspaces` w
+        INNER JOIN
+        `wspc_workspace_members` wm
+        ON w.Id = wm.WorkspaceId
+        WHERE wm.UserId = @UserId
+        AND w.`Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByName">
+      <TextCommand>
+        SELECT w.*, wm.UserId, wm.Role FROM
+        `wspc_workspaces` w
+        INNER JOIN
+        `wspc_workspace_members` wm
+        ON w.Id = wm.WorkspaceId
+        WHERE wm.UserId = @UserId
+        AND w.`Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

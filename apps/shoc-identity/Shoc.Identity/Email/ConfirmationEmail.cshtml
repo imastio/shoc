@@ -1,0 +1,16 @@
+﻿@model dynamic
+
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<!-- START: MAIN CONTENT -->
+
+<p>Hello,</p>
+<p>Thank you for creating an account with us. Please confirm your email address by clicking the link below:</p>
+<p><a href="@Model.ConfirmationLink">Confirm Account</a></p>
+<p>Alternatively, you can use the confirmation code <b>@Model.ConfirmationCode</b> to activate your account.</p>
+<p>Best regards,</p>
+<p>Shoc Platform</p>
+
+<!-- END: MAIN CONTENT -->

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  
+    <OperationGroup Name="Identity.Grant">
+
+        <SqlOperation Name="GetAll">
+
+            <TextCommand ExpectedResult="Table">
+                SELECT * FROM `idp_persisted_grants`;
+            </TextCommand>
+
+        </SqlOperation>
+        <SqlOperation Name="GetAllBy">
+
+            <TextCommand ExpectedResult="Table">
+                SELECT * FROM `idp_persisted_grants`
+                WHERE 1=1
+                {if:BySession {and `SessionId` = @SessionId} else {}}
+                {if:ByClient {and `ClientId` = @ClientId} else {}}
+                {if:BySubject {and `SubjectId` = @SubjectId} else {}}
+                {if:ByType {and `Type` = @Type} else {}};
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="GetByKey">
+
+            <TextCommand ExpectedResult="Table">
+                SELECT * FROM `idp_persisted_grants`WHERE `Key` = @Key;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="Save">
+
+            <TextCommand ExpectedResult="Table">
+                REPLACE INTO `idp_persisted_grants`
+                (`Id`, `Key`, `ClientId`, `Type`, `SubjectId`, `SessionId`, `CreationTime`, `ConsumedTime`, `Expiration`,
+                `Description`, `Data`)
+                VALUES
+                (@Id, @Key, @ClientId, @Type, @SubjectId, @SessionId, @CreationTime, @ConsumedTime, @Expiration,
+                @Description, @Data);
+                SELECT * FROM `idp_persisted_grants` WHERE `Key` = @Key;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteByKey">
+
+            <TextCommand ExpectedResult="Table">
+                SELECT * FROM `idp_persisted_grants`WHERE `Key` = @Key;
+                DELETE FROM `idp_persisted_grants` WHERE `Key` = @Key;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteAllBy">
+
+            <TextCommand ExpectedResult="RowCount">
+                DELETE FROM `idp_persisted_grants`
+                WHERE 1=1
+                {if:BySession {and `SessionId` = @SessionId} else {}}
+                {if:ByClient {and `ClientId` = @ClientId} else {}}
+                {if:BySubject {and `SubjectId` = @SubjectId} else {}}
+                {if:ByType {and `Type` = @Type} else {}};
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteAll">
+
+            <TextCommand ExpectedResult="RowCount">
+                DELETE FROM `idp_persisted_grants`;
+            </TextCommand>
+
+        </SqlOperation>
+    </OperationGroup>
+    
+</DataOperations>
