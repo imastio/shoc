@@ -1,5 +1,5 @@
 import { selfClient } from "@/clients/shoc";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 import StandardAlert from "@/components/general/standard-alert";
 import { WorkspaceSelector } from "@/components/workspace/workspace-selector";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
@@ -46,7 +46,7 @@ export default function ClusterCreateModal(props: any){
             configuration: values.configuration
         };
 
-        const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).create(token, input.workspaceId, input)); 
+        const result = await withToken((token: string) => selfClient(ClustersClient).create(token, input.workspaceId, input)); 
 
         setProgress(false);
 

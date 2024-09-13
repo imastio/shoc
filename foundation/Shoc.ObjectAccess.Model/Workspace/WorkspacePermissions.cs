@@ -58,6 +58,11 @@ public class WorkspacePermissions
     /// Delete invitations of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_INVITATION = "workspace_delete_invitation";
+    
+    /// <summary>
+    /// View clusters of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_CLUSTERS = "workspace_list_clusters";
         
     /// <summary>
     /// Get and initialize all the constants

@@ -44,6 +44,12 @@ public interface IClusterRepository
     /// </summary>
     /// <returns></returns>
     Task<ClusterModel> GetByName(string workspaceId, string name);
+    
+    /// <summary>
+    /// Gets the extended object by workspace id and the name 
+    /// </summary>
+    /// <returns></returns>
+    Task<ClusterExtendedModel> GetExtendedByName(string workspaceId, string name);
 
     /// <summary>
     /// Creates the object with given input

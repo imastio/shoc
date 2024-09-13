@@ -10,9 +10,9 @@ import { selfClient } from "@/clients/shoc";
 import TableContainer from "@/components/general/table-container";
 import ClusterStatus from "@/components/cluster/cluster-status";
 import { clusterTypesMap } from "@/well-known/clusters";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
-import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 import ClusterCreateModal from "./cluster-create-modal";
+import UnboundClustersClient from "@/clients/shoc/cluster/unbound-clusters-client";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 
 export default function ClustersTable({ workspaceId, loading = false }: any) {
     const { withToken } = useApiAuthentication();
@@ -78,8 +78,8 @@ export default function ClustersTable({ workspaceId, loading = false }: any) {
         setProgress(true);
 
         const result = workspaceId ? 
-            await withToken((token: string) => selfClient(WorkspaceClustersClient).getAllExtended(token, workspaceId)) :
-            await withToken((token: string) => selfClient(ClustersClient).getAllExtended(token));
+            await withToken((token: string) => selfClient(ClustersClient).getAllExtended(token, workspaceId)) :
+            await withToken((token: string) => selfClient(UnboundClustersClient).getAllExtended(token));
 
         setProgress(false);
 

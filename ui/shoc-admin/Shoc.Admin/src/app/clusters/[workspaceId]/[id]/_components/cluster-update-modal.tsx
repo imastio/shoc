@@ -1,5 +1,5 @@
 import { selfClient } from "@/clients/shoc";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 import StandardAlert from "@/components/general/standard-alert";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { clusterNamePattern, clusterStatuses, clusterTypes } from "@/well-known/clusters";
@@ -28,7 +28,7 @@ export default function ClusterUpdateModal({existing, open, onClose = () => {}, 
             status: values.status
         }
 
-        const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).updateById(token, existing?.workspaceId, existing?.id, input));
+        const result = await withToken((token: string) => selfClient(ClustersClient).updateById(token, existing?.workspaceId, existing?.id, input));
 
         setProgress(false);
         

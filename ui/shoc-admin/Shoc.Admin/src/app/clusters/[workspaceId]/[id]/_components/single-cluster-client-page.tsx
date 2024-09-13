@@ -10,12 +10,12 @@ import { ObjectContainer } from "@/components/general/object-container";
 import PageContainer from "@/components/general/page-container";
 import { localDateTime } from "@/extended/format";
 import Link from "antd/es/typography/Link";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
 import ClusterStatus from "@/components/cluster/cluster-status";
 import ClusterUpdateModal from "./cluster-update-modal";
 import ClusterConfigurationUpdateModal from "./cluster-configuration-update-modal";
 import ClusterDeleteModal from "./cluster-delete-modal";
 import { clusterStatusesMap, clusterTypesMap } from "@/well-known/clusters";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 
 export default function SingleClusterClientPage() {
 
@@ -37,7 +37,7 @@ export default function SingleClusterClientPage() {
 
         setProgress(true);
 
-        const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).getExtendedById(token, workspaceId, id));
+        const result = await withToken((token: string) => selfClient(ClustersClient).getExtendedById(token, workspaceId, id));
 
         setProgress(false);
 

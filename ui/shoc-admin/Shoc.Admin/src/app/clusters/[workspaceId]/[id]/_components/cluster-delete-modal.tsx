@@ -1,5 +1,5 @@
 import { selfClient } from "@/clients/shoc";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 import StandardAlert from "@/components/general/standard-alert";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { Modal} from "antd";
@@ -19,7 +19,7 @@ export default function ClusterDeleteModal({existing, open, onClose = () => {}, 
         setErrors([]);
         setProgress(true);
 
-        const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).deleteById(token, existing?.workspaceId, existing?.id ));
+        const result = await withToken((token: string) => selfClient(ClustersClient).deleteById(token, existing?.workspaceId, existing?.id ));
 
         setProgress(false);
 

@@ -132,6 +132,33 @@ public class ClusterService : ClusterServiceBase
     } 
     
     /// <summary>
+    /// Gets the object by workspace id and the name 
+    /// </summary>
+    /// <returns></returns>
+    public async Task<ClusterExtendedModel> GetExtendedByName(string workspaceId, string name)
+    {
+        // make sure workspace and name are given
+        if (string.IsNullOrWhiteSpace(workspaceId) || string.IsNullOrWhiteSpace(name))
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // require the parent object
+        await this.RequireWorkspace(workspaceId);
+        
+        // try getting the result
+        var result = await this.clusterRepository.GetExtendedByName(workspaceId, name);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        return result;
+    } 
+    
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

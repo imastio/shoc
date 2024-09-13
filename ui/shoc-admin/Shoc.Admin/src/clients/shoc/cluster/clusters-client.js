@@ -13,10 +13,10 @@ export default class ClustersClient extends BaseAxiosClient {
     super("shoc-cluster", config);
   }
  
-  getAllExtended(token){
+  getAll(token, workspaceId){
 
     const url = this.urlify({
-      api: `api/clusters/extended`
+      api: `api/workspaces/${workspaceId}/clusters`
     });
 
     return this.webClient.get(url, {
@@ -25,4 +25,96 @@ export default class ClustersClient extends BaseAxiosClient {
       }
     });
   }
+
+  getAllExtended(token, workspaceId){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/extended`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+   getById(token, workspaceId, id){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/${id}`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+  getExtendedById(token, workspaceId, id){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/${id}/extended`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+   create(token, workspaceId, input){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters`
+    });
+
+    return this.webClient.post(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+   updateById(token, workspaceId, id, input) {
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/${id}`
+    });
+
+    return this.webClient.put(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+  updateConfigurationById(token, workspaceId, id, input) {
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/${id}/configuration`
+    });
+
+    return this.webClient.put(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+   deleteById(token, workspaceId, id){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/clusters/${id}`
+    });
+
+    return this.webClient.delete(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+  
 }

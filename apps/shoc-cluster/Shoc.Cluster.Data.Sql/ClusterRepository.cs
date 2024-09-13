@@ -104,6 +104,19 @@ public class ClusterRepository : IClusterRepository
             Name = name
         });
     }
+
+    /// <summary>
+    /// Gets the extended object by workspace id and the name 
+    /// </summary>
+    /// <returns></returns>
+    public Task<ClusterExtendedModel> GetExtendedByName(string workspaceId, string name)
+    {
+        return this.dataOps.Connect().QueryFirst("Cluster", "GetExtendedByName").ExecuteAsync<ClusterExtendedModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Name = name
+        });
+    }
     
     /// <summary>
     /// Creates the object with given input

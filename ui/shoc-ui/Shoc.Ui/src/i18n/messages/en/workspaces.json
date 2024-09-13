@@ -57,5 +57,6 @@
     "workspaces.invitations.createError": "Could not invite the user to the workspace.",
     "workspaces.invitations.create.action": "Invite",
     "workspaces.invitations.decline.notice": "You are about to decline the invitation. The operation cannot be undone.",
-    "workspaces.invitations.accept.notice": "Once accepted, you will be added to the workspace."
+    "workspaces.invitations.accept.notice": "Once accepted, you will be added to the workspace.",
+    "workspaces.clusters.menu.clusters": "Clusters"
 }

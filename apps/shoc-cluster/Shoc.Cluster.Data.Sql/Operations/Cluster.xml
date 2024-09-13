@@ -66,6 +66,18 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetExtendedByName">
+      <TextCommand>
+        SELECT c.*, w.Name as WorkspaceName
+        FROM
+        `clstr_clusters` c
+        INNER JOIN
+        `wspc_workspaces` w
+        ON c.WorkspaceId = w.Id
+        WHERE c.`WorkspaceId` = @WorkspaceId AND c.`Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+
     <SqlOperation Name="Create">
 
       <TextCommand>
