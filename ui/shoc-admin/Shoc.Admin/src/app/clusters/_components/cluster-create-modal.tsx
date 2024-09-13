@@ -42,7 +42,8 @@ export default function ClusterCreateModal(props: any){
         const input = {
             workspaceId: workspaceId ? workspaceId : values.workspaceId,
             name: values.name,
-            type: values.type
+            type: values.type,
+            configuration: values.configuration
         };
 
         const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).create(token, input.workspaceId, input)); 
@@ -96,6 +97,9 @@ export default function ClusterCreateModal(props: any){
                 {!workspaceId && <Form.Item name="workspaceId" label="Workspace" rules={[{required: true, message: 'Please select the workspace'}]}>
                     <WorkspaceSelector placeholder="Select the workspace" />
                 </Form.Item>}
+                <Form.Item name="configuration" label="Configuration">
+                    <Input.TextArea placeholder="Please enter the configuration (kubeconfig, etc.)" />
+                </Form.Item>  
             </Form>
         </Modal>
     );

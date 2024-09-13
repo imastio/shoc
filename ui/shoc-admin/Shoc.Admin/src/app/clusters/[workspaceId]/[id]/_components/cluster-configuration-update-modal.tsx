@@ -72,7 +72,7 @@ export default function ClusterConfigurationUpdateModal({existing, open, onClose
                 onFinish={onSubmit}
                 layout="vertical"
             >
-                <Form.Item name="configuration" label="Configuration" >
+                <Form.Item name="configuration" label="Configuration">
                     <Input.TextArea placeholder="Please enter the configuration (kubeconfig, etc.)" />
                 </Form.Item>         
             </Form>
