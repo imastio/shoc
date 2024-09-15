@@ -1,46 +1,48 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { MoreVertical, Pencil, Trash2 } from "lucide-react"
+import KubernetesIcon from "@/components/icons/kubernetes-icon";
 import ClusterIcon from "@/components/icons/cluster-icon";
+import { useIntl } from "react-intl";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-interface ObjectCardProps {
-  title: string;
-  status: 'active' | 'archived';
+interface ClusterCardProps {
+    name: string,
+    description: string,
+    status: 'active' | 'archived',
+    type: 'k8s'
 }
 
-export default function Component({ title, status }: ObjectCardProps = { title: 'Sample Object', status: 'active' }) {
+export default function ClusterCard({ workspaceName, cluster, className }: { workspaceName: string, cluster: ClusterCardProps, className?: string }) {
+
+    const intl = useIntl();
+    const { name, description, status, type } = cluster;
+
   return (
-    <Card className="w-full max-w-sm">
+    <Card className={cn("w-full h-fit", className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center space-x-2">
-          <ClusterIcon className="h-6 w-6 text-primary" />
-          <h2 className="text-lg font-semibold">{title}</h2>
+          { type === 'k8s' ? <KubernetesIcon className="h-6 w-6 text-primary" /> : <ClusterIcon className="h-6 w-6" /> }
+          <h2 className="text-lg font-semibold truncate">{name}</h2>
         </div>
-        <Badge variant={status === 'active' ? 'default' : 'secondary'}>
-          {status}
+        <Badge variant={status === 'active' ? 'outline' : 'secondary'} className="ml-2">
+          {intl.formatMessage({id: `workspaces.clusters.statuses.${status}`})}
         </Badge>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">
-          This is a brief description or additional information about the object.
+        <p className={cn("text-sm text-muted-foreground text-balance", description ? "" : "italic")}>
+          { description || intl.formatMessage({id: 'workspaces.clusters.noDescription'}) }
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="flex space-x-2">
-          <Button variant="outline" size="sm">
-            <Pencil className="h-4 w-4 mr-2" />
-            Edit
+          <Link href={`/workspaces/${workspaceName}/clusters/${cluster.name}`}>
+          <Button variant="link" className="p-0">
+            {intl.formatMessage({id: 'global.actions.view'})}
           </Button>
-          <Button variant="outline" size="sm">
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
-          </Button>
+          </Link>
         </div>
-        <Button variant="ghost" size="sm">
-          <MoreVertical className="h-4 w-4" />
-          <span className="sr-only">More options</span>
-        </Button>
       </CardFooter>
     </Card>
   )

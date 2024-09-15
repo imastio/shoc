@@ -72,6 +72,7 @@ public abstract class WorkspaceClusterServiceBase
             WorkspaceId = input.WorkspaceId,
             WorkspaceName = input.WorkspaceName,
             Name = input.Name,
+            Description = input.Description,
             Type = input.Type,
             Status = input.Status,
             Created = input.Created,

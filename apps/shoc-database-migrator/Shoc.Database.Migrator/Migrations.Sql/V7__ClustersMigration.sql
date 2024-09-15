@@ -2,6 +2,7 @@
     `Id` varchar(100) NOT NULL,
     `WorkspaceId` varchar(100) NOT NULL,
     `Name` varchar(256) NOT NULL,
+    `Description` text NOT NULL,
     `Type` varchar(64) NOT NULL,
     `Status` varchar(64) NOT NULL,
     `Configuration` longtext NOT NULL,

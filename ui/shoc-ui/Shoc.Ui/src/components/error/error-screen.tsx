@@ -39,7 +39,7 @@ export default function ErrorScreen({ errors, kind: givenKind, title: givenTitle
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-background text-card-foreground">
       <section className={cn("bg-white dark:bg-gray-900")}>
-          <div className="px-4 mx-auto text-centerlg:px-12">
+          <div className="px-4 mx-auto text-center lg:px-12">
             <h1 className="text-center mb-4 text-2xl font-bold tracking-tight leading-none text-gray-900 lg:mb-6 md:text-3xl xl:text-5xl dark:text-white">
               {title}
             </h1>
@@ -51,8 +51,6 @@ export default function ErrorScreen({ errors, kind: givenKind, title: givenTitle
             </div>}
           </div>
         </section>
-
-     
     </div>
   )
 }

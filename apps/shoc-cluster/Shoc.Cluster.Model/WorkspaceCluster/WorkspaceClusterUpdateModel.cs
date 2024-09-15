@@ -21,6 +21,11 @@ public class WorkspaceClusterUpdateModel
     public string Name { get; set; }
     
     /// <summary>
+    /// The description of the cluster
+    /// </summary>
+    public string Description { get; set; }
+    
+    /// <summary>
     /// The type of the cluster
     /// </summary>
     public string Type { get; set; }

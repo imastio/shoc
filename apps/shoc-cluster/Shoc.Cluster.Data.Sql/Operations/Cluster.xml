@@ -82,9 +82,9 @@
 
       <TextCommand>
         INSERT INTO `clstr_clusters`
-        (`Id`, `WorkspaceId`, `Name`, `Type`, `Status`, `Configuration`)
+        (`Id`, `WorkspaceId`, `Name`, `Description`, `Type`, `Status`, `Configuration`)
         VALUES
-        (@Id, @WorkspaceId, @Name, @Type, @Status, @Configuration);
+        (@Id, @WorkspaceId, @Name, @Description, @Type, @Status, @Configuration);
 
         SELECT * FROM `clstr_clusters`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
@@ -97,6 +97,7 @@
         UPDATE `clstr_clusters`
         SET
         `Name` = @Name,
+        `Description` = @Description,
         `Type` = @Type,
         `Status` = @Status
         WHERE

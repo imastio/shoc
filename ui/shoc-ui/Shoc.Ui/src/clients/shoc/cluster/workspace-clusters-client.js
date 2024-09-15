@@ -17,7 +17,7 @@ export default class WorkspaceClustersClient extends BaseAxiosClient {
     const url = this.urlify({
       api: `api/workspaces/${workspaceId}/workspace-clusters`
     });
-
+    
     return this.webClient.get(url, {
       headers: {
         ...this.authBearer(token)

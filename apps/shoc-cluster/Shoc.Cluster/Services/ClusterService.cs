@@ -174,6 +174,9 @@ public class ClusterService : ClusterServiceBase
         
         // empty configuration
         input.Configuration ??= string.Empty;
+
+        // initialize the description
+        input.Description ??= string.Empty;
         
         // require the parent object
         await this.RequireWorkspace(input.WorkspaceId); 
@@ -218,6 +221,9 @@ public class ClusterService : ClusterServiceBase
         // make sure referring to the correct object
         input.WorkspaceId = workspaceId;
         input.Id = id;
+
+        // initialize the description
+        input.Description ??= string.Empty;
         
         // require the parent object
         await this.RequireWorkspace(workspaceId);

@@ -2,6 +2,8 @@ import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
 import { getByName } from "../cached-workspace-actions";
+import ClusterCardList from "./_components/cluster-card-list";
+import WorkspaceClustersClientPage from "./_components/workspace-clusters-client-page";
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +18,7 @@ export async function generateMetadata({ params: { name } }: { params: any }): P
   }
 }
 
-export default async function WorkspaceMembersPage({ params: { name } }: any) {
+export default async function WorkspaceClustersPage({ params: { name } }: any) {
 
   const { data: workspace, errors: workspaceErrors } = await getByName(name);
   const intl = await getIntl();
@@ -26,8 +28,8 @@ export default async function WorkspaceMembersPage({ params: { name } }: any) {
   }
 
   return <>
-    <div className="items-center">
-      <h1 className="text-lg truncate font-semibold md:text-2xl">{intl.formatMessage({id: 'workspaces.sidebar.clusters'})}</h1>
+    <div className="flex flex-col h-full">
+      <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={name} />
     </div>
   </>
 }

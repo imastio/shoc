@@ -42,6 +42,7 @@ export default function ClusterCreateModal(props: any){
         const input = {
             workspaceId: workspaceId ? workspaceId : values.workspaceId,
             name: values.name,
+            description: values.description,
             type: values.type,
             configuration: values.configuration
         };
@@ -88,7 +89,13 @@ export default function ClusterCreateModal(props: any){
                     { pattern: clusterNamePattern, message: 'The name is invalid' }
                     ]}>
                     <Input placeholder="Please enter the name" />
-                </Form.Item>         
+                </Form.Item>  
+                <Form.Item name="description" label="Description" rules={[
+                    { required: true, message: 'Please enter cluster description' },
+                    { max: 512, message: 'The description is too long' }
+                    ]}>
+                    <Input.TextArea placeholder="Please enter the description" />
+                </Form.Item>             
                 <Form.Item name="type" label="Type" rules={[{ required: true, message: 'Please select a valid type' }]}>
                     <Select placeholder="Select the type ">
                         {clusterTypes.map(entry => <Select.Option key={entry.key} value={entry.key}>{entry.display}</Select.Option>)}

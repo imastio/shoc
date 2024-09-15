@@ -63,6 +63,11 @@ public class WorkspacePermissions
     /// View clusters of the workspace
     /// </summary>
     public const string WORKSPACE_LIST_CLUSTERS = "workspace_list_clusters";
+    
+    /// <summary>
+    /// Create cluster of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_CLUSTER = "workspace_create_cluster";
         
     /// <summary>
     /// Get and initialize all the constants

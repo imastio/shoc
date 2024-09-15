@@ -58,5 +58,12 @@
     "workspaces.invitations.create.action": "Invite",
     "workspaces.invitations.decline.notice": "You are about to decline the invitation. The operation cannot be undone.",
     "workspaces.invitations.accept.notice": "Once accepted, you will be added to the workspace.",
-    "workspaces.clusters.menu.clusters": "Clusters"
+    "workspaces.clusters.menu.clusters": "Clusters",
+    "workspaces.clusters.page.title": "Workspace Clusters",
+    "workspaces.clusters.types.k8s": "Kubernetes",
+    "workspaces.clusters.statuses.active": "Active",
+    "workspaces.clusters.statuses.archived": "Archived",
+    "workspaces.clusters.noDescription": "No description",
+    "workspaces.clusters.noWorkspaces": "There are no clusters yet",
+    "workspaces.clusters.noWorkspaces.note": "You need to have at least on cluster in your workspace to run jobs."
 }

@@ -13,6 +13,7 @@
     "global.actions.selectAll": "Select all",
     "global.actions.accept": "Accept",
     "global.actions.decline": "Decline",
+    "global.actions.view": "View",
     "global.navigation.next": "Next",
     "global.navigation.prev": "Prev",
     "global.labels.name": "Name",

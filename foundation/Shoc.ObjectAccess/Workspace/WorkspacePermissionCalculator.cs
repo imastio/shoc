@@ -31,7 +31,8 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_CREATE_INVITATION,
                 WorkspacePermissions.WORKSPACE_UPDATE_INVITATION,
                 WorkspacePermissions.WORKSPACE_DELETE_INVITATION,
-                WorkspacePermissions.WORKSPACE_LIST_CLUSTERS
+                WorkspacePermissions.WORKSPACE_LIST_CLUSTERS,
+                WorkspacePermissions.WORKSPACE_CREATE_CLUSTER
             }
         },
         {
