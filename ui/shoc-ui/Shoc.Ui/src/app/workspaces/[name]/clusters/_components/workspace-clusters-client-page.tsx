@@ -9,6 +9,7 @@ import WorkspaceAddDialogButton from "@/app/workspaces/(chooser)/_components/wor
 import ClusterCardList from "./cluster-card-list";
 import ClusterSkeletonCard from "./cluster-skeleton-card";
 import NoClusters from "./no-clusters";
+import ClusterAddDialogButton from "./cluster-add-dialog-button";
 
 export default function WorkspaceClustersClientPage({ workspaceId, workspaceName }: any) {
 
@@ -51,10 +52,10 @@ export default function WorkspaceClustersClientPage({ workspaceId, workspaceName
         <BasicHeader 
             title={intl.formatMessage({id: 'workspaces.clusters.page.title'})}
             actions={[<div key="workspace-header-operations" className="flex space-x-1">
-                {items.length > 0 && <WorkspaceAddDialogButton key="add-workspace" disabled={progress} onSuccess={() => load(workspaceId)} />}
+                {items.length > 0 && <ClusterAddDialogButton key="add-cluster" workspaceId={workspaceId} disabled={progress} onSuccess={() => load(workspaceId)} />}
             </div>]}
         />
         {(progress || items.length > 0) && <ClusterCardList workspaceId={workspaceId} workspaceName={workspaceName} items={items} progress={progress} />}
-        {(!progress && items.length === 0) && <div className="py-4 h-full"><NoClusters /></div>}
+        {(!progress && items.length === 0) && <div className="py-4 h-full"><NoClusters workspaceId={workspaceId} onCreated={() => load(workspaceId)} /></div>}
     </div>
 }

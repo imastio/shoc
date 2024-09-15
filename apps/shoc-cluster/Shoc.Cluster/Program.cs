@@ -30,6 +30,7 @@ builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<ConfigurationProtectionProvider>();
 builder.Services.AddSingleton<ClusterService>();
 builder.Services.AddSingleton<WorkspaceClusterService>();
+builder.Services.AddSingleton<K8sService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

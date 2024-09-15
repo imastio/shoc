@@ -28,7 +28,7 @@
     "workspaces.placeholders.description": "Add a brief desription to your workspace",
     "workspaces.actions.select": "Select",
     "workspaces.actions.create": "Create",
-    "workspaces.messages.created": "A workspaces successfuly created",
+    "workspaces.messages.created": "A workspace was successfuly created",
     "workspaces.sidebar.dashboard": "Dashboard",
     "workspaces.sidebar.jobs": "Jobs",
     "workspaces.sidebar.clusters": "Clusters",
@@ -65,5 +65,18 @@
     "workspaces.clusters.statuses.archived": "Archived",
     "workspaces.clusters.noDescription": "No description",
     "workspaces.clusters.noWorkspaces": "There are no clusters yet",
-    "workspaces.clusters.noWorkspaces.note": "You need to have at least on cluster in your workspace to run jobs."
+    "workspaces.clusters.noWorkspaces.note": "You need to have at least one cluster in your workspace to run jobs.",
+    "workspaces.clusters.validation.invalidName": "Cluster name is not valid!",
+    "workspaces.clusters.validation.invalidDescription": "Cluster description is mandatory!",
+    "workspaces.clusters.validation.invalidType": "The type is not valid!",
+    "workspaces.clusters.create.notice": "Create a cluster to run your jobs over.",
+    "workspaces.clusters.create.error": "Could not create a cluster.",
+    "workspaces.clusters.messages.created": "A cluster was successfuly created",
+    "workspaces.clusters.messages.testFailed": "The cluster configuration is not valid or no enough permissions.",
+    "workspaces.clusters.messages.testSuccess": "Successfully connected to the cluster. {nodesCount} nodes are explored.",
+    "workspaces.clusters.add": "Add cluster",
+    "workspaces.clusters.placeholders.name": "A unique name for your cluster",
+    "workspaces.clusters.placeholders.type": "Select a cluster type",
+    "workspaces.clusters.placeholders.description": "Add a brief desription to your cluster",
+    "workspaces.clusters.placeholders.configuration": "Add configuration for your cluster (example: kubeconfig for your K8s cluster)"
 }

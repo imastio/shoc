@@ -20,9 +20,9 @@ export default function ClusterCardList({ workspaceId, workspaceName, items, pro
     }, [page, items])
 
     return <>
-        <div className="flex flex-wrap gap-4 w-full py-4">
-            {!progress && current.map((item: any) => <ClusterCard key={item.id} workspaceName={workspaceName} className="sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1rem)" cluster={item} />)}
-            {progress && Array.from(Array(SKELETON_PAGE_SIZE).keys()).map(idx => <ClusterSkeletonCard className="sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1rem)" key={idx} />)}
+        <div className="flex flex-wrap gap-4 h-min w-full py-4">
+            {!progress && current.map((item: any) => <ClusterCard key={item.id} workspaceName={workspaceName} className="w-full lg:w-[calc(50%-1rem)] xl:w-[calc(33%-1rem)] 2xl:w-[calc(25%-1rem)]" cluster={item} />)}
+            {progress && Array.from(Array(SKELETON_PAGE_SIZE).keys()).map(idx => <ClusterSkeletonCard className="w-full lg:w-[calc(50%-1rem)] xl:w-[calc(33%-1rem)] 2xl:w-[calc(25%-1rem)]" key={idx} />)}
         </div>
         {items.length > DEFAULT_PAGE_SIZE && <div className="flex mx-auto space-x-2">
             <Button variant="outline" disabled={page === 0} onClick={() => setPage(prev => prev - 1)}>

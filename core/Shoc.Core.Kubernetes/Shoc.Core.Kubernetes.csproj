@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="../../Shoc.Shared.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="KubernetesClient" Version="15.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Shoc.Core/Shoc.Core.csproj" />
+  </ItemGroup>
+
+</Project>

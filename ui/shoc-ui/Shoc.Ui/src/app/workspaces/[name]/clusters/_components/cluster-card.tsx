@@ -20,7 +20,7 @@ export default function ClusterCard({ workspaceName, cluster, className }: { wor
     const { name, description, status, type } = cluster;
 
   return (
-    <Card className={cn("w-full h-fit", className)}>
+    <Card className={cn("h-fit", className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center space-x-2">
           { type === 'k8s' ? <KubernetesIcon className="h-6 w-6 text-primary" /> : <ClusterIcon className="h-6 w-6" /> }

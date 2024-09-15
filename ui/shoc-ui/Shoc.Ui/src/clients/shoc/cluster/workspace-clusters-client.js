@@ -24,4 +24,28 @@ export default class WorkspaceClustersClient extends BaseAxiosClient {
       }
     });
   }
+
+  create(token, workspaceId, input) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/workspace-clusters`
+    });
+    
+    return this.webClient.post(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+  ping(token, workspaceId, input) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/workspace-clusters/ping`
+    });
+    
+    return this.webClient.post(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
 }

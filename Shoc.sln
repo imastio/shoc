@@ -126,6 +126,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Cluster.Data.Sql", "ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Cluster", "apps\shoc-cluster\Shoc.Cluster\Shoc.Cluster.csproj", "{C0094568-8868-41C7-AA5B-23765EC4DE8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Kubernetes", "core\Shoc.Core.Kubernetes\Shoc.Core.Kubernetes.csproj", "{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -328,6 +330,10 @@ Global
 		{C0094568-8868-41C7-AA5B-23765EC4DE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0094568-8868-41C7-AA5B-23765EC4DE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0094568-8868-41C7-AA5B-23765EC4DE8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -392,5 +398,6 @@ Global
 		{32C55F85-421D-44BE-A332-A56992D59621} = {388BE1D2-9297-4967-8551-4A44C55022E0}
 		{1AF4A050-6BF4-4932-A292-AC5007960B5F} = {388BE1D2-9297-4967-8551-4A44C55022E0}
 		{C0094568-8868-41C7-AA5B-23765EC4DE8F} = {388BE1D2-9297-4967-8551-4A44C55022E0}
+		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5} = {16F3537F-3EA0-4158-8441-FFD81F8371E1}
 	EndGlobalSection
 EndGlobal

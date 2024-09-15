@@ -43,5 +43,29 @@ public class WorkspaceClustersController : ControllerBase
     {
         return this.clusterService.GetAll(this.HttpContext.GetPrincipal().Id, workspaceId);
     }
+
+    /// <summary>
+    /// Creates a new object
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="input">The creation input</param>
+    /// <returns></returns>
+    [HttpPost]
+    public Task<WorkspaceClusterCreatedModel> Create(string workspaceId, [FromBody] WorkspaceClusterCreateModel input)
+    {
+        return this.clusterService.Create(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+    }
+    
+    /// <summary>
+    /// Test a configuration for a new object
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="input">The test input</param>
+    /// <returns></returns>
+    [HttpPost("ping")]
+    public Task<WorkspaceClusterConnectionTestedModel> Ping(string workspaceId, [FromBody] WorkspaceClusterConnectionTestModel input)
+    {
+        return this.clusterService.Ping(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+    }
 }
 

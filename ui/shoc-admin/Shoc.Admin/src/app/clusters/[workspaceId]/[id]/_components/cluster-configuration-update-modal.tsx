@@ -1,5 +1,5 @@
 import { selfClient } from "@/clients/shoc";
-import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
+import ClustersClient from "@/clients/shoc/cluster/clusters-client";
 import StandardAlert from "@/components/general/standard-alert";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { Form, Input, Modal } from "antd";
@@ -25,7 +25,7 @@ export default function ClusterConfigurationUpdateModal({existing, open, onClose
             configuration: values.configuration
         }
 
-        const result = await withToken((token: string) => selfClient(WorkspaceClustersClient).updateConfigurationById(token, existing?.workspaceId, existing?.id, input));
+        const result = await withToken((token: string) => selfClient(ClustersClient).updateConfigurationById(token, existing?.workspaceId, existing?.id, input));
 
         setProgress(false);
         

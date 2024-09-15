@@ -20,6 +20,11 @@ public abstract class ClusterServiceBase
     /// The name pattern for cluster
     /// </summary>
     protected static readonly Regex NAME_PATTERN = new(@"^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$");
+
+    /// <summary>
+    /// The maximum description length
+    /// </summary>
+    protected const int MAX_DESCRIPTION_LENGTH = 256;
     
     /// <summary>
     /// The object repository

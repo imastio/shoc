@@ -37,6 +37,7 @@ export default async function sessionMiddleware(context: NextContext, next: Next
     }
 
     if(!session || session.error){
+        console.log("No session detected")
         context.response = NextResponse.redirect(new URL(`/sign-in?${search.toString()}`, context.request.url))
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
@@ -178,6 +179,9 @@ public class ClusterService : ClusterServiceBase
         // initialize the description
         input.Description ??= string.Empty;
         
+        // truncate the description for safety
+        input.Description = input.Description[..Math.Min(input.Description.Length, MAX_DESCRIPTION_LENGTH)];
+        
         // require the parent object
         await this.RequireWorkspace(input.WorkspaceId); 
         
@@ -224,6 +228,9 @@ public class ClusterService : ClusterServiceBase
 
         // initialize the description
         input.Description ??= string.Empty;
+        
+        // truncate the description for safety
+        input.Description = input.Description[..Math.Min(input.Description.Length, MAX_DESCRIPTION_LENGTH)];
         
         // require the parent object
         await this.RequireWorkspace(workspaceId);
