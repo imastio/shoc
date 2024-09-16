@@ -131,7 +131,7 @@ export default function WorkspaceMembersTable({ workspaceId, className }: { work
         )
       }
     }
-  ], [intl, load, workspaceId, hasAny])
+  ], [intl, hasAny])
 
   return (
     <>

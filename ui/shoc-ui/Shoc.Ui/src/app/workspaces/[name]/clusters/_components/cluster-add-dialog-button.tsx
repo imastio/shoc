@@ -76,7 +76,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
       onSuccess(data)
     }
 
-  }, [router, intl]);
+  }, [intl, form, onSuccess, workspaceId]);
 
   async function onSubmit(values: any) {
     await submit({
@@ -106,7 +106,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
     }
     
     toast(intl.formatMessage({ id: 'workspaces.clusters.messages.testSuccess' }, { nodesCount: data.nodesCount }))
-  }, [form]);
+  }, [form, intl, workspaceId]);
 
   return <Dialog open={open} onOpenChange={onOpenChangeWrapper} modal>
     <DialogTrigger asChild>

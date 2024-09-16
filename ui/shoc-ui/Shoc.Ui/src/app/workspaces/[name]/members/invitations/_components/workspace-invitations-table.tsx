@@ -150,7 +150,7 @@ export default function WorkspaceInvitationsTable({ workspaceId, className }: { 
         )
       }
     }
-  ], [intl, load, workspaceId, hasAny])
+  ], [intl, hasAny])
 
   return (
     <>

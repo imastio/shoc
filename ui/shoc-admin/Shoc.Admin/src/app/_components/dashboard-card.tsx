@@ -12,7 +12,7 @@ export default function DashboardCard({style = {}, title, link = '/', descriptio
     return <Card
     style={{ ...style }}
     actions={[
-      <Link href={link}><RightOutlined key="icon" /></Link>,
+      <Link key="link-right" href={link}><RightOutlined key="icon" /></Link>,
     ]}
   >
     <Card.Meta

@@ -30,7 +30,7 @@ export default function SignInForm({ expired, next = '/' }: { expired?: boolean,
             submit()
         }
 
-    }, [expired])
+    }, [expired, submit])
 
     return <Card className="mx-auto my-auto max-w-sm">
         <CardHeader>

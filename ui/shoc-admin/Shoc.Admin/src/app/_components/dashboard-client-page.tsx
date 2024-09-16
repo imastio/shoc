@@ -36,7 +36,7 @@ export default function DashboardClientPage() {
         <Row gutter={16} style={{ marginTop: 10 }}>
             {
                 cards.filter(card => isAllowed(card.link)).map(card => <Col key={card.link} style={{ marginBottom: 16 }} span={8}>
-                    <DashboardCard title={card.title} link={card.link} description={card.content} />
+                    <DashboardCard key={card.link} title={card.title} link={card.link} description={card.content} />
                 </Col>)
             }
         </Row>

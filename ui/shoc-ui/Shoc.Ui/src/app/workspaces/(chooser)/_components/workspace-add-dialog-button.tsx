@@ -72,7 +72,7 @@ export default function WorkspaceAddDialogButton({ className, disabled = false, 
       onSuccess(data)
     }
 
-  }, [router, intl]);
+  }, [intl, onSuccess]);
 
   async function onSubmit(values: any) {
     await submit({
