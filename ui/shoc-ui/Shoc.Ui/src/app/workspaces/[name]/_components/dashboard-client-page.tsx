@@ -2,8 +2,8 @@
 
 import BasicHeader from "@/components/general/basic-header";
 import { useIntl } from "react-intl"
-import WorkspaceMembersCountCard from "./workspace-members-count-card";
 import useWorkspaceAccess from "@/providers/workspace-access/use-workspace-access";
+import WorkspaceClustersCountCard from "./workspace-clusters-count-card";
 
 export default function DashboardClientPage({ workspaceId, workspaceName }: { workspaceId: string, workspaceName: string }) {
 
@@ -16,7 +16,7 @@ export default function DashboardClientPage({ workspaceId, workspaceName }: { wo
         />
 
         <div className="flex flex-row">
-            { hasAny(['workspace_list_members']) && <WorkspaceMembersCountCard workspaceId={workspaceId} workspaceName={workspaceName} />}
+            { hasAny(['workspace_list_clusters']) && <WorkspaceClustersCountCard workspaceId={workspaceId} workspaceName={workspaceName} />}
         </div>
 
     </div>

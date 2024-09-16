@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 
-export default function WorkspaceMembersCountCard({ workspaceId, workspaceName }: { workspaceId: string, workspaceName: string }) {
+export default function WorkspaceClustersCountCard({ workspaceId, workspaceName }: { workspaceId: string, workspaceName: string }) {
 
     const intl = useIntl();
     const [progress, setProgress] = useState(true);
@@ -38,14 +38,14 @@ export default function WorkspaceMembersCountCard({ workspaceId, workspaceName }
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                    {intl.formatMessage({ id: 'workspaces.members.card.count' })}
+                    {intl.formatMessage({ id: 'workspaces.clusters.card.count' })}
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">{data?.count || "N/A"}</div>
             </CardContent>
             <CardFooter>
-                <Link href={`/workspaces/${workspaceName}/members`}>
+                <Link href={`/workspaces/${workspaceName}/clusters`}>
                     <Button variant="link" className="px-0">
                         {intl.formatMessage({id: 'global.actions.more'})}
                     </Button>
