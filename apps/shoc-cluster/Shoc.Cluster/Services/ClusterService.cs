@@ -160,6 +160,18 @@ public class ClusterService : ClusterServiceBase
     } 
     
     /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<ClusterCountModel> CountAll(string workspaceId)
+    {
+        // require the parent object
+        await this.RequireWorkspace(workspaceId);
+        
+        return await this.clusterRepository.CountAll(workspaceId);
+    }
+    
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

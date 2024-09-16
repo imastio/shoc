@@ -117,6 +117,19 @@ public class ClusterRepository : IClusterRepository
             Name = name
         });
     }
+
+    /// <summary>
+    /// Count objects by workspace id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    public Task<ClusterCountModel> CountAll(string workspaceId)
+    {
+        return this.dataOps.Connect().QueryFirst("Cluster", "CountAll").ExecuteAsync<ClusterCountModel>(new
+        {
+            WorkspaceId = workspaceId,
+        });
+    }
     
     /// <summary>
     /// Creates the object with given input

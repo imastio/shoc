@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { rpcDirect } from "@/server-actions/rpc"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useIntl } from "react-intl"
 
 export default function SignInForm({ expired, next = '/' }: { expired?: boolean, next: string }) {
@@ -18,11 +18,19 @@ export default function SignInForm({ expired, next = '/' }: { expired?: boolean,
     const intl = useIntl();
     const [progress, setProgress] = useState(false);
 
-    const submit = async () => {
+    const submit = useCallback(async () => {
 
         setProgress(true);
         await rpcDirect('auth/signIn', { redirectTo: next.startsWith('/sign-in') ? '/' : next })
-    }
+    }, [next]);
+
+    useEffect(() => {
+
+        if(!expired){
+            submit()
+        }
+
+    }, [expired])
 
     return <Card className="mx-auto my-auto max-w-sm">
         <CardHeader>

@@ -15,6 +15,7 @@
     "global.actions.decline": "Decline",
     "global.actions.view": "View",
     "global.actions.test": "Test",
+    "global.actions.more": "More",
     "global.navigation.next": "Next",
     "global.navigation.prev": "Prev",
     "global.labels.name": "Name",

@@ -45,7 +45,6 @@ export default function WorkspaceMembersTable({ workspaceId, className }: { work
 
   }, []);
 
-
   useEffect(() => {
     if (!workspaceId) {
       return;

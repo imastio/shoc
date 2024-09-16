@@ -43,6 +43,7 @@
     "workspaces.members.update": "Update membership",
     "workspaces.members.updateNotice": "You can update the role of the member in the workspace.",
     "workspaces.members.updateError": "Unable to update the membership",
+    "workspaces.members.card.count": "Workspace Members",
     "workspaces.invitations": "Invitations",
     "workspaces.invitations.noInvitations": "You're all caught up",
     "workspaces.invitations.noInvitations.note": "You can continue working with your current workspaces or create a new one!",

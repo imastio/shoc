@@ -7,7 +7,6 @@ import { rpc } from "@/server-actions/rpc";
 import WorkspaceCardList from "./workspace-card-list";
 import { useIntl } from "react-intl";
 import BasicHeader from "@/components/general/basic-header";
-import { useRouter } from "next/navigation";
 import InvitationsButton from "./invitations-button";
 
 export default function WorkspacesClientPage() {
@@ -16,7 +15,6 @@ export default function WorkspacesClientPage() {
     const [items, setItems] = useState<any[]>([]);
     const [errors, setErrors] = useState<any[]>([]);
     const intl = useIntl();
-    const router = useRouter();
 
     const load = useCallback(async () => {
 

@@ -43,6 +43,17 @@ public class WorkspaceClustersController : ControllerBase
     {
         return this.clusterService.GetAll(this.HttpContext.GetPrincipal().Id, workspaceId);
     }
+    
+    /// <summary>
+    /// Counts all the objects
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    [HttpGet("count")]
+    public Task<WorkspaceClusterCountModel> CountAll(string workspaceId)
+    {
+        return this.clusterService.CountAll(this.HttpContext.GetPrincipal().Id, workspaceId);
+    }
 
     /// <summary>
     /// Creates a new object

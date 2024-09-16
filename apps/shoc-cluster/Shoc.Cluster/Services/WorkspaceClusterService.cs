@@ -47,6 +47,25 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
     }
     
     /// <summary>
+    /// Counts all objects
+    /// </summary>
+    /// <returns></returns>
+    public async Task<WorkspaceClusterCountModel> CountAll(string userId, string workspaceId)
+    {
+        // count the objects
+        var count = await this.clusterService.CountAll(workspaceId);
+        
+        // ensure we have a permission to view workspace clusters
+        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+
+        // map and return the result
+        return new WorkspaceClusterCountModel
+        {
+            Count = count.Count
+        };
+    }
+    
+    /// <summary>
     /// Creates a new object
     /// </summary>
     /// <returns></returns>

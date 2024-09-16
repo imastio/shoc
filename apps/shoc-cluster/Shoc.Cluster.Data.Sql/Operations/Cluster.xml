@@ -78,6 +78,13 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="CountAll">
+      <TextCommand>
+        SELECT COUNT(Id) as Count FROM `clstr_clusters`
+        WHERE `WorkspaceId` = @WorkspaceId;
+      </TextCommand>
+    </SqlOperation>
+
     <SqlOperation Name="Create">
 
       <TextCommand>

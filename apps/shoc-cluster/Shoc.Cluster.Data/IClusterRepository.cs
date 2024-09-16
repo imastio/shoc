@@ -52,6 +52,13 @@ public interface IClusterRepository
     Task<ClusterExtendedModel> GetExtendedByName(string workspaceId, string name);
 
     /// <summary>
+    /// Count objects by workspace id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    Task<ClusterCountModel> CountAll(string workspaceId);
+
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
