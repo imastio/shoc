@@ -128,6 +128,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Cluster", "apps\shoc-c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Core.Kubernetes", "core\Shoc.Core.Kubernetes\Shoc.Core.Kubernetes.csproj", "{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shoc-secret", "shoc-secret", "{F0B90562-0EA4-4526-9F07-F745575219F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Secret.Model", "apps\shoc-secret\Shoc.Secret.Model\Shoc.Secret.Model.csproj", "{372E31BE-1A6B-496B-8E35-E4355C4C6805}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -334,6 +338,10 @@ Global
 		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372E31BE-1A6B-496B-8E35-E4355C4C6805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372E31BE-1A6B-496B-8E35-E4355C4C6805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372E31BE-1A6B-496B-8E35-E4355C4C6805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372E31BE-1A6B-496B-8E35-E4355C4C6805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -399,5 +407,7 @@ Global
 		{1AF4A050-6BF4-4932-A292-AC5007960B5F} = {388BE1D2-9297-4967-8551-4A44C55022E0}
 		{C0094568-8868-41C7-AA5B-23765EC4DE8F} = {388BE1D2-9297-4967-8551-4A44C55022E0}
 		{E916A3D4-7FC1-441C-8E62-8F43D7FDA8B5} = {16F3537F-3EA0-4158-8441-FFD81F8371E1}
+		{F0B90562-0EA4-4526-9F07-F745575219F3} = {21A6D5CD-1D11-43E0-A84C-82811AA2FF3A}
+		{372E31BE-1A6B-496B-8E35-E4355C4C6805} = {F0B90562-0EA4-4526-9F07-F745575219F3}
 	EndGlobalSection
 EndGlobal

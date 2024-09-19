@@ -1,6 +1,6 @@
 services:
   
-  # Single HTTPS port a for local usage only
+  # Single HTTPS port a for local usage only [11000]
   shoc-ingress:
     namespace: default
     ports:
@@ -156,3 +156,20 @@ services:
       - protocol: https
         roles: [ 'grpc' ]
         port: 11141
+        
+  # Secret service ports [11144 - 11149]
+  shoc-secret:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11144
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11145
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11146
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11147

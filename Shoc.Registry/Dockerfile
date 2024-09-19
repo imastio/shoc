@@ -1,3 +1,0 @@
-FROM registry:2.8.1
-
-EXPOSE 11004
