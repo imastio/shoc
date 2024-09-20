@@ -11,14 +11,14 @@ public static class SecretErrors
     public const string INVALID_NAME = "SECRET_INVALID_NAME";
 
     /// <summary>
+    /// The description is invalid
+    /// </summary>
+    public const string INVALID_DESCRIPTION = "SECRET_INVALID_DESCRIPTION";
+    
+    /// <summary>
     /// The name already exists
     /// </summary>
     public const string EXISTING_NAME = "SECRET_EXISTING_NAME";
-
-    /// <summary>
-    /// The type is invalid
-    /// </summary>
-    public const string INVALID_TYPE = "SECRET_INVALID_TYPE";
     
     /// <summary>
     /// The workspace is invalid

@@ -30,6 +30,10 @@ function GetCsharpProject ($serviceName) {
 		return "$PSScriptRoot/apps/shoc-cluster/Shoc.Cluster/Shoc.Cluster.csproj"
 	}
 
+	if($serviceName -eq "shoc-secret"){
+		return "$PSScriptRoot/apps/shoc-secret/Shoc.Secret/Shoc.Secret.csproj"
+	}
+
 	if($serviceName -eq "shoc-webgtw"){
 		return "$PSScriptRoot/apps/shoc-webgtw/Shoc.Webgtw/Shoc.Webgtw.csproj"
 	}

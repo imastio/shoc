@@ -16,6 +16,11 @@ public class UserSecretUpdateModel
     public string WorkspaceId { get; set; }
     
     /// <summary>
+    /// The user associated with the user secret
+    /// </summary>
+    public string UserId { get; set; }
+    
+    /// <summary>
     /// The name of the user secret (should be unique within the workspace)
     /// </summary>
     public string Name { get; set; }

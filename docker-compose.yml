@@ -228,6 +228,27 @@ services:
       - shoc-database
     networks:
       - shoc-network
+  
+  shoc-secret:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-secret:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-secret/Shoc.Secret
+    container_name: shoc-secret
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-secret.env
+    ports:
+      - '11144:11144'
+      - '11145:11145'
+      - '11146:11146'
+      - '11147:11147'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
 
 
     
