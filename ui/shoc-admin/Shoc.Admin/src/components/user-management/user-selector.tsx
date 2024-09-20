@@ -2,7 +2,7 @@ import { selfClient } from "@/clients/shoc";
 import UsersClient from "@/clients/shoc/identity/users-client";
 import useDebounce from "@/hooks/useDebounce";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
-import { Select, Spin } from "antd";
+import { Empty, Select, Spin } from "antd";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
@@ -15,12 +15,12 @@ export function UserSelector(props: any) {
     const [search, setSearch] = useState(null);
     const debouncedSearch = useDebounce(search);
 
-    const load = useCallback(async () => {
+    const load = useCallback(async (term: string | null) => {
         setProgress(true);
-
+        setData([])
         const result = await withToken((token: string) => selfClient(UsersClient).getAllReferentialValues(token, {
-            search: debouncedSearch
-        }, 0, debouncedSearch ? 100 : 20));
+            search: term
+        }, 0, term ? 100 : 20));
 
         setProgress(false);
 
@@ -33,13 +33,12 @@ export function UserSelector(props: any) {
 
         setData(items.map((obj: any) => ({ label: obj.fullName, value: obj.id })));
 
-    }, [withToken, debouncedSearch]);
+    }, [withToken]);
 
     useEffect(() => {
-        if(data === null){
-            load();
-        }
-    }, [load, data])
+        load(debouncedSearch);
+    }, [load, debouncedSearch])
+
 
     return <Select
         {...props}
@@ -47,7 +46,7 @@ export function UserSelector(props: any) {
         showSearch
         searchValue={search}
         onSearch={setSearch}
-        notFoundContent={progress ? <Spin size="small" /> : null}
+        notFoundContent={progress ? <Spin size="small" /> : <Empty />}
         options={data || []}
         disabled={props.disabled}
     />

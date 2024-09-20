@@ -16,6 +16,8 @@ import { workspaceStatusesMap, workspaceTypesMap } from "@/well-known/workspaces
 import { WorkspaceMembersTable } from "./workspace-members-table";
 import { WorkspaceInvitationsTable } from "./workspace-invitations-table";
 import ClustersTable from "@/app/clusters/_components/clusters-table";
+import { WorkspaceSecretsTable } from "./workspace-secrets-table";
+import { WorkspaceUserSecretsTable } from "./workspace-user-secrets-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -103,6 +105,16 @@ export default function SingleWorkspaceClientPage() {
                                 key: "3",
                                 label: "Clusters",
                                 children: <ClustersTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "4",
+                                label: "Secrets",
+                                children: <WorkspaceSecretsTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "5",
+                                label: "User Secrets",
+                                children: <WorkspaceUserSecretsTable workspaceId={workspaceId} loading={progress} />
                             }
                         ]
                     }}
@@ -115,6 +127,12 @@ export default function SingleWorkspaceClientPage() {
                         },
                         {
                             tabKey: "3"
+                        },
+                        {
+                            tabKey: "4"
+                        },
+                        {
+                            tabKey: "5"
                         }
                     ]}
                     content={<>

@@ -2,6 +2,7 @@ import { selfClient } from "@/clients/shoc";
 import ClusterAccessesClient from "@/clients/shoc/cluster/cluster-accesses-client";
 import IdentityAccessClient from "@/clients/shoc/identity/identity-accesses-client";
 import RegistryAccessesClient from "@/clients/shoc/registry/registry-accesses-client";
+import SecretAccessesClient from "@/clients/shoc/secret/secret-accesses-client";
 import SettingsAccessesClient from "@/clients/shoc/settings/settings-accesses-client";
 import WorkspaceAccessesClient from "@/clients/shoc/workspace/workspace-accesses-client";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
@@ -34,6 +35,11 @@ const getFetcher = (area: string) => {
 
     if(area === 'cluster'){
         const client = selfClient(ClusterAccessesClient);
+        return client.getAll.bind(client);
+    }
+
+    if(area === 'secret'){
+        const client = selfClient(SecretAccessesClient);
         return client.getAll.bind(client);
     }
 

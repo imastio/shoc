@@ -16,6 +16,10 @@ export const accessAreas = [
         display: 'Cluster Management'
     },
     {
+        key: 'secret', 
+        display: 'Secret Management'
+    },
+    {
         key: 'settings', 
         display: 'Settings'
     }
