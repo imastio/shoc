@@ -4,6 +4,7 @@ import BasicHeader from "@/components/general/basic-header";
 import { useIntl } from "react-intl"
 import useWorkspaceAccess from "@/providers/workspace-access/use-workspace-access";
 import WorkspaceClustersCountCard from "./workspace-clusters-count-card";
+import { WorkspacePermissions } from "@/well-known/workspace-permissions";
 
 export default function DashboardClientPage({ workspaceId, workspaceName }: { workspaceId: string, workspaceName: string }) {
 
@@ -16,7 +17,7 @@ export default function DashboardClientPage({ workspaceId, workspaceName }: { wo
         />
 
         <div className="flex flex-row">
-            { hasAny(['workspace_list_clusters']) && <WorkspaceClustersCountCard workspaceId={workspaceId} workspaceName={workspaceName} />}
+            { hasAny([WorkspacePermissions.WORKSPACE_LIST_CLUSTERS]) && <WorkspaceClustersCountCard workspaceId={workspaceId} workspaceName={workspaceName} />}
         </div>
 
     </div>

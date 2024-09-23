@@ -3,6 +3,7 @@ import authEn from "./messages/en/auth.json";
 import componentsEn from "./messages/en/components.json";
 import errorsEn from "./messages/en/errors.json";
 import workspacesEn from "./messages/en/workspaces.json";
+import secretsEn from "./messages/en/secrets.json";
 import localeConfig from "./locale-config";
 
 export const localeMessages = {
@@ -12,7 +13,8 @@ export const localeMessages = {
         ...authEn,
         ...componentsEn,
         ...errorsEn,
-        ...workspacesEn
+        ...workspacesEn,
+        ...secretsEn
     }
 };
 

@@ -32,6 +32,8 @@ builder.Services.AddSingleton<UserSecretProtectionProvider>();
 builder.Services.AddSingleton<SecretValidationService>();
 builder.Services.AddSingleton<SecretService>();
 builder.Services.AddSingleton<UserSecretService>();
+builder.Services.AddSingleton<WorkspaceSecretService>();
+builder.Services.AddSingleton<WorkspaceUserSecretService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

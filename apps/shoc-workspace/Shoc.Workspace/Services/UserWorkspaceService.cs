@@ -136,7 +136,7 @@ public class UserWorkspaceService : UserWorkspaceServiceBase
         var existing = await this.RequireById(userId, id);
         
         // ensure update permissions is given
-        await this.workspaceAccessEvaluator.Ensure(userId, id, WorkspacePermissions.WORKSPACE_EDIT);
+        await this.workspaceAccessEvaluator.Ensure(userId, id, WorkspacePermissions.WORKSPACE_UPDATE);
 
         // perform the operation
         var result = await this.workspaceService.UpdateById(id, new WorkspaceUpdateModel

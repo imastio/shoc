@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import useWorkspaceAccess from "@/providers/workspace-access/use-workspace-access";
+import { WorkspacePermissions } from "@/well-known/workspace-permissions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -17,7 +18,7 @@ export default function WorkspaceClustersMenu({ name }: { name: string }) {
         {
             path: `/workspaces/${name}/clusters`,
             title: intl.formatMessage({ id: 'workspaces.clusters.menu.clusters' }),
-            visible: hasAny(['workspace_list_clusters'])
+            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_CLUSTERS])
         }
     ], [intl, name, hasAny])
 

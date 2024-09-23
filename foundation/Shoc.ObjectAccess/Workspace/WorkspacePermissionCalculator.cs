@@ -22,7 +22,7 @@ public class WorkspacePermissionCalculator
             new HashSet<string>
             {
                 WorkspacePermissions.WORKSPACE_VIEW,
-                WorkspacePermissions.WORKSPACE_EDIT,
+                WorkspacePermissions.WORKSPACE_UPDATE,
                 WorkspacePermissions.WORKSPACE_DELETE,
                 WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
                 WorkspacePermissions.WORKSPACE_UPDATE_MEMBER,
@@ -32,7 +32,17 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_UPDATE_INVITATION,
                 WorkspacePermissions.WORKSPACE_DELETE_INVITATION,
                 WorkspacePermissions.WORKSPACE_LIST_CLUSTERS,
-                WorkspacePermissions.WORKSPACE_CREATE_CLUSTER
+                WorkspacePermissions.WORKSPACE_CREATE_CLUSTER,
+                WorkspacePermissions.WORKSPACE_UPDATE_CLUSTER,
+                WorkspacePermissions.WORKSPACE_DELETE_CLUSTER,
+                WorkspacePermissions.WORKSPACE_LIST_SECRETS,
+                WorkspacePermissions.WORKSPACE_CREATE_SECRET,
+                WorkspacePermissions.WORKSPACE_UPDATE_SECRET,
+                WorkspacePermissions.WORKSPACE_DELETE_SECRET,
+                WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
+                WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
             }
         },
         {
@@ -41,14 +51,23 @@ public class WorkspacePermissionCalculator
             {
                 WorkspacePermissions.WORKSPACE_VIEW,
                 WorkspacePermissions.WORKSPACE_LIST_MEMBERS,
-                WorkspacePermissions.WORKSPACE_LIST_CLUSTERS
+                WorkspacePermissions.WORKSPACE_LIST_CLUSTERS,
+                WorkspacePermissions.WORKSPACE_LIST_SECRETS,
+                WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
+                WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
             }
         },
         {
             WorkspaceRoles.GUEST,
             new HashSet<string>
             {
-                WorkspacePermissions.WORKSPACE_VIEW
+                WorkspacePermissions.WORKSPACE_VIEW,
+                WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
+                WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
             }
         }
     };

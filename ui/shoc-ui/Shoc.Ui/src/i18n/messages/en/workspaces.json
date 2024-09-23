@@ -32,6 +32,7 @@
     "workspaces.sidebar.dashboard": "Dashboard",
     "workspaces.sidebar.jobs": "Jobs",
     "workspaces.sidebar.clusters": "Clusters",
+    "workspaces.sidebar.secrets": "Secrets",
     "workspaces.sidebar.registries": "Registries",
     "workspaces.sidebar.members": "Members",
     "workspaces.sidebar.settings": "Settings",

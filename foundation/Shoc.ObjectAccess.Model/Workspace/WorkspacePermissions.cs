@@ -17,7 +17,7 @@ public class WorkspacePermissions
     /// <summary>
     /// Edit the workspace
     /// </summary>
-    public const string WORKSPACE_EDIT = "workspace_edit";
+    public const string WORKSPACE_UPDATE = "workspace_update";
 
     /// <summary>
     /// Delete the workspace
@@ -60,6 +60,11 @@ public class WorkspacePermissions
     public const string WORKSPACE_DELETE_INVITATION = "workspace_delete_invitation";
     
     /// <summary>
+    /// View secrets of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_SECRETS = "workspace_list_secrets";
+    
+    /// <summary>
     /// View clusters of the workspace
     /// </summary>
     public const string WORKSPACE_LIST_CLUSTERS = "workspace_list_clusters";
@@ -68,6 +73,51 @@ public class WorkspacePermissions
     /// Create cluster of the workspace
     /// </summary>
     public const string WORKSPACE_CREATE_CLUSTER = "workspace_create_cluster";
+    
+    /// <summary>
+    /// Update cluster of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_CLUSTER = "workspace_update_cluster";
+    
+    /// <summary>
+    /// Delete cluster of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_CLUSTER = "workspace_delete_cluster";
+    
+    /// <summary>
+    /// Create secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_SECRET = "workspace_create_secret";
+    
+    /// <summary>
+    /// Update secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_SECRET = "workspace_update_secret";
+    
+    /// <summary>
+    /// Delete secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_SECRET = "workspace_delete_secret";
+    
+    /// <summary>
+    /// View user secrets of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_USER_SECRETS = "workspace_list_user_clusters";
+    
+    /// <summary>
+    /// Create user secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_USER_SECRET = "workspace_create_user_cluster";
+    
+    /// <summary>
+    /// Update user secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_USER_SECRET = "workspace_update_user_cluster";
+    
+    /// <summary>
+    /// Delete user secret of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_USER_SECRET = "workspace_delete_user_cluster";
         
     /// <summary>
     /// Get and initialize all the constants

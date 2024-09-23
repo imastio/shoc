@@ -18,6 +18,7 @@ import WorkspaceInvitationDeleteDialog from "./workspace-invitation-delete-dialo
 import WorkspaceInvitationUpdateDialog from "./workspace-invitation-update-dialog"
 import WorkspaceInvitationCreateDialog from "./workspace-invitation-create-dialog"
 import DataTableToolbar from "@/components/data-table/data-table-toolbar"
+import { WorkspacePermissions } from "@/well-known/workspace-permissions"
 
 export default function WorkspaceInvitationsTable({ workspaceId, className }: { workspaceId: string, className?: string }) {
 
@@ -133,14 +134,14 @@ export default function WorkspaceInvitationsTable({ workspaceId, className }: { 
               <DropdownMenuLabel>{intl.formatMessage({ id: 'global.labels.actions' })}</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() => setEditingItem(row.original)}
-                disabled={row.original.role === 'owner' || !hasAny(['workspace_update_invitation'])}
+                disabled={row.original.role === 'owner' || !hasAny([WorkspacePermissions.WORKSPACE_UPDATE_INVITATION])}
               >
                 {intl.formatMessage({ 'id': 'global.actions.update' })}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-red-600 hover:!text-red-600 hover:!bg-red-100"
                 onClick={() => setDeletingItem(row.original)}
-                disabled={row.original.role === 'owner' || !hasAny(['workspace_delete_invitation'])}
+                disabled={row.original.role === 'owner' || !hasAny([WorkspacePermissions.WORKSPACE_DELETE_INVITATION])}
               >
                 {intl.formatMessage({ 'id': 'global.actions.delete' })}
               </DropdownMenuItem>
