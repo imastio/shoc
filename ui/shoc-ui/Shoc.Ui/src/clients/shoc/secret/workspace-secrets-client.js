@@ -15,7 +15,7 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
 
   getAll(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets`
+      api: `api/workspaces/${workspaceId}/workspace-secrets`
     });
     
     return this.webClient.get(url, {
@@ -27,7 +27,7 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
 
   countAll(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/count`
+      api: `api/workspaces/${workspaceId}/workspace-secrets/count`
     });
     
     return this.webClient.get(url, {
@@ -39,7 +39,7 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
 
   create(token, workspaceId, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets`
+      api: `api/workspaces/${workspaceId}/workspace-secrets`
     });
     
     return this.webClient.post(url, input, {
@@ -51,7 +51,7 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
 
   updateById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}`
+      api: `api/workspaces/${workspaceId}/workspace-secrets/${id}`
     });
     
     return this.webClient.put(url, input, {
@@ -63,7 +63,7 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
 
   updateValueById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}/value`
+      api: `api/workspaces/${workspaceId}/workspace-secrets/${id}/value`
     });
     
     return this.webClient.put(url, input, {
@@ -73,12 +73,12 @@ export default class WorkspaceSecretsClient extends BaseAxiosClient {
     });
   }
 
-  deleteById(token, workspaceId, id, input) {
+  deleteById(token, workspaceId, id) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}`
+      api: `api/workspaces/${workspaceId}/workspace-secrets/${id}`
     });
     
-    return this.webClient.delete(url, input, {
+    return this.webClient.delete(url, {
       headers: {
         ...this.authBearer(token)
       }

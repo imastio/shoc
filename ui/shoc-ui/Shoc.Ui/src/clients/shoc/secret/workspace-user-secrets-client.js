@@ -15,7 +15,7 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
 
   getAll(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets`
     });
     
     return this.webClient.get(url, {
@@ -27,7 +27,7 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
 
   countAll(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets/count`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets/count`
     });
     
     return this.webClient.get(url, {
@@ -39,7 +39,7 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
 
   create(token, workspaceId, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets`
     });
     
     return this.webClient.post(url, input, {
@@ -51,7 +51,7 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
 
   updateById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets/${id}`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets/${id}`
     });
     
     return this.webClient.put(url, input, {
@@ -63,7 +63,7 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
 
   updateValueById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets/${id}/value`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets/${id}/value`
     });
     
     return this.webClient.put(url, input, {
@@ -73,12 +73,12 @@ export default class WorkspaceUserSecretsClient extends BaseAxiosClient {
     });
   }
 
-  deleteById(token, workspaceId, id, input) {
+  deleteById(token, workspaceId, id) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/user-secrets/${id}`
+      api: `api/workspaces/${workspaceId}/workspace-user-secrets/${id}`
     });
-    
-    return this.webClient.delete(url, input, {
+
+    return this.webClient.delete(url, {
       headers: {
         ...this.authBearer(token)
       }

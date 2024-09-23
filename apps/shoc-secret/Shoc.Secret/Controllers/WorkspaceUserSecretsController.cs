@@ -13,7 +13,7 @@ namespace Shoc.Secret.Controllers;
 /// <summary>
 /// The user secrets endpoint
 /// </summary>
-[Route("api/workspaces/{workspaceId}/user-secrets")]
+[Route("api/workspaces/{workspaceId}/workspace-user-secrets")]
 [ApiController]
 [ShocExceptionHandler]
 [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
@@ -99,7 +99,7 @@ public class WorkspaceUserSecretsController : ControllerBase
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="id">The id of the object</param>
     /// <returns></returns>
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public Task<WorkspaceUserSecretDeletedModel> UpdateById(string workspaceId, string id)
     {
         return this.userSecretService.DeleteById(this.HttpContext.GetPrincipal().Id, workspaceId, id);

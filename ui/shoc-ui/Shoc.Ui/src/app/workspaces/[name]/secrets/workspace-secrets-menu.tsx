@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
-export default function WorkspaceMembersMenu({ name }: { name: string }) {
+export default function WorkspaceSecretsMenu({ name }: { name: string }) {
 
     const intl = useIntl();
     const pathname = usePathname();
@@ -16,14 +16,14 @@ export default function WorkspaceMembersMenu({ name }: { name: string }) {
 
     const definitions = useMemo(() => [
         {
-            path: `/workspaces/${name}/members`,
-            title: intl.formatMessage({ id: 'workspaces.members.menu.members' }),
-            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_MEMBERS])
+            path: `/workspaces/${name}/secrets/user-secrets`,
+            title: intl.formatMessage({ id: 'secrets.menu.userSecrets' }),
+            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS])
         },
         {
-            path: `/workspaces/${name}/members/invitations`,
-            title: intl.formatMessage({ id: 'workspaces.members.menu.invitations' }),
-            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_INVITATIONS])
+            path: `/workspaces/${name}/secrets/workspace-secrets`,
+            title: intl.formatMessage({ id: 'secrets.menu.workspaceSecrets' }),
+            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_SECRETS])
         }
     ], [intl, name, hasAny])
 

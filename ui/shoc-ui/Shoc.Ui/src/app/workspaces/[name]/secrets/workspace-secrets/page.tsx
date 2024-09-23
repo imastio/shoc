@@ -1,15 +1,15 @@
 import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
-import { getByName } from "../cached-workspace-actions";
-import WorkspaceClustersClientPage from "./_components/workspace-clusters-client-page";
+import { getByName } from "../../cached-workspace-actions";
+import SecretsTable from "./_components/secrets-table";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
 
   const intl = await getIntl();
-  const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.clusters' });
+  const defaultTitle = intl.formatMessage({ id: 'secrets.menu.workspaceSecrets' });
   const title = name ? `${defaultTitle} - ${name}` : defaultTitle;
 
   return {
@@ -17,7 +17,7 @@ export async function generateMetadata({ params: { name } }: { params: any }): P
   }
 }
 
-export default async function WorkspaceClustersPage({ params: { name } }: any) {
+export default async function WorkspaceUserSecretsPage({ params: { name } }: any) {
 
   const { data: workspace, errors: workspaceErrors } = await getByName(name);
   const intl = await getIntl();
@@ -27,8 +27,9 @@ export default async function WorkspaceClustersPage({ params: { name } }: any) {
   }
 
   return <>
-    <div className="flex flex-col h-full">
-      <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={name} />
+    <div className="items-center">
+      <h1 className="text-lg truncate font-semibold md:text-2xl">{intl.formatMessage({id: 'secrets.menu.workspaceSecrets'})}</h1>
     </div>
+    <SecretsTable className="mt-4" workspaceId={workspace.id} />
   </>
 }

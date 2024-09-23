@@ -37,6 +37,8 @@ export default function WorkspaceInvitationDeleteDialog({ item, open, onClose, t
         if (onSuccess) {
             onSuccess(data)
         }
+
+        onOpenChangeWrapper(false)
     }
 
     const onOpenChangeWrapper = (openValue: boolean): void => {
@@ -74,7 +76,6 @@ export default function WorkspaceInvitationDeleteDialog({ item, open, onClose, t
                         onClick={async (e) => {
                             e.preventDefault();
                             await onOk()
-                            onOpenChangeWrapper(false);
                         }}
                     >
                         {progress && <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />}

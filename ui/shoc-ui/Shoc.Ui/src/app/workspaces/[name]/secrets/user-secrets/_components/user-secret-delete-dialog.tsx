@@ -1,5 +1,4 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { WorkspaceMember } from "./types";
 import { AlertDialogFooter, AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { ReactNode, useState } from "react";
 import ErrorAlert from "@/components/general/error-alert";
@@ -10,14 +9,14 @@ import { buttonVariants } from "@/components/ui/button";
 import SpinnerIcon from "@/components/icons/spinner-icon";
 
 type DialogProps = {
-    item: WorkspaceMember,
+    item: any,
     open?: boolean,
     onClose?: () => void,
     trigger?: ReactNode,
     onSuccess?: (result: any) => void,
 }
 
-export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigger, onSuccess }: DialogProps) {
+export default function UserSecretDeleteDialog({ item, open, onClose, trigger, onSuccess }: DialogProps) {
 
     const intl = useIntl();
     const [errors, setErrors] = useState<any[]>([]);
@@ -27,7 +26,7 @@ export default function WorkspaceMemberDeleteDialog({ item, open, onClose, trigg
 
         setErrors([]);
         setProgress(true);
-        const { data, errors } = await rpc('workspace/user-workspace-members/deleteById', { workspaceId: item.workspaceId, id: item.id });
+        const { data, errors } = await rpc('secret/workspace-user-secrets/deleteById', { workspaceId: item.workspaceId, id: item.id });
         setProgress(false);
 
         if (errors) {

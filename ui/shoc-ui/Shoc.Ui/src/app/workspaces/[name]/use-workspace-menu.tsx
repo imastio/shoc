@@ -42,10 +42,11 @@ export default function useWorkspaceMenu({ name }: { name: string }){
             visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_CLUSTERS])
         },
         { 
-            path: `/workspaces/${name}/secrets`, 
+            path: `/workspaces/${name}/secrets/user-secrets`, 
             title: intl.formatMessage({ id: 'workspaces.sidebar.secrets' }), 
             icon: KeyRoundIcon,
-            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_SECRETS, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS])
+            visible: hasAny([WorkspacePermissions.WORKSPACE_LIST_SECRETS, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS]),
+            altPaths: [`/workspaces/${name}/secrets/workspace-secrets`]
         },
         { 
             path: `/workspaces/${name}/settings`, 

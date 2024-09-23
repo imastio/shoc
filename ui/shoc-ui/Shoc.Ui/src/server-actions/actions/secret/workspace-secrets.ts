@@ -26,7 +26,7 @@ export const updateValueById = defineServerAction(({ workspaceId, id, input }) =
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceSecretsClient).updateValueById(token, workspaceId, id, input)));
 });
 
-export const deleteById = defineServerAction(({ workspaceId, id, input }) => {
+export const deleteById = defineServerAction(({ workspaceId, id }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceSecretsClient).deleteById(token, workspaceId, id)));
 });
 
