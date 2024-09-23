@@ -155,7 +155,7 @@ export default function SingleWorkspaceClientPage() {
                             <Col span={24}>
                                 <Descriptions>
                                     <Descriptions.Item label="Name">{workspace.name}</Descriptions.Item>
-                                    <Descriptions.Item label="Title">{workspace.title}</Descriptions.Item>
+                                    <Descriptions.Item label="Description">{workspace.description}</Descriptions.Item>
                                     <Descriptions.Item label="Type">{workspaceTypesMap[workspace.type] || workspace.type}</Descriptions.Item>
                                     <Descriptions.Item label="Status">{workspaceStatusesMap[workspace.status] || workspace.status}</Descriptions.Item>
                                     <Descriptions.Item label="Created">{localDateTime(workspace.created)}</Descriptions.Item>
