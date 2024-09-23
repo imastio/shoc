@@ -37,7 +37,7 @@ export default function ClusterCard({ workspaceName, cluster, className }: { wor
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="flex space-x-2">
-          <Link href={`/workspaces/${workspaceName}/clusters/${cluster.name}`}>
+          <Link prefetch={false} href={`/workspaces/${workspaceName}/clusters/${cluster.name}`}>
           <Button variant="link" className="p-0">
             {intl.formatMessage({id: 'global.actions.view'})}
           </Button>
