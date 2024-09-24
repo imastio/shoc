@@ -10,3 +10,13 @@ export interface ResolvedContext {
   providerUrl: URL,
   workspace: string
 }
+
+export interface AuthSession {
+  id: string,
+  sub: string,
+  email: string,
+  userType: string,
+  name: string,
+  username: string,
+  expires: Date,
+}

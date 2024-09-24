@@ -1,7 +1,5 @@
 import { ResolvedContext } from "@/core/types";
 import { logger } from "@/services/logger";
-import axios from "axios";
-import https from 'https';
 import { Command } from "commander";
 
 export function getRootCommand(command: Command) {

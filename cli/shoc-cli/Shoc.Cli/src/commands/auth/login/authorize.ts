@@ -1,7 +1,6 @@
 import open from 'open';
 import http from 'http';
 import crypto from 'crypto';
-import { ResolvedContext } from '@/core/types';
 import { getFreePort } from '@/services/network';
 import { logger } from '@/services/logger';
 
@@ -32,7 +31,6 @@ export async function getOpenIdConfiguration(idp: URL): Promise<OpenIdConfigurat
     const wellKnownUrl = new URL(idp);
     wellKnownUrl.pathname = '/.well-known/openid-configuration'
 
-    console.log("calling", wellKnownUrl.toString())
     try {
         const response = await (await fetch(wellKnownUrl)).json();
         return {
@@ -119,7 +117,6 @@ async function waitForCode({ port }: { port: any }): Promise<CodeResponse> {
 function codePromise(server: http.Server): Promise<CodeResponse> {
     return new Promise((resolve) => {
         server.on('request', (req, res) => {
-
             if(!req.url?.includes('signed-in')){
                 res.writeHead(404);
                 res.end('Not found')
