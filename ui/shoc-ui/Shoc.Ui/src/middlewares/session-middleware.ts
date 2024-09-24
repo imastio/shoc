@@ -21,7 +21,7 @@ export default async function sessionMiddleware(context: NextContext, next: Next
     const session = await auth();
 
     // if URL is public or is api url
-    if(isPublic || pathname.startsWith('/api')){
+    if(isPublic || pathname.startsWith('/api') || pathname.startsWith('/well-known')){
 
         if (shouldContinueMiddleware(context.response)) {
             await next(context)

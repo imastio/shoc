@@ -1,14 +1,11 @@
+import { Config } from '@/core/types';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';
 
-const CONFIG_PATH = path.join(process.env.HOME || '', '.shoc', 'config.yaml');
-
-export interface Config {
-  providers: { name: string, url: string }[];
-  contexts: { name: string; provider: string; workspace: string }[];
-  defaultContext: string;
-}
+const SHOC_FOLDER_NAME = '.shoc';
+const CONFIG_FILE_NAME = 'config.yaml';
+const CONFIG_PATH = path.join(process.env.HOME || '', SHOC_FOLDER_NAME, CONFIG_FILE_NAME);
 
 export async function loadConfig(): Promise<Config | null> {
   try {

@@ -1,27 +1,22 @@
-import { Command } from 'commander';
-import { version } from '../package.json'; // Adjust the path based on your structure
+import { version } from '../package.json';
 import configCommand from './commands/config';
+import authCommand from './commands/auth';
+import { createCommand } from 'commander';
 
-const program = new Command();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const program = createCommand();
 
 program
   .name('shoc')
-  .description('CLI tool for SHOC')
-  .version(version)
-  .option('--context <context>', 'Override the default context')
-  .option('--workspace <workspace>', 'Override the default workspace');
+  .description('A command-line interface for managing your job on Shoc Platform')
+  .version(version, '-v, --version')
+  .option('--context <context>', 'Use the mentioned context')
+  .option('--workspace <workspace>', 'Use the mentioned workspace')
+  .enablePositionalOptions();
 
-// Add commands
 program.addCommand(configCommand);
+program.addCommand(authCommand);
 
-// Parse the command-line arguments
 program.parse(process.argv);
 
-// Access global options
-const options = program.opts();
-if (options.context) {
-  console.log(`Using context: ${options.context}`);
-}
-if (options.workspace) {
-  console.log(`Using workspace: ${options.workspace}`);
-}
