@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "composite": false,
+        "declaration": true,
+        "declarationMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSources": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "preserveWatchOutput": true,
+        "skipLibCheck": true,
+        "rootDir": "src",
+        "outDir": "dist",
+        "strict": true,
+        "target": "es6",
+        "module": "commonjs",
+        "isolatedModules": false,
+        "sourceMap": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+    },
+    "include": [
+        "./src/"
+    ],
+    "exclude": [
+        "assets",
+        "node_modules",
+        "bower_components",
+        "jspm_packages"
+    ]
+}

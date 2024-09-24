@@ -1,0 +1,36 @@
+{
+  "name": "shoc",
+  "version": "1.0.0",
+  "description": "Run your jobs on Shoc Platform via Shoc CLI.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "ISC",
+  "author": {
+    "name": "davitp",
+    "url": "https://github.com/davitp"
+  },
+  "files": ["dist"],
+  "main": "index.js",
+  "exports": "./dist/index.js",
+  "bin": "./dist/index.js",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "keywords": [],
+  "dependencies": {
+    "commander": "^12.1.0",
+    "figlet": "^1.7.0",
+    "prompt-sync": "^4.2.0",
+    "prompts": "^2.4.2",
+    "yaml": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.8",
+    "@types/node": "^22.6.1",
+    "@types/prompt-sync": "^4.2.3",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2"
+  }
+}
