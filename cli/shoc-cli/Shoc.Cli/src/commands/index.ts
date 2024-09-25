@@ -4,6 +4,8 @@ import authCommand from './auth';
 import { createCommand } from 'commander';
 import workspacesCommand from './workspaces';
 import clustersCommand from './clusters';
+import userSecretsCommand from './user-secrets';
+import workspaceSecretsCommand from './workspace-secrets';
 
 const program = createCommand();
 
@@ -20,6 +22,8 @@ program.addCommand(configCommand);
 program.addCommand(authCommand);
 program.addCommand(workspacesCommand);
 program.addCommand(clustersCommand);
+program.addCommand(userSecretsCommand);
+program.addCommand(workspaceSecretsCommand);
 
 
 export default program;
