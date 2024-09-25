@@ -20,7 +20,6 @@ workspaceSecretsListCommand
         const result: any[] = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceSecretsClient).getAll(ctx.token, workspace.id));
         
         logger.just("List of defined workspace secrets:")
-        logger.break()
         result.forEach(item => {
             logger.just(`  - Name: ${item.name}, Encrypted: ${item.encrypted ? '✓' : '✗'}, Value: ${item.value}`)
         });
