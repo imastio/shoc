@@ -16,6 +16,9 @@ export const logger = {
   just(...args: unknown[]) {
     console.log(...args)
   },
+  table(...args: unknown[]) {
+    console.table(...args)
+  },
   break() {
     console.log("")
   },

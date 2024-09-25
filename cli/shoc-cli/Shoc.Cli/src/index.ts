@@ -3,6 +3,7 @@ import configCommand from './commands/config';
 import authCommand from './commands/auth';
 import { createCommand } from 'commander';
 import workspacesCommand from './commands/workspaces';
+import clustersCommand from './commands/clusters';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -19,6 +20,7 @@ program
 program.addCommand(configCommand);
 program.addCommand(authCommand);
 program.addCommand(workspacesCommand);
+program.addCommand(clustersCommand);
 
 program.parse(process.argv);
 
