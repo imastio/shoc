@@ -1,7 +1,7 @@
-import resolveContext from "@/services/context-resolver";
+import resolveContext, { getWellKnownEndpoints } from "@/services/context-resolver";
 import { createCommand } from "commander";
-import { asyncHandler, getRootOptions, getWellKnownEndpoints } from "@/commands/common";
-import { authorize } from "./authorize";
+import { asyncHandler, getRootOptions } from "@/commands/common";
+import { authorize } from "../../../services/authorize";
 import { storeSession } from "@/services/session-service";
 import { logger } from "@/services/logger";
 
@@ -14,7 +14,7 @@ authLoginCommand
         const rootOptions = getRootOptions(cmd);
         const context = await resolveContext(rootOptions.context, rootOptions.workspace);
 
-        const { idp } = await getWellKnownEndpoints(context);
+        const { idp } = await getWellKnownEndpoints(context.providerUrl);
 
         const { accessToken, refreshToken } = await authorize({ idp })
 

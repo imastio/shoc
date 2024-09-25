@@ -45,6 +45,35 @@ export async function getOpenIdConfiguration(idp: URL): Promise<OpenIdConfigurat
     }
 }
 
+export async function refresh({ idp, accessToken, refreshToken }: { idp: URL, accessToken: string, refreshToken: string }): Promise<TokenResult> {
+    const openidConfiguration = await getOpenIdConfiguration(idp);
+
+    const body = new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: authConfig.clientId,
+        refresh_token: refreshToken,
+        access_token: accessToken,
+    });
+
+    const response = await fetch(openidConfiguration.tokenEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body.toString()
+    });
+
+    if (!response.ok) {
+        throw new Error(`Could not extend your session. Please login again.`);
+    }
+
+    const result = await response.json();
+
+    return {
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token
+    }
+}
 
 export async function authorize({ idp }: { idp: URL }): Promise<TokenResult> {
 
@@ -117,7 +146,7 @@ async function waitForCode({ port }: { port: any }): Promise<CodeResponse> {
 function codePromise(server: http.Server): Promise<CodeResponse> {
     return new Promise((resolve) => {
         server.on('request', (req, res) => {
-            if(!req.url?.includes('signed-in')){
+            if (!req.url?.includes('signed-in')) {
                 res.writeHead(404);
                 res.end('Not found')
                 return;
@@ -144,7 +173,7 @@ function timeoutPromise(seconds: number, controller: AbortController): Promise<C
 
         controller.signal.addEventListener('abort', () => {
             clearTimeout(timeoutId);
-          });
+        });
     });
 }
 

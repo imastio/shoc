@@ -1,6 +1,5 @@
 import { ResolvedContext } from "@/core/types";
 import { loadConfig } from "./config";
-import ErrorDefinitions from "@/error-handling/error-definitions";
 
 export default async function resolveContext(context?: string, workspace?: string): Promise<ResolvedContext> {
 
@@ -33,4 +32,17 @@ export default async function resolveContext(context?: string, workspace?: strin
         providerUrl: new URL(provider.url),
         workspace: workspace ?? ctx.workspace
     };
+}
+
+export async function getWellKnownEndpoints(providerUrl: URL): Promise<{ idp: URL, api: URL }> {
+
+    const endpointsUrl = new URL(providerUrl);
+    endpointsUrl.pathname = '/well-known/endpoints';
+    
+    const result = await (await fetch(endpointsUrl)).json();
+
+    return {
+        idp: new URL(result.idp),
+        api: new URL(result.api)
+    }
 }

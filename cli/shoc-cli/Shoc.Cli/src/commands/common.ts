@@ -23,21 +23,6 @@ export function getRootOptions(command: Command): { context?: string, workspace?
     }
 }
 
-export async function getWellKnownEndpoints(context: ResolvedContext): Promise<{ idp: URL, api: URL }> {
-
-    const url = context.providerUrl;
-
-    const endpointsUrl = new URL(url);
-    endpointsUrl.pathname = '/well-known/endpoints';
-    
-    const result = await (await fetch(endpointsUrl)).json();
-
-    return {
-        idp: new URL(result.idp),
-        api: new URL(result.api)
-    }
-}
-
 export const asyncHandler = (fn: (...args: any[]) => Promise<void>) => (...args: any[]) => {
     fn(...args).catch((err) => {
         logger.error(`${err.message}`);

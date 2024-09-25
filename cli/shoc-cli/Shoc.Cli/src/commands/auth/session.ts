@@ -21,11 +21,9 @@ authSessionCommand
             return;
         }
 
-        const expired = session.expires.getTime() < new Date().getTime()
-
         logger.just(`Session details as of now (${new Date().toLocaleString()}):`);
-        logger.just(`  - Status: ${expired ? chalk.yellow('Expired') : chalk.green('Active')}`);
-        logger.just(`  - Valid Until: ${expired ? chalk.yellow(session.expires.toLocaleString()) : chalk.green(session.expires.toLocaleString())}`);
+        logger.just(`  - Status: ${session.expired ? chalk.yellow('Expired') : chalk.green('Active')}`);
+        logger.just(`  - Valid Until: ${session.expired ? chalk.yellow(session.expires.toLocaleString()) : chalk.green(session.expires.toLocaleString())}`);
         logger.just(`  - ID: ${session.id}`);
         logger.just(`  - Name: ${session.name}`);
         logger.just(`  - Email: ${session.email}`);

@@ -11,6 +11,12 @@ export interface ResolvedContext {
   workspace: string
 }
 
+export interface AuthenticatedContext {
+  session: AuthSession,
+  accessToken: string,
+  refreshToken: string | null,
+}
+
 export interface AuthSession {
   id: string,
   sub: string,
@@ -19,4 +25,5 @@ export interface AuthSession {
   name: string,
   username: string,
   expires: Date,
+  expired: boolean
 }
