@@ -1,6 +1,7 @@
 {
   "name": "shoc",
   "version": "1.0.0",
+  "type": "module",
   "description": "Run your jobs on Shoc Platform via Shoc CLI.",
   "publishConfig": {
     "access": "public"
@@ -13,7 +14,7 @@
   "files": [
     "dist"
   ],
-  "main": "index.js",
+  "main": "index.tss",
   "exports": "./dist/index.js",
   "bin": "./dist/index.js",
   "scripts": {
@@ -22,6 +23,7 @@
   },
   "keywords": [],
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.14.1",
     "axios": "^1.7.7",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",

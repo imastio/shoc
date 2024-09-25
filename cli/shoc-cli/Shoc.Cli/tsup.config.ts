@@ -7,6 +7,8 @@ export default defineConfig({
   format: ["esm"],
   sourcemap: true,
   minify: true,
-  target: "esnext",
+  target: "node20",
+  platform: "node",
   outDir: "dist",
+  splitting: false
 })

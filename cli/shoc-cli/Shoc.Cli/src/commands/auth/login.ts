@@ -1,7 +1,7 @@
 import resolveContext, { getWellKnownEndpoints } from "@/services/context-resolver";
 import { createCommand } from "commander";
 import { asyncHandler, getRootOptions } from "@/commands/common";
-import { authorize } from "../../../services/authorize";
+import { authorize } from "../../services/authorize";
 import { storeSession } from "@/services/session-service";
 import { logger } from "@/services/logger";
 
@@ -11,8 +11,7 @@ authLoginCommand
     .description('Authenticate the user in the provider')
     .action(asyncHandler(async (_, cmd) => {
 
-        const rootOptions = getRootOptions(cmd);
-        const context = await resolveContext(rootOptions.context, rootOptions.workspace);
+        const context = await resolveContext(getRootOptions(cmd));
 
         const { idp } = await getWellKnownEndpoints(context.providerUrl);
 

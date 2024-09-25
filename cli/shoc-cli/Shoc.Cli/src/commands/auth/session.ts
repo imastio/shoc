@@ -11,8 +11,7 @@ authSessionCommand
     .description('Show details of the current session')
     .action(asyncHandler(async (_, cmd) => {
 
-        const rootOptions = getRootOptions(cmd);
-        const context = await resolveContext(rootOptions.context, rootOptions.workspace);
+        const context = await resolveContext(getRootOptions(cmd));
 
         const session = await checkSession(context.providerUrl.toString());
 

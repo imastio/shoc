@@ -1,9 +1,11 @@
-import { ResolvedContext } from "@/core/types";
+import { ResolvedContext, RootOptions } from "@/core/types";
 import { loadConfig } from "./config";
+import axios from "axios";
 
-export default async function resolveContext(context?: string, workspace?: string): Promise<ResolvedContext> {
+export default async function resolveContext(options: RootOptions): Promise<ResolvedContext> {
 
-    var config = await loadConfig();
+    const { context, workspace, dir } = options;
+    const config = await loadConfig();
     
     if(!config){
         throw new Error('The Shoc CLI is not configured. You can run "shoc config init" to configure it.');
@@ -30,7 +32,8 @@ export default async function resolveContext(context?: string, workspace?: strin
         name: ctx.name,
         providerName: provider.name,
         providerUrl: new URL(provider.url),
-        workspace: workspace ?? ctx.workspace
+        workspace: workspace ?? ctx.workspace,
+        dir: dir ?? process.cwd()
     };
 }
 
@@ -39,7 +42,7 @@ export async function getWellKnownEndpoints(providerUrl: URL): Promise<{ idp: UR
     const endpointsUrl = new URL(providerUrl);
     endpointsUrl.pathname = '/well-known/endpoints';
     
-    const result = await (await fetch(endpointsUrl)).json();
+    const result = (await axios.get(endpointsUrl.toString())).data;
 
     return {
         idp: new URL(result.idp),

@@ -4,11 +4,18 @@ export interface Config {
   defaultContext: string;
 }
 
+export interface RootOptions {
+  context?: string,
+  workspace?: string,
+  dir?: string 
+}
+
 export interface ResolvedContext {
   name: string,
   providerName: string,
   providerUrl: URL,
-  workspace: string
+  workspace: string,
+  dir: string
 }
 
 export interface AuthenticatedContext {

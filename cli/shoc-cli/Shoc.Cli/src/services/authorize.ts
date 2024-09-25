@@ -3,6 +3,7 @@ import http from 'http';
 import crypto from 'crypto';
 import { getFreePort } from '@/services/network';
 import { logger } from '@/services/logger';
+import axios from 'axios';
 
 const AUTH_TIMEOUT_SECONDS = 5 * 60;
 
@@ -32,7 +33,8 @@ export async function getOpenIdConfiguration(idp: URL): Promise<OpenIdConfigurat
     wellKnownUrl.pathname = '/.well-known/openid-configuration'
 
     try {
-        const response = await (await fetch(wellKnownUrl)).json();
+        
+        const response = (await axios.get(wellKnownUrl.toString())).data;
         return {
             authorizationEndpoint: response.authorization_endpoint,
             tokenEndpoint: response.token_endpoint
@@ -40,7 +42,6 @@ export async function getOpenIdConfiguration(idp: URL): Promise<OpenIdConfigurat
     }
     catch (e) {
         const error = e as Error;
-        console.log(error)
         throw Error(`Unable to obtain configuration to start authentication. Details: ${error?.message || 'Unknown Reason'}.`)
     }
 }
@@ -55,19 +56,9 @@ export async function refresh({ idp, accessToken, refreshToken }: { idp: URL, ac
         access_token: accessToken,
     });
 
-    const response = await fetch(openidConfiguration.tokenEndpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body.toString()
-    });
-
-    if (!response.ok) {
-        throw new Error(`Could not extend your session. Please login again.`);
-    }
-
-    const result = await response.json();
+    const response = await axios.post(openidConfiguration.tokenEndpoint, body);
+  
+    const result = response.data;
 
     return {
         accessToken: result.access_token,
@@ -187,19 +178,9 @@ async function exchangeCode({ tokenUrl, code, codeVerifier, redirectUri }: { tok
         code_verifier: codeVerifier,
     });
 
-    const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body.toString()
-    });
+    const response = await axios.post(tokenUrl.toString(), body);
 
-    if (!response.ok) {
-        throw new Error(`Authentication failed as no token was returned.`);
-    }
-
-    const result = await response.json();
+    const result = response.data;
 
     return {
         accessToken: result.access_token,

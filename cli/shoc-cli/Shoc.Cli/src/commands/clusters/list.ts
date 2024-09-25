@@ -13,8 +13,7 @@ clustersListCommand
     .description('List my clusters')
     .action(asyncHandler(async (_, cmd) => {
 
-        const rootOptions = getRootOptions(cmd);
-        const context = await resolveContext(rootOptions.context, rootOptions.workspace);
+        const context = await resolveContext(getRootOptions(cmd));
 
         const workspace = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, context.workspace));
 
@@ -22,7 +21,12 @@ clustersListCommand
         
         logger.just("Available clusters:")
         logger.break()
-        logger.table(result)
+        result.forEach(item => {
+            logger.just(`  - Name: ${item.name}`)
+            logger.just(`    Description: ${item.description || 'N/A'}`)
+            logger.just(`    Status: ${item.status}`)
+            logger.break()
+        });
     }));
 
 

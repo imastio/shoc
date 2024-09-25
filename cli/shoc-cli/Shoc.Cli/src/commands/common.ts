@@ -1,4 +1,4 @@
-import { ResolvedContext } from "@/core/types";
+import { RootOptions } from "@/core/types";
 import { logger } from "@/services/logger";
 import { Command } from "commander";
 
@@ -13,13 +13,14 @@ export function getRootCommand(command: Command) {
     return current;
 }
 
-export function getRootOptions(command: Command): { context?: string, workspace?: string } {
+export function getRootOptions(command: Command): RootOptions {
     const root = getRootCommand(command);
     const opts = root.opts();
 
     return {
         context: opts.context,
-        workspace: opts.workspace
+        workspace: opts.workspace,
+        dir: opts.dir
     }
 }
 

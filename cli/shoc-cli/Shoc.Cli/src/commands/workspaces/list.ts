@@ -11,9 +11,8 @@ const workspacesListCommand = createCommand('list')
 workspacesListCommand
     .description('List my workspaces')
     .action(asyncHandler(async (_, cmd) => {
-
-        const rootOptions = getRootOptions(cmd);
-        const context = await resolveContext(rootOptions.context, rootOptions.workspace);
+        
+        const context = await resolveContext(getRootOptions(cmd));
 
         const result: any[] = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getAll(ctx.token));
         

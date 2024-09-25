@@ -10,8 +10,7 @@ authLogoutCommand
     .description('Logout from the provider')
     .action(asyncHandler(async (_, cmd) => {
 
-        const rootOptions = getRootOptions(cmd);
-        const context = await resolveContext(rootOptions.context, rootOptions.workspace);
+        const context = await resolveContext(getRootOptions(cmd));
 
         await clearSession(context.providerUrl.toString());
         logger.success(`You have been logged out successfully!`);
