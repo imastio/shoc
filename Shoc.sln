@@ -138,6 +138,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Secret.Data.Sql", "app
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Secret", "apps\shoc-secret\Shoc.Secret\Shoc.Secret.csproj", "{5E765F8D-8713-4FA9-B5AF-4C678580C5E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shoc-package", "shoc-package", "{D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Package.Model", "apps\shoc-package\Shoc.Package.Model\Shoc.Package.Model.csproj", "{91581602-0E84-42E2-88EE-22F817F19B89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -360,6 +364,10 @@ Global
 		{5E765F8D-8713-4FA9-B5AF-4C678580C5E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E765F8D-8713-4FA9-B5AF-4C678580C5E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E765F8D-8713-4FA9-B5AF-4C678580C5E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91581602-0E84-42E2-88EE-22F817F19B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91581602-0E84-42E2-88EE-22F817F19B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91581602-0E84-42E2-88EE-22F817F19B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91581602-0E84-42E2-88EE-22F817F19B89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -430,5 +438,7 @@ Global
 		{3EF33CE8-3DE2-4C4C-A443-AAB2058D625B} = {F0B90562-0EA4-4526-9F07-F745575219F3}
 		{D3D6604A-EFD0-4025-A132-2CB945B710D1} = {F0B90562-0EA4-4526-9F07-F745575219F3}
 		{5E765F8D-8713-4FA9-B5AF-4C678580C5E9} = {F0B90562-0EA4-4526-9F07-F745575219F3}
+		{D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE} = {21A6D5CD-1D11-43E0-A84C-82811AA2FF3A}
+		{91581602-0E84-42E2-88EE-22F817F19B89} = {D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE}
 	EndGlobalSection
 EndGlobal
