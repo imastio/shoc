@@ -1,20 +1,35 @@
 {
-  "$id": "https://shoc.dev/schemas/spec-01",
+  "$id": "https://shoc.dev/api/schemas/spec-01",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Base Schema for Dockerfile Variables in Shoc Platform",
+  "type": "object",
   "definitions": {
-    "dockerImageTag": {
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+)?$",
-      "description": "A valid Docker image tag, optionally with a version"
-    },
-    "packageName": {
+    "ImageTag": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9._-]+$",
-      "description": "A valid package name"
+      "description": "A valid Docker image tag (letters, numbers, ., _, or -)."
     },
-    "entrypoint": {
+    "AlpinePackageName": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9/._-]+$",
-      "description": "A valid entrypoint command"
+      "pattern": "^[a-z0-9]+([-.][a-z0-9]+)*$",
+      "description": "A valid Alpine package name (lowercase letters, numbers, ., or -)."
+    },
+    "EntrypointArray": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9/._-]+$",
+        "minLength": 1,
+        "description": "Entrypoint commands must be valid paths or binaries without special characters."
+      },
+      "minItems": 1,
+      "description": "An array of entrypoint commands (must be valid binaries or paths)."
+    },
+    "UserId": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 65535,
+      "description": "A valid user ID (between 1000 and 65535)."
     }
   }
 }

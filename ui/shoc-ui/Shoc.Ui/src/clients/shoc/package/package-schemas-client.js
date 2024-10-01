@@ -14,6 +14,14 @@ export default class PackageSchemasClient extends BaseAxiosClient {
     super("shoc-package", config);
   }
 
+  getAll() {
+    const url = this.urlify({
+      api: `api/schemas`
+    });
+    
+    return this.webClient.get(url);
+  }
+
   get(name) {
     const url = this.urlify({
       api: `api/schemas/${name}`

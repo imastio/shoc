@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getIssuer } from '@/addons/auth/config';
-import { shocApiConfig } from '@/clients/api-config';
 import { shocClient } from '@/clients/shoc';
 import PackageSchemasClient from '@/clients/shoc/package/package-schemas-client';
 import axios from 'axios';
 import ErrorDefinitions from '@/addons/error-handling/error-definitions';
 
-export async function GET(req: NextRequest, { params }: { params: { name: string } }) {
+export async function GET(_: NextRequest, { params }: { params: { name: string } }) {
 
     try {
-
         const { name } = params;
     
         const response = await shocClient(PackageSchemasClient).get(name);

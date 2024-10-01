@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +27,21 @@ public class SchemasController : ControllerBase
     public SchemasController(SchemaProvider schemaProvider)
     {
         this.schemaProvider = schemaProvider;
+    }
+    
+    /// <summary>
+    /// Gets all the available schemas
+    /// </summary>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<IEnumerable<object>> GetAll()
+    {
+        // get names
+        var result = await this.schemaProvider.GetSchemaNames();
+
+        // build objects and return the result
+        return result.Select(name => new { Name = name });
     }
     
     /// <summary>

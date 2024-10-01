@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Shoc.Core;
@@ -10,6 +12,28 @@ namespace Shoc.Package.Services;
 /// </summary>
 public class SchemaProvider
 {
+    /// <summary>
+    /// Gets the names of available schemas
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<string>> GetSchemaNames()
+    {
+        // the target directory
+        var directory = GetSchemasDirectory();
+
+        // no such directory
+        if (!Directory.Exists(directory))
+        {
+            return Task.FromResult(Enumerable.Empty<string>());
+        }
+
+        // gets the directory info
+        var info = new DirectoryInfo(directory);
+
+        // return .json file names inside the directory
+        return Task.FromResult(info.GetFiles().Where(file => file.Name.EndsWith(".json")).Select(file => file.Name.Replace(".json", "")));
+    }
+    
     /// <summary>
     /// Gets the schema or null if not found
     /// </summary>
@@ -60,5 +84,17 @@ public class SchemaProvider
         var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
         return Path.Combine(sourceDirectory, "Schemas", $"{name}.json");
+    }
+
+    /// <summary>
+    /// Gets the schemas directory
+    /// </summary>
+    /// <returns></returns>
+    private static string GetSchemasDirectory()
+    {
+        // get the execution directory
+        var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+
+        return Path.Combine(sourceDirectory, "Schemas");
     }
 }
