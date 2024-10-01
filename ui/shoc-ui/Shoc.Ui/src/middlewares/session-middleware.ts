@@ -2,6 +2,7 @@ import { auth } from "@/addons/auth";
 import { NextContext, NextMiddlewareDelegate, shouldContinueMiddleware } from ".";
 import PUBLIC_PATHS from "@/app/_components/public-paths";
 import { NextResponse } from "next/server";
+import { API_ROUTE_PREFIXES } from "./config/api-routes";
 
 export default async function sessionMiddleware(context: NextContext, next: NextMiddlewareDelegate): Promise<void> {
 
@@ -21,7 +22,7 @@ export default async function sessionMiddleware(context: NextContext, next: Next
     const session = await auth();
 
     // if URL is public or is api url
-    if(isPublic || pathname.startsWith('/api') || pathname.startsWith('/well-known') || pathname.startsWith('/schemas')){
+    if(isPublic || API_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix))){
 
         if (shouldContinueMiddleware(context.response)) {
             await next(context)

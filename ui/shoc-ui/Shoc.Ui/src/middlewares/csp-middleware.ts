@@ -1,4 +1,5 @@
 import { NextContext, NextMiddlewareDelegate, shouldContinueMiddleware } from ".";
+import { API_ROUTE_PREFIXES } from "./config/api-routes";
 
 // allowed scripts
 const scriptSrc = [
@@ -26,7 +27,7 @@ const frameSrc = [
 export default async function cspMiddleware(context: NextContext, next: NextMiddlewareDelegate): Promise<void> {
 
     // skip /api and /handle routes
-    if (context.request.nextUrl.pathname.startsWith('/api')) {
+    if (API_ROUTE_PREFIXES.some(prefix => context.request.nextUrl.pathname.startsWith(prefix))) {
         await next(context);
         return;
     }
