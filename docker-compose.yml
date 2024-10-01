@@ -250,6 +250,27 @@ services:
     networks:
       - shoc-network
 
+  shoc-package:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-package:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-package/Shoc.Package
+    container_name: shoc-package
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-package.env
+    ports:
+      - '11150:11150'
+      - '11151:11151'
+      - '11152:11152'
+      - '11153:11153'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
+
 
     
   

@@ -27,6 +27,7 @@ $AllServices = @(
     "shoc-registry",
     "shoc-cluster",
     "shoc-secret",
+    "shoc-package"
     "shoc-webgtw",
     "shoc-ingress"
 )

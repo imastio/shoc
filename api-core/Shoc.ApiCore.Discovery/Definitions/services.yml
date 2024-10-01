@@ -173,3 +173,20 @@ services:
       - protocol: https
         roles: [ 'grpc' ]
         port: 11147
+        
+  # Secret service ports [11150 - 11155]
+  shoc-package:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11150
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11151
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11152
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11153

@@ -7,7 +7,7 @@
   <Import Project="../../../Shoc.Shared.proj" />
 
   <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer" Version="7.0.4" />
+    <PackageReference Include="Duende.IdentityServer" Version="7.0.6" />
   </ItemGroup>
 
   <ItemGroup>
