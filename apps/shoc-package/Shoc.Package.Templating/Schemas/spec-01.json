@@ -1,0 +1,20 @@
+{
+  "$id": "https://shoc.dev/schemas/spec-01",
+  "definitions": {
+    "dockerImageTag": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+)?$",
+      "description": "A valid Docker image tag, optionally with a version"
+    },
+    "packageName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]+$",
+      "description": "A valid package name"
+    },
+    "entrypoint": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9/._-]+$",
+      "description": "A valid entrypoint command"
+    }
+  }
+}
