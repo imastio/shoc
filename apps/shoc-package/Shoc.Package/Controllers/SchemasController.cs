@@ -22,7 +22,7 @@ public class SchemasController : ControllerBase
     private readonly SchemaProvider schemaProvider;
     
     /// <summary>
-    /// Creates new instance of access definitions controller
+    /// Creates new instance of the controller
     /// </summary>
     public SchemasController(SchemaProvider schemaProvider)
     {

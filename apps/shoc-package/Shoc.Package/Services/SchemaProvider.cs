@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Shoc.Core;
+using Shoc.Package.Templating.Model;
 
 namespace Shoc.Package.Services;
 
@@ -31,7 +32,7 @@ public class SchemaProvider
         var info = new DirectoryInfo(directory);
 
         // return .json file names inside the directory
-        return Task.FromResult(info.GetFiles().Where(file => file.Name.EndsWith(".json")).Select(file => file.Name.Replace(".json", "")));
+        return Task.FromResult(info.GetFiles().Where(file => file.Name.EndsWith(TemplatingConstants.SCHEMA_EXTENSION)).Select(file => file.Name.Replace(TemplatingConstants.SCHEMA_EXTENSION, "")));
     }
     
     /// <summary>
@@ -83,7 +84,7 @@ public class SchemaProvider
         // get the execution directory
         var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
-        return Path.Combine(sourceDirectory, "Schemas", $"{name}.json");
+        return Path.Combine(sourceDirectory, TemplatingConstants.SCHEMAS_DIRECTORY, $"{name}{TemplatingConstants.SCHEMA_EXTENSION}");
     }
 
     /// <summary>
@@ -95,6 +96,6 @@ public class SchemaProvider
         // get the execution directory
         var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
-        return Path.Combine(sourceDirectory, "Schemas");
+        return Path.Combine(sourceDirectory, TemplatingConstants.SCHEMAS_DIRECTORY);
     }
 }

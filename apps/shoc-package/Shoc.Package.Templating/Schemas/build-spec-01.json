@@ -1,5 +1,5 @@
 {
-  "$id": "https://shoc.dev/api/schemas/spec-01",
+  "$id": "https://shoc.dev/api/schemas/build-spec-01",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Base Schema for Dockerfile Variables in Shoc Platform",
   "type": "object",
@@ -19,7 +19,6 @@
       "items": {
         "type": "string",
         "pattern": "^[a-zA-Z0-9/._-]+$",
-        "minLength": 1,
         "description": "Entrypoint commands must be valid paths or binaries without special characters."
       },
       "minItems": 1,

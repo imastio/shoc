@@ -8,7 +8,7 @@ import { asyncHandler } from "../common";
 const configInitCommand = createCommand('init')
 
 configInitCommand
-    .description('Initialize the configuration ')
+    .description('Initialize the configuration')
     .action(asyncHandler(async (options) => {
 
         const existing = await loadConfig();

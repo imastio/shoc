@@ -28,6 +28,8 @@ builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddSingleton<SchemaProvider>();
+builder.Services.AddSingleton<TemplateProvider>();
+builder.Services.AddSingleton<TemplateBuildSpecGenerator>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 
