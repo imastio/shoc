@@ -2,6 +2,9 @@ import { RootOptions } from "@/core/types";
 import { logger } from "@/services/logger";
 import { Command } from "commander";
 
+export const DEFAULT_BUILD_FILE = 'build.shoc.yaml'
+export const DEFAULT_RUN_FILE = 'run.shoc.yaml'
+
 export function getRootCommand(command: Command) {
 
     let current = command;

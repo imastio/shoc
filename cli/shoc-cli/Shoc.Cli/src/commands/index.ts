@@ -6,6 +6,7 @@ import workspacesCommand from './workspaces';
 import clustersCommand from './clusters';
 import userSecretsCommand from './user-secrets';
 import workspaceSecretsCommand from './workspace-secrets';
+import templatesCommand from './templates';
 
 const program = createCommand();
 
@@ -20,6 +21,7 @@ program
 
 program.addCommand(configCommand);
 program.addCommand(authCommand);
+program.addCommand(templatesCommand);
 program.addCommand(workspacesCommand);
 program.addCommand(clustersCommand);
 program.addCommand(userSecretsCommand);

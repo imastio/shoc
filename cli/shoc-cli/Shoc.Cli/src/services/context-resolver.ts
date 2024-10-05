@@ -1,6 +1,8 @@
 import { ResolvedContext, RootOptions } from "@/core/types";
 import { loadConfig } from "./config";
 import axios from "axios";
+import fs from "fs";
+
 
 export default async function resolveContext(options: RootOptions): Promise<ResolvedContext> {
 
@@ -28,12 +30,26 @@ export default async function resolveContext(options: RootOptions): Promise<Reso
         throw new Error(`The provider ${provider.name} has invalid URL (${provider.url})`);
     }
 
+    let resolvedDir = dir ?? process.cwd()
+
+    if(resolvedDir.endsWith('/')){
+        resolvedDir.substring(0, resolvedDir.length - 1)
+    }
+
+    if(!fs.existsSync(resolvedDir)){
+        throw new Error(`The directory ${resolvedDir} does not exist`)
+    }
+
+    if(!fs.lstatSync(resolvedDir).isDirectory()){
+        throw new Error(`The path ${resolvedDir} is not a directory`)
+    }
+
     return {
         name: ctx.name,
         providerName: provider.name,
         providerUrl: new URL(provider.url),
         workspace: workspace ?? ctx.workspace,
-        dir: dir ?? process.cwd()
+        dir: resolvedDir
     };
 }
 
