@@ -24,10 +24,12 @@
   "keywords": [],
   "dependencies": {
     "@dotenvx/dotenvx": "^1.14.1",
+    "archiver": "^7.0.1",
     "axios": "^1.7.7",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "figlet": "^1.7.0",
+    "glob": "^11.0.0",
     "jose": "^5.9.3",
     "keytar": "^7.9.0",
     "net": "^1.0.2",

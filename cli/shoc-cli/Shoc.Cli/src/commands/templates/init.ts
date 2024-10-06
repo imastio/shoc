@@ -28,7 +28,8 @@ templatesInitCommand
 
         const buildObject = {
             template: `${name}:${variant}`,
-            spec: spec
+            spec: spec,
+            ignore: []
         }
 
         const targetBuildFile = `${context.dir}/${DEFAULT_BUILD_FILE}`
