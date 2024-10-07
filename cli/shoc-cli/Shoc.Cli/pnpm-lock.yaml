@@ -48,6 +48,9 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
     devDependencies:
+      '@types/archiver':
+        specifier: ^6.0.2
+        version: 6.0.2
       '@types/figlet':
         specifier: ^1.5.8
         version: 1.5.8
@@ -332,6 +335,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@types/archiver@6.0.2':
+    resolution: {integrity: sha512-KmROQqbQzKGuaAbmK+ZcytkJ51+YqDa7NmbXjmtC5YBLSyQYo21YaUnQ3HbaPFKL1ooo6RQ6OPYPIDyxfpDDXw==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -343,6 +349,9 @@ packages:
 
   '@types/prompts@2.4.9':
     resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
+
+  '@types/readdir-glob@1.1.5':
+    resolution: {integrity: sha512-raiuEPUYqXu+nvtY2Pe8s8FEmZ3x5yAH4VkLdihcPdalvsHltomrRC9BzuStrJ9yk06470hS0Crw0f1pXqD+Hg==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -1310,6 +1319,10 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.22.4':
     optional: true
 
+  '@types/archiver@6.0.2':
+    dependencies:
+      '@types/readdir-glob': 1.1.5
+
   '@types/estree@1.0.5': {}
 
   '@types/figlet@1.5.8': {}
@@ -1322,6 +1335,10 @@ snapshots:
     dependencies:
       '@types/node': 22.6.1
       kleur: 3.0.3
+
+  '@types/readdir-glob@1.1.5':
+    dependencies:
+      '@types/node': 22.6.1
 
   abort-controller@3.0.0:
     dependencies:
