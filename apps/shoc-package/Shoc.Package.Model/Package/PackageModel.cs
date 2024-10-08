@@ -23,9 +23,19 @@ public class PackageModel
     public string Checksum { get; set; }
     
     /// <summary>
-    /// The build specification
+    /// The reference to the base template
     /// </summary>
-    public string BuildSpec { get; set; }
+    public string TemplateReference { get; set; }
+    
+    /// <summary>
+    /// The effective dockerfile of the package
+    /// </summary>
+    public string Dockerfile { get; set; }
+    
+    /// <summary>
+    /// The registry id
+    /// </summary>
+    public string RegistryId { get; set; }
     
     /// <summary>
     /// The full url to the image

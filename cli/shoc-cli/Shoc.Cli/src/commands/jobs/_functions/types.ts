@@ -1,4 +1,4 @@
-export interface BuildObject {
+export interface BuildManifest {
     template: string,
     spec: any,
     ignore: string[] | undefined
@@ -14,8 +14,8 @@ export interface BuildFileEntry extends FileEntry{
     localPath: string
 }
 
-export interface BuildObjectResult {
-    buildObject: BuildObject,
+export interface BuildManifestResult {
+    manifest: BuildManifest,
     buildFile: FileEntry
 }
 

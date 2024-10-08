@@ -1,4 +1,5 @@
 {
+  "$id": "https://shoc.dev/api/templates/alpine/variants/default/build-spec",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "The schema of specification for 'alpine' package for Shoc Platform",
   "type": "object",

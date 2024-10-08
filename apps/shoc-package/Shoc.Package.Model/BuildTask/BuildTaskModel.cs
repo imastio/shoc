@@ -18,19 +18,19 @@ public class BuildTaskModel
     public string WorkspaceId { get; set; }
     
     /// <summary>
-    /// The class of the build 
+    /// The build task type
     /// </summary>
-    public string Class { get; set; }
-    
-    /// <summary>
-    /// The build specification
-    /// </summary>
-    public string Spec { get; set; }
+    public string Provider { get; set; }
     
     /// <summary>
     /// The status of the build task
     /// </summary>
     public string Status { get; set; }
+    
+    /// <summary>
+    /// The build manifest (template, spec, etc.)
+    /// </summary>
+    public string Manifest { get; set; }
     
     /// <summary>
     /// The deadline of the current status

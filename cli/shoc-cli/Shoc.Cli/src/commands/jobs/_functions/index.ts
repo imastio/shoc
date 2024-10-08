@@ -4,7 +4,7 @@ import fsDirect from "fs";
 import path from "path";
 import * as YAML from 'yaml';
 import { promises as fs } from 'fs';
-import { BuildFileEntry, BuildListing, BuildObject, BuildObjectResult, FileEntry } from "./types";
+import { BuildFileEntry, BuildListing, BuildManifest, BuildManifestResult, FileEntry } from "./types";
 import { glob, Path } from "glob";
 import crypto from "crypto"
 import os from "os";
@@ -30,23 +30,23 @@ async function getBuildFile(context: ResolvedContext, options: any): Promise<Fil
     }
 }
 
-export async function getBuildObject(context: ResolvedContext, options: any): Promise<BuildObjectResult> {
+export async function getBuildManifest(context: ResolvedContext, options: any): Promise<BuildManifestResult> {
 
     const targetBuildFile = await getBuildFile(context, options);
 
     const file = await fs.readFile(targetBuildFile.fullPath, 'utf8');
 
     return {
-        buildObject: YAML.parse(file) as BuildObject,
+        manifest: YAML.parse(file) as BuildManifest,
         buildFile: targetBuildFile
     };
 }
 
-export async function getBuildListing(context: ResolvedContext, buildObject: BuildObject) : Promise<BuildListing>{
+export async function getBuildListing(context: ResolvedContext, manifest: BuildManifest) : Promise<BuildListing>{
     const list: Path[] = await glob(
         '**/*',
         {
-            ignore: [...DEFAULT_IGNORE_PATTERNS, ...(buildObject.ignore || [])],
+            ignore: [...DEFAULT_IGNORE_PATTERNS, ...(manifest.ignore || [])],
             cwd: context.dir,
             nodir: true,
             withFileTypes: true

@@ -7,7 +7,7 @@ import { shocClient } from "@/clients/shoc";
 import TemplatesClient from "@/clients/shoc/package/templates-client";
 import fs from "fs";
 import { stringify as yamlStringify } from 'yaml';
-
+import { BuildManifest } from "../jobs/_functions/types";
 
 const templatesInitCommand = createCommand('init')
 
@@ -26,7 +26,7 @@ templatesInitCommand
     
         logger.info(`Initializing the template in the current directory (${context.dir})...`)
 
-        const buildObject = {
+        const buildObject: BuildManifest = {
             template: `${name}:${variant}`,
             spec: spec,
             ignore: []
