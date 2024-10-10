@@ -16,6 +16,8 @@ jobsBuildCommand
         const { files } = await getBuildListing(context, manifest);
 
         const hash = computeListingHash(buildFile, files);
+        
+        console.log("Hash computed", { hash, length: hash.length })
 
         const zip = await createZip(files);
 

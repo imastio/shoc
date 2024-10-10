@@ -7,6 +7,44 @@
   <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
 
   <OperationGroup Name="Package">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `pkg_packages`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Updated` Desc;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `pkg_packages`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `pkg_packages`
+        (`Id`, `WorkspaceId`, `UserId`, `Scope`, `Manifest`, `Runtime`, `ListingChecksum`, `Dockerfile`, `TemplateReference`, `RegistryId`, `Image`)
+        VALUES
+        (@Id, @WorkspaceId, @UserId, @Scope, @Manifest, @Runtime, @ListingChecksum, @Dockerfile, @TemplateReference, @RegistryId, @Image);
+
+        SELECT * FROM `pkg_packages`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `pkg_packages` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `pkg_packages` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
   </OperationGroup>
 
 </DataOperations>

@@ -9,6 +9,12 @@ namespace Shoc.Package.Templating.Modules;
 /// </summary>
 public class LocalSchemaResolver : JSchemaUrlResolver
 {
+    /// <summary>
+    /// Gets the schema resource
+    /// </summary>
+    /// <param name="context">The context</param>
+    /// <param name="reference">The schema reference</param>
+    /// <returns></returns>
     public override Stream GetSchemaResource(ResolveSchemaContext context, SchemaReference reference)
     {
         // schema is not referenced with base URI

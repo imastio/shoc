@@ -9,6 +9,8 @@ using Shoc.DataProtection;
 using Shoc.DataProtection.Sql;
 using Shoc.ObjectAccess.Sql.Workspace;
 using Shoc.ObjectAccess.Workspace;
+using Shoc.Package.Data;
+using Shoc.Package.Data.Sql;
 
 namespace Shoc.Package.Config;
 
@@ -43,6 +45,8 @@ public static class DataConfiguration
         services.AddSingleton<IProtectionKeyRepository, ProtectionKeyRepository>();
         services.AddSingleton<IAccessRepository, AccessRepository>();
         services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
+        services.AddSingleton<IPackageRepository, PackageRepository>();
+        services.AddSingleton<IBuildTaskRepository, BuildTaskRepository>();
             
         // chain services
         return services;

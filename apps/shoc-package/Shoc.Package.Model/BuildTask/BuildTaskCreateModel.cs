@@ -3,9 +3,9 @@ using System;
 namespace Shoc.Package.Model.BuildTask;
 
 /// <summary>
-/// The build task model
+/// The build task create
 /// </summary>
-public class BuildTaskModel
+public class BuildTaskCreateModel
 {
     /// <summary>
     /// The object id
@@ -51,24 +51,4 @@ public class BuildTaskModel
     /// The scope of the target package
     /// </summary>
     public string TargetScope { get; set; }
-    
-    /// <summary>
-    /// The target package id on success
-    /// </summary>
-    public string TargetPackageId { get; set; }
-    
-    /// <summary>
-    /// The error code if any
-    /// </summary>
-    public string ErrorCode { get; set; }
-    
-    /// <summary>
-    /// The creation time
-    /// </summary>
-    public DateTime Created { get; set; }
-    
-    /// <summary>
-    /// The update time
-    /// </summary>
-    public DateTime Updated { get; set; }
 }

@@ -3,8 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Schema;
 using Shoc.Core;
 using Shoc.Package.Templating.Model;
+using Shoc.Package.Templating.Modules;
 
 namespace Shoc.Package.Services;
 
@@ -87,6 +89,18 @@ public class TemplateProvider
         
         // read the file and return
         return File.ReadAllTextAsync(path);
+    }
+    
+    /// <summary>
+    /// Gets the build spec by template name and variant
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="variant"></param>
+    /// <returns></returns>
+    public async Task<JSchema> GetBuildSpecSchemaByName(string name, string variant)
+    {
+        // read the file and return
+        return JSchema.Parse(await this.GetBuildSpecByName(name, variant), new LocalSchemaResolver());
     }
     
     /// <summary>

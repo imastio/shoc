@@ -42,7 +42,10 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
                 WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
                 WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
-                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
+                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
+                WorkspacePermissions.WORKSPACE_BUILD_PACKAGE,
+                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE
             }
         },
         {
@@ -56,7 +59,10 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
                 WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
                 WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
-                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
+                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET,
+                WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
+                WorkspacePermissions.WORKSPACE_BUILD_PACKAGE,
+                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE
             }
         },
         {
@@ -64,10 +70,7 @@ public class WorkspacePermissionCalculator
             new HashSet<string>
             {
                 WorkspacePermissions.WORKSPACE_VIEW,
-                WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS,
-                WorkspacePermissions.WORKSPACE_CREATE_USER_SECRET,
-                WorkspacePermissions.WORKSPACE_UPDATE_USER_SECRET,
-                WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET
+                WorkspacePermissions.WORKSPACE_LIST_PACKAGES
             }
         }
     };

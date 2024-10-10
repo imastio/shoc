@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Package.BuildTask">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `pkg_build_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Updated` Desc;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `pkg_build_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `pkg_build_tasks`
+        (`Id`, `WorkspaceId`, `UserId`, `Provider`, `Manifest`, `ListingChecksum`, `Status`, `Deadline`)
+        VALUES
+        (@Id, @WorkspaceId, @UserId, @Provider, @Manifest, @ListingChecksum, @Status, @Deadline);
+
+        SELECT * FROM `pkg_build_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateById">
+      <TextCommand>
+        UPDATE `pkg_build_tasks`
+        SET
+        `Status` = @Status,
+        `Deadline` = @Deadline,
+        `TargetPackageId` = @TargetPackageId,
+        `ErrorCode` = @ErrorCode
+        WHERE
+        `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+        SELECT * FROM `pkg_build_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `pkg_build_tasks` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `pkg_build_tasks` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

@@ -60,11 +60,6 @@ public class WorkspacePermissions
     public const string WORKSPACE_DELETE_INVITATION = "workspace_delete_invitation";
     
     /// <summary>
-    /// View secrets of the workspace
-    /// </summary>
-    public const string WORKSPACE_LIST_SECRETS = "workspace_list_secrets";
-    
-    /// <summary>
     /// View clusters of the workspace
     /// </summary>
     public const string WORKSPACE_LIST_CLUSTERS = "workspace_list_clusters";
@@ -83,6 +78,11 @@ public class WorkspacePermissions
     /// Delete cluster of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_CLUSTER = "workspace_delete_cluster";
+    
+    /// <summary>
+    /// View secrets of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_SECRETS = "workspace_list_secrets";
     
     /// <summary>
     /// Create secret of the workspace
@@ -118,6 +118,21 @@ public class WorkspacePermissions
     /// Delete user secret of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_USER_SECRET = "workspace_delete_user_cluster";
+    
+    /// <summary>
+    /// View packages of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_PACKAGES = "workspace_list_packages";
+    
+    /// <summary>
+    /// Create package of the workspace
+    /// </summary>
+    public const string WORKSPACE_BUILD_PACKAGE = "workspace_build_package";
+    
+    /// <summary>
+    /// Delete package of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_PACKAGE = "workspace_delete_package";
         
     /// <summary>
     /// Get and initialize all the constants

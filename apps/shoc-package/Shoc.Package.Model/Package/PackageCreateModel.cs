@@ -5,7 +5,7 @@ namespace Shoc.Package.Model.Package;
 /// <summary>
 /// The package model
 /// </summary>
-public class PackageModel
+public class PackageCreateModel
 {
     /// <summary>
     /// The object id
@@ -61,14 +61,4 @@ public class PackageModel
     /// The full url to the image
     /// </summary>
     public string Image { get; set; }
-    
-    /// <summary>
-    /// The creation time
-    /// </summary>
-    public DateTime Created { get; set; }
-    
-    /// <summary>
-    /// The update time
-    /// </summary>
-    public DateTime Updated { get; set; }
 }
