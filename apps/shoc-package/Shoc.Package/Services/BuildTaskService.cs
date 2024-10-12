@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Serialization;
+using Scriban;
 using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Package.Data;
@@ -13,6 +16,7 @@ using Shoc.Package.Model;
 using Shoc.Package.Model.BuildTask;
 using Shoc.Package.Model.Package;
 using Shoc.Package.Templating.Model;
+using Shoc.Registry.Grpc.Registries;
 
 namespace Shoc.Package.Services;
 
@@ -24,7 +28,12 @@ public class BuildTaskService
     /// <summary>
     /// The name of the default variant
     /// </summary>
-    public const string DEFAULT_TEMPLATE_VARIANT = "default";
+    private const string DEFAULT_TEMPLATE_VARIANT = "default";
+
+    /// <summary>
+    /// The special generated dockerfile for the build
+    /// </summary>
+    private const string SHOC_DOCKERFILE_NAME = "Dockerfile.g.shoc";
     
     /// <summary>
     /// The deadline of object creation
@@ -40,11 +49,6 @@ public class BuildTaskService
     /// The package repository
     /// </summary>
     private readonly IPackageRepository packageRepository;
-
-    /// <summary>
-    /// The schema provider
-    /// </summary>
-    private readonly SchemaProvider schemaProvider;
 
     /// <summary>
     /// The template provider
@@ -66,15 +70,13 @@ public class BuildTaskService
     /// </summary>
     /// <param name="buildTaskRepository">The build task repository</param>
     /// <param name="packageRepository">The package repository</param>
-    /// <param name="schemaProvider">The schema provider</param>
     /// <param name="templateProvider">The template provider</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
     /// <param name="validationService">The validation service</param>
-    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, SchemaProvider schemaProvider, TemplateProvider templateProvider, IGrpcClientProvider grpcClientProvider, ValidationService validationService)
+    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, TemplateProvider templateProvider, IGrpcClientProvider grpcClientProvider, ValidationService validationService)
     {
         this.buildTaskRepository = buildTaskRepository;
         this.packageRepository = packageRepository;
-        this.schemaProvider = schemaProvider;
         this.templateProvider = templateProvider;
         this.grpcClientProvider = grpcClientProvider;
         this.validationService = validationService;
@@ -103,7 +105,15 @@ public class BuildTaskService
         await this.validationService.RequireWorkspace(workspaceId);
 
         // get from the storage
-        return await this.buildTaskRepository.GetById(workspaceId, id);
+        var result = await this.buildTaskRepository.GetById(workspaceId, id);
+
+        // ensure object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        return result;
     }
     
     /// <summary>
@@ -133,55 +143,234 @@ public class BuildTaskService
         ValidateProvider(input.Provider);
         
         // validate target scope
-        ValidateScope(input.TargetScope);
+        ValidateScope(input.Scope);
         
         // validate the checksum
         ValidateListingChecksum(input.ListingChecksum);
 
         // deserialize the manifest
         var manifest = DeserializeManifest(input.Manifest);
-
+        
         // gets the template reference
         var templateReference = GetTemplateReference(manifest.Template);
+        
+        // assign the template reference
+        input.TemplateReference = $"{templateReference.Template}:{templateReference.Variant}";
 
         // get the build spec schema
         var buildSpecSchema = await this.GetBuildSpecSchema(templateReference.Template, templateReference.Variant);
         
         // validate the spec against the schema
         ValidateBuildSpec(buildSpecSchema, manifest.Spec);
-        
-        input.
-        
-        // try getting object by name
-        var existing = await this.secretRepository.GetByName(workspaceId, input.Name);
 
-        // if object by name exists
-        if (existing != null)
+        // get the runtime object
+        var runtime = await this.GetRuntime(templateReference.Template, templateReference.Variant);
+
+        // serialize and store the runtime (ensure camel case)
+        input.Runtime = JsonConvert.SerializeObject(runtime, new JsonSerializerSettings
         {
-            throw ErrorDefinition.Validation(SecretErrors.EXISTING_NAME).AsException();
-        }
-        
-        // create a protector
-        var protector = this.protectionProvider.Create();
-        
-        // encrypt if needed
-        input.Value = input.Encrypted ? protector.Protect(input.Value) : input.Value;
+            ContractResolver = new CamelCasePropertyNamesContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy
+                {
+                    ProcessDictionaryKeys = false
+                }
+            }
+        });
+
+        // get the dockerfile template
+        var dockerfileTemplate = await this.GetTemplate(templateReference.Template, templateReference.Variant);
+
+        // render dockerfile based on the template and specification
+        input.Dockerfile = await RenderDockerfile(dockerfileTemplate, manifest.Spec);
+
+        // gets the registry to store the image
+        input.RegistryId = await this.GetDefaultRegistryId(workspaceId);
         
         // create object in the storage
-        return await this.secretRepository.Create(workspaceId, input);
+        return await this.buildTaskRepository.Create(workspaceId, input);
+    }
+
+    /// <summary>
+    /// Updates the bundle by id
+    /// </summary>
+    /// <param name="userId">The acting user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <param name="file">The file</param>
+    /// <returns></returns>
+    public async Task<BuildTaskModel> UpdateBundleById(string userId, string workspaceId, string id, Stream file)
+    {
+        // get and require existing object
+        var existing = await this.GetById(workspaceId, id);
+
+        // the user performing the operation is different
+        if (existing.UserId != userId)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.USER_MISMATCH).AsException();
+        }
+        
+        // check if status is not in a creating status then error
+        if (existing.Status != BuildTaskStatuses.CREATING)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.UNEXPECTED_OPERATION).AsException();
+        }
+
+        // the build has expired in creation status
+        if (existing.Deadline < DateTime.UtcNow)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.EXPIRED_BUILD_TASK).AsException();
+        }
+
+        // check the provider
+        if (existing.Provider != BuildTaskProviders.REMOTE)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_BUILD_PROVIDER).AsException();
+        }
+
+        // empty file for zip
+        var zipFile = Path.GetTempFileName();
+        
+        try
+        {
+            await using var zipStream = new FileStream(zipFile, FileMode.OpenOrCreate, FileAccess.Write);
+            await file.CopyToAsync(zipStream);
+        }
+        catch (Exception ex)
+        {
+            // ensure file is deleted
+            File.Delete(zipFile);
+            
+            // rethrow with proper exception
+            throw ErrorDefinition.Validation(PackageErrors.UPLOAD_ERROR, ex.Message).AsException();
+        }
+
+        // create a root directory for the build
+        var rootDir = Directory.CreateTempSubdirectory("build_");
+
+        try
+        {
+            ZipFile.ExtractToDirectory(zipFile, rootDir.FullName);
+        }
+        catch (Exception ex)
+        {
+            // delete directory on error (recursive)
+            rootDir.Delete(true);
+            
+            // rethrow with proper exception
+            throw ErrorDefinition.Validation(PackageErrors.UNZIP_ERROR, ex.Message).AsException();
+        }
+        finally
+        {
+            // zip file should be deleted anyways
+            File.Delete(zipFile);
+        }
+
+        // write dockerfile
+        await File.WriteAllTextAsync(Path.Combine(rootDir.FullName, SHOC_DOCKERFILE_NAME), existing.Dockerfile);
+
+        // update the status
+        return await this.buildTaskRepository.UpdateById(workspaceId, id, new BuildTaskUpdateModel
+        {
+            WorkspaceId = workspaceId,
+            Id = id,
+            Status = BuildTaskStatuses.BUILDING,
+            Deadline = DateTime.UtcNow.AddHours(10),
+            ErrorCode = null,
+            PackageId = null
+        });
+    }
+
+    /// <summary>
+    /// Gets the registry to store the package
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <returns></returns>
+    protected async Task<string> GetDefaultRegistryId(string workspaceId)
+    {
+        // try getting object
+        try {
+            var result = await this.grpcClientProvider
+                .Get<WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcClient>()
+                .DoAuthorized(async (client, metadata) => await client.GetByWorkspaceIdAsync(new GetWorkspaceDefaultRegistryRequest{WorkspaceId = workspaceId}, metadata));
+
+            return result.Registry.Id;
+        }
+        catch(Exception)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY).AsException();
+        }
+    }
+
+    /// <summary>
+    /// Renders the given template with the given spec
+    /// </summary>
+    /// <param name="dockerfileTemplate">The template content</param>
+    /// <param name="spec">The specification to render</param>
+    /// <returns></returns>
+    private static async Task<string> RenderDockerfile(string dockerfileTemplate, Dictionary<string, object> spec)
+    {
+        try
+        {
+            // parse the template file
+            var parsed = Template.Parse(dockerfileTemplate);
+
+            // render with spec
+            return await parsed.RenderAsync(spec);
+        }
+        catch (Exception e)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.RENDER_FAILURE, e.Message).AsException();
+        }
+    }
+
+    /// <summary>
+    /// Gets the valid runtime for the template
+    /// </summary>
+    /// <param name="name">The template name</param>
+    /// <param name="variant">The template variant</param>
+    /// <returns></returns>
+    protected async Task<TemplateRuntimeModel> GetRuntime(string name, string variant)
+    {
+        try
+        {
+            return await this.templateProvider.GetRuntimeByName(name, variant);
+        }
+        catch (Exception e)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_RUNTIME, e.Message).AsException();
+        }
     }
     
+    /// <summary>
+    /// Gets the valid runtime for the template
+    /// </summary>
+    /// <param name="name">The template name</param>
+    /// <param name="variant">The template variant</param>
+    /// <returns></returns>
+    protected async Task<string> GetTemplate(string name, string variant)
+    {
+        try
+        {
+            return await this.templateProvider.GetTemplateByName(name, variant);
+        }
+        catch (Exception e)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_DOCKERFILE_TEMPLATE, e.Message).AsException();
+        }
+    }
+
     /// <summary>
     /// Gets the build spec schema
     /// </summary>
     /// <param name="name">The name of the template</param>
     /// <param name="variant">The template variant</param>
     /// <returns></returns>
-    protected Task<JSchema> GetBuildSpecSchema(string name, string variant)
+    protected async Task<JSchema> GetBuildSpecSchema(string name, string variant)
     {
         try
         {
-            return this.templateProvider.GetBuildSpecSchemaByName(name, variant);
+            return await this.templateProvider.GetBuildSpecSchemaByName(name, variant);
         }
         catch (Exception)
         {
@@ -204,7 +393,7 @@ public class BuildTaskService
         
         // parse the object
         var specObject = JObject.FromObject(spec);
-
+        
         // check if not valid
         if (!specObject.IsValid(schema, out IList<ValidationError> errors))
         {
@@ -269,6 +458,7 @@ public class BuildTaskService
 
         try
         {
+            // using Newtonsoft to make sure Dictionary<string, object> has simple values not Json Elements
             return JsonConvert.DeserializeObject<BuildManifestModel>(manifest);
         }
         catch (Exception e)
@@ -311,4 +501,5 @@ public class BuildTaskService
             Variant = variant
         };
     }
+
 }

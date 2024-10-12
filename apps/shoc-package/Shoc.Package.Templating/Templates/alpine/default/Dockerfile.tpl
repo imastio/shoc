@@ -1,8 +1,8 @@
 # Use the base image "alpine" with a configurable tag (default to latest)
-FROM alpine:{{ tag || "latest" }}
+FROM alpine:{{ tag ?? "latest" }}
 
 # Define environment variables for user and group IDs with a default value for appUid
-ENV APP_UID={{ appUid || 1234 }}
+ENV APP_UID={{ appUid ?? 1234 }}
 
 # Create a non-root user with a specific UID and GID
 RUN addgroup \

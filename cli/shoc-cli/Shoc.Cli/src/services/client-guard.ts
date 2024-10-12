@@ -46,7 +46,11 @@ function transformError(error: any): Error {
 
         if (isShocError && error.response?.data?.errors) {
             const first = error.response.data.errors[0]
-            return Error(first?.message || resolveError(first?.code || ''))
+            if(first?.message){
+                return Error(`${first.message} (${first.code})`)
+            }
+
+            return Error(resolveError(first?.code || ''))
         }
     }
 

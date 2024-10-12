@@ -30,7 +30,7 @@ public class BuildTaskUpdateModel
     /// <summary>
     /// The target package id on success
     /// </summary>
-    public string TargetPackageId { get; set; }
+    public string PackageId { get; set; }
     
     /// <summary>
     /// The error code if any

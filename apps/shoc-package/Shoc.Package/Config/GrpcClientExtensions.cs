@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shoc.ApiCore.GrpcClient;
 using Shoc.Identity.Grpc.Users;
+using Shoc.Registry.Grpc.Registries;
 using Shoc.Workspace.Grpc.Workspaces;
 
 namespace Shoc.Package.Config;
@@ -19,6 +20,7 @@ public static class GrpcClientExtensions
         services.AddDiscoverableGrpcClient("shoc-identity", invoker => new UserServiceGrpc.UserServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-workspace", invoker => new WorkspaceServiceGrpc.WorkspaceServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-workspace", invoker => new WorkspaceMemberServiceGrpc.WorkspaceMemberServiceGrpcClient(invoker));
+        services.AddDiscoverableGrpcClient("shoc-registry", invoker => new WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcClient(invoker));
         return services;
     }
 }

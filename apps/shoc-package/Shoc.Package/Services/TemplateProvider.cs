@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using Shoc.Core;
 using Shoc.Package.Templating.Model;
@@ -101,6 +102,54 @@ public class TemplateProvider
     {
         // read the file and return
         return JSchema.Parse(await this.GetBuildSpecByName(name, variant), new LocalSchemaResolver());
+    }
+    
+    /// <summary>
+    /// Gets the build spec by template name and variant
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="variant"></param>
+    /// <returns></returns>
+    public async Task<TemplateRuntimeModel> GetRuntimeByName(string name, string variant)
+    {
+        // the target file path
+        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.RUNTIME_FILE);
+        
+        // the build spec file for the given template and variant
+        var runtime = new FileInfo(path);
+
+        // ensure exists
+        if (!runtime.Exists)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // read the file and return
+        return JsonConvert.DeserializeObject<TemplateRuntimeModel>(await File.ReadAllTextAsync(runtime.FullName));
+    }
+    
+    /// <summary>
+    /// Gets the build spec by template name and variant
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="variant"></param>
+    /// <returns></returns>
+    public Task<string> GetTemplateByName(string name, string variant)
+    {
+        // the target file path
+        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.DOCKERFILE_TEMPLATE_FILE);
+        
+        // the build spec file for the given template and variant
+        var runtime = new FileInfo(path);
+
+        // ensure exists
+        if (!runtime.Exists)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // read the file and return
+        return File.ReadAllTextAsync(runtime.FullName);
     }
     
     /// <summary>

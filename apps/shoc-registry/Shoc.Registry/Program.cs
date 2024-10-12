@@ -7,9 +7,11 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
+using Shoc.ApiCore.Grpc;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.Registry.Config;
 using Shoc.Registry.Crypto;
+using Shoc.Registry.Grpc;
 using Shoc.Registry.Services;
 
 // start building web application
@@ -28,6 +30,7 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
+builder.Services.AddGrpcEssentials();
 builder.Services.AddSingleton<CredentialProtectionProvider>();
 builder.Services.AddSingleton<SigningKeyProtectionProvider>();
 builder.Services.AddSingleton<KeyProviderService>();
@@ -51,5 +54,7 @@ app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGrpcReflectionService().AllowAnonymous();
+app.MapGrpcService<WorkspaceDefaultRegistryServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();

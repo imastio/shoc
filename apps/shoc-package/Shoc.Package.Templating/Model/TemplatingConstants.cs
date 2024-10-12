@@ -31,7 +31,7 @@ public static class TemplatingConstants
     public const string DOCKERFILE_TEMPLATE_FILE = "Dockerfile.tpl";
 
     /// <summary>
-    /// The manifest json file name
+    /// The runtime json file name
     /// </summary>
-    public const string MANIFEST_FILE = "manifest.json";
+    public const string RUNTIME_FILE = "runtime.json";
 }

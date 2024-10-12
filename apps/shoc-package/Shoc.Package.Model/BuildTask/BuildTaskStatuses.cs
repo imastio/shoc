@@ -27,7 +27,7 @@ public static class BuildTaskStatuses
     /// <summary>
     /// The pushing status 
     /// </summary>
-    public const string PUSHING = "building";
+    public const string PUSHING = "pushing";
     
     /// <summary>
     /// The completed status 

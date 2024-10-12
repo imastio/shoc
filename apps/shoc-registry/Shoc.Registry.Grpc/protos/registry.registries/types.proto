@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Registry.Grpc.Registries";
+package api.grpc.registry.registries;
+
+message RegistryGrpcModel {
+  string id = 1;
+  optional string workspaceId = 2;
+  string name = 3;
+  string displayName = 4;
+  string status = 5;
+  string provider = 6;
+  string usageScope = 7;
+  string registry = 8;
+  optional string namespace = 9;
+}
+
+message GetWorkspaceDefaultRegistryRequest {
+  string workspaceId = 1;
+}
+
+message GetWorkspaceDefaultRegistryResponse {
+  RegistryGrpcModel registry = 1;
+}
+

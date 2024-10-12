@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
 using Shoc.Package.Model.BuildTask;
@@ -67,5 +69,22 @@ public class WorkspaceBuildTaskService
 
         // create the object
         return await this.buildTaskService.Create(workspaceId, input);
+    }
+    
+    /// <summary>
+    /// Updates the bundle of the object
+    /// </summary>
+    /// <returns></returns>
+    public async Task<BuildTaskModel> UpdateBundleById(string userId, string workspaceId, string id, Stream file)
+    {
+        // ensure have required access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_SECRETS,
+            WorkspacePermissions.WORKSPACE_BUILD_PACKAGE);
+        
+        // create the object
+        return await this.buildTaskService.UpdateBundleById(userId, workspaceId, id, file);
     }
 }

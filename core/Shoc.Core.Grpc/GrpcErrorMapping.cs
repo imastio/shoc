@@ -68,7 +68,7 @@ public static class GrpcErrorMapping
         };
 
         // map the payload
-        var payload = error.Payload?.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+        var payload = error.Payload?.ToDictionary(kv => kv.Key, kv => kv.Value?.ToString());
 
         // add payload if any
         if (payload != null)
@@ -86,6 +86,6 @@ public static class GrpcErrorMapping
     /// <returns></returns>
     public static ErrorDefinition FromGrpcErrorDefinition(GrpcErrorDefinition error)
     {
-        return ErrorDefinition.From(error.Kind, error.Code, error.Message, error.Payload?.ToDictionary(kv => kv.Key, kv => (object)kv.Value));
+        return ErrorDefinition.From(error.Kind, error.Code, error.Message, error.Payload?.ToDictionary(kv => kv.Key, kv => kv.Value as object));
     }
 }

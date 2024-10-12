@@ -2,6 +2,14 @@ import resolveContext from "@/services/context-resolver";
 import { createCommand } from "commander";
 import { asyncHandler, getRootOptions } from "@/commands/common";
 import { computeListingHash, createZip, getBuildListing, getBuildManifest } from "./_functions";
+import clientGuard from "@/services/client-guard";
+import { shocClient } from "@/clients/shoc";
+import UserWorkspacesClient from "@/clients/shoc/workspace/user-workspaces-client";
+import WorkspaceBuildTasksClient from "@/clients/shoc/package/build-tasks-client";
+import fs from "fs";
+import { FormData } from 'formdata-node';
+import { fileFromPath } from 'formdata-node/file-from-path';
+
 
 const jobsBuildCommand = createCommand('build')
 
@@ -17,9 +25,24 @@ jobsBuildCommand
 
         const hash = computeListingHash(buildFile, files);
         
-        console.log("Hash computed", { hash, length: hash.length })
+        const workspace = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, context.workspace));
 
+        const input = {
+            workspaceId: workspace.id,
+            provider: 'remote',
+            scope: 'workspace',
+            listingChecksum: hash,
+            manifest: JSON.stringify(manifest)
+        }
+
+        const task = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).create(ctx.token, workspace.id, input));
+        
         const zip = await createZip(files);
+
+        const uploadData = new FormData()
+        uploadData.append('file', await fileFromPath(zip))
+        
+        const uploaded = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspace.id, task.id, uploadData));
 
     }));
 

@@ -1,0 +1,11 @@
+syntax = "proto3";
+import "registry.registries/types.proto";
+
+option csharp_namespace = "Shoc.Registry.Grpc.Registries";
+package api.grpc.registry.registries;
+
+service WorkspaceDefaultRegistryServiceGrpc {
+
+  rpc GetByWorkspaceId(GetWorkspaceDefaultRegistryRequest) returns (GetWorkspaceDefaultRegistryResponse);
+
+}

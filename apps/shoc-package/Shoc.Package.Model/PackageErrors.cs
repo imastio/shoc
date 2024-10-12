@@ -51,6 +51,51 @@ public static class PackageErrors
     public const string INVALID_RUNTIME = "PACKAGE_INVALID_RUNTIME";
     
     /// <summary>
+    /// The template is invalid
+    /// </summary>
+    public const string INVALID_DOCKERFILE_TEMPLATE = "PACKAGE_INVALID_DOCKERFILE_TEMPLATE";
+
+    /// <summary>
+    /// The error indicating render failure
+    /// </summary>
+    public const string RENDER_FAILURE = "PACKAGE_RENDER_FAILURE";
+
+    /// <summary>
+    /// The registry is invalid
+    /// </summary>
+    public const string INVALID_REGISTRY = "PACKAGE_INVALID_REGISTRY";
+    
+    /// <summary>
+    /// The user mismatch
+    /// </summary>
+    public const string USER_MISMATCH = "PACKAGE_USER_MISMATCH";
+    
+    /// <summary>
+    /// The expired operation
+    /// </summary>
+    public const string UNEXPECTED_OPERATION = "PACKAGE_UNEXPECTED_OPERATION";
+    
+    /// <summary>
+    /// The build task is expired
+    /// </summary>
+    public const string EXPIRED_BUILD_TASK = "PACKAGE_EXPIRED_BUILD_TASK";
+    
+    /// <summary>
+    /// The bundle type is invalid
+    /// </summary>
+    public const string INVALID_BUNDLE_TYPE = "PACKAGE_INVALID_BUNDLE_TYPE";
+    
+    /// <summary>
+    /// The bundle upload error
+    /// </summary>
+    public const string UPLOAD_ERROR = "PACKAGE_UPLOAD_ERROR";
+    
+    /// <summary>
+    /// The bundle unzip error
+    /// </summary>
+    public const string UNZIP_ERROR = "PACKAGE_UNZIP_ERROR";
+    
+    /// <summary>
     /// The unknown error
     /// </summary>
     public const string UNKNOWN_ERROR = "PACKAGE_UNKNOWN_ERROR";

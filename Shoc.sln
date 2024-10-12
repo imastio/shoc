@@ -150,6 +150,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Package", "apps\shoc-p
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Package.Templating", "apps\shoc-package\Shoc.Package.Templating\Shoc.Package.Templating.csproj", "{08537680-6BEA-465E-9173-14626A21939B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shoc.Registry.Grpc", "apps\shoc-registry\Shoc.Registry.Grpc\Shoc.Registry.Grpc.csproj", "{92C4E379-CB54-4176-AA4C-83E38DF6AC70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -392,6 +394,10 @@ Global
 		{08537680-6BEA-465E-9173-14626A21939B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08537680-6BEA-465E-9173-14626A21939B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08537680-6BEA-465E-9173-14626A21939B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92C4E379-CB54-4176-AA4C-83E38DF6AC70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92C4E379-CB54-4176-AA4C-83E38DF6AC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92C4E379-CB54-4176-AA4C-83E38DF6AC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92C4E379-CB54-4176-AA4C-83E38DF6AC70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -468,5 +474,6 @@ Global
 		{44E5C5CF-1EFB-4BCB-B2E2-57642E38097A} = {D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE}
 		{187B9965-0018-48CE-9743-AD5BC4DDA536} = {D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE}
 		{08537680-6BEA-465E-9173-14626A21939B} = {D9D5D1FE-22D8-4F36-A0D4-60E1BFBC54CE}
+		{92C4E379-CB54-4176-AA4C-83E38DF6AC70} = {6F7721AE-97D8-4080-AEBD-D75A1106B4BB}
 	EndGlobalSection
 EndGlobal

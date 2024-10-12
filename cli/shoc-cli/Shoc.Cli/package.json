@@ -29,6 +29,7 @@
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "figlet": "^1.7.0",
+    "formdata-node": "^6.0.3",
     "glob": "^11.0.0",
     "jose": "^5.9.3",
     "keytar": "^7.9.0",
@@ -38,10 +39,10 @@
     "yaml": "^2.5.1"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.2",
     "@types/figlet": "^1.5.8",
     "@types/node": "^22.6.1",
     "@types/prompts": "^2.4.9",
-    "@types/archiver": "^6.0.2",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
   }

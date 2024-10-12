@@ -28,14 +28,39 @@ public class BuildTaskCreateModel
     public string Provider { get; set; }
     
     /// <summary>
+    /// The scope of the target package
+    /// </summary>
+    public string Scope { get; set; }
+    
+    /// <summary>
+    /// The listing checksum
+    /// </summary>
+    public string ListingChecksum { get; set; }
+    
+    /// <summary>
     /// The build manifest (template, spec, etc.)
     /// </summary>
     public string Manifest { get; set; }
 
     /// <summary>
-    /// The listing checksum
+    /// The runtime info for the package
     /// </summary>
-    public string ListingChecksum { get; set; }
+    public string Runtime { get; set; }
+    
+    /// <summary>
+    /// The effective dockerfile of the package
+    /// </summary>
+    public string Dockerfile { get; set; }
+    
+    /// <summary>
+    /// The reference to the base template
+    /// </summary>
+    public string TemplateReference { get; set; }
+    
+    /// <summary>
+    /// The registry id
+    /// </summary>
+    public string RegistryId { get; set; }
     
     /// <summary>
     /// The status of the build task
@@ -46,9 +71,4 @@ public class BuildTaskCreateModel
     /// The deadline of the current status
     /// </summary>
     public DateTime? Deadline { get; set; }
-    
-    /// <summary>
-    /// The scope of the target package
-    /// </summary>
-    public string TargetScope { get; set; }
 }

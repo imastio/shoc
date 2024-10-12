@@ -28,6 +28,11 @@ public class PackageModel
     public string Scope { get; set; }
     
     /// <summary>
+    /// The package checksum
+    /// </summary>
+    public string ListingChecksum { get; set; }
+    
+    /// <summary>
     /// The manifest of the package
     /// </summary>
     public string Manifest { get; set; }
@@ -36,11 +41,6 @@ public class PackageModel
     /// The runtime of the package
     /// </summary>
     public string Runtime { get; set; }
-    
-    /// <summary>
-    /// The package checksum
-    /// </summary>
-    public string ListingChecksum { get; set; }
     
     /// <summary>
     /// The effective dockerfile of the package
