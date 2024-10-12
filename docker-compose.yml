@@ -255,6 +255,7 @@ services:
     restart: always
     build: ./apps/shoc-package/Shoc.Package
     container_name: shoc-package
+    privileged: true
     env_file: 
       - ./env/ref-api-auth.env
       - ./env/ref-api-discovery.env
