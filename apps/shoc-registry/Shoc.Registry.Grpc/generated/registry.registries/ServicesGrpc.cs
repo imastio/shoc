@@ -332,17 +332,25 @@ namespace Shoc.Registry.Grpc.Registries {
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest.Parser));
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse.Parser));
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> __Method_GetByWorkspace = new grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse>(
+    static readonly grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> __Method_GetPushCredentialOrCreate = new grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
-        "GetByWorkspace",
-        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsRequest,
-        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsResponse);
+        "GetPushCredentialOrCreate",
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialRequest,
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> __Method_GetPullCredentialOrCreate = new grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetPullCredentialOrCreate",
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialRequest,
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -355,7 +363,13 @@ namespace Shoc.Registry.Grpc.Registries {
     public abstract partial class RegistryPlainCredentialServiceGrpcBase
     {
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPushCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPullCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -390,24 +404,44 @@ namespace Shoc.Registry.Grpc.Registries {
       }
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse GetPushCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return GetByWorkspace(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return GetPushCredentialOrCreate(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::CallOptions options)
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse GetPushCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_GetByWorkspace, null, options, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetPushCredentialOrCreate, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspaceAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPushCredentialOrCreateAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return GetByWorkspaceAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return GetPushCredentialOrCreateAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspaceAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPushCredentialOrCreateAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.AsyncUnaryCall(__Method_GetByWorkspace, null, options, request);
+        return CallInvoker.AsyncUnaryCall(__Method_GetPushCredentialOrCreate, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse GetPullCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetPullCredentialOrCreate(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse GetPullCredentialOrCreate(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetPullCredentialOrCreate, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPullCredentialOrCreateAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetPullCredentialOrCreateAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse> GetPullCredentialOrCreateAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetPullCredentialOrCreate, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -423,7 +457,8 @@ namespace Shoc.Registry.Grpc.Registries {
     public static grpc::ServerServiceDefinition BindService(RegistryPlainCredentialServiceGrpcBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_GetByWorkspace, serviceImpl.GetByWorkspace).Build();
+          .AddMethod(__Method_GetPushCredentialOrCreate, serviceImpl.GetPushCredentialOrCreate)
+          .AddMethod(__Method_GetPullCredentialOrCreate, serviceImpl.GetPullCredentialOrCreate).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
@@ -433,7 +468,8 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static void BindService(grpc::ServiceBinderBase serviceBinder, RegistryPlainCredentialServiceGrpcBase serviceImpl)
     {
-      serviceBinder.AddMethod(__Method_GetByWorkspace, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse>(serviceImpl.GetByWorkspace));
+      serviceBinder.AddMethod(__Method_GetPushCredentialOrCreate, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse>(serviceImpl.GetPushCredentialOrCreate));
+      serviceBinder.AddMethod(__Method_GetPullCredentialOrCreate, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse>(serviceImpl.GetPullCredentialOrCreate));
     }
 
   }

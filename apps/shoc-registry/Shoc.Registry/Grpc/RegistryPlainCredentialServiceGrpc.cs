@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.DataProtection;
@@ -45,45 +44,51 @@ public class RegistryPlainCredentialServiceGrpc : Registries.RegistryPlainCreden
     }
 
     /// <summary>
-    /// Gets the registry plain credentials for the workspace
+    /// Gets the registry plain credential for push operations
     /// </summary>
     /// <param name="request">The request</param>
     /// <param name="context">The context</param>
     /// <returns></returns>
-    public override async Task<GetRegistryPlainCredentialsResponse> GetByWorkspace(GetRegistryPlainCredentialsRequest request, ServerCallContext context)
+    public override async Task<GetRegistryPlainCredentialResponse> GetPushCredentialOrCreate(GetRegistryPlainCredentialRequest request, ServerCallContext context)
     {
         // ensure authorization
         await this.accessAuthorization.RequireScopesAll(context.GetHttpContext(), new []{ KnownScopes.SVC });
 
-        // get workspace-level credentials
-        var workspaceCredentials = await this.registryCredentialService.GetBy(request.RegistryId, new RegistryCredentialFilter
-        {
-            ByWorkspace = true,
-            WorkspaceId = request.WorkspaceId,
-            ByUser = true,
-            UserId = null
-        });
+        // create a protector
+        var protector = this.credentialProtectionProvider.Create();
         
-        // get user-level credentials
-        var userCredentials = await this.registryCredentialService.GetBy(request.RegistryId, new RegistryCredentialFilter
-        {
-            ByWorkspace = true,
-            WorkspaceId = request.WorkspaceId,
-            ByUser = true,
-            UserId = request.UserId
-        });
+        // the result of the operation
+        var result =
+            await this.registryCredentialService.GetOrCreatePushCredential(request.RegistryId, request.WorkspaceId,
+                request.UserId);
 
-        // all credentials
-        var all = workspaceCredentials.Union(userCredentials);
+        return new GetRegistryPlainCredentialResponse
+        {
+            Credential = Map(result, protector)
+        };
+    }
+
+    /// <summary>
+    /// Gets the registry plain credential for pull operation
+    /// </summary>
+    /// <param name="request">The request</param>
+    /// <param name="context">The context</param>
+    /// <returns></returns>
+    public override async Task<GetRegistryPlainCredentialResponse> GetPullCredentialOrCreate(GetRegistryPlainCredentialRequest request, ServerCallContext context)
+    {
+        // ensure authorization
+        await this.accessAuthorization.RequireScopesAll(context.GetHttpContext(), new []{ KnownScopes.SVC });
 
         // create a protector
         var protector = this.credentialProtectionProvider.Create();
 
-        return new GetRegistryPlainCredentialsResponse
+        // the result of the operation
+        var result = await this.registryCredentialService.GetOrCreatePullCredential(request.RegistryId, request.WorkspaceId, request.UserId);
+        
+        return new GetRegistryPlainCredentialResponse
         {
-            Credentials = { all.Select(credential => Map(credential, protector)) }
+            Credential = Map(result, protector)
         };
-
     }
 
     /// <summary>

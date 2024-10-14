@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
 using Shoc.ApiCore.GrpcClient;
@@ -6,6 +8,7 @@ using Shoc.Core;
 using Shoc.Registry.Data;
 using Shoc.Registry.Model;
 using Shoc.Registry.Model.Credential;
+using Shoc.Registry.Model.Registry;
 
 namespace Shoc.Registry.Services;
 
@@ -104,6 +107,167 @@ public class RegistryCredentialService : RegistryServiceBase
         await this.RequireRegistryById(registryId);
         
         return await this.registryCredentialRepository.GetExtendedBy(registryId, filter);
+    }
+
+    /// <summary>
+    /// Gets or creates (only for shoc provider) a push credential
+    /// </summary>
+    /// <param name="registryId">The registry id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="userId">The user id</param>
+    /// <returns></returns>
+    public async Task<RegistryCredentialModel> GetOrCreatePushCredential(string registryId, string workspaceId, string userId)
+    {
+        // require registry
+        var registry = await this.RequireRegistryById(registryId);
+
+        // require workspace
+        await this.RequireWorkspace(workspaceId);
+
+        // require user
+        await this.RequireUser(userId);
+
+        // get user-level credentials
+        var userCredentials = (await this.GetBy(registryId, new RegistryCredentialFilter
+        {
+            ByWorkspace = true,
+            WorkspaceId = workspaceId,
+            ByUser = true,
+            UserId = userId,
+            PushAllowed = true,
+            PullAllowed = true
+        })).ToList();
+        
+        // user push credentials are found
+        if (userCredentials.Count > 0)
+        {
+            return userCredentials.First();
+        }
+        
+        // workspace-level credentials
+        var workspaceCredentials = (await this.GetBy(registryId, new RegistryCredentialFilter
+        {
+            ByWorkspace = true,
+            WorkspaceId = workspaceId,
+            ByUser = true,
+            UserId = null,
+            PushAllowed = true,
+            PullAllowed = true
+        })).ToList();
+        
+        // workspace push credentials are found
+        if (workspaceCredentials.Count > 0)
+        {
+            return userCredentials.First();
+        }
+
+        // if no push credential was found, but it's a shoc provider, we can create one
+        if (registry.Provider == RegistryProviderTypes.SHOC)
+        {
+            // create a new object
+            return await this.Create(registryId, new RegistryCredentialCreateModel
+            {
+                RegistryId = registryId,
+                WorkspaceId = workspaceId,
+                UserId = userId,
+                Source = RegistryCredentialSources.GENERATED,
+                Username = userId,
+                Password = Guid.NewGuid().ToString(),
+                Email = string.Empty,
+                PullAllowed = true,
+                PushAllowed = true
+            });
+        }
+
+        // no credential could be provided
+        throw ErrorDefinition.NotFound().AsException();
+    }
+    
+    /// <summary>
+    /// Gets or creates (only for shoc provider) a push credential
+    /// </summary>
+    /// <param name="registryId">The registry id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="userId">The user id</param>
+    /// <returns></returns>
+    public async Task<RegistryCredentialModel> GetOrCreatePullCredential(string registryId, string workspaceId, string userId)
+    {
+        // require registry
+        var registry = await this.RequireRegistryById(registryId);
+
+        // require workspace
+        await this.RequireWorkspace(workspaceId);
+
+        // require user
+        await this.RequireUser(userId);
+
+        // get user-level credentials
+        var userCredentials = (await this.GetBy(registryId, new RegistryCredentialFilter
+        {
+            ByWorkspace = true,
+            WorkspaceId = workspaceId,
+            ByUser = true,
+            UserId = userId,
+            PullAllowed = true
+        })).ToList();
+
+        // try finding a credential where only pull is allowed
+        var userPullOnlyCredential = userCredentials.FirstOrDefault(cred => cred.PullAllowed && !cred.PushAllowed);
+
+        // if user pull cred is found return it
+        if (userPullOnlyCredential != null)
+        {
+            return userPullOnlyCredential;
+        }
+        
+        // workspace-level credentials
+        var workspaceCredentials = (await this.GetBy(registryId, new RegistryCredentialFilter
+        {
+            ByWorkspace = true,
+            WorkspaceId = workspaceId,
+            ByUser = true,
+            UserId = null,
+            PullAllowed = true
+        })).ToList();
+        
+        // try finding a credential where only pull is allowed
+        var workspacePullOnlyCredential = workspaceCredentials.FirstOrDefault(cred => cred.PullAllowed && !cred.PushAllowed);
+
+        // if workspace pull cred is found return it
+        if (workspacePullOnlyCredential != null)
+        {
+            return workspacePullOnlyCredential;
+        }
+        
+        // if no push credential was found, but it's a shoc provider, we can create one
+        if (registry.Provider == RegistryProviderTypes.SHOC)
+        {
+            // create a new object
+            return await this.Create(registryId, new RegistryCredentialCreateModel
+            {
+                RegistryId = registryId,
+                WorkspaceId = workspaceId,
+                UserId = userId,
+                Source = RegistryCredentialSources.GENERATED,
+                Username = userId,
+                Password = Guid.NewGuid().ToString(),
+                Email = string.Empty,
+                PullAllowed = true,
+                PushAllowed = false
+            });
+        }
+
+        // try getting any pull credential (here allowing push access as well)
+        var anyPullCredential = userCredentials.FirstOrDefault() ?? workspaceCredentials.FirstOrDefault();
+
+        // use credential if found
+        if (anyPullCredential != null)
+        {
+            return anyPullCredential;
+        }
+        
+        // no credential could be provided
+        throw ErrorDefinition.NotFound().AsException();
     }
 
     /// <summary>

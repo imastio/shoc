@@ -33,12 +33,16 @@ namespace Shoc.Registry.Grpc.Registries {
             "RGVmYXVsdFJlZ2lzdHJ5UmVzcG9uc2UyiQEKE1JlZ2lzdHJ5U2VydmljZUdy",
             "cGMScgoHR2V0QnlJZBI0LmFwaS5ncnBjLnJlZ2lzdHJ5LnJlZ2lzdHJpZXMu",
             "R2V0UmVnaXN0cnlCeUlkUmVxdWVzdBoxLmFwaS5ncnBjLnJlZ2lzdHJ5LnJl",
-            "Z2lzdHJpZXMuR2V0UmVnaXN0cnlSZXNwb25zZTK8AQoiUmVnaXN0cnlQbGFp",
-            "bkNyZWRlbnRpYWxTZXJ2aWNlR3JwYxKVAQoOR2V0QnlXb3Jrc3BhY2USQC5h",
-            "cGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVzLkdldFJlZ2lzdHJ5UGxhaW5D",
-            "cmVkZW50aWFsc1JlcXVlc3QaQS5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3Ry",
-            "aWVzLkdldFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsc1Jlc3BvbnNlQiCqAh1T",
-            "aG9jLlJlZ2lzdHJ5LkdycGMuUmVnaXN0cmllc2IGcHJvdG8z"));
+            "Z2lzdHJpZXMuR2V0UmVnaXN0cnlSZXNwb25zZTLmAgoiUmVnaXN0cnlQbGFp",
+            "bkNyZWRlbnRpYWxTZXJ2aWNlR3JwYxKeAQoZR2V0UHVzaENyZWRlbnRpYWxP",
+            "ckNyZWF0ZRI/LmFwaS5ncnBjLnJlZ2lzdHJ5LnJlZ2lzdHJpZXMuR2V0UmVn",
+            "aXN0cnlQbGFpbkNyZWRlbnRpYWxSZXF1ZXN0GkAuYXBpLmdycGMucmVnaXN0",
+            "cnkucmVnaXN0cmllcy5HZXRSZWdpc3RyeVBsYWluQ3JlZGVudGlhbFJlc3Bv",
+            "bnNlEp4BChlHZXRQdWxsQ3JlZGVudGlhbE9yQ3JlYXRlEj8uYXBpLmdycGMu",
+            "cmVnaXN0cnkucmVnaXN0cmllcy5HZXRSZWdpc3RyeVBsYWluQ3JlZGVudGlh",
+            "bFJlcXVlc3QaQC5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVzLkdldFJl",
+            "Z2lzdHJ5UGxhaW5DcmVkZW50aWFsUmVzcG9uc2VCIKoCHVNob2MuUmVnaXN0",
+            "cnkuR3JwYy5SZWdpc3RyaWVzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -81,16 +83,16 @@ public class AuthenticationController : ControllerBase
             Username = credentials.Username,
             Password = credentials.Password
         };
-
+        
         // generate the response based on the input 
         var response = await this.authenticationService.GetToken(workspaceName, registryName, tokenRequest);
-
+        
         // handle the success case
         if (response is TokenResponseSpec responseSpec)
         {
             return this.Ok(responseSpec);
         }
-        
+
         // return unauthorized error
         return this.Unauthorized(response);
     }

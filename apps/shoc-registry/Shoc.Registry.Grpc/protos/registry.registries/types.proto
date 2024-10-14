@@ -44,12 +44,12 @@ message GetRegistryResponse {
   RegistryGrpcModel registry = 1;
 }
 
-message GetRegistryPlainCredentialsRequest {
+message GetRegistryPlainCredentialRequest {
   string registryId = 1;
   string workspaceId = 2;
   string userId = 3;
 }
 
-message GetRegistryPlainCredentialsResponse {
-  repeated RegistryPlainCredentialGrpcModel credentials = 1;
+message GetRegistryPlainCredentialResponse {
+  RegistryPlainCredentialGrpcModel credential = 1;
 }

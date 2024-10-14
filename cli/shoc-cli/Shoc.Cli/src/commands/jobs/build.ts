@@ -6,10 +6,8 @@ import clientGuard from "@/services/client-guard";
 import { shocClient } from "@/clients/shoc";
 import UserWorkspacesClient from "@/clients/shoc/workspace/user-workspaces-client";
 import WorkspaceBuildTasksClient from "@/clients/shoc/package/build-tasks-client";
-import fs from "fs";
 import { FormData } from 'formdata-node';
 import { fileFromPath } from 'formdata-node/file-from-path';
-
 
 const jobsBuildCommand = createCommand('build')
 
@@ -30,7 +28,7 @@ jobsBuildCommand
         const input = {
             workspaceId: workspace.id,
             provider: 'remote',
-            scope: 'workspace',
+            scope: 'user',
             listingChecksum: hash,
             manifest: JSON.stringify(manifest)
         }

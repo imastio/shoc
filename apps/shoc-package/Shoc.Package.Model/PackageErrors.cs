@@ -66,6 +66,11 @@ public static class PackageErrors
     public const string INVALID_REGISTRY = "PACKAGE_INVALID_REGISTRY";
     
     /// <summary>
+    /// The registry credential is invalid or not found
+    /// </summary>
+    public const string INVALID_REGISTRY_CREDENTIALS = "PACKAGE_INVALID_REGISTRY_CREDENTIALS";
+    
+    /// <summary>
     /// The user mismatch
     /// </summary>
     public const string USER_MISMATCH = "PACKAGE_USER_MISMATCH";
@@ -99,6 +104,11 @@ public static class PackageErrors
     /// The image build error
     /// </summary>
     public const string IMAGE_BUILD_ERROR = "PACKAGE_IMAGE_BUILD_ERROR";
+    
+    /// <summary>
+    /// The image push error
+    /// </summary>
+    public const string IMAGE_PUSH_ERROR = "PACKAGE_IMAGE_PUSH_ERROR";
     
     /// <summary>
     /// The unknown error

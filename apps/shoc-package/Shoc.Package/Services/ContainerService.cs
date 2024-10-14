@@ -40,4 +40,32 @@ public class ContainerService
         // run command to build
         return await this.commandRunner.RunBash(command);
     }
+    
+    /// <summary>
+    /// Pushes an image from to the registry
+    /// </summary>
+    /// <param name="context">The context to push</param>
+    /// <returns></returns>
+    public async Task<CommandRunResult> Push(ContainerPushContext context)
+    {
+        // the command to run with runner
+        var command = $"./Scripts/container-build.sh push --tls-verify=false --creds {context.Username}:{context.Password} {context.Image}";
+        
+        // run command to build
+        return await this.commandRunner.RunBash(command);
+    }
+    
+    /// <summary>
+    /// Removes a local image with the name
+    /// </summary>
+    /// <param name="context">The context to remove</param>
+    /// <returns></returns>
+    public async Task<CommandRunResult> RemoveImage(ContainerRmiContext context)
+    {
+        // the command to run with runner
+        var command = $"./Scripts/container-build.sh rmi {context.Image}";
+        
+        // run command to build
+        return await this.commandRunner.RunBash(command);
+    }
 }

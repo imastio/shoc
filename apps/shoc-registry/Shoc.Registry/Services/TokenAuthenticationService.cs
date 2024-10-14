@@ -106,12 +106,6 @@ public class TokenAuthenticationService : AuthenticationServiceBase
         // build the validation keys list
         var validationKeys = keys.Select(payload => this.keyProviderService.ToSecurityKey(payload)).ToList();
 
-        // check if the client is given
-        if (string.IsNullOrWhiteSpace(request.ClientId))
-        {
-            return TokenErrorSpec.Create(TokenErrorCodes.INVALID_CLIENT);
-        }
-
         // check if grant type is missing or not allowed
         if (string.IsNullOrWhiteSpace(request.GrantType) || !ALLOWED_GRANT_TYPES.Contains(request.GrantType))
         {
@@ -445,7 +439,7 @@ public class TokenAuthenticationService : AuthenticationServiceBase
             CredentialId = validCredential.Id,
             Username = validCredential.Username,
             WorkspaceId = validCredential.WorkspaceId,
-            UserId = validCredential.WorkspaceId,
+            UserId = validCredential.UserId,
             PullAllowed = validCredential.PullAllowed,
             PushAllowed = validCredential.PushAllowed
         };
@@ -471,11 +465,11 @@ public class TokenAuthenticationService : AuthenticationServiceBase
         }
 
         // if workspace is given but no user specified allow the following path
-        if (!string.IsNullOrWhiteSpace(subject.WorkspaceId) && string.IsNullOrWhiteSpace(subject.UserId))
+        if (!string.IsNullOrWhiteSpace(subject.WorkspaceId))
         {
             result.Add(new(@$"^w\/{subject.WorkspaceId}\/[^\/]+$"));
         }
-
+        
         return result;
     }
 

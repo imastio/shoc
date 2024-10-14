@@ -13,5 +13,6 @@ service RegistryServiceGrpc {
 }
 
 service RegistryPlainCredentialServiceGrpc {
-  rpc GetByWorkspace(GetRegistryPlainCredentialsRequest) returns (GetRegistryPlainCredentialsResponse);
+  rpc GetPushCredentialOrCreate(GetRegistryPlainCredentialRequest) returns (GetRegistryPlainCredentialResponse);
+  rpc GetPullCredentialOrCreate(GetRegistryPlainCredentialRequest) returns (GetRegistryPlainCredentialResponse);
 }

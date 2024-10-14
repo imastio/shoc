@@ -42,13 +42,13 @@ namespace Shoc.Registry.Grpc.Registries {
             "YXBpLmdycGMucmVnaXN0cnkucmVnaXN0cmllcy5SZWdpc3RyeUdycGNNb2Rl",
             "bCIkChZHZXRSZWdpc3RyeUJ5SWRSZXF1ZXN0EgoKAmlkGAEgASgJIlgKE0dl",
             "dFJlZ2lzdHJ5UmVzcG9uc2USQQoIcmVnaXN0cnkYASABKAsyLy5hcGkuZ3Jw",
-            "Yy5yZWdpc3RyeS5yZWdpc3RyaWVzLlJlZ2lzdHJ5R3JwY01vZGVsIl0KIkdl",
-            "dFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsc1JlcXVlc3QSEgoKcmVnaXN0cnlJ",
-            "ZBgBIAEoCRITCgt3b3Jrc3BhY2VJZBgCIAEoCRIOCgZ1c2VySWQYAyABKAki",
-            "egojR2V0UmVnaXN0cnlQbGFpbkNyZWRlbnRpYWxzUmVzcG9uc2USUwoLY3Jl",
-            "ZGVudGlhbHMYASADKAsyPi5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVz",
-            "LlJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsR3JwY01vZGVsQiCqAh1TaG9jLlJl",
-            "Z2lzdHJ5LkdycGMuUmVnaXN0cmllc2IGcHJvdG8z"));
+            "Yy5yZWdpc3RyeS5yZWdpc3RyaWVzLlJlZ2lzdHJ5R3JwY01vZGVsIlwKIUdl",
+            "dFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsUmVxdWVzdBISCgpyZWdpc3RyeUlk",
+            "GAEgASgJEhMKC3dvcmtzcGFjZUlkGAIgASgJEg4KBnVzZXJJZBgDIAEoCSJ4",
+            "CiJHZXRSZWdpc3RyeVBsYWluQ3JlZGVudGlhbFJlc3BvbnNlElIKCmNyZWRl",
+            "bnRpYWwYASABKAsyPi5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVzLlJl",
+            "Z2lzdHJ5UGxhaW5DcmVkZW50aWFsR3JwY01vZGVsQiCqAh1TaG9jLlJlZ2lz",
+            "dHJ5LkdycGMuUmVnaXN0cmllc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,8 +58,8 @@ namespace Shoc.Registry.Grpc.Registries {
             new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse), global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse.Parser, new[]{ "Registry" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest), global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest.Parser, new[]{ "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryResponse), global::Shoc.Registry.Grpc.Registries.GetRegistryResponse.Parser, new[]{ "Registry" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest.Parser, new[]{ "RegistryId", "WorkspaceId", "UserId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse.Parser, new[]{ "Credentials" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialRequest.Parser, new[]{ "RegistryId", "WorkspaceId", "UserId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialResponse.Parser, new[]{ "Credential" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1907,16 +1907,16 @@ namespace Shoc.Registry.Grpc.Registries {
 
   }
 
-  public sealed partial class GetRegistryPlainCredentialsRequest : pb::IMessage<GetRegistryPlainCredentialsRequest>
+  public sealed partial class GetRegistryPlainCredentialRequest : pb::IMessage<GetRegistryPlainCredentialRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<GetRegistryPlainCredentialsRequest> _parser = new pb::MessageParser<GetRegistryPlainCredentialsRequest>(() => new GetRegistryPlainCredentialsRequest());
+    private static readonly pb::MessageParser<GetRegistryPlainCredentialRequest> _parser = new pb::MessageParser<GetRegistryPlainCredentialRequest>(() => new GetRegistryPlainCredentialRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetRegistryPlainCredentialsRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<GetRegistryPlainCredentialRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1932,7 +1932,7 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsRequest() {
+    public GetRegistryPlainCredentialRequest() {
       OnConstruction();
     }
 
@@ -1940,7 +1940,7 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsRequest(GetRegistryPlainCredentialsRequest other) : this() {
+    public GetRegistryPlainCredentialRequest(GetRegistryPlainCredentialRequest other) : this() {
       registryId_ = other.registryId_;
       workspaceId_ = other.workspaceId_;
       userId_ = other.userId_;
@@ -1949,8 +1949,8 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsRequest Clone() {
-      return new GetRegistryPlainCredentialsRequest(this);
+    public GetRegistryPlainCredentialRequest Clone() {
+      return new GetRegistryPlainCredentialRequest(this);
     }
 
     /// <summary>Field number for the "registryId" field.</summary>
@@ -1992,12 +1992,12 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as GetRegistryPlainCredentialsRequest);
+      return Equals(other as GetRegistryPlainCredentialRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetRegistryPlainCredentialsRequest other) {
+    public bool Equals(GetRegistryPlainCredentialRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2096,7 +2096,7 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetRegistryPlainCredentialsRequest other) {
+    public void MergeFrom(GetRegistryPlainCredentialRequest other) {
       if (other == null) {
         return;
       }
@@ -2170,16 +2170,16 @@ namespace Shoc.Registry.Grpc.Registries {
 
   }
 
-  public sealed partial class GetRegistryPlainCredentialsResponse : pb::IMessage<GetRegistryPlainCredentialsResponse>
+  public sealed partial class GetRegistryPlainCredentialResponse : pb::IMessage<GetRegistryPlainCredentialResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<GetRegistryPlainCredentialsResponse> _parser = new pb::MessageParser<GetRegistryPlainCredentialsResponse>(() => new GetRegistryPlainCredentialsResponse());
+    private static readonly pb::MessageParser<GetRegistryPlainCredentialResponse> _parser = new pb::MessageParser<GetRegistryPlainCredentialResponse>(() => new GetRegistryPlainCredentialResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetRegistryPlainCredentialsResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<GetRegistryPlainCredentialResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2195,7 +2195,7 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsResponse() {
+    public GetRegistryPlainCredentialResponse() {
       OnConstruction();
     }
 
@@ -2203,44 +2203,45 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsResponse(GetRegistryPlainCredentialsResponse other) : this() {
-      credentials_ = other.credentials_.Clone();
+    public GetRegistryPlainCredentialResponse(GetRegistryPlainCredentialResponse other) : this() {
+      credential_ = other.credential_ != null ? other.credential_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetRegistryPlainCredentialsResponse Clone() {
-      return new GetRegistryPlainCredentialsResponse(this);
+    public GetRegistryPlainCredentialResponse Clone() {
+      return new GetRegistryPlainCredentialResponse(this);
     }
 
-    /// <summary>Field number for the "credentials" field.</summary>
-    public const int CredentialsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> _repeated_credentials_codec
-        = pb::FieldCodec.ForMessage(10, global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel.Parser);
-    private readonly pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> credentials_ = new pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel>();
+    /// <summary>Field number for the "credential" field.</summary>
+    public const int CredentialFieldNumber = 1;
+    private global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel credential_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> Credentials {
-      get { return credentials_; }
+    public global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel Credential {
+      get { return credential_; }
+      set {
+        credential_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as GetRegistryPlainCredentialsResponse);
+      return Equals(other as GetRegistryPlainCredentialResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetRegistryPlainCredentialsResponse other) {
+    public bool Equals(GetRegistryPlainCredentialResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if(!credentials_.Equals(other.credentials_)) return false;
+      if (!object.Equals(Credential, other.Credential)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2248,7 +2249,7 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      hash ^= credentials_.GetHashCode();
+      if (credential_ != null) hash ^= Credential.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2267,7 +2268,10 @@ namespace Shoc.Registry.Grpc.Registries {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      credentials_.WriteTo(output, _repeated_credentials_codec);
+      if (credential_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Credential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2278,7 +2282,10 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      credentials_.WriteTo(ref output, _repeated_credentials_codec);
+      if (credential_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Credential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2289,7 +2296,9 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      size += credentials_.CalculateSize(_repeated_credentials_codec);
+      if (credential_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Credential);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2298,11 +2307,16 @@ namespace Shoc.Registry.Grpc.Registries {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetRegistryPlainCredentialsResponse other) {
+    public void MergeFrom(GetRegistryPlainCredentialResponse other) {
       if (other == null) {
         return;
       }
-      credentials_.Add(other.credentials_);
+      if (other.credential_ != null) {
+        if (credential_ == null) {
+          Credential = new global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel();
+        }
+        Credential.MergeFrom(other.Credential);
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2319,7 +2333,10 @@ namespace Shoc.Registry.Grpc.Registries {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            credentials_.AddEntriesFrom(input, _repeated_credentials_codec);
+            if (credential_ == null) {
+              Credential = new global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel();
+            }
+            input.ReadMessage(Credential);
             break;
           }
         }
@@ -2338,7 +2355,10 @@ namespace Shoc.Registry.Grpc.Registries {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            credentials_.AddEntriesFrom(ref input, _repeated_credentials_codec);
+            if (credential_ == null) {
+              Credential = new global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel();
+            }
+            input.ReadMessage(Credential);
             break;
           }
         }

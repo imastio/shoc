@@ -13,7 +13,7 @@ public class RegistryHandlerService
     /// </summary>
     /// <param name="context">The context</param>
     /// <returns></returns>
-    public string BuildImageTag(RegistryImageContext context)
+    public virtual string BuildImageTag(RegistryImageContext context)
     {
         // for shoc provider use nested scheme
         if (context.Provider == KnownRegistryProviders.SHOC)

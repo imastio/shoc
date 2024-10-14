@@ -258,7 +258,7 @@ public class BuildTaskService
                 Status = BuildTaskStatuses.FAILED,
                 Deadline = null,
                 ErrorCode = e.Errors.FirstOrDefault()?.Code ?? PackageErrors.UNKNOWN_ERROR,
-                Message = e.Message,
+                Message = e.Errors.FirstOrDefault()?.Message ?? e.Message,
                 PackageId = null
             });
         }
@@ -366,15 +366,51 @@ public class BuildTaskService
         
         // the build result
         var buildResult = await this.containerService.Build(buildContext);
-
-        Console.WriteLine("Out: " + buildResult.Output);
-        Console.WriteLine("Err: " + buildResult.Error);
         
         // build was not successful
         if (!buildResult.Success)
         {
             throw ErrorDefinition.Validation(PackageErrors.IMAGE_BUILD_ERROR, buildResult.Error).AsException();
         }
+
+        // get the push credential
+        var credential = await this.GetPushCredential(existing.RegistryId, existing.WorkspaceId, existing.UserId);
+        
+        // create push context
+        var pushContext = new ContainerPushContext
+        {
+            Image = image,
+            Username = credential.Username,
+            Password = credential.PasswordPlain
+        };
+
+        // push and get the result
+        var pushResult = await this.containerService.Push(pushContext);
+        
+        // remove the local image after successful push
+        await this.containerService.RemoveImage(new ContainerRmiContext { Image = image});
+        
+        // push was not successful
+        if (!pushResult.Success)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.IMAGE_PUSH_ERROR, pushResult.Error).AsException();
+        }
+
+        // store the package
+        var package = await this.packageRepository.Create(existing.WorkspaceId, new PackageCreateModel
+        {
+            Id = packageId,
+            WorkspaceId = existing.WorkspaceId,
+            UserId = existing.UserId,
+            Scope = existing.Scope,
+            ListingChecksum = existing.ListingChecksum,
+            Manifest = existing.Manifest,
+            Runtime = existing.Runtime,
+            Containerfile = existing.Containerfile,
+            TemplateReference = existing.TemplateReference,
+            RegistryId = existing.RegistryId,
+            Image = image
+        });
         
         // update the status
         return await this.buildTaskRepository.UpdateById(existing.WorkspaceId, existing.Id, new BuildTaskUpdateModel
@@ -384,8 +420,8 @@ public class BuildTaskService
             Status = BuildTaskStatuses.COMPLETED,
             Deadline = null,
             ErrorCode = null,
-            Message = $"Package {image} is successfuly created",
-            PackageId = null
+            Message = $"Package {image} is successfully created",
+            PackageId = package.Id
         });
     }
 
@@ -428,6 +464,34 @@ public class BuildTaskService
         catch(Exception)
         {
             throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY).AsException();
+        }
+    }
+
+    /// <summary>
+    /// Gets the push credential for the registry
+    /// </summary>
+    /// <param name="registryId">The registry id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="userId">The user id</param>
+    /// <returns></returns>
+    protected async Task<RegistryPlainCredentialGrpcModel> GetPushCredential(string registryId, string workspaceId, string userId)
+    {
+        // try getting object
+        try {
+            var result = await this.grpcClientProvider
+                .Get<RegistryPlainCredentialServiceGrpc.RegistryPlainCredentialServiceGrpcClient>()
+                .DoAuthorized(async (client, metadata) => await client.GetPushCredentialOrCreateAsync(new GetRegistryPlainCredentialRequest
+                {
+                    RegistryId = registryId,
+                    WorkspaceId = workspaceId,
+                    UserId = userId
+                }, metadata));
+
+            return result.Credential;
+        }
+        catch(Exception)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY_CREDENTIALS).AsException();
         }
     }
 

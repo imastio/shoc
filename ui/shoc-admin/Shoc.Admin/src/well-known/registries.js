@@ -64,7 +64,7 @@ export const registryCredentialSources = [
         display: 'Manual'
     },
     {
-        key: 'genenrated', 
+        key: 'generated', 
         display: 'Generated'
     },
     {
