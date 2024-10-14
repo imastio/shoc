@@ -36,4 +36,9 @@ public class BuildTaskUpdateModel
     /// The error code if any
     /// </summary>
     public string ErrorCode { get; set; }
+    
+    /// <summary>
+    /// The completion message
+    /// </summary>
+    public string Message { get; set; }
 }

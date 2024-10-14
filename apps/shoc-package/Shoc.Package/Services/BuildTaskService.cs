@@ -14,7 +14,9 @@ using Shoc.Core;
 using Shoc.Package.Data;
 using Shoc.Package.Model;
 using Shoc.Package.Model.BuildTask;
+using Shoc.Package.Model.Command;
 using Shoc.Package.Model.Package;
+using Shoc.Package.Model.Registry;
 using Shoc.Package.Templating.Model;
 using Shoc.Registry.Grpc.Registries;
 
@@ -31,9 +33,24 @@ public class BuildTaskService
     private const string DEFAULT_TEMPLATE_VARIANT = "default";
 
     /// <summary>
-    /// The special generated dockerfile for the build
+    /// The zip bundle name
     /// </summary>
-    private const string SHOC_DOCKERFILE_NAME = "Dockerfile.g.shoc";
+    private const string SHOC_BUNDLE_ZIP_NAME = "bundle.zip";
+    
+    /// <summary>
+    /// The special generated Containerfile for the build
+    /// </summary>
+    private const string SHOC_CONTAINERFILE_NAME = "Containerfile.g.shoc";
+    
+    /// <summary>
+    /// The prefix for temporary build root directory
+    /// </summary>
+    private const string SHOC_BUILD_ROOT_PREFIX = "shoc_build_";
+
+    /// <summary>
+    /// The name of build subdirectory
+    /// </summary>
+    private const string BUILD_DIRECTORY_NAME = "build";
     
     /// <summary>
     /// The deadline of object creation
@@ -66,6 +83,16 @@ public class BuildTaskService
     private readonly ValidationService validationService;
 
     /// <summary>
+    /// The container service
+    /// </summary>
+    private readonly ContainerService containerService;
+
+    /// <summary>
+    /// The registry handler service
+    /// </summary>
+    private readonly RegistryHandlerService registryHandlerService;
+
+    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="buildTaskRepository">The build task repository</param>
@@ -73,13 +100,17 @@ public class BuildTaskService
     /// <param name="templateProvider">The template provider</param>
     /// <param name="grpcClientProvider">The grpc client provider</param>
     /// <param name="validationService">The validation service</param>
-    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, TemplateProvider templateProvider, IGrpcClientProvider grpcClientProvider, ValidationService validationService)
+    /// <param name="containerService">The container service</param>
+    /// <param name="registryHandlerService">The registry handler service</param>
+    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, TemplateProvider templateProvider, IGrpcClientProvider grpcClientProvider, ValidationService validationService, ContainerService containerService, RegistryHandlerService registryHandlerService)
     {
         this.buildTaskRepository = buildTaskRepository;
         this.packageRepository = packageRepository;
         this.templateProvider = templateProvider;
         this.grpcClientProvider = grpcClientProvider;
         this.validationService = validationService;
+        this.containerService = containerService;
+        this.registryHandlerService = registryHandlerService;
     }
     
     /// <summary>
@@ -128,7 +159,7 @@ public class BuildTaskService
         input.WorkspaceId = workspaceId;
 
         // initial status is creating
-        input.Status = BuildTaskStatuses.CREATING;
+        input.Status = BuildTaskStatuses.CREATED;
         
         // initialize deadline
         input.Deadline = DateTime.UtcNow.Add(CREATING_DEADLINE);
@@ -178,14 +209,14 @@ public class BuildTaskService
             }
         });
 
-        // get the dockerfile template
-        var dockerfileTemplate = await this.GetTemplate(templateReference.Template, templateReference.Variant);
+        // get the containerfile template
+        var containerfileTemplate = await this.GetTemplate(templateReference.Template, templateReference.Variant);
 
-        // render dockerfile based on the template and specification
-        input.Dockerfile = await RenderDockerfile(dockerfileTemplate, manifest.Spec);
+        // render containerfile based on the template and specification
+        input.Containerfile = await RenderContainerfile(containerfileTemplate, manifest.Spec);
 
         // gets the registry to store the image
-        input.RegistryId = await this.GetDefaultRegistryId(workspaceId);
+        input.RegistryId = (await this.GetDefaultRegistryId(workspaceId)).Id;
         
         // create object in the storage
         return await this.buildTaskRepository.Create(workspaceId, input);
@@ -210,8 +241,57 @@ public class BuildTaskService
             throw ErrorDefinition.Validation(PackageErrors.USER_MISMATCH).AsException();
         }
         
+        // create a root directory for the build
+        var rootDir = Directory.CreateTempSubdirectory(SHOC_BUILD_ROOT_PREFIX);
+
+        try
+        {
+            // perform the action
+            return await this.UpdateBundleByIdImpl(existing, rootDir, file);
+        }
+        catch (ShocException e)
+        {
+            return await this.buildTaskRepository.UpdateById(existing.WorkspaceId, existing.Id, new BuildTaskUpdateModel
+            {
+                WorkspaceId = existing.WorkspaceId,
+                Id = existing.Id,
+                Status = BuildTaskStatuses.FAILED,
+                Deadline = null,
+                ErrorCode = e.Errors.FirstOrDefault()?.Code ?? PackageErrors.UNKNOWN_ERROR,
+                Message = e.Message,
+                PackageId = null
+            });
+        }
+        catch (Exception e)
+        {
+            return await this.buildTaskRepository.UpdateById(existing.WorkspaceId, existing.Id, new BuildTaskUpdateModel
+            {
+                WorkspaceId = existing.WorkspaceId,
+                Id = existing.Id,
+                Status = BuildTaskStatuses.FAILED,
+                Deadline = null,
+                ErrorCode = PackageErrors.UNKNOWN_ERROR,
+                Message = e.Message,
+                PackageId = null
+            });
+        }
+        finally
+        {
+            rootDir.Delete(true);
+        }
+    }
+
+    /// <summary>
+    /// Updates the bundle by id
+    /// </summary>
+    /// <param name="existing">The existing object</param>
+    /// <param name="rootDir">The root directory</param>
+    /// <param name="file">The file</param>
+    /// <returns></returns>
+    private async Task<BuildTaskModel> UpdateBundleByIdImpl(BuildTaskModel existing, DirectoryInfo rootDir, Stream file)
+    {
         // check if status is not in a creating status then error
-        if (existing.Status != BuildTaskStatuses.CREATING)
+        if (existing.Status != BuildTaskStatuses.CREATED)
         {
             throw ErrorDefinition.Validation(PackageErrors.UNEXPECTED_OPERATION).AsException();
         }
@@ -229,7 +309,7 @@ public class BuildTaskService
         }
 
         // empty file for zip
-        var zipFile = Path.GetTempFileName();
+        var zipFile = Path.Combine(rootDir.FullName, SHOC_BUNDLE_ZIP_NAME);
         
         try
         {
@@ -238,45 +318,73 @@ public class BuildTaskService
         }
         catch (Exception ex)
         {
-            // ensure file is deleted
-            File.Delete(zipFile);
-            
             // rethrow with proper exception
             throw ErrorDefinition.Validation(PackageErrors.UPLOAD_ERROR, ex.Message).AsException();
         }
 
-        // create a root directory for the build
-        var rootDir = Directory.CreateTempSubdirectory("build_");
+        // create a subdirectory
+        var buildDir = rootDir.CreateSubdirectory(BUILD_DIRECTORY_NAME);
 
         try
         {
-            ZipFile.ExtractToDirectory(zipFile, rootDir.FullName);
+            ZipFile.ExtractToDirectory(zipFile, buildDir.FullName);
         }
         catch (Exception ex)
         {
-            // delete directory on error (recursive)
-            rootDir.Delete(true);
-            
             // rethrow with proper exception
             throw ErrorDefinition.Validation(PackageErrors.UNZIP_ERROR, ex.Message).AsException();
         }
-        finally
+        
+        // write containerfile
+        await File.WriteAllTextAsync(Path.Combine(rootDir.FullName, SHOC_CONTAINERFILE_NAME), existing.Containerfile);
+
+        // get registry
+        var registry = await this.GetRegistryById(existing.RegistryId);
+
+        // build the future package id
+        var packageId = StdIdGenerator.Next(PackageObjects.PACKAGE).ToLowerInvariant();
+
+        // build image url
+        var image = this.registryHandlerService.BuildImageTag(new RegistryImageContext
         {
-            // zip file should be deleted anyways
-            File.Delete(zipFile);
+            Registry = registry.Registry,
+            Namespace = registry.Namespace,
+            Provider = registry.Provider,
+            TargetWorkspaceId = existing.WorkspaceId,
+            TargetUserId = existing.UserId,
+            TargetPackageScope = existing.Scope,
+            TargetPackageId = packageId
+        });
+        
+        // create a build context
+        var buildContext = new ContainerBuildContext
+        {
+            Containerfile = Path.Combine(rootDir.FullName, SHOC_CONTAINERFILE_NAME),
+            WorkingDirectory = buildDir.FullName,
+            Image = image
+        };
+        
+        // the build result
+        var buildResult = await this.containerService.Build(buildContext);
+
+        Console.WriteLine("Out: " + buildResult.Output);
+        Console.WriteLine("Err: " + buildResult.Error);
+        
+        // build was not successful
+        if (!buildResult.Success)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.IMAGE_BUILD_ERROR, buildResult.Error).AsException();
         }
-
-        // write dockerfile
-        await File.WriteAllTextAsync(Path.Combine(rootDir.FullName, SHOC_DOCKERFILE_NAME), existing.Dockerfile);
-
+        
         // update the status
-        return await this.buildTaskRepository.UpdateById(workspaceId, id, new BuildTaskUpdateModel
+        return await this.buildTaskRepository.UpdateById(existing.WorkspaceId, existing.Id, new BuildTaskUpdateModel
         {
-            WorkspaceId = workspaceId,
-            Id = id,
-            Status = BuildTaskStatuses.BUILDING,
-            Deadline = DateTime.UtcNow.AddHours(10),
+            WorkspaceId = existing.WorkspaceId,
+            Id = existing.Id,
+            Status = BuildTaskStatuses.COMPLETED,
+            Deadline = null,
             ErrorCode = null,
+            Message = $"Package {image} is successfuly created",
             PackageId = null
         });
     }
@@ -286,7 +394,7 @@ public class BuildTaskService
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
     /// <returns></returns>
-    protected async Task<string> GetDefaultRegistryId(string workspaceId)
+    protected async Task<RegistryGrpcModel> GetDefaultRegistryId(string workspaceId)
     {
         // try getting object
         try {
@@ -294,7 +402,28 @@ public class BuildTaskService
                 .Get<WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcClient>()
                 .DoAuthorized(async (client, metadata) => await client.GetByWorkspaceIdAsync(new GetWorkspaceDefaultRegistryRequest{WorkspaceId = workspaceId}, metadata));
 
-            return result.Registry.Id;
+            return result.Registry;
+        }
+        catch(Exception)
+        {
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY).AsException();
+        }
+    }
+    
+    /// <summary>
+    /// Gets the registry to store the package
+    /// </summary>
+    /// <param name="id">The workspace id</param>
+    /// <returns></returns>
+    protected async Task<RegistryGrpcModel> GetRegistryById(string id)
+    {
+        // try getting object
+        try {
+            var result = await this.grpcClientProvider
+                .Get<RegistryServiceGrpc.RegistryServiceGrpcClient>()
+                .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetRegistryByIdRequest{Id = id}, metadata));
+
+            return result.Registry;
         }
         catch(Exception)
         {
@@ -305,15 +434,15 @@ public class BuildTaskService
     /// <summary>
     /// Renders the given template with the given spec
     /// </summary>
-    /// <param name="dockerfileTemplate">The template content</param>
+    /// <param name="containerfileTemplate">The template content</param>
     /// <param name="spec">The specification to render</param>
     /// <returns></returns>
-    private static async Task<string> RenderDockerfile(string dockerfileTemplate, Dictionary<string, object> spec)
+    private static async Task<string> RenderContainerfile(string containerfileTemplate, Dictionary<string, object> spec)
     {
         try
         {
             // parse the template file
-            var parsed = Template.Parse(dockerfileTemplate);
+            var parsed = Template.Parse(containerfileTemplate);
 
             // render with spec
             return await parsed.RenderAsync(spec);
@@ -356,7 +485,7 @@ public class BuildTaskService
         }
         catch (Exception e)
         {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_DOCKERFILE_TEMPLATE, e.Message).AsException();
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_CONTAINERFILE_TEMPLATE, e.Message).AsException();
         }
     }
 

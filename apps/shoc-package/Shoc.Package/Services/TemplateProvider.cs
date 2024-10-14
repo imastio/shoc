@@ -137,7 +137,7 @@ public class TemplateProvider
     public Task<string> GetTemplateByName(string name, string variant)
     {
         // the target file path
-        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.DOCKERFILE_TEMPLATE_FILE);
+        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.CONTAINERFILE_TEMPLATE_FILE);
         
         // the build spec file for the given template and variant
         var runtime = new FileInfo(path);

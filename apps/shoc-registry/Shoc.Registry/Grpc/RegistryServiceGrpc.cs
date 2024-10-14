@@ -11,7 +11,7 @@ namespace Shoc.Registry.Grpc;
 /// The Grpc service implementation
 /// </summary>
 [BearerOnly]
-public class WorkspaceDefaultRegistryServiceGrpc : Registries.WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcBase
+public class RegistryServiceGrpc : Registries.RegistryServiceGrpc.RegistryServiceGrpcBase
 {
     /// <summary>
     /// The access authorization service
@@ -22,7 +22,7 @@ public class WorkspaceDefaultRegistryServiceGrpc : Registries.WorkspaceDefaultRe
     /// The registry service
     /// </summary>
     private readonly RegistryService registryService;
-    
+
     /// <summary>
     /// The registry grpc mapper
     /// </summary>
@@ -34,7 +34,7 @@ public class WorkspaceDefaultRegistryServiceGrpc : Registries.WorkspaceDefaultRe
     /// <param name="accessAuthorization">The access authorization</param>
     /// <param name="registryService">The registry service</param>
     /// <param name="registryGrpcMapper">The registry grpc mapper</param>
-    public WorkspaceDefaultRegistryServiceGrpc(IAccessAuthorization accessAuthorization, RegistryService registryService, RegistryGrpcMapper registryGrpcMapper)
+    public RegistryServiceGrpc(IAccessAuthorization accessAuthorization, RegistryService registryService, RegistryGrpcMapper registryGrpcMapper)
     {
         this.accessAuthorization = accessAuthorization;
         this.registryService = registryService;
@@ -42,12 +42,12 @@ public class WorkspaceDefaultRegistryServiceGrpc : Registries.WorkspaceDefaultRe
     }
 
     /// <summary>
-    /// Gets the workspace default registry
+    /// Gets the registry by id
     /// </summary>
     /// <param name="request">The request object</param>
     /// <param name="context">The context object</param>
     /// <returns></returns>
-    public override async Task<GetWorkspaceDefaultRegistryResponse> GetByWorkspaceId(GetWorkspaceDefaultRegistryRequest request, ServerCallContext context)
+    public override async Task<GetRegistryResponse> GetById(GetRegistryByIdRequest request, ServerCallContext context)
     {
         // ensure authorization
         await this.accessAuthorization.RequireScopesAll(context.GetHttpContext(), new []{ KnownScopes.SVC });
@@ -56,7 +56,7 @@ public class WorkspaceDefaultRegistryServiceGrpc : Registries.WorkspaceDefaultRe
         var registry = await this.registryService.GetByGlobalName("default");
 
         // build and return the result
-        return new GetWorkspaceDefaultRegistryResponse
+        return new GetRegistryResponse
         {
             Registry = this.registryGrpcMapper.Map(registry)
         };

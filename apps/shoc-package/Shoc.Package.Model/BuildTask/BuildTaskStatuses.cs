@@ -12,22 +12,7 @@ public static class BuildTaskStatuses
     /// <summary>
     /// The created status 
     /// </summary>
-    public const string CREATING = "creating";
-
-    /// <summary>
-    /// The uploading status 
-    /// </summary>
-    public const string UPLOADING = "uploading";
-    
-    /// <summary>
-    /// The building status 
-    /// </summary>
-    public const string BUILDING = "building";
-    
-    /// <summary>
-    /// The pushing status 
-    /// </summary>
-    public const string PUSHING = "pushing";
+    public const string CREATED = "created";
     
     /// <summary>
     /// The completed status 

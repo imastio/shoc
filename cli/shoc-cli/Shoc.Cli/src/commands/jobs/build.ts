@@ -41,9 +41,10 @@ jobsBuildCommand
 
         const uploadData = new FormData()
         uploadData.append('file', await fileFromPath(zip))
-        
+
         const uploaded = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspace.id, task.id, uploadData));
 
+        console.log("Uploaded", uploaded)
     }));
 
 

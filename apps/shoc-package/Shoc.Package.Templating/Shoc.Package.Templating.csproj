@@ -10,7 +10,7 @@
       <None Update="Schemas\build-spec-01.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\alpine\default\Dockerfile.tpl">
+      <None Update="Templates\alpine\default\Containerfile.tpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\alpine\default\build-spec.json">

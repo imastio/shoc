@@ -5,7 +5,13 @@ option csharp_namespace = "Shoc.Registry.Grpc.Registries";
 package api.grpc.registry.registries;
 
 service WorkspaceDefaultRegistryServiceGrpc {
-
   rpc GetByWorkspaceId(GetWorkspaceDefaultRegistryRequest) returns (GetWorkspaceDefaultRegistryResponse);
+}
 
+service RegistryServiceGrpc {
+  rpc GetById(GetRegistryByIdRequest) returns (GetRegistryResponse);
+}
+
+service RegistryPlainCredentialServiceGrpc {
+  rpc GetByWorkspace(GetRegistryPlainCredentialsRequest) returns (GetRegistryPlainCredentialsResponse);
 }

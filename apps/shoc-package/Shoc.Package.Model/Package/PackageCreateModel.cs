@@ -41,9 +41,9 @@ public class PackageCreateModel
     public string Runtime { get; set; }
     
     /// <summary>
-    /// The effective dockerfile of the package
+    /// The effective Containerfile of the package
     /// </summary>
-    public string Dockerfile { get; set; }
+    public string Containerfile { get; set; }
     
     /// <summary>
     /// The reference to the base template

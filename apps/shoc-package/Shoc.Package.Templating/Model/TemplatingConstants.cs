@@ -26,9 +26,9 @@ public static class TemplatingConstants
     public const string BUILD_SPEC_FILE = "build-spec.json";
 
     /// <summary>
-    /// The dockerfile template file name
+    /// The containerfile template file name
     /// </summary>
-    public const string DOCKERFILE_TEMPLATE_FILE = "Dockerfile.tpl";
+    public const string CONTAINERFILE_TEMPLATE_FILE = "Containerfile.tpl";
 
     /// <summary>
     /// The runtime json file name

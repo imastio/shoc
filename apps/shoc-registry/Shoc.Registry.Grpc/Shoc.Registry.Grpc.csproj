@@ -37,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="generated\registry.registries\" />
+      <Folder Include="generated\" />
     </ItemGroup>
 
 </Project>

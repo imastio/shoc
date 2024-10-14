@@ -27,9 +27,9 @@
 
       <TextCommand>
         INSERT INTO `pkg_packages`
-        (`Id`, `WorkspaceId`, `UserId`, `Scope`, `ListingChecksum`, `Manifest`, `Runtime`, `Dockerfile`, `TemplateReference`, `RegistryId`, `Image`)
+        (`Id`, `WorkspaceId`, `UserId`, `Scope`, `ListingChecksum`, `Manifest`, `Runtime`, `Containerfile`, `TemplateReference`, `RegistryId`, `Image`)
         VALUES
-        (@Id, @WorkspaceId, @UserId, @Scope, @ListingChecksum, @Manifest, @Runtime, @Dockerfile, @TemplateReference, @RegistryId, @Image);
+        (@Id, @WorkspaceId, @UserId, @Scope, @ListingChecksum, @Manifest, @Runtime, @Containerfile, @TemplateReference, @RegistryId, @Image);
 
         SELECT * FROM `pkg_packages`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;

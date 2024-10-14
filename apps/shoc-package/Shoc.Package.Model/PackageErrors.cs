@@ -53,7 +53,7 @@ public static class PackageErrors
     /// <summary>
     /// The template is invalid
     /// </summary>
-    public const string INVALID_DOCKERFILE_TEMPLATE = "PACKAGE_INVALID_DOCKERFILE_TEMPLATE";
+    public const string INVALID_CONTAINERFILE_TEMPLATE = "PACKAGE_INVALID_CONTAINERFILE_TEMPLATE";
 
     /// <summary>
     /// The error indicating render failure
@@ -94,6 +94,11 @@ public static class PackageErrors
     /// The bundle unzip error
     /// </summary>
     public const string UNZIP_ERROR = "PACKAGE_UNZIP_ERROR";
+    
+    /// <summary>
+    /// The image build error
+    /// </summary>
+    public const string IMAGE_BUILD_ERROR = "PACKAGE_IMAGE_BUILD_ERROR";
     
     /// <summary>
     /// The unknown error

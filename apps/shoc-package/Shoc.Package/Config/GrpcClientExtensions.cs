@@ -21,6 +21,9 @@ public static class GrpcClientExtensions
         services.AddDiscoverableGrpcClient("shoc-workspace", invoker => new WorkspaceServiceGrpc.WorkspaceServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-workspace", invoker => new WorkspaceMemberServiceGrpc.WorkspaceMemberServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-registry", invoker => new WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcClient(invoker));
+        services.AddDiscoverableGrpcClient("shoc-registry", invoker => new RegistryServiceGrpc.RegistryServiceGrpcClient(invoker));
+        services.AddDiscoverableGrpcClient("shoc-registry", invoker => new RegistryPlainCredentialServiceGrpc.RegistryPlainCredentialServiceGrpcClient(invoker));
+        
         return services;
     }
 }

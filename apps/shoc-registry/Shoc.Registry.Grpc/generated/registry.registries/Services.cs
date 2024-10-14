@@ -30,8 +30,15 @@ namespace Shoc.Registry.Grpc.Registries {
             "R3JwYxKXAQoQR2V0QnlXb3Jrc3BhY2VJZBJALmFwaS5ncnBjLnJlZ2lzdHJ5",
             "LnJlZ2lzdHJpZXMuR2V0V29ya3NwYWNlRGVmYXVsdFJlZ2lzdHJ5UmVxdWVz",
             "dBpBLmFwaS5ncnBjLnJlZ2lzdHJ5LnJlZ2lzdHJpZXMuR2V0V29ya3NwYWNl",
-            "RGVmYXVsdFJlZ2lzdHJ5UmVzcG9uc2VCIKoCHVNob2MuUmVnaXN0cnkuR3Jw",
-            "Yy5SZWdpc3RyaWVzYgZwcm90bzM="));
+            "RGVmYXVsdFJlZ2lzdHJ5UmVzcG9uc2UyiQEKE1JlZ2lzdHJ5U2VydmljZUdy",
+            "cGMScgoHR2V0QnlJZBI0LmFwaS5ncnBjLnJlZ2lzdHJ5LnJlZ2lzdHJpZXMu",
+            "R2V0UmVnaXN0cnlCeUlkUmVxdWVzdBoxLmFwaS5ncnBjLnJlZ2lzdHJ5LnJl",
+            "Z2lzdHJpZXMuR2V0UmVnaXN0cnlSZXNwb25zZTK8AQoiUmVnaXN0cnlQbGFp",
+            "bkNyZWRlbnRpYWxTZXJ2aWNlR3JwYxKVAQoOR2V0QnlXb3Jrc3BhY2USQC5h",
+            "cGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVzLkdldFJlZ2lzdHJ5UGxhaW5D",
+            "cmVkZW50aWFsc1JlcXVlc3QaQS5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3Ry",
+            "aWVzLkdldFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsc1Jlc3BvbnNlQiCqAh1T",
+            "aG9jLlJlZ2lzdHJ5LkdycGMuUmVnaXN0cmllc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

@@ -9,7 +9,7 @@
       "default": "latest",
       "description": "The tag for the base image."
     },
-    "appUid": {
+    "shocUid": {
       "$ref": "https://shoc.dev/api/schemas/build-spec-01#/definitions/UserId",
       "default": 1234,
       "description": "The user ID to create within the container."

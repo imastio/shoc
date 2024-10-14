@@ -27,9 +27,9 @@
 
       <TextCommand>
         INSERT INTO `pkg_build_tasks`
-        (`Id`, `WorkspaceId`, `UserId`, `Provider`, `Scope`, `ListingChecksum`, `Manifest`, `Runtime`, `Dockerfile`, `TemplateReference`, `RegistryId`, `Status`, `Deadline`)
+        (`Id`, `WorkspaceId`, `UserId`, `Provider`, `Scope`, `ListingChecksum`, `Manifest`, `Runtime`, `Containerfile`, `TemplateReference`, `RegistryId`, `Status`, `Deadline`)
         VALUES
-        (@Id, @WorkspaceId, @UserId, @Provider, @Scope, @ListingChecksum, @Manifest, @Runtime, @Dockerfile, @TemplateReference, @RegistryId, @Status, @Deadline);
+        (@Id, @WorkspaceId, @UserId, @Provider, @Scope, @ListingChecksum, @Manifest, @Runtime, @Containerfile, @TemplateReference, @RegistryId, @Status, @Deadline);
 
         SELECT * FROM `pkg_build_tasks`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
@@ -44,7 +44,8 @@
         `Status` = @Status,
         `Deadline` = @Deadline,
         `PackageId` = @PackageId,
-        `ErrorCode` = @ErrorCode
+        `ErrorCode` = @ErrorCode,
+        `Message` = @Message
         WHERE
         `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
 

@@ -151,5 +151,291 @@ namespace Shoc.Registry.Grpc.Registries {
     }
 
   }
+  public static partial class RegistryServiceGrpc
+  {
+    static readonly string __ServiceName = "api.grpc.registry.registries.RegistryServiceGrpc";
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest> __Marshaller_api_grpc_registry_registries_GetRegistryByIdRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryResponse> __Marshaller_api_grpc_registry_registries_GetRegistryResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryResponse.Parser));
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryResponse> __Method_GetById = new grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetById",
+        __Marshaller_api_grpc_registry_registries_GetRegistryByIdRequest,
+        __Marshaller_api_grpc_registry_registries_GetRegistryResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::Shoc.Registry.Grpc.Registries.ServicesReflection.Descriptor.Services[1]; }
+    }
+
+    /// <summary>Base class for server-side implementations of RegistryServiceGrpc</summary>
+    [grpc::BindServiceMethod(typeof(RegistryServiceGrpc), "BindService")]
+    public abstract partial class RegistryServiceGrpcBase
+    {
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Shoc.Registry.Grpc.Registries.GetRegistryResponse> GetById(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for RegistryServiceGrpc</summary>
+    public partial class RegistryServiceGrpcClient : grpc::ClientBase<RegistryServiceGrpcClient>
+    {
+      /// <summary>Creates a new client for RegistryServiceGrpc</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public RegistryServiceGrpcClient(grpc::ChannelBase channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for RegistryServiceGrpc that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public RegistryServiceGrpcClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected RegistryServiceGrpcClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected RegistryServiceGrpcClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryResponse GetById(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetById(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryResponse GetById(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetById, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryResponse> GetByIdAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetByIdAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryResponse> GetByIdAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetById, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected override RegistryServiceGrpcClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new RegistryServiceGrpcClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static grpc::ServerServiceDefinition BindService(RegistryServiceGrpcBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetById, serviceImpl.GetById).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, RegistryServiceGrpcBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetById, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryResponse>(serviceImpl.GetById));
+    }
+
+  }
+  public static partial class RegistryPlainCredentialServiceGrpc
+  {
+    static readonly string __ServiceName = "api.grpc.registry.registries.RegistryPlainCredentialServiceGrpc";
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse.Parser));
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> __Method_GetByWorkspace = new grpc::Method<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetByWorkspace",
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsRequest,
+        __Marshaller_api_grpc_registry_registries_GetRegistryPlainCredentialsResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::Shoc.Registry.Grpc.Registries.ServicesReflection.Descriptor.Services[2]; }
+    }
+
+    /// <summary>Base class for server-side implementations of RegistryPlainCredentialServiceGrpc</summary>
+    [grpc::BindServiceMethod(typeof(RegistryPlainCredentialServiceGrpc), "BindService")]
+    public abstract partial class RegistryPlainCredentialServiceGrpcBase
+    {
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for RegistryPlainCredentialServiceGrpc</summary>
+    public partial class RegistryPlainCredentialServiceGrpcClient : grpc::ClientBase<RegistryPlainCredentialServiceGrpcClient>
+    {
+      /// <summary>Creates a new client for RegistryPlainCredentialServiceGrpc</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public RegistryPlainCredentialServiceGrpcClient(grpc::ChannelBase channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for RegistryPlainCredentialServiceGrpc that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public RegistryPlainCredentialServiceGrpcClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected RegistryPlainCredentialServiceGrpcClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected RegistryPlainCredentialServiceGrpcClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetByWorkspace(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse GetByWorkspace(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetByWorkspace, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspaceAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetByWorkspaceAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse> GetByWorkspaceAsync(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetByWorkspace, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected override RegistryPlainCredentialServiceGrpcClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new RegistryPlainCredentialServiceGrpcClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static grpc::ServerServiceDefinition BindService(RegistryPlainCredentialServiceGrpcBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetByWorkspace, serviceImpl.GetByWorkspace).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, RegistryPlainCredentialServiceGrpcBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetByWorkspace, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest, global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse>(serviceImpl.GetByWorkspace));
+    }
+
+  }
 }
 #endregion

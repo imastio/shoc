@@ -30,17 +30,36 @@ namespace Shoc.Registry.Grpc.Registries {
             "KAkSEwoLZGlzcGxheU5hbWUYBCABKAkSDgoGc3RhdHVzGAUgASgJEhAKCHBy",
             "b3ZpZGVyGAYgASgJEhIKCnVzYWdlU2NvcGUYByABKAkSEAoIcmVnaXN0cnkY",
             "CCABKAkSFgoJbmFtZXNwYWNlGAkgASgJSAGIAQFCDgoMX3dvcmtzcGFjZUlk",
-            "QgwKCl9uYW1lc3BhY2UiOQoiR2V0V29ya3NwYWNlRGVmYXVsdFJlZ2lzdHJ5",
-            "UmVxdWVzdBITCgt3b3Jrc3BhY2VJZBgBIAEoCSJoCiNHZXRXb3Jrc3BhY2VE",
-            "ZWZhdWx0UmVnaXN0cnlSZXNwb25zZRJBCghyZWdpc3RyeRgBIAEoCzIvLmFw",
-            "aS5ncnBjLnJlZ2lzdHJ5LnJlZ2lzdHJpZXMuUmVnaXN0cnlHcnBjTW9kZWxC",
-            "IKoCHVNob2MuUmVnaXN0cnkuR3JwYy5SZWdpc3RyaWVzYgZwcm90bzM="));
+            "QgwKCl9uYW1lc3BhY2UijQIKIFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsR3Jw",
+            "Y01vZGVsEgoKAmlkGAEgASgJEhIKCnJlZ2lzdHJ5SWQYAiABKAkSGAoLd29y",
+            "a3NwYWNlSWQYAyABKAlIAIgBARITCgZ1c2VySWQYBCABKAlIAYgBARIOCgZz",
+            "b3VyY2UYBSABKAkSEAoIdXNlcm5hbWUYBiABKAkSFQoNcGFzc3dvcmRQbGFp",
+            "bhgHIAEoCRISCgVlbWFpbBgIIAEoCUgCiAEBEhMKC3B1c2hBbGxvd2VkGAkg",
+            "ASgIEhMKC3B1bGxBbGxvd2VkGAogASgIQg4KDF93b3Jrc3BhY2VJZEIJCgdf",
+            "dXNlcklkQggKBl9lbWFpbCI5CiJHZXRXb3Jrc3BhY2VEZWZhdWx0UmVnaXN0",
+            "cnlSZXF1ZXN0EhMKC3dvcmtzcGFjZUlkGAEgASgJImgKI0dldFdvcmtzcGFj",
+            "ZURlZmF1bHRSZWdpc3RyeVJlc3BvbnNlEkEKCHJlZ2lzdHJ5GAEgASgLMi8u",
+            "YXBpLmdycGMucmVnaXN0cnkucmVnaXN0cmllcy5SZWdpc3RyeUdycGNNb2Rl",
+            "bCIkChZHZXRSZWdpc3RyeUJ5SWRSZXF1ZXN0EgoKAmlkGAEgASgJIlgKE0dl",
+            "dFJlZ2lzdHJ5UmVzcG9uc2USQQoIcmVnaXN0cnkYASABKAsyLy5hcGkuZ3Jw",
+            "Yy5yZWdpc3RyeS5yZWdpc3RyaWVzLlJlZ2lzdHJ5R3JwY01vZGVsIl0KIkdl",
+            "dFJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsc1JlcXVlc3QSEgoKcmVnaXN0cnlJ",
+            "ZBgBIAEoCRITCgt3b3Jrc3BhY2VJZBgCIAEoCRIOCgZ1c2VySWQYAyABKAki",
+            "egojR2V0UmVnaXN0cnlQbGFpbkNyZWRlbnRpYWxzUmVzcG9uc2USUwoLY3Jl",
+            "ZGVudGlhbHMYASADKAsyPi5hcGkuZ3JwYy5yZWdpc3RyeS5yZWdpc3RyaWVz",
+            "LlJlZ2lzdHJ5UGxhaW5DcmVkZW50aWFsR3JwY01vZGVsQiCqAh1TaG9jLlJl",
+            "Z2lzdHJ5LkdycGMuUmVnaXN0cmllc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel), global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel.Parser, new[]{ "Id", "WorkspaceId", "Name", "DisplayName", "Status", "Provider", "UsageScope", "Registry", "Namespace" }, new[]{ "WorkspaceId", "Namespace" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel), global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel.Parser, new[]{ "Id", "RegistryId", "WorkspaceId", "UserId", "Source", "Username", "PasswordPlain", "Email", "PushAllowed", "PullAllowed" }, new[]{ "WorkspaceId", "UserId", "Email" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryRequest), global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryRequest.Parser, new[]{ "WorkspaceId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse), global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse.Parser, new[]{ "Registry" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse), global::Shoc.Registry.Grpc.Registries.GetWorkspaceDefaultRegistryResponse.Parser, new[]{ "Registry" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest), global::Shoc.Registry.Grpc.Registries.GetRegistryByIdRequest.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryResponse), global::Shoc.Registry.Grpc.Registries.GetRegistryResponse.Parser, new[]{ "Registry" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsRequest.Parser, new[]{ "RegistryId", "WorkspaceId", "UserId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse), global::Shoc.Registry.Grpc.Registries.GetRegistryPlainCredentialsResponse.Parser, new[]{ "Credentials" }, null, null, null, null)
           }));
     }
     #endregion
@@ -556,6 +575,564 @@ namespace Shoc.Registry.Grpc.Registries {
 
   }
 
+  public sealed partial class RegistryPlainCredentialGrpcModel : pb::IMessage<RegistryPlainCredentialGrpcModel>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RegistryPlainCredentialGrpcModel> _parser = new pb::MessageParser<RegistryPlainCredentialGrpcModel>(() => new RegistryPlainCredentialGrpcModel());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<RegistryPlainCredentialGrpcModel> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RegistryPlainCredentialGrpcModel() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RegistryPlainCredentialGrpcModel(RegistryPlainCredentialGrpcModel other) : this() {
+      id_ = other.id_;
+      registryId_ = other.registryId_;
+      workspaceId_ = other.workspaceId_;
+      userId_ = other.userId_;
+      source_ = other.source_;
+      username_ = other.username_;
+      passwordPlain_ = other.passwordPlain_;
+      email_ = other.email_;
+      pushAllowed_ = other.pushAllowed_;
+      pullAllowed_ = other.pullAllowed_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RegistryPlainCredentialGrpcModel Clone() {
+      return new RegistryPlainCredentialGrpcModel(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "registryId" field.</summary>
+    public const int RegistryIdFieldNumber = 2;
+    private string registryId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RegistryId {
+      get { return registryId_; }
+      set {
+        registryId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "workspaceId" field.</summary>
+    public const int WorkspaceIdFieldNumber = 3;
+    private string workspaceId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string WorkspaceId {
+      get { return workspaceId_ ?? ""; }
+      set {
+        workspaceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "workspaceId" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasWorkspaceId {
+      get { return workspaceId_ != null; }
+    }
+    /// <summary>Clears the value of the "workspaceId" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearWorkspaceId() {
+      workspaceId_ = null;
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 4;
+    private string userId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_ ?? ""; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "userId" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUserId {
+      get { return userId_ != null; }
+    }
+    /// <summary>Clears the value of the "userId" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUserId() {
+      userId_ = null;
+    }
+
+    /// <summary>Field number for the "source" field.</summary>
+    public const int SourceFieldNumber = 5;
+    private string source_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Source {
+      get { return source_; }
+      set {
+        source_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "username" field.</summary>
+    public const int UsernameFieldNumber = 6;
+    private string username_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Username {
+      get { return username_; }
+      set {
+        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "passwordPlain" field.</summary>
+    public const int PasswordPlainFieldNumber = 7;
+    private string passwordPlain_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PasswordPlain {
+      get { return passwordPlain_; }
+      set {
+        passwordPlain_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 8;
+    private string email_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_ ?? ""; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "email" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasEmail {
+      get { return email_ != null; }
+    }
+    /// <summary>Clears the value of the "email" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearEmail() {
+      email_ = null;
+    }
+
+    /// <summary>Field number for the "pushAllowed" field.</summary>
+    public const int PushAllowedFieldNumber = 9;
+    private bool pushAllowed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PushAllowed {
+      get { return pushAllowed_; }
+      set {
+        pushAllowed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pullAllowed" field.</summary>
+    public const int PullAllowedFieldNumber = 10;
+    private bool pullAllowed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PullAllowed {
+      get { return pullAllowed_; }
+      set {
+        pullAllowed_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as RegistryPlainCredentialGrpcModel);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(RegistryPlainCredentialGrpcModel other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      if (RegistryId != other.RegistryId) return false;
+      if (WorkspaceId != other.WorkspaceId) return false;
+      if (UserId != other.UserId) return false;
+      if (Source != other.Source) return false;
+      if (Username != other.Username) return false;
+      if (PasswordPlain != other.PasswordPlain) return false;
+      if (Email != other.Email) return false;
+      if (PushAllowed != other.PushAllowed) return false;
+      if (PullAllowed != other.PullAllowed) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
+      if (RegistryId.Length != 0) hash ^= RegistryId.GetHashCode();
+      if (HasWorkspaceId) hash ^= WorkspaceId.GetHashCode();
+      if (HasUserId) hash ^= UserId.GetHashCode();
+      if (Source.Length != 0) hash ^= Source.GetHashCode();
+      if (Username.Length != 0) hash ^= Username.GetHashCode();
+      if (PasswordPlain.Length != 0) hash ^= PasswordPlain.GetHashCode();
+      if (HasEmail) hash ^= Email.GetHashCode();
+      if (PushAllowed != false) hash ^= PushAllowed.GetHashCode();
+      if (PullAllowed != false) hash ^= PullAllowed.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (RegistryId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RegistryId);
+      }
+      if (HasWorkspaceId) {
+        output.WriteRawTag(26);
+        output.WriteString(WorkspaceId);
+      }
+      if (HasUserId) {
+        output.WriteRawTag(34);
+        output.WriteString(UserId);
+      }
+      if (Source.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Source);
+      }
+      if (Username.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Username);
+      }
+      if (PasswordPlain.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(PasswordPlain);
+      }
+      if (HasEmail) {
+        output.WriteRawTag(66);
+        output.WriteString(Email);
+      }
+      if (PushAllowed != false) {
+        output.WriteRawTag(72);
+        output.WriteBool(PushAllowed);
+      }
+      if (PullAllowed != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(PullAllowed);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (RegistryId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RegistryId);
+      }
+      if (HasWorkspaceId) {
+        output.WriteRawTag(26);
+        output.WriteString(WorkspaceId);
+      }
+      if (HasUserId) {
+        output.WriteRawTag(34);
+        output.WriteString(UserId);
+      }
+      if (Source.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Source);
+      }
+      if (Username.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Username);
+      }
+      if (PasswordPlain.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(PasswordPlain);
+      }
+      if (HasEmail) {
+        output.WriteRawTag(66);
+        output.WriteString(Email);
+      }
+      if (PushAllowed != false) {
+        output.WriteRawTag(72);
+        output.WriteBool(PushAllowed);
+      }
+      if (PullAllowed != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(PullAllowed);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (RegistryId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RegistryId);
+      }
+      if (HasWorkspaceId) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(WorkspaceId);
+      }
+      if (HasUserId) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (Source.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Source);
+      }
+      if (Username.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
+      }
+      if (PasswordPlain.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PasswordPlain);
+      }
+      if (HasEmail) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (PushAllowed != false) {
+        size += 1 + 1;
+      }
+      if (PullAllowed != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(RegistryPlainCredentialGrpcModel other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
+      }
+      if (other.RegistryId.Length != 0) {
+        RegistryId = other.RegistryId;
+      }
+      if (other.HasWorkspaceId) {
+        WorkspaceId = other.WorkspaceId;
+      }
+      if (other.HasUserId) {
+        UserId = other.UserId;
+      }
+      if (other.Source.Length != 0) {
+        Source = other.Source;
+      }
+      if (other.Username.Length != 0) {
+        Username = other.Username;
+      }
+      if (other.PasswordPlain.Length != 0) {
+        PasswordPlain = other.PasswordPlain;
+      }
+      if (other.HasEmail) {
+        Email = other.Email;
+      }
+      if (other.PushAllowed != false) {
+        PushAllowed = other.PushAllowed;
+      }
+      if (other.PullAllowed != false) {
+        PullAllowed = other.PullAllowed;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 18: {
+            RegistryId = input.ReadString();
+            break;
+          }
+          case 26: {
+            WorkspaceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 42: {
+            Source = input.ReadString();
+            break;
+          }
+          case 50: {
+            Username = input.ReadString();
+            break;
+          }
+          case 58: {
+            PasswordPlain = input.ReadString();
+            break;
+          }
+          case 66: {
+            Email = input.ReadString();
+            break;
+          }
+          case 72: {
+            PushAllowed = input.ReadBool();
+            break;
+          }
+          case 80: {
+            PullAllowed = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+          case 18: {
+            RegistryId = input.ReadString();
+            break;
+          }
+          case 26: {
+            WorkspaceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 42: {
+            Source = input.ReadString();
+            break;
+          }
+          case 50: {
+            Username = input.ReadString();
+            break;
+          }
+          case 58: {
+            PasswordPlain = input.ReadString();
+            break;
+          }
+          case 66: {
+            Email = input.ReadString();
+            break;
+          }
+          case 72: {
+            PushAllowed = input.ReadBool();
+            break;
+          }
+          case 80: {
+            PullAllowed = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class GetWorkspaceDefaultRegistryRequest : pb::IMessage<GetWorkspaceDefaultRegistryRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -570,7 +1147,7 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -759,7 +1336,7 @@ namespace Shoc.Registry.Grpc.Registries {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -934,6 +1511,834 @@ namespace Shoc.Registry.Grpc.Registries {
               Registry = new global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel();
             }
             input.ReadMessage(Registry);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class GetRegistryByIdRequest : pb::IMessage<GetRegistryByIdRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetRegistryByIdRequest> _parser = new pb::MessageParser<GetRegistryByIdRequest>(() => new GetRegistryByIdRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetRegistryByIdRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryByIdRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryByIdRequest(GetRegistryByIdRequest other) : this() {
+      id_ = other.id_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryByIdRequest Clone() {
+      return new GetRegistryByIdRequest(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private string id_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetRegistryByIdRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetRegistryByIdRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id.Length != 0) hash ^= Id.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetRegistryByIdRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id.Length != 0) {
+        Id = other.Id;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class GetRegistryResponse : pb::IMessage<GetRegistryResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetRegistryResponse> _parser = new pb::MessageParser<GetRegistryResponse>(() => new GetRegistryResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetRegistryResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryResponse(GetRegistryResponse other) : this() {
+      registry_ = other.registry_ != null ? other.registry_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryResponse Clone() {
+      return new GetRegistryResponse(this);
+    }
+
+    /// <summary>Field number for the "registry" field.</summary>
+    public const int RegistryFieldNumber = 1;
+    private global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel registry_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel Registry {
+      get { return registry_; }
+      set {
+        registry_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetRegistryResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetRegistryResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Registry, other.Registry)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (registry_ != null) hash ^= Registry.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (registry_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Registry);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (registry_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Registry);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (registry_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Registry);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetRegistryResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.registry_ != null) {
+        if (registry_ == null) {
+          Registry = new global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel();
+        }
+        Registry.MergeFrom(other.Registry);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (registry_ == null) {
+              Registry = new global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel();
+            }
+            input.ReadMessage(Registry);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (registry_ == null) {
+              Registry = new global::Shoc.Registry.Grpc.Registries.RegistryGrpcModel();
+            }
+            input.ReadMessage(Registry);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class GetRegistryPlainCredentialsRequest : pb::IMessage<GetRegistryPlainCredentialsRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetRegistryPlainCredentialsRequest> _parser = new pb::MessageParser<GetRegistryPlainCredentialsRequest>(() => new GetRegistryPlainCredentialsRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetRegistryPlainCredentialsRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsRequest(GetRegistryPlainCredentialsRequest other) : this() {
+      registryId_ = other.registryId_;
+      workspaceId_ = other.workspaceId_;
+      userId_ = other.userId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsRequest Clone() {
+      return new GetRegistryPlainCredentialsRequest(this);
+    }
+
+    /// <summary>Field number for the "registryId" field.</summary>
+    public const int RegistryIdFieldNumber = 1;
+    private string registryId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RegistryId {
+      get { return registryId_; }
+      set {
+        registryId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "workspaceId" field.</summary>
+    public const int WorkspaceIdFieldNumber = 2;
+    private string workspaceId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string WorkspaceId {
+      get { return workspaceId_; }
+      set {
+        workspaceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 3;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetRegistryPlainCredentialsRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetRegistryPlainCredentialsRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (RegistryId != other.RegistryId) return false;
+      if (WorkspaceId != other.WorkspaceId) return false;
+      if (UserId != other.UserId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (RegistryId.Length != 0) hash ^= RegistryId.GetHashCode();
+      if (WorkspaceId.Length != 0) hash ^= WorkspaceId.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (RegistryId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(RegistryId);
+      }
+      if (WorkspaceId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(WorkspaceId);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(UserId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (RegistryId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(RegistryId);
+      }
+      if (WorkspaceId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(WorkspaceId);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(UserId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (RegistryId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RegistryId);
+      }
+      if (WorkspaceId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(WorkspaceId);
+      }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetRegistryPlainCredentialsRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.RegistryId.Length != 0) {
+        RegistryId = other.RegistryId;
+      }
+      if (other.WorkspaceId.Length != 0) {
+        WorkspaceId = other.WorkspaceId;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            RegistryId = input.ReadString();
+            break;
+          }
+          case 18: {
+            WorkspaceId = input.ReadString();
+            break;
+          }
+          case 26: {
+            UserId = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            RegistryId = input.ReadString();
+            break;
+          }
+          case 18: {
+            WorkspaceId = input.ReadString();
+            break;
+          }
+          case 26: {
+            UserId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class GetRegistryPlainCredentialsResponse : pb::IMessage<GetRegistryPlainCredentialsResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetRegistryPlainCredentialsResponse> _parser = new pb::MessageParser<GetRegistryPlainCredentialsResponse>(() => new GetRegistryPlainCredentialsResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetRegistryPlainCredentialsResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Shoc.Registry.Grpc.Registries.TypesReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsResponse(GetRegistryPlainCredentialsResponse other) : this() {
+      credentials_ = other.credentials_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetRegistryPlainCredentialsResponse Clone() {
+      return new GetRegistryPlainCredentialsResponse(this);
+    }
+
+    /// <summary>Field number for the "credentials" field.</summary>
+    public const int CredentialsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> _repeated_credentials_codec
+        = pb::FieldCodec.ForMessage(10, global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel.Parser);
+    private readonly pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> credentials_ = new pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Shoc.Registry.Grpc.Registries.RegistryPlainCredentialGrpcModel> Credentials {
+      get { return credentials_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetRegistryPlainCredentialsResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetRegistryPlainCredentialsResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!credentials_.Equals(other.credentials_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= credentials_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      credentials_.WriteTo(output, _repeated_credentials_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      credentials_.WriteTo(ref output, _repeated_credentials_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += credentials_.CalculateSize(_repeated_credentials_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetRegistryPlainCredentialsResponse other) {
+      if (other == null) {
+        return;
+      }
+      credentials_.Add(other.credentials_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            credentials_.AddEntriesFrom(input, _repeated_credentials_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            credentials_.AddEntriesFrom(ref input, _repeated_credentials_codec);
             break;
           }
         }
