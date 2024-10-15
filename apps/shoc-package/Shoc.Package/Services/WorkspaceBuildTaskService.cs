@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
 using Shoc.Package.Model.BuildTask;

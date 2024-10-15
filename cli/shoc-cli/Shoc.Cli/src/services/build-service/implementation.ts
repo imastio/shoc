@@ -4,7 +4,7 @@ import fsDirect from "fs";
 import path from "path";
 import * as YAML from 'yaml';
 import { promises as fs } from 'fs';
-import { BuildFileEntry, BuildListing, BuildManifest, BuildManifestResult, FileEntry } from "./types";
+import { BuildContext, BuildFileEntry, BuildListing, BuildManifest, BuildManifestResult, FileEntry } from "./types";
 import { glob, Path } from "glob";
 import crypto from "crypto"
 import os from "os";
@@ -14,8 +14,8 @@ const DEFAULT_IGNORE_PATTERNS = ['**/.git/**', '**/node_modules/**']
 const DEFAULT_TEMP_DIR = 'shoc-temp'
 const ZIP_FILENAME_SIZE = 16
 
-async function getBuildFile(context: ResolvedContext, options: any): Promise<FileEntry>{
-    const targetBuildFile = path.resolve(context.dir, options.buildFile || DEFAULT_BUILD_FILE)
+async function getBuildFile(context: BuildContext): Promise<FileEntry>{
+    const targetBuildFile = path.resolve(context.dir, context.buildFile || DEFAULT_BUILD_FILE)
 
     if (!fsDirect.existsSync(targetBuildFile)) {
         throw Error(`The build file ${targetBuildFile} could not be found!`)
@@ -30,9 +30,9 @@ async function getBuildFile(context: ResolvedContext, options: any): Promise<Fil
     }
 }
 
-export async function getBuildManifest(context: ResolvedContext, options: any): Promise<BuildManifestResult> {
+export async function getBuildManifest(context: BuildContext): Promise<BuildManifestResult> {
 
-    const targetBuildFile = await getBuildFile(context, options);
+    const targetBuildFile = await getBuildFile(context);
 
     const file = await fs.readFile(targetBuildFile.fullPath, 'utf8');
 
@@ -42,7 +42,7 @@ export async function getBuildManifest(context: ResolvedContext, options: any): 
     };
 }
 
-export async function getBuildListing(context: ResolvedContext, manifest: BuildManifest) : Promise<BuildListing>{
+export async function getBuildListing(context: BuildContext, manifest: BuildManifest) : Promise<BuildListing>{
     const list: Path[] = await glob(
         '**/*',
         {

@@ -8,6 +8,7 @@ import userSecretsCommand from './user-secrets';
 import workspaceSecretsCommand from './workspace-secrets';
 import templatesCommand from './templates';
 import jobsCommand from './jobs';
+import buildCommand from './build';
 
 const program = createCommand();
 
@@ -20,6 +21,7 @@ program
   .option('-d, --dir <dir>', 'Use the given working directory')
   .enablePositionalOptions();
 
+program.addCommand(buildCommand);
 program.addCommand(configCommand);
 program.addCommand(authCommand);
 program.addCommand(jobsCommand)

@@ -43,6 +43,7 @@ export default class WorkspaceBuildTasksClient extends BaseAxiosClient {
         ...this.authBearer(token),
         'Content-Type': 'multipart/form-data'
       },
+      timeout: 2 * 60 * 60 * 1000,
       maxBodyLength: Infinity
     });
   }

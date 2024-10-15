@@ -4,6 +4,7 @@ using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Identity.Grpc.Users;
 using Shoc.Package.Model;
+using Shoc.Package.Model.Package;
 using Shoc.Workspace.Grpc.Workspaces;
 
 namespace Shoc.Package.Services;
@@ -76,31 +77,29 @@ public class ValidationService
     }
     
     /// <summary>
-    /// Validate user to be a member of the workspace
+    /// Validate object scope
     /// </summary>
-    /// <param name="workspaceId">The workspace id</param>
-    /// <param name="userId">The user id</param>
-    public async Task RequireMembership(string workspaceId, string userId)
+    /// <param name="scope">The scope to validate</param>
+    public void ValidateScope(string scope)
     {
-        // no user id given
-        if (string.IsNullOrWhiteSpace(userId))
+        // make sure valid status
+        if (PackageScopes.ALL.Contains(scope))
         {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_USER).AsException();
+            return;
         }
-        
-        // try getting object
-        try {
-            await this.grpcClientProvider
-                .Get<WorkspaceMemberServiceGrpc.WorkspaceMemberServiceGrpcClient>()
-                .DoAuthorized(async (client, metadata) => await client.GetByUserIdAsync(new GetWorkspaceMemberByUserIdRequest
-                {
-                    WorkspaceId = workspaceId,
-                    UserId = userId
-                }, metadata));
-        }
-        catch(Exception)
+
+        throw ErrorDefinition.Validation(PackageErrors.INVALID_PACKAGE_SCOPE).AsException();
+    }
+
+    /// <summary>
+    /// Validates the listing checksum
+    /// </summary>
+    /// <param name="checksum">The checksum</param>
+    public void ValidateListingChecksum(string checksum)
+    {
+        if (string.IsNullOrWhiteSpace(checksum))
         {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_USER).AsException();
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_LISTING_CHECKSUM).AsException();
         }
     }
 }

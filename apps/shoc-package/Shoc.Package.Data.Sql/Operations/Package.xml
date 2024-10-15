@@ -16,6 +16,14 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetAllByListingChecksum">
+      <TextCommand>
+        SELECT * FROM `pkg_packages`
+        WHERE `WorkspaceId` = @WorkspaceId AND `ListingChecksum` = @ListingChecksum
+        ORDER BY `Updated` Desc;
+      </TextCommand>
+    </SqlOperation>
+
     <SqlOperation Name="GetById">
       <TextCommand>
         SELECT * FROM `pkg_packages`

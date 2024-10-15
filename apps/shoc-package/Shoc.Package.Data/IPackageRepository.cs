@@ -14,6 +14,14 @@ public interface IPackageRepository
     /// </summary>
     /// <returns></returns>
     Task<IEnumerable<PackageModel>> GetAll(string workspaceId);
+
+    /// <summary>
+    /// Gets all the objects by listing checksum
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="listingChecksum">The listing checksum</param>
+    /// <returns></returns>
+    Task<IEnumerable<PackageModel>> GetAllByListingChecksum(string workspaceId, string listingChecksum);
     
     /// <summary>
     /// Gets the object by id

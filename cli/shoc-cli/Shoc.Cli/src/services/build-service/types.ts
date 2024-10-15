@@ -22,3 +22,10 @@ export interface BuildManifestResult {
 export interface BuildListing {
     files: BuildFileEntry[]
 }
+
+export interface BuildContext {
+    workspace: string,
+    dir: string,
+    buildFile: string,
+    scope: string
+}

@@ -36,6 +36,8 @@ builder.Services.AddSingleton<TemplateProvider>();
 builder.Services.AddSingleton<TemplateBuildSpecGenerator>();
 builder.Services.AddSingleton<BuildTaskService>();
 builder.Services.AddSingleton<WorkspaceBuildTaskService>();
+builder.Services.AddSingleton<PackageService>();
+builder.Services.AddSingleton<WorkspacePackageService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

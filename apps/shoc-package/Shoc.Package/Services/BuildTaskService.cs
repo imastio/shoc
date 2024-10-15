@@ -9,7 +9,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Serialization;
 using Scriban;
-using Shoc.ApiCore.GrpcClient;
 using Shoc.Core;
 using Shoc.Package.Data;
 using Shoc.Package.Model;
@@ -18,7 +17,6 @@ using Shoc.Package.Model.Command;
 using Shoc.Package.Model.Package;
 using Shoc.Package.Model.Registry;
 using Shoc.Package.Templating.Model;
-using Shoc.Registry.Grpc.Registries;
 
 namespace Shoc.Package.Services;
 
@@ -73,11 +71,6 @@ public class BuildTaskService
     private readonly TemplateProvider templateProvider;
 
     /// <summary>
-    /// The grpc client provider
-    /// </summary>
-    private readonly IGrpcClientProvider grpcClientProvider;
-
-    /// <summary>
     /// The validation service
     /// </summary>
     private readonly ValidationService validationService;
@@ -98,16 +91,14 @@ public class BuildTaskService
     /// <param name="buildTaskRepository">The build task repository</param>
     /// <param name="packageRepository">The package repository</param>
     /// <param name="templateProvider">The template provider</param>
-    /// <param name="grpcClientProvider">The grpc client provider</param>
     /// <param name="validationService">The validation service</param>
     /// <param name="containerService">The container service</param>
     /// <param name="registryHandlerService">The registry handler service</param>
-    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, TemplateProvider templateProvider, IGrpcClientProvider grpcClientProvider, ValidationService validationService, ContainerService containerService, RegistryHandlerService registryHandlerService)
+    public BuildTaskService(IBuildTaskRepository buildTaskRepository, IPackageRepository packageRepository, TemplateProvider templateProvider, ValidationService validationService, ContainerService containerService, RegistryHandlerService registryHandlerService)
     {
         this.buildTaskRepository = buildTaskRepository;
         this.packageRepository = packageRepository;
         this.templateProvider = templateProvider;
-        this.grpcClientProvider = grpcClientProvider;
         this.validationService = validationService;
         this.containerService = containerService;
         this.registryHandlerService = registryHandlerService;
@@ -174,10 +165,10 @@ public class BuildTaskService
         ValidateProvider(input.Provider);
         
         // validate target scope
-        ValidateScope(input.Scope);
+        this.validationService.ValidateScope(input.Scope);
         
         // validate the checksum
-        ValidateListingChecksum(input.ListingChecksum);
+        this.validationService.ValidateListingChecksum(input.ListingChecksum);
 
         // deserialize the manifest
         var manifest = DeserializeManifest(input.Manifest);
@@ -216,7 +207,7 @@ public class BuildTaskService
         input.Containerfile = await RenderContainerfile(containerfileTemplate, manifest.Spec);
 
         // gets the registry to store the image
-        input.RegistryId = (await this.GetDefaultRegistryId(workspaceId)).Id;
+        input.RegistryId = (await this.registryHandlerService.GetDefaultRegistryId(workspaceId)).Id;
         
         // create object in the storage
         return await this.buildTaskRepository.Create(workspaceId, input);
@@ -339,7 +330,7 @@ public class BuildTaskService
         await File.WriteAllTextAsync(Path.Combine(rootDir.FullName, SHOC_CONTAINERFILE_NAME), existing.Containerfile);
 
         // get registry
-        var registry = await this.GetRegistryById(existing.RegistryId);
+        var registry = await this.registryHandlerService.GetRegistryById(existing.RegistryId);
 
         // build the future package id
         var packageId = StdIdGenerator.Next(PackageObjects.PACKAGE).ToLowerInvariant();
@@ -374,7 +365,7 @@ public class BuildTaskService
         }
 
         // get the push credential
-        var credential = await this.GetPushCredential(existing.RegistryId, existing.WorkspaceId, existing.UserId);
+        var credential = await this.registryHandlerService.GetPushCredential(existing.RegistryId, existing.WorkspaceId, existing.UserId);
         
         // create push context
         var pushContext = new ContainerPushContext
@@ -423,76 +414,6 @@ public class BuildTaskService
             Message = $"Package {image} is successfully created",
             PackageId = package.Id
         });
-    }
-
-    /// <summary>
-    /// Gets the registry to store the package
-    /// </summary>
-    /// <param name="workspaceId">The workspace id</param>
-    /// <returns></returns>
-    protected async Task<RegistryGrpcModel> GetDefaultRegistryId(string workspaceId)
-    {
-        // try getting object
-        try {
-            var result = await this.grpcClientProvider
-                .Get<WorkspaceDefaultRegistryServiceGrpc.WorkspaceDefaultRegistryServiceGrpcClient>()
-                .DoAuthorized(async (client, metadata) => await client.GetByWorkspaceIdAsync(new GetWorkspaceDefaultRegistryRequest{WorkspaceId = workspaceId}, metadata));
-
-            return result.Registry;
-        }
-        catch(Exception)
-        {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY).AsException();
-        }
-    }
-    
-    /// <summary>
-    /// Gets the registry to store the package
-    /// </summary>
-    /// <param name="id">The workspace id</param>
-    /// <returns></returns>
-    protected async Task<RegistryGrpcModel> GetRegistryById(string id)
-    {
-        // try getting object
-        try {
-            var result = await this.grpcClientProvider
-                .Get<RegistryServiceGrpc.RegistryServiceGrpcClient>()
-                .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetRegistryByIdRequest{Id = id}, metadata));
-
-            return result.Registry;
-        }
-        catch(Exception)
-        {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY).AsException();
-        }
-    }
-
-    /// <summary>
-    /// Gets the push credential for the registry
-    /// </summary>
-    /// <param name="registryId">The registry id</param>
-    /// <param name="workspaceId">The workspace id</param>
-    /// <param name="userId">The user id</param>
-    /// <returns></returns>
-    protected async Task<RegistryPlainCredentialGrpcModel> GetPushCredential(string registryId, string workspaceId, string userId)
-    {
-        // try getting object
-        try {
-            var result = await this.grpcClientProvider
-                .Get<RegistryPlainCredentialServiceGrpc.RegistryPlainCredentialServiceGrpcClient>()
-                .DoAuthorized(async (client, metadata) => await client.GetPushCredentialOrCreateAsync(new GetRegistryPlainCredentialRequest
-                {
-                    RegistryId = registryId,
-                    WorkspaceId = workspaceId,
-                    UserId = userId
-                }, metadata));
-
-            return result.Credential;
-        }
-        catch(Exception)
-        {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_REGISTRY_CREDENTIALS).AsException();
-        }
     }
 
     /// <summary>
@@ -607,33 +528,6 @@ public class BuildTaskService
         }
 
         throw ErrorDefinition.Validation(PackageErrors.INVALID_BUILD_PROVIDER).AsException();
-    }
-    
-    /// <summary>
-    /// Validate object scope
-    /// </summary>
-    /// <param name="scope">The scope to validate</param>
-    protected static void ValidateScope(string scope)
-    {
-        // make sure valid status
-        if (PackageScopes.ALL.Contains(scope))
-        {
-            return;
-        }
-
-        throw ErrorDefinition.Validation(PackageErrors.INVALID_PACKAGE_SCOPE).AsException();
-    }
-
-    /// <summary>
-    /// Validates the listing checksum
-    /// </summary>
-    /// <param name="checksum">The checksum</param>
-    protected static void ValidateListingChecksum(string checksum)
-    {
-        if (string.IsNullOrWhiteSpace(checksum))
-        {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_LISTING_CHECKSUM).AsException();
-        }
     }
 
     /// <summary>

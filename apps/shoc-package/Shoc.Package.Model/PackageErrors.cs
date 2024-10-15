@@ -109,6 +109,11 @@ public static class PackageErrors
     /// The image push error
     /// </summary>
     public const string IMAGE_PUSH_ERROR = "PACKAGE_IMAGE_PUSH_ERROR";
+
+    /// <summary>
+    /// The image copy error
+    /// </summary>
+    public const string IMAGE_COPY_ERROR = "PACKAGE_IMAGE_COPY_ERROR"; 
     
     /// <summary>
     /// The unknown error

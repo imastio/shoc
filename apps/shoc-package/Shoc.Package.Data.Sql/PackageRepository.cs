@@ -39,6 +39,21 @@ public class PackageRepository : IPackageRepository
     }
 
     /// <summary>
+    /// Gets all the objects by listing checksum
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="listingChecksum">The listing checksum</param>
+    /// <returns></returns>
+    public Task<IEnumerable<PackageModel>> GetAllByListingChecksum(string workspaceId, string listingChecksum)
+    {
+        return this.dataOps.Connect().Query("Package", "GetAllByListingChecksum").ExecuteAsync<PackageModel>(new
+        {
+            WorkspaceId = workspaceId,
+            ListingChecksum = listingChecksum
+        });
+    }
+
+    /// <summary>
     /// Gets the object by id
     /// </summary>
     /// <returns></returns>

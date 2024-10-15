@@ -68,4 +68,19 @@ public class ContainerService
         // run command to build
         return await this.commandRunner.RunBash(command);
     }
+    
+    /// <summary>
+    /// Copies image from source to target
+    /// </summary>
+    /// <param name="source">The source context to pull</param>
+    /// <param name="target">The target context to push</param>
+    /// <returns></returns>
+    public async Task<CommandRunResult> Copy(ContainerCopyContext source, ContainerCopyContext target)
+    {
+        // the command to run with runner
+        var command = $"./Scripts/container-imagectl.sh copy --src-tls-verify=false --src-creds {source.Username}:{source.Password} --dest-tls-verify=false --dest-creds {target.Username}:{target.Password} docker://{source.Image} docker://{target.Image}";
+        
+        // run command to build
+        return await this.commandRunner.RunBash(command);
+    }
 }

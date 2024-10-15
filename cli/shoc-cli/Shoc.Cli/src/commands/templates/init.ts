@@ -7,7 +7,7 @@ import { shocClient } from "@/clients/shoc";
 import TemplatesClient from "@/clients/shoc/package/templates-client";
 import fs from "fs";
 import { stringify as yamlStringify } from 'yaml';
-import { BuildManifest } from "../jobs/_functions/types";
+import { BuildManifest } from "../../services/build-service/types";
 
 const templatesInitCommand = createCommand('init')
 
