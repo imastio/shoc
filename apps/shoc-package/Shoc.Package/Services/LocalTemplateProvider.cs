@@ -90,7 +90,7 @@ public class LocalTemplateProvider
             {
                 Name = name,
                 Title = defaultVariant.Title,
-                Description = defaultVariant.Variant,
+                Description = defaultVariant.Description,
                 Author = defaultVariant.Author,
                 Variants = variants
             });

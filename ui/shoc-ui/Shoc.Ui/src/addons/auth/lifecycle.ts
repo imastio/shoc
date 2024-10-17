@@ -102,7 +102,6 @@ const handleRefreshResult = async (current: JWT, request: Promise<TokenResult>) 
         return newToken;
     }
     catch(error){
-        console.log("We've got an error while refreshing", error)
         sessionAccessTokenCache.del(`${current.sid}.at`);
         return { 
             ...current, 

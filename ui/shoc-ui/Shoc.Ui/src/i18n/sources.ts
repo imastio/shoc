@@ -4,6 +4,7 @@ import componentsEn from "./messages/en/components.json";
 import errorsEn from "./messages/en/errors.json";
 import workspacesEn from "./messages/en/workspaces.json";
 import secretsEn from "./messages/en/secrets.json";
+import templatesEn from "./messages/en/templates.json";
 import localeConfig from "./locale-config";
 
 export const localeMessages = {
@@ -14,7 +15,8 @@ export const localeMessages = {
         ...componentsEn,
         ...errorsEn,
         ...workspacesEn,
-        ...secretsEn
+        ...secretsEn,
+        ...templatesEn
     }
 };
 

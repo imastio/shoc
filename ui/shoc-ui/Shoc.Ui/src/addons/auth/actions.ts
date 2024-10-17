@@ -11,7 +11,7 @@ export async function getJwt(headersOverride?: Headers): Promise<JWT & { actualA
     const secure = getBaseUrl().startsWith('https://')
 
     const jwt = await getToken({
-        req: { headers: headersOverride ?? headers() },
+        req: { headers: headersOverride ?? await headers() },
         secret: getAuthSecret(),
         secureCookie: secure,
         salt: `${secure ? '__Secure-' : ''}authjs.session-token`

@@ -86,7 +86,6 @@ export async function authenticatedUser<TResult>(action: (token: string) => Prom
     catch(error){
         if(error instanceof AxiosError){
             if(error.response?.status === 401){
-                console.trace("Not authenticated with token", error.config?.headers?.Authorization)
             }
 
             throw error;            

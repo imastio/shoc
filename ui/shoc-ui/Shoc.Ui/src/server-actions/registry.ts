@@ -7,6 +7,7 @@ import { serverActions as userInvitations } from './actions/workspace/user-invit
 import { serverActions as workspaceClusters } from './actions/cluster/workspace-clusters'
 import { serverActions as workspaceSecrets } from './actions/secret/workspace-secrets'
 import { serverActions as workspaceUserSecrets } from './actions/secret/workspace-user-secrets'
+import { serverActions as templates } from './actions/template/templates'
 
 const allRpc = {
     ...index,
@@ -17,7 +18,8 @@ const allRpc = {
     ...userInvitations,
     ...workspaceClusters,
     ...workspaceSecrets,
-    ...workspaceUserSecrets
+    ...workspaceUserSecrets,
+    ...templates
 }
 
 export default allRpc;
