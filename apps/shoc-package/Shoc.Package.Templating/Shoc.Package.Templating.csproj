@@ -10,16 +10,28 @@
       <None Update="Schemas\build-spec-01.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\alpine\default\Containerfile.tpl">
+      <None Update="Templates\alpine\runtime.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\alpine\default\build-spec.json">
+      <None Update="Templates\alpine\Containerfile.tpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\alpine\default\meta.json">
+      <None Update="Templates\alpine\build-spec.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\alpine\default\runtime.json">
+      <None Update="Templates\alpine\variant-1\Containerfile.tpl">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\alpine\Examples.md">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\alpine\Overview.md">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\alpine\Specification.md">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\alpine\metadata.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

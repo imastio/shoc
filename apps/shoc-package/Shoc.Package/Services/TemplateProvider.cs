@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using Shoc.Core;
 using Shoc.Package.Templating.Model;
@@ -17,150 +14,105 @@ namespace Shoc.Package.Services;
 public class TemplateProvider
 {
     /// <summary>
-    /// Gets all the template definitions
+    /// The template cache
     /// </summary>
-    /// <returns></returns>
-    public Task<IEnumerable<TemplateModel>> GetAll()
-    {
-        // the root directory
-        var directory = GetTemplatesDirectory();
-
-        // no such directory
-        if (!Directory.Exists(directory))
-        {
-            return Task.FromResult(Enumerable.Empty<TemplateModel>());
-        }
-
-        // the directory info
-        var info = new DirectoryInfo(directory);
-
-        // map sub-directories and return result
-        return Task.FromResult(info.GetDirectories().Select(template => new TemplateModel
-        {
-            Name = template.Name,
-            Variants = template.GetDirectories().Select(variant => variant.Name).ToArray()
-        }));
-    }
+    private readonly IEnumerable<TemplateDefinition> cache;
     
     /// <summary>
-    /// Gets template by name
+    /// Creates a new instance for the template provider
+    /// </summary>
+    /// <param name="localTemplateProvider">The local provider</param>
+    public TemplateProvider(LocalTemplateProvider localTemplateProvider)
+    {
+        this.cache = localTemplateProvider.LoadAll().Result;
+    }
+
+    /// <summary>
+    /// Gets all the template descriptors
     /// </summary>
     /// <returns></returns>
-    public Task<TemplateModel> GetByName(string name)
+    public Task<IEnumerable<TemplateDescriptorModel>> GetAll()
     {
-        // get the target directory
-        var directory = Path.Combine(GetTemplatesDirectory(), name);
-        
-        // ensure object exists
-        if (!Directory.Exists(directory))
+        return Task.FromResult(this.cache.Select(Map));
+    }
+
+    /// <summary>
+    /// Gets the variants of the template
+    /// </summary>
+    /// <param name="name">The name of the template</param>
+    /// <returns></returns>
+    public Task<IEnumerable<TemplateVariantDefinition>> GetVariants(string name)
+    {
+        // get the template
+        var template = this.cache.FirstOrDefault(item => item.Name == name);
+
+        // template not found
+        if (template == null)
         {
             throw ErrorDefinition.NotFound().AsException();
         }
 
-        // the directory info
-        var info = new DirectoryInfo(directory);
-        
-        // build and return the result
-        return Task.FromResult(new TemplateModel
-        {
-            Name = info.Name,
-            Variants = info.GetDirectories().Select(variant => variant.Name).ToArray()
-        });
+        return Task.FromResult(template.Variants.Values.AsEnumerable());
     }
 
     /// <summary>
-    /// Gets the build spec by template name and variant
+    /// Gets the variant of the template
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="variant"></param>
+    /// <param name="name">The name of the template</param>
+    /// <param name="variant">The variant name</param>
     /// <returns></returns>
-    public Task<string> GetBuildSpecByName(string name, string variant)
+    public Task<TemplateVariantDefinition> GetVariant(string name, string variant)
     {
-        // the target file path
-        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.BUILD_SPEC_FILE);
-        
-        // the build spec file for the given template and variant
-        var buildSpec = new FileInfo(path);
+        // get the template
+        var template = this.cache.FirstOrDefault(item => item.Name == name);
 
-        // ensure exists
-        if (!buildSpec.Exists)
+        // template not found
+        if (template == null)
         {
             throw ErrorDefinition.NotFound().AsException();
         }
-        
-        // read the file and return
-        return File.ReadAllTextAsync(path);
-    }
-    
-    /// <summary>
-    /// Gets the build spec by template name and variant
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="variant"></param>
-    /// <returns></returns>
-    public async Task<JSchema> GetBuildSpecSchemaByName(string name, string variant)
-    {
-        // read the file and return
-        return JSchema.Parse(await this.GetBuildSpecByName(name, variant), new LocalSchemaResolver());
-    }
-    
-    /// <summary>
-    /// Gets the build spec by template name and variant
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="variant"></param>
-    /// <returns></returns>
-    public async Task<TemplateRuntimeModel> GetRuntimeByName(string name, string variant)
-    {
-        // the target file path
-        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.RUNTIME_FILE);
-        
-        // the build spec file for the given template and variant
-        var runtime = new FileInfo(path);
 
-        // ensure exists
-        if (!runtime.Exists)
+        // try finding the variant by name
+        var result = template.Variants.TryGetValue(variant, out var variantDef) ? variantDef : null;
+        
+        // variant not found
+        if (result == null)
         {
             throw ErrorDefinition.NotFound().AsException();
         }
-        
-        // read the file and return
-        return JsonConvert.DeserializeObject<TemplateRuntimeModel>(await File.ReadAllTextAsync(runtime.FullName));
-    }
-    
-    /// <summary>
-    /// Gets the build spec by template name and variant
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="variant"></param>
-    /// <returns></returns>
-    public Task<string> GetTemplateByName(string name, string variant)
-    {
-        // the target file path
-        var path = Path.Combine(GetTemplatesDirectory(), name, variant, TemplatingConstants.CONTAINERFILE_TEMPLATE_FILE);
-        
-        // the build spec file for the given template and variant
-        var runtime = new FileInfo(path);
 
-        // ensure exists
-        if (!runtime.Exists)
+        return Task.FromResult(result);
+    }
+
+    /// <summary>
+    /// Gets the variant of the template
+    /// </summary>
+    /// <param name="name">The name of the template</param>
+    /// <param name="variant">The variant name</param>
+    /// <returns></returns>
+    public async Task<JSchema> GetVariantBuildSpec(string name, string variant)
+    {
+        // get the template variant
+        var templateVariant = await this.GetVariant(name, variant);
+
+        // parse the schema
+        return JSchema.Parse(templateVariant.BuildSpec, new LocalSchemaResolver());
+    }
+
+    /// <summary>
+    /// Maps the template definition to template descriptor
+    /// </summary>
+    /// <param name="input">The input to map</param>
+    /// <returns></returns>
+    private static TemplateDescriptorModel Map(TemplateDefinition input)
+    {
+        return new TemplateDescriptorModel
         {
-            throw ErrorDefinition.NotFound().AsException();
-        }
-        
-        // read the file and return
-        return File.ReadAllTextAsync(runtime.FullName);
-    }
-    
-    /// <summary>
-    /// Gets the templates directory
-    /// </summary>
-    /// <returns></returns>
-    private static string GetTemplatesDirectory()
-    {
-        // get the execution directory
-        var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-        return Path.Combine(sourceDirectory, TemplatingConstants.TEMPLATES_DIRECTORY);
+            Name = input.Name,
+            Title = input.Title,
+            Description = input.Description,
+            Author = input.Author,
+            Variants = input.Variants.Keys
+        };
     }
 }

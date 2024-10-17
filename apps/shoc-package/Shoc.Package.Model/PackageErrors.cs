@@ -86,11 +86,6 @@ public static class PackageErrors
     public const string EXPIRED_BUILD_TASK = "PACKAGE_EXPIRED_BUILD_TASK";
     
     /// <summary>
-    /// The bundle type is invalid
-    /// </summary>
-    public const string INVALID_BUNDLE_TYPE = "PACKAGE_INVALID_BUNDLE_TYPE";
-    
-    /// <summary>
     /// The bundle upload error
     /// </summary>
     public const string UPLOAD_ERROR = "PACKAGE_UPLOAD_ERROR";
@@ -113,7 +108,12 @@ public static class PackageErrors
     /// <summary>
     /// The image copy error
     /// </summary>
-    public const string IMAGE_COPY_ERROR = "PACKAGE_IMAGE_COPY_ERROR"; 
+    public const string IMAGE_COPY_ERROR = "PACKAGE_IMAGE_COPY_ERROR";
+
+    /// <summary>
+    /// The template init error
+    /// </summary>
+    public const string TEMPLATE_INIT_ERROR = "PACKAGE_TEMPLATE_INIT_ERROR";
     
     /// <summary>
     /// The unknown error

@@ -6,6 +6,15 @@ namespace Shoc.Package.Templating.Model;
 public class TemplateRuntimeModel
 {
     /// <summary>
+    /// The default instance of the template runtime
+    /// </summary>
+    public static readonly TemplateRuntimeModel DEFAULT = new TemplateRuntimeModel
+    {
+        Type = "function",
+        Args = true
+    };
+    
+    /// <summary>
     /// The type of runtime
     /// </summary>
     public string Type { get; set; }

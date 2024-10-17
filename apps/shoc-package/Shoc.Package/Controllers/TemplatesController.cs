@@ -24,15 +24,15 @@ public class TemplatesController : ControllerBase
     /// <summary>
     /// The build spec generator
     /// </summary>
-    private readonly TemplateBuildSpecGenerator buildSpecGenerator;
+    private readonly TemplateInitializationService initializationService;
     
     /// <summary>
     /// Creates new instance of the controller
     /// </summary>
-    public TemplatesController(TemplateProvider templateProvider, TemplateBuildSpecGenerator buildSpecGenerator)
+    public TemplatesController(TemplateProvider templateProvider, TemplateInitializationService initializationService)
     {
         this.templateProvider = templateProvider;
-        this.buildSpecGenerator = buildSpecGenerator;
+        this.initializationService = initializationService;
     }
     
     /// <summary>
@@ -41,20 +41,31 @@ public class TemplatesController : ControllerBase
     /// <returns></returns>
     [AllowAnonymous]
     [HttpGet]
-    public Task<IEnumerable<TemplateModel>> GetAll()
+    public Task<IEnumerable<TemplateDescriptorModel>> GetAll()
     {
         return this.templateProvider.GetAll();
     }
     
     /// <summary>
-    /// Gets the template by name
+    /// Gets the variants by template name
     /// </summary>
     /// <returns></returns>
     [AllowAnonymous]
-    [HttpGet("{name}")]
-    public Task<TemplateModel> GetByName(string name)
+    [HttpGet("{name}/variants")]
+    public Task<IEnumerable<TemplateVariantDefinition>> GetVariants(string name)
     {
-        return this.templateProvider.GetByName(name);
+        return this.templateProvider.GetVariants(name);
+    }
+    
+    /// <summary>
+    /// Gets the variant by name and variant
+    /// </summary>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpGet("{name}/variants/{variant}")]
+    public Task<TemplateVariantDefinition> GetVariant(string name, string variant)
+    {
+        return this.templateProvider.GetVariant(name, variant);
     }
     
     /// <summary>
@@ -67,7 +78,7 @@ public class TemplatesController : ControllerBase
     {
         return new ContentResult
         {
-            Content = await this.templateProvider.GetBuildSpecByName(name, variant),
+            Content = (await this.templateProvider.GetVariant(name, variant)).BuildSpec,
             ContentType = "application/json"
         };
     }
@@ -82,7 +93,7 @@ public class TemplatesController : ControllerBase
     {
         return new ContentResult
         {
-            Content = (await this.buildSpecGenerator.Generate(name, variant))?.ToString(),
+            Content = (await this.initializationService.Generate(name, variant))?.ToString(),
             ContentType = "application/json"
         };
     }

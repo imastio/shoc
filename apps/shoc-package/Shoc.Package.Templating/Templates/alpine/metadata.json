@@ -1,0 +1,5 @@
+{
+  "title": "Alpine Base Image",
+  "description": "A lightweight, minimal base image built from Alpine Linux. This template is designed to create secure and efficient containers for any purpose by leveraging Alpine's small size and robust package manager.",
+  "author": "davitp"
+}

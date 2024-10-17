@@ -1,19 +1,28 @@
-using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Shoc.Core;
-using Shoc.Package.Templating.Model;
-using Shoc.Package.Templating.Modules;
 
 namespace Shoc.Package.Services;
 
 /// <summary>
-/// The JSON example generator
+/// The template initialization service
 /// </summary>
-public class TemplateBuildSpecGenerator
+public class TemplateInitializationService
 {
+    /// <summary>
+    /// The template provider
+    /// </summary>
+    private readonly TemplateProvider templateProvider;
+
+    /// <summary>
+    /// The template build spec generate
+    /// </summary>
+    /// <param name="templateProvider">The template </param>
+    public TemplateInitializationService(TemplateProvider templateProvider)
+    {
+        this.templateProvider = templateProvider;
+    }
+
     /// <summary>
     /// Generates a sample json based on the template name and variant build spec
     /// </summary>
@@ -22,29 +31,11 @@ public class TemplateBuildSpecGenerator
     /// <returns></returns>
     public async Task<JObject> Generate(string name, string variant)
     {
-        // get the execution directory
-        var sourceDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-        // the templates directory
-        var templates = Path.Combine(sourceDirectory, TemplatingConstants.TEMPLATES_DIRECTORY);
-        
-        // the target file path
-        var path = Path.Combine(templates, name, variant, TemplatingConstants.BUILD_SPEC_FILE);
-        
-        // the build spec file for the given template and variant
-        var buildSpec = new FileInfo(path);
-
-        // ensure exists
-        if (!buildSpec.Exists)
-        {
-            throw ErrorDefinition.NotFound().AsException();
-        }
-        
-        // read the file and return
-        var schema = JSchema.Parse(await File.ReadAllTextAsync(path), new LocalSchemaResolver());
+        // gets the template variant
+        var spec = await this.templateProvider.GetVariantBuildSpec(name, variant);
 
         // generate based on the schema string
-        return await this.GenerateImpl(schema);
+        return await this.GenerateImpl(spec);
     }
 
     /// <summary>

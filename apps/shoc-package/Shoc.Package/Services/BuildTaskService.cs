@@ -179,17 +179,17 @@ public class BuildTaskService
         // assign the template reference
         input.TemplateReference = $"{templateReference.Template}:{templateReference.Variant}";
 
-        // get the build spec schema
-        var buildSpecSchema = await this.GetBuildSpecSchema(templateReference.Template, templateReference.Variant);
+        // get the template variant
+        var templateVariant = await this.GetVariant(templateReference.Template, templateReference.Variant);
+
+        // get the variant spec
+        var buildSpec = await this.GetVariantBuildSpec(templateReference.Template, templateReference.Variant);
         
         // validate the spec against the schema
-        ValidateBuildSpec(buildSpecSchema, manifest.Spec);
-
-        // get the runtime object
-        var runtime = await this.GetRuntime(templateReference.Template, templateReference.Variant);
-
+        ValidateBuildSpec(buildSpec, manifest.Spec);
+        
         // serialize and store the runtime (ensure camel case)
-        input.Runtime = JsonConvert.SerializeObject(runtime, new JsonSerializerSettings
+        input.Runtime = JsonConvert.SerializeObject(templateVariant.Runtime, new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver
             {
@@ -199,12 +199,9 @@ public class BuildTaskService
                 }
             }
         });
-
-        // get the containerfile template
-        var containerfileTemplate = await this.GetTemplate(templateReference.Template, templateReference.Variant);
-
+        
         // render containerfile based on the template and specification
-        input.Containerfile = await RenderContainerfile(containerfileTemplate, manifest.Spec);
+        input.Containerfile = await RenderContainerfile(templateVariant.Containerfile, manifest.Spec);
 
         // gets the registry to store the image
         input.RegistryId = (await this.registryHandlerService.GetDefaultRegistryId(workspaceId)).Id;
@@ -437,54 +434,36 @@ public class BuildTaskService
             throw ErrorDefinition.Validation(PackageErrors.RENDER_FAILURE, e.Message).AsException();
         }
     }
-
+    
     /// <summary>
-    /// Gets the valid runtime for the template
+    /// Gets the template variant
     /// </summary>
-    /// <param name="name">The template name</param>
+    /// <param name="name">The name of the template</param>
     /// <param name="variant">The template variant</param>
     /// <returns></returns>
-    protected async Task<TemplateRuntimeModel> GetRuntime(string name, string variant)
+    protected async Task<TemplateVariantDefinition> GetVariant(string name, string variant)
     {
         try
         {
-            return await this.templateProvider.GetRuntimeByName(name, variant);
+            return await this.templateProvider.GetVariant(name, variant);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_RUNTIME, e.Message).AsException();
+            throw ErrorDefinition.Validation(PackageErrors.INVALID_TEMPLATE).AsException();
         }
     }
     
-    /// <summary>
-    /// Gets the valid runtime for the template
-    /// </summary>
-    /// <param name="name">The template name</param>
-    /// <param name="variant">The template variant</param>
-    /// <returns></returns>
-    protected async Task<string> GetTemplate(string name, string variant)
-    {
-        try
-        {
-            return await this.templateProvider.GetTemplateByName(name, variant);
-        }
-        catch (Exception e)
-        {
-            throw ErrorDefinition.Validation(PackageErrors.INVALID_CONTAINERFILE_TEMPLATE, e.Message).AsException();
-        }
-    }
-
     /// <summary>
     /// Gets the build spec schema
     /// </summary>
     /// <param name="name">The name of the template</param>
     /// <param name="variant">The template variant</param>
     /// <returns></returns>
-    protected async Task<JSchema> GetBuildSpecSchema(string name, string variant)
+    protected async Task<JSchema> GetVariantBuildSpec(string name, string variant)
     {
         try
         {
-            return await this.templateProvider.GetBuildSpecSchemaByName(name, variant);
+            return await this.templateProvider.GetVariantBuildSpec(name, variant);
         }
         catch (Exception)
         {

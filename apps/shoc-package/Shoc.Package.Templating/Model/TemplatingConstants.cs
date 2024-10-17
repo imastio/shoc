@@ -6,6 +6,11 @@ namespace Shoc.Package.Templating.Model;
 public static class TemplatingConstants
 {
     /// <summary>
+    /// The name of the default variant
+    /// </summary>
+    public const string DEFAULT_VARIANT = "default";
+    
+    /// <summary>
     /// The schemas directory
     /// </summary>
     public const string SCHEMAS_DIRECTORY = "Schemas";
@@ -34,4 +39,24 @@ public static class TemplatingConstants
     /// The runtime json file name
     /// </summary>
     public const string RUNTIME_FILE = "runtime.json";
+    
+    /// <summary>
+    /// The metadata json file name
+    /// </summary>
+    public const string METADATA_FILE = "metadata.json";
+    
+    /// <summary>
+    /// The overview file name
+    /// </summary>
+    public const string OVERVIEW_FILE = "Overview.md";
+    
+    /// <summary>
+    /// The specification file name
+    /// </summary>
+    public const string SPECIFICATION_FILE = "Specification.md";
+    
+    /// <summary>
+    /// The examples file name
+    /// </summary>
+    public const string EXAMPLES_FILE = "Examples.md";
 }
