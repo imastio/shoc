@@ -4,15 +4,20 @@ import Link from "next/link";
 import Typography from "@/components/vc/typography";
 import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
-import { getVariant } from "../../../cached-template-actions";
+import { getVariant } from "@/app/(public)/docs/templates/cached-template-actions";
 import ErrorScreen from "@/components/error/error-screen";
 import Markdown from 'react-markdown'
-import { Separator } from "@/components/ui/separator";
+import CodeBlock from "@/components/vc/code-block";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 
 type PageProps = {
     params: { name: string, variant: string };
 };
-
 
 export const dynamic = 'force-dynamic';
 
@@ -53,19 +58,50 @@ export default async function VariantPage({ params: { name, variant } }: PagePro
             </div>
             <div className="!w-full">
                 <div className="mb-7">
-                    <Typography className="">
+                    <Typography className="mt-2">
                         {template.description}
                     </Typography>
-                    <Typography className="mt-2">
+                    <div className="mt-4">
+                        <h2 className="sm:text-2xl text-xl font-bold">
+                            Usage
+                        </h2>
+                        <CodeBlock className="mt-2" language="bash" code={`shoc init ${name}:${variant}`} />
+                    </div>
+                    <Typography className="mt-4">
+                        <h2 className="sm:text-2xl text-xl font-bold">
+                            Overview
+                        </h2>
                         <Markdown>
                             {template.overviewMarkdown}
                         </Markdown>
                     </Typography>
-                    <Typography className="mt-2">
+                    <Typography className="mt-4">
+                        <h2 className="sm:text-2xl text-xl font-bold">
+                            Specification
+                        </h2>
                         <Markdown>
                             {template.specificationMarkdown}
                         </Markdown>
                     </Typography>
+                    <div className="mt-4">
+                        <h2 className="sm:text-2xl text-xl font-bold">
+                            Template Code
+                        </h2>
+                        <Accordion className="mt-2" type="single" collapsible>
+                            <AccordionItem value="template">
+                                <AccordionTrigger>Template</AccordionTrigger>
+                                <AccordionContent>
+                                    <CodeBlock language="dockerfile" code={template.containerfile} />
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="spec">
+                                <AccordionTrigger>Build Specification</AccordionTrigger>
+                                <AccordionContent>
+                                    <CodeBlock language="json" code={template.buildSpec} />
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,8 +1,6 @@
-# Alpine Base Image Specification
-
 This section outlines the expected properties and configuration options for the Alpine base image template. These properties can be defined in your `build.shoc.yaml` file to customize the generated container image.
 
-### Properties
+#### Properties
 
 - **tag** (`string`, optional):
     - The tag of the Alpine base image to use. Defaults to `latest`.
@@ -22,7 +20,7 @@ This section outlines the expected properties and configuration options for the 
 
 ---
 
-### Notes
+#### Notes
 
 1. The **tag** property allows you to specify a specific version of Alpine (e.g., `3.14`) or use the default `latest`.
 2. The **shocUid** ensures that files and processes inside the container are handled by a non-root user, providing better security.
