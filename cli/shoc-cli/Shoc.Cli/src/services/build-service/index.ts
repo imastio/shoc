@@ -6,43 +6,52 @@ import clientGuard from "@/services/client-guard";
 import UserWorkspacesClient from "@/clients/shoc/workspace/user-workspaces-client";
 import WorkspaceBuildTasksClient from "@/clients/shoc/package/workspace-build-tasks-client";
 import { fileFromPath } from "formdata-node/file-from-path";
-import { logger } from "../logger";
 import chalk from "chalk";
 import { requireSession } from "@/services/session-service";
-import path from "path";
-import ErrorDefinitions from "@/error-handling/error-definitions";
 import WorkspacePackagesClient from "@/clients/shoc/package/workspace-packages-client";
 import { ApiError } from "@/error-handling/error-types";
+import ora, { oraPromise } from "ora";
 
 export default async function build(context: ResolvedContext, buildContext: BuildContext) : Promise<{ packageId: string }> {
     
-    const session = await requireSession(context.providerUrl.toString());
+    const session = await oraPromise(requireSession(context.providerUrl.toString()), {
+        successText: res => `Authenticated by ${chalk.bold(res.name)} at ${chalk.bold(buildContext.workspace)}`,
+        failText: err => `Could not authenticate: ${chalk.red(err.message)}` 
+    }).catch(() => process.exit(1));
 
-    logger.just(`Build started by ${chalk.green(session.name)} for workspace ${chalk.green(buildContext.workspace)}`);
-    logger.just(`Package directory: ${chalk.green(buildContext.dir)}`)
-    logger.just(`Package scope: ${chalk.green(buildContext.scope)}`)
+    ora().succeed(`Using ${chalk.bold(buildContext.dir)} as a package directory`);
+    ora().succeed(`Packaing with scope ${chalk.bold(buildContext.scope)}`);
+ 
+    const { buildFile, manifest } = await oraPromise(getBuildManifest(buildContext), {
+        successText: res => `Detected build manifest at ${chalk.bold(res.buildFile.fullPath)}`,
+        failText: err => `Build manifest could not be found: ${chalk.red(err.message)}` 
+    }).catch(() => process.exit(1));
 
-    const { buildFile, manifest } = await getBuildManifest(buildContext);
-
-    logger.just(`Build manifest: ${chalk.green(buildFile.fullPath)}`)    
-
-    const { files } = await getBuildListing(buildContext, manifest);
+    const { files } = await oraPromise(getBuildListing(buildContext, manifest), {
+        successText: res => `Detected ${chalk.bold(res.files.length)} files to package`,
+        failText: err => `Could not fetch the list of files to package: ${chalk.red(err.message)}`
+    }).catch(() => process.exit(1));
 
     const hash = computeListingHash(buildFile, files);
-    
-    logger.just(`Detected ${chalk.green(files.length)} files for bundling`);
-    logger.just(`Package checksum: ${chalk.green(hash)}`);
+    ora().succeed(`Computed checksum of the package ${chalk.bold(hash)}`);
 
-    const workspace = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, buildContext.workspace));
+    const workspace = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, buildContext.workspace)), {
+        text: `Validating workspace ${chalk.bold(buildContext.workspace)}`,
+        successText: res => `Workspace ${chalk.bold(res.name)} is valid`,
+        failText: err => `The workspace ${chalk.bold(buildContext.workspace)} could not be found: ${chalk.red(err.message)}`
+    }).catch(() => process.exit(1));
 
-    const duplicate = await tryCreateFromCache(context, {
+    const duplicate = await oraPromise(tryCreateFromCache(context, {
         workspaceId: workspace.id,
         scope: buildContext.scope,
         listingChecksum: hash
-    });
+    }), {
+        text: 'Checking if the package could be restored from cache',
+        successText: res => res ? 'The package has been already built' : 'The package was not cached',
+        failText: err => `Could not perform the cache check: ${chalk.red(err.message)}`
+    }).catch(() => process.exit(1));
 
     if(duplicate){
-        logger.just(`The package was successfully built from cache: ${chalk.green(duplicate.packageId)}`)
         return { packageId: duplicate.packageId };
     }
 
@@ -54,24 +63,27 @@ export default async function build(context: ResolvedContext, buildContext: Buil
         manifest: JSON.stringify(manifest)
     }
 
-    const task = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).create(ctx.token, workspace.id, input));
-
-    logger.just(`Remote build task initiated with reference ${chalk.green(task.id)}`)
+    const task = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).create(ctx.token, workspace.id, input)), {
+        text: 'Starting a build process for the package',
+        successText: res => `Build process is successfully initiated with reference ${chalk.bold(res.id)}`,
+        failText: err => `Could not initiate the build process: ${chalk.red(err.message)}`
+    });
 
     const zip = await createZip(files);
-
-    logger.just(`Started uploading the bundle for the remote build: ${chalk.green(path.basename(zip))}`)
 
     const uploadData = new FormData()
     uploadData.append('file', await fileFromPath(zip))
 
-    const uploaded = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspace.id, task.id, uploadData));
+    const uploaded = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspace.id, task.id, uploadData)), {
+        text: 'Uploading the package bundle to build',
+        successText: res => `The package was successfully built with reference ${chalk.bold(res.id)}`,
+        failText: err => `Could not upload and build the package: ${chalk.red(err.message)}`
+    });
 
     if(uploaded.status === 'failed'){
-        throw ErrorDefinitions.validation(uploaded.message, uploaded.errorCode)
+        ora().fail(`The package build failed: ${uploaded.message} (${uploaded.errorCode})`)
+        process.exit(1);
     }
-
-    logger.just(`The package was successfuly built: ${chalk.green(uploaded.packageId)}`);
 
     return { packageId: uploaded.packageId }
 }
