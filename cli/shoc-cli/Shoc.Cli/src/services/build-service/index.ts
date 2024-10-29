@@ -76,7 +76,7 @@ export default async function build(context: ResolvedContext, buildContext: Buil
 
     const uploaded = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspace.id, task.id, uploadData)), {
         text: 'Uploading the package bundle to build',
-        successText: res => `The package was successfully built with reference ${chalk.bold(res.id)}`,
+        successText: res => `The package was successfully built with reference ${chalk.bold(res.packageId)}`,
         failText: err => `Could not upload and build the package: ${chalk.red(err.message)}`
     });
 
