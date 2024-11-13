@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Label">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `job_labels`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Name` Asc;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `job_labels`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByName">
+      <TextCommand>
+        SELECT * FROM `job_labels`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Name` = @Name;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `job_labels`
+        (`Id`, `WorkspaceId`, `Name`)
+        VALUES
+        (@Id, @WorkspaceId, @Name);
+
+        SELECT * FROM `job_labels`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="Ensure">
+
+      <TextCommand>
+        INSERT INTO `job_labels`
+        (`Id`, `WorkspaceId`, `Name`)
+        VALUES
+        (@Id, @WorkspaceId, @Name)
+        ON DUPLICATE KEY UPDATE `Name` = `Name`;
+
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `job_labels` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `job_labels` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

@@ -76,8 +76,7 @@ public class SecretService : SecretServiceBase
         // get from the storage
         return await this.secretRepository.CountAll(workspaceId);
     }
-
-
+    
     /// <summary>
     /// Creates the object with given input
     /// </summary>

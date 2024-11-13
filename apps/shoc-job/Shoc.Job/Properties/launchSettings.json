@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Shoc.Package": {
+    "Shoc.Job": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -10,7 +10,7 @@
       },
       "dotnetRunMessages": "true",
       "externalUrlConfiguration": true,
-      "applicationUrl": "http://*:11150"
+      "applicationUrl": "http://*:11156"
     }
   }
 }

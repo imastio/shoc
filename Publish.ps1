@@ -38,6 +38,10 @@ function GetCsharpProject ($serviceName) {
 		return "$PSScriptRoot/apps/shoc-package/Shoc.Package/Shoc.Package.csproj"
 	}
 
+	if($serviceName -eq "shoc-job"){
+		return "$PSScriptRoot/apps/shoc-job/Shoc.Job/Shoc.Job.csproj"
+	}
+
 	if($serviceName -eq "shoc-webgtw"){
 		return "$PSScriptRoot/apps/shoc-webgtw/Shoc.Webgtw/Shoc.Webgtw.csproj"
 	}

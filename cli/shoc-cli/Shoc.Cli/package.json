@@ -31,6 +31,7 @@
     "figlet": "^1.7.0",
     "formdata-node": "^6.0.3",
     "glob": "^11.0.0",
+    "isomorphic-git": "^1.27.1",
     "jose": "^5.9.3",
     "keytar": "^7.9.0",
     "net": "^1.0.2",

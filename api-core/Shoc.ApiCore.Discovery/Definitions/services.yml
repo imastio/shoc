@@ -174,7 +174,7 @@ services:
         roles: [ 'grpc' ]
         port: 11147
         
-  # Secret service ports [11150 - 11155]
+  # Package service ports [11150 - 11155]
   shoc-package:
     namespace: default
     ports:
@@ -190,3 +190,21 @@ services:
       - protocol: https
         roles: [ 'grpc' ]
         port: 11153
+  
+  # Job service ports [11156 - 11161]
+  shoc-job:
+    namespace: default
+    ports:
+      - protocol: http
+        roles: [ 'api' ]
+        port: 11156
+      - protocol: https
+        roles: [ 'api' ]
+        port: 11157
+      - protocol: http
+        roles: [ 'grpc' ]
+        port: 11158
+      - protocol: https
+        roles: [ 'grpc' ]
+        port: 11159
+        

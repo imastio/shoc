@@ -9,6 +9,7 @@ import workspaceSecretsCommand from './workspace-secrets';
 import templatesCommand from './templates';
 import jobsCommand from './jobs';
 import buildCommand from './build';
+import gitCommand from './git';
 
 const program = createCommand();
 
@@ -30,6 +31,7 @@ program.addCommand(workspacesCommand);
 program.addCommand(clustersCommand);
 program.addCommand(userSecretsCommand);
 program.addCommand(workspaceSecretsCommand);
+program.addCommand(gitCommand);
 
 
 export default program;

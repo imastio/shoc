@@ -272,7 +272,27 @@ services:
     networks:
       - shoc-network
 
-
+  shoc-job:
+    image: ${SHOC_PUBLIC_REGISTRY:-ghcr.io}/${SHOC_PUBLIC_REPOSITORY:-imastio/shoc/public}/shoc-job:${SHOC_PUBLIC_VERSION:-latest}
+    restart: always
+    build: ./apps/shoc-job/Shoc.Job
+    container_name: shoc-job
+    privileged: true
+    env_file: 
+      - ./env/ref-api-auth.env
+      - ./env/ref-api-discovery.env
+      - ./env/ref-api-datasource.env
+      - ./env/ref-api-mailing.env
+      - ./env/shoc-job.env
+    ports:
+      - '11156:11156'
+      - '11157:11157'
+      - '11158:11158'
+      - '11159:11159'
+    depends_on:
+      - shoc-database
+    networks:
+      - shoc-network
     
   
 

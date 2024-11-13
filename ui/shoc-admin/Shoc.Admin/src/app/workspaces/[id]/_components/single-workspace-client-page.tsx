@@ -18,6 +18,7 @@ import { WorkspaceInvitationsTable } from "./workspace-invitations-table";
 import ClustersTable from "@/app/clusters/_components/clusters-table";
 import { WorkspaceSecretsTable } from "./workspace-secrets-table";
 import { WorkspaceUserSecretsTable } from "./workspace-user-secrets-table";
+import { WorkspaceLabelsTable } from "../(labels)/workspace-labels-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -115,6 +116,11 @@ export default function SingleWorkspaceClientPage() {
                                 key: "5",
                                 label: "User Secrets",
                                 children: <WorkspaceUserSecretsTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "6",
+                                label: "Labels",
+                                children: <WorkspaceLabelsTable workspaceId={workspaceId} loading={progress} />
                             }
                         ]
                     }}
@@ -133,6 +139,9 @@ export default function SingleWorkspaceClientPage() {
                         },
                         {
                             tabKey: "5"
+                        },
+                        {
+                            tabKey: "6"
                         }
                     ]}
                     content={<>
