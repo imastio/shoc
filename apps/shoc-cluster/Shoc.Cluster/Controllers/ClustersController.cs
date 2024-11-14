@@ -12,7 +12,7 @@ namespace Shoc.Cluster.Controllers;
 /// <summary>
 /// The clusters endpoint
 /// </summary>
-[Route("api/workspaces/{workspaceId}/clusters")]
+[Route("api/management/workspaces/{workspaceId}/clusters")]
 [ApiController]
 [ShocExceptionHandler]
 public class ClustersController : ControllerBase

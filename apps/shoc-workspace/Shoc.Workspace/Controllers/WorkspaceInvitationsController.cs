@@ -12,7 +12,7 @@ namespace Shoc.Workspace.Controllers;
 /// <summary>
 /// The workspace invitations endpoints
 /// </summary>
-[Route("api/workspaces/{workspaceId}/invitations")]
+[Route("api/management/workspaces/{workspaceId}/invitations")]
 [ApiController]
 [ShocExceptionHandler]
 public class WorkspaceInvitationsController : ControllerBase

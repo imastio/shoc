@@ -90,7 +90,6 @@ export default class UserWorkspacesClient extends BaseAxiosClient {
     });
   }
 
-
    updateById(token, id, input) {
 
     const url = this.urlify({

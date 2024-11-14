@@ -16,7 +16,7 @@ export default class SecretsClient extends BaseAxiosClient {
   getAll(token, workspaceId) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets`
+      api: `api/management/workspaces/${workspaceId}/secrets`
     });
 
     return this.webClient.get(url, {
@@ -29,7 +29,7 @@ export default class SecretsClient extends BaseAxiosClient {
   getAllExtended(token, workspaceId) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/extended`
+      api: `api/management/workspaces/${workspaceId}/secrets/extended`
     });
 
     return this.webClient.get(url, {
@@ -42,7 +42,7 @@ export default class SecretsClient extends BaseAxiosClient {
   getById(token, workspaceId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/secrets/${id}`
     });
 
     return this.webClient.get(url, {
@@ -55,7 +55,7 @@ export default class SecretsClient extends BaseAxiosClient {
   create(token, workspaceId, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets`
+      api: `api/management/workspaces/${workspaceId}/secrets`
     });
 
     return this.webClient.post(url, input, {
@@ -68,7 +68,7 @@ export default class SecretsClient extends BaseAxiosClient {
   updateById(token, workspaceId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/secrets/${id}`
     });
 
     return this.webClient.put(url, input, {
@@ -81,7 +81,7 @@ export default class SecretsClient extends BaseAxiosClient {
   updateValueById(token, workspaceId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}/value`
+      api: `api/management/workspaces/${workspaceId}/secrets/${id}/value`
     });
 
     return this.webClient.put(url, input, {
@@ -94,7 +94,7 @@ export default class SecretsClient extends BaseAxiosClient {
   deleteById(token, workspaceId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/secrets/${id}`
     });
 
     return this.webClient.delete(url, {
@@ -103,5 +103,4 @@ export default class SecretsClient extends BaseAxiosClient {
       }
     });
   }
-
 }

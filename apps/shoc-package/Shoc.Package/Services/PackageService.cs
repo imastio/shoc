@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Core;
@@ -14,6 +15,11 @@ namespace Shoc.Package.Services;
 /// </summary>
 public class PackageService
 {
+    /// <summary>
+    /// The default page size
+    /// </summary>
+    private const int DEFAULT_PAGE_SIZE = 20;
+    
     /// <summary>
     /// The package repository
     /// </summary>
@@ -49,6 +55,25 @@ public class PackageService
         this.containerService = containerService;
     }
 
+    /// <summary>
+    /// Gets page of the extended objects
+    /// </summary>
+    /// <returns></returns>
+    public async Task<PackagePageResult<PackageExtendedModel>> GetExtendedPageBy(string workspaceId, PackageFilter filter, int page, int? size)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+        
+        // load the page of objects
+        return await this.packageRepository.GetExtendedPageBy(workspaceId, filter, Math.Abs(page), Math.Abs(size ?? DEFAULT_PAGE_SIZE));
+    }
+
+    /// <summary>
+    /// Duplicates the package from the given input
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="input">The input</param>
+    /// <returns></returns>
     public async Task<PackageModel> DuplicateFrom(string workspaceId, PackageDuplicateFromModel input)
     {
         // ensure referring to the correct object

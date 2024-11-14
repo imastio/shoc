@@ -16,6 +16,35 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetExtendedPageBy">
+      <TextCommand>
+        SELECT p.*, w.Name as WorkspaceName, u.FullName as UserFullName, r.Name as RegistryName
+        FROM `pkg_packages` p 
+        INNER JOIN `wspc_workspaces` w
+        ON p.WorkspaceId = w.Id 
+        INNER JOIN `idp_users` u
+        ON p.UserId = u.Id
+        INNER JOIN `reg_registries` r
+        ON p.RegistryId = r.Id
+        WHERE p.`WorkspaceId` = @WorkspaceId
+        {if:ByUser {AND p.UserId = @UserId} else {}}
+        {if:ByScope {AND p.`Scope` = @Scope} else {}}
+        ORDER BY p.`Updated` Desc
+        LIMIT @Offset, @Count;  
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="CountBy">
+      <TextCommand>
+        SELECT COUNT(p.Id) as TotalCount
+        FROM `pkg_packages` p
+        WHERE p.`WorkspaceId` = @WorkspaceId
+        {if:ByUser {AND p.UserId = @UserId} else {}}
+        {if:ByScope {AND p.`Scope` = @Scope} else {}}
+        ORDER BY p.`Updated` Desc;
+      </TextCommand>
+    </SqlOperation>
+    
     <SqlOperation Name="GetAllByListingChecksum">
       <TextCommand>
         SELECT * FROM `pkg_packages`

@@ -20,11 +20,6 @@ public class PackageAccesses
     public const string PACKAGE_PACKAGES_LIST = "package:packages:list";
     
     /// <summary>
-    /// The list references access to package object references
-    /// </summary>
-    public const string PACKAGE_PACKAGES_LIST_REFERENCES = "package:packages:list_references";
-
-    /// <summary>
     /// A 'create' access to package objects
     /// </summary>
     public const string PACKAGE_PACKAGES_CREATE = "package:packages:create";

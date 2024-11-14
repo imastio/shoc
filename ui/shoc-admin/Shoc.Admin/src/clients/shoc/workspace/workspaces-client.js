@@ -17,7 +17,7 @@ export default class WorkspacesClient extends BaseAxiosClient {
   getAll(token){
 
     const url = this.urlify({
-      api: `api/workspaces`
+      api: `api/management/workspaces`
     });
 
     return this.webClient.get(url, {
@@ -30,7 +30,7 @@ export default class WorkspacesClient extends BaseAxiosClient {
    getById(token, id){
 
     const url = this.urlify({
-      api: `api/workspaces/${id}`
+      api: `api/management/workspaces/${id}`
     });
 
     return this.webClient.get(url, {
@@ -47,7 +47,7 @@ export default class WorkspacesClient extends BaseAxiosClient {
    create(token, input){
 
     const url = this.urlify({
-      api: `api/workspaces`
+      api: `api/management/workspaces`
     });
 
     return this.webClient.post(url, input, {
@@ -61,7 +61,7 @@ export default class WorkspacesClient extends BaseAxiosClient {
    updateById(token, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${id}`
+      api: `api/management/workspaces/${id}`
     });
 
     return this.webClient.put(url, input, {
@@ -74,7 +74,7 @@ export default class WorkspacesClient extends BaseAxiosClient {
    deleteById(token, id){
 
     const url = this.urlify({
-      api: `api/workspaces/${id}`
+      api: `api/management/workspaces/${id}`
     });
 
     return this.webClient.delete(url, {

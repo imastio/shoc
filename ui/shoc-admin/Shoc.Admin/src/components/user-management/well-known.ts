@@ -20,6 +20,10 @@ export const accessAreas = [
         display: 'Secret Management'
     },
     {
+        key: 'package', 
+        display: 'Package Management'
+    },
+    {
         key: 'job', 
         display: 'Job Management'
     },

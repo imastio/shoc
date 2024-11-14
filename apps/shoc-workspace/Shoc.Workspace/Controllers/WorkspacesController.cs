@@ -12,7 +12,7 @@ namespace Shoc.Workspace.Controllers;
 /// <summary>
 /// The workspaces endpoint
 /// </summary>
-[Route("api/workspaces")]
+[Route("api/management/workspaces")]
 [ApiController]
 [ShocExceptionHandler]
 public class WorkspacesController : ControllerBase

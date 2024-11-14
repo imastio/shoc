@@ -15,7 +15,7 @@ export default class WorkspaceInvitationsClient extends BaseAxiosClient {
 
   getAll(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/invitations`,
+      api: `api/management/workspaces/${workspaceId}/invitations`,
      
     });
  
@@ -28,7 +28,7 @@ export default class WorkspaceInvitationsClient extends BaseAxiosClient {
 
   getAllExtended(token, workspaceId) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/invitations/extended`,
+      api: `api/management/workspaces/${workspaceId}/invitations/extended`,
      
     });
  
@@ -42,7 +42,7 @@ export default class WorkspaceInvitationsClient extends BaseAxiosClient {
 
   create(token, workspaceId, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/invitations`,
+      api: `api/management/workspaces/${workspaceId}/invitations`,
      
     });
   
@@ -55,7 +55,7 @@ export default class WorkspaceInvitationsClient extends BaseAxiosClient {
 
   updateById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/invitations/${id}`,
+      api: `api/management/workspaces/${workspaceId}/invitations/${id}`,
      
     });
   
@@ -65,11 +65,10 @@ export default class WorkspaceInvitationsClient extends BaseAxiosClient {
       }
     });
   }
-
   
   deleteById(token, workspaceId, id) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/invitations/${id}`,
+      api: `api/management/workspaces/${workspaceId}/invitations/${id}`,
     });
 
     return this.webClient.delete(url, {

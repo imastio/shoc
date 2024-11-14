@@ -12,7 +12,7 @@ namespace Shoc.Secret.Controllers;
 /// <summary>
 /// The secrets endpoint
 /// </summary>
-[Route("api/workspaces/{workspaceId}/users/{userId}/secrets")]
+[Route("api/management/workspaces/{workspaceId}/users/{userId}/secrets")]
 [ApiController]
 [ShocExceptionHandler]
 public class UserSecretsController : ControllerBase

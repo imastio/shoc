@@ -16,7 +16,7 @@ export default class ClustersClient extends BaseAxiosClient {
   getAll(token, workspaceId){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters`
+      api: `api/management/workspaces/${workspaceId}/clusters`
     });
 
     return this.webClient.get(url, {
@@ -29,7 +29,7 @@ export default class ClustersClient extends BaseAxiosClient {
   getAllExtended(token, workspaceId){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/extended`
+      api: `api/management/workspaces/${workspaceId}/clusters/extended`
     });
 
     return this.webClient.get(url, {
@@ -42,7 +42,7 @@ export default class ClustersClient extends BaseAxiosClient {
    getById(token, workspaceId, id){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/${id}`
+      api: `api/management/workspaces/${workspaceId}/clusters/${id}`
     });
 
     return this.webClient.get(url, {
@@ -55,7 +55,7 @@ export default class ClustersClient extends BaseAxiosClient {
   getExtendedById(token, workspaceId, id){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/${id}/extended`
+      api: `api/management/workspaces/${workspaceId}/clusters/${id}/extended`
     });
 
     return this.webClient.get(url, {
@@ -68,7 +68,7 @@ export default class ClustersClient extends BaseAxiosClient {
    create(token, workspaceId, input){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters`
+      api: `api/management/workspaces/${workspaceId}/clusters`
     });
 
     return this.webClient.post(url, input, {
@@ -81,7 +81,7 @@ export default class ClustersClient extends BaseAxiosClient {
    updateById(token, workspaceId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/${id}`
+      api: `api/management/workspaces/${workspaceId}/clusters/${id}`
     });
 
     return this.webClient.put(url, input, {
@@ -94,7 +94,7 @@ export default class ClustersClient extends BaseAxiosClient {
   updateConfigurationById(token, workspaceId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/${id}/configuration`
+      api: `api/management/workspaces/${workspaceId}/clusters/${id}/configuration`
     });
 
     return this.webClient.put(url, input, {
@@ -107,7 +107,7 @@ export default class ClustersClient extends BaseAxiosClient {
    deleteById(token, workspaceId, id){
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/clusters/${id}`
+      api: `api/management/workspaces/${workspaceId}/clusters/${id}`
     });
 
     return this.webClient.delete(url, {

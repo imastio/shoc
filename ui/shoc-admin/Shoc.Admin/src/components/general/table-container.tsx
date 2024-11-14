@@ -13,6 +13,10 @@ function getErrorEmpty(errors: any[]){
         return <Result title="Not Found" subTitle="The data you are requesting could not be found!" status="404" />
     }
 
+    if(errors.some(error => error.code === 'VALIDATION_ERROR') || errors.length > 0){
+        return <Result title="Invalid Request" subTitle="Seems, your request is not valid to process!" status="error" />
+    }
+
     if(errors.some(error => error.code === 'UNKNOWN_ERROR') || errors.length > 0){
         return <Result title="System Error" subTitle="There is a problem with our systems, please try again a bit later!" status="500" />
     }

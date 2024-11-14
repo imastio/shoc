@@ -12,7 +12,7 @@ namespace Shoc.Workspace.Controllers;
 /// <summary>
 /// The workspace members endpoints
 /// </summary>
-[Route("api/workspaces/{workspaceId}/members")]
+[Route("api/management/workspaces/{workspaceId}/members")]
 [ApiController]
 [ShocExceptionHandler]
 public class WorkspaceMembersController : ControllerBase

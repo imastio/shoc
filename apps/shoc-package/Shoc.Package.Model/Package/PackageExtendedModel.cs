@@ -1,0 +1,89 @@
+using System;
+
+namespace Shoc.Package.Model.Package;
+
+/// <summary>
+/// The package model
+/// </summary>
+public class PackageExtendedModel
+{
+    /// <summary>
+    /// The object id
+    /// </summary>
+    public string Id { get; set; }
+    
+    /// <summary>
+    /// The workspace id
+    /// </summary>
+    public string WorkspaceId { get; set; }
+    
+    /// <summary>
+    /// The workspace name
+    /// </summary>
+    public string WorkspaceName { get; set; }
+    
+    /// <summary>
+    /// The owner of the package
+    /// </summary>
+    public string UserId { get; set; }
+    
+    /// <summary>
+    /// The user full name
+    /// </summary>
+    public string UserFullName { get; set; }
+    
+    /// <summary>
+    /// The target scope
+    /// </summary>
+    public string Scope { get; set; }
+    
+    /// <summary>
+    /// The package checksum
+    /// </summary>
+    public string ListingChecksum { get; set; }
+    
+    /// <summary>
+    /// The manifest of the package
+    /// </summary>
+    public string Manifest { get; set; }
+    
+    /// <summary>
+    /// The runtime of the package
+    /// </summary>
+    public string Runtime { get; set; }
+    
+    /// <summary>
+    /// The effective Containerfile of the package
+    /// </summary>
+    public string Containerfile { get; set; }
+    
+    /// <summary>
+    /// The reference to the base template
+    /// </summary>
+    public string TemplateReference { get; set; }
+    
+    /// <summary>
+    /// The registry id
+    /// </summary>
+    public string RegistryId { get; set; }
+    
+    /// <summary>
+    /// The registry name
+    /// </summary>
+    public string RegistryName { get; set; }
+    
+    /// <summary>
+    /// The full url to the image
+    /// </summary>
+    public string Image { get; set; }
+    
+    /// <summary>
+    /// The creation time
+    /// </summary>
+    public DateTime Created { get; set; }
+    
+    /// <summary>
+    /// The update time
+    /// </summary>
+    public DateTime Updated { get; set; }
+}

@@ -16,6 +16,12 @@ public interface IPackageRepository
     Task<IEnumerable<PackageModel>> GetAll(string workspaceId);
 
     /// <summary>
+    /// Gets page of the extended objects
+    /// </summary>
+    /// <returns></returns>
+    Task<PackagePageResult<PackageExtendedModel>> GetExtendedPageBy(string workspaceId, PackageFilter filter, int page, int size);
+    
+    /// <summary>
     /// Gets all the objects by listing checksum
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

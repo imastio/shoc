@@ -6,16 +6,16 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 
-export function WorkspaceMemberSelector(props: any) {
+export function WorkspaceMemberSelector({ workspaceId, ...rest }: any) {
 
     const { withToken } = useApiAuthentication();
     const [data, setData] = useState<any[] | null>(null);
     const [progress, setProgress] = useState(false);
 
-    const load = useCallback(async (workspaceId: string) => {
+    const load = useCallback(async (id: string) => {
         setProgress(true);
 
-        const result = await withToken((token: string) => selfClient(WorkspaceMembersClient).getAllExtended(token, workspaceId));
+        const result = await withToken((token: string) => selfClient(WorkspaceMembersClient).getAllExtended(token, id));
 
         setProgress(false);
 
@@ -30,23 +30,23 @@ export function WorkspaceMemberSelector(props: any) {
 
     useEffect(() => {
 
-        if (data === null && props.workspaceId) {
-            load(props.workspaceId);
+        if (data === null && workspaceId) {
+            load(workspaceId);
         }
-    }, [load, data, props.workspaceId])
+    }, [load, data, workspaceId])
 
     if (!data || data.length === 0 || progress) {
-        return <Select {...props} value={null} disabled />
+        return <Select {...rest} value={null} disabled />
     }
 
     return <Select
-        {...props}
+        {...rest}
         showSearch
         filterOption={(input, option) =>
             (option?.label as string ?? '').toLowerCase().includes(input.toLowerCase())
         }
         options={data}
-        disabled={progress || props.disabled}
+        disabled={progress || rest.disabled}
     />
 
 }

@@ -16,7 +16,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   getAll(token, workspaceId, userId) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets`
     });
 
     return this.webClient.get(url, {
@@ -29,7 +29,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   getAllExtended(token, workspaceId, userId) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets/extended`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets/extended`
     });
 
     return this.webClient.get(url, {
@@ -42,7 +42,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   getById(token, workspaceId, userId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
     });
 
     return this.webClient.get(url, {
@@ -55,7 +55,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   create(token, workspaceId, userId, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets`
     });
 
     return this.webClient.post(url, input, {
@@ -68,7 +68,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   updateById(token, workspaceId, userId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
     });
 
     return this.webClient.put(url, input, {
@@ -81,7 +81,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   updateValueById(token, workspaceId, userId, id, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets/${id}/value`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets/${id}/value`
     });
 
     return this.webClient.put(url, input, {
@@ -94,7 +94,7 @@ export default class UserSecretsClient extends BaseAxiosClient {
   deleteById(token, workspaceId, userId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
+      api: `api/management/workspaces/${workspaceId}/users/${userId}/secrets/${id}`
     });
 
     return this.webClient.delete(url, {
