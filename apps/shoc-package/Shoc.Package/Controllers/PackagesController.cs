@@ -11,7 +11,7 @@ namespace Shoc.Package.Controllers;
 /// <summary>
 /// The secrets endpoint
 /// </summary>
-[Route("api/packages")]
+[Route("api/management/workspaces/{workspaceId}/packages")]
 [ApiController]
 [ShocExceptionHandler]
 public class PackagesController : ControllerBase
@@ -37,7 +37,7 @@ public class PackagesController : ControllerBase
     [HttpGet("extended")]
     [AuthorizeAnyAccess(PackageAccesses.PACKAGE_PACKAGES_LIST)]
     public Task<PackagePageResult<PackageExtendedModel>> GetExtendedPageBy(
-        [RequiredFromQuery] string workspaceId, 
+        string workspaceId, 
         [FromQuery] string userId,
         [FromQuery] string scope,
         [FromQuery] int page, 
@@ -50,5 +50,15 @@ public class PackagesController : ControllerBase
         }, page, size);
     }
     
+    /// <summary>
+    /// Gets page of the extended objects
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("{id}/extended")]
+    [AuthorizeAnyAccess(PackageAccesses.PACKAGE_PACKAGES_READ)]
+    public Task<PackageExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        return this.packageService.GetExtendedById(workspaceId, id);
+    }
 }
 

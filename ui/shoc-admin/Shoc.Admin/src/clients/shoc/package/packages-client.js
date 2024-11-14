@@ -16,8 +16,8 @@ export default class PackagesClient extends BaseAxiosClient {
   getExtendedPage(token, workspaceId, filter, page, size) {
 
     const url = this.urlify({
-      api: `api/packages/extended`,
-      query: { workspaceId, userId: filter?.userId, scope: filter?.scope, page, size}
+      api: `api/management/workspaces/${workspaceId}/packages/extended`,
+      query: { userId: filter?.userId, scope: filter?.scope, page, size}
     });
 
     return this.webClient.get(url, {
@@ -27,4 +27,16 @@ export default class PackagesClient extends BaseAxiosClient {
     });
   }
 
+  getExtendedById(token, workspaceId, id) {
+
+    const url = this.urlify({
+      api: `api/management/workspaces/${workspaceId}/packages/${id}/extended`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
 }

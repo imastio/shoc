@@ -101,6 +101,19 @@ public class PackageRepository : IPackageRepository
             Id = id
         });
     }
+    
+    /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<PackageExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        return this.dataOps.Connect().QueryFirst("Package", "GetExtendedById").ExecuteAsync<PackageExtendedModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id
+        });
+    }
 
     /// <summary>
     /// Creates the object with given input

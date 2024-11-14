@@ -13,7 +13,7 @@ import WorkspacesClient from "@/clients/shoc/workspace/workspaces-client";
 import WorkspaceDeleteModal from "./workspace-delete-modal";
 import WorkspaceUpdateModal from "./workspace-update-modal";
 import { workspaceStatusesMap, workspaceTypesMap } from "@/well-known/workspaces";
-import { PackagesTable } from "../packages/packages-table";
+import { PackagesTable } from "../packages/_components/packages-table";
 import { WorkspaceInvitationsTable } from "../(invitations)/workspace-invitations-table";
 import { WorkspaceMembersTable } from "../(members)/workspace-members-table";
 import { UserSecretsTable } from "../(user-secrets)/user-secrets-table";

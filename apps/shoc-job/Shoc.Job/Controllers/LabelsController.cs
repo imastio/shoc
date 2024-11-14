@@ -12,7 +12,7 @@ namespace Shoc.Job.Controllers;
 /// <summary>
 /// The labels endpoint
 /// </summary>
-[Route("api/workspaces/{workspaceId}/labels")]
+[Route("api/management/workspaces/{workspaceId}/labels")]
 [ApiController]
 [ShocExceptionHandler]
 public class LabelsController : ControllerBase

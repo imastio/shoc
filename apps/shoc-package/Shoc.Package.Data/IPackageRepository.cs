@@ -36,6 +36,12 @@ public interface IPackageRepository
     Task<PackageModel> GetById(string workspaceId, string id);
 
     /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    Task<PackageExtendedModel> GetExtendedById(string workspaceId, string id);
+
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

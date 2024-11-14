@@ -59,6 +59,20 @@
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
       </TextCommand>
     </SqlOperation>
+
+    <SqlOperation Name="GetExtendedById">
+      <TextCommand>
+        SELECT p.*, w.Name as WorkspaceName, u.FullName as UserFullName, r.Name as RegistryName
+        FROM `pkg_packages` p
+        INNER JOIN `wspc_workspaces` w
+        ON p.WorkspaceId = w.Id
+        INNER JOIN `idp_users` u
+        ON p.UserId = u.Id
+        INNER JOIN `reg_registries` r
+        ON p.RegistryId = r.Id
+        WHERE p.`WorkspaceId` = @WorkspaceId AND p.Id = @Id
+      </TextCommand>
+    </SqlOperation>
     
     <SqlOperation Name="Create">
 

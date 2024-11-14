@@ -69,6 +69,28 @@ public class PackageService
     }
 
     /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<PackageExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // try load the object
+        var result = await this.packageRepository.GetExtendedById(workspaceId, id);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
+    }
+
+    /// <summary>
     /// Duplicates the package from the given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

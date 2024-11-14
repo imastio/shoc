@@ -16,7 +16,7 @@ export default class LabelsClient extends BaseAxiosClient {
   getAll(token, workspaceId) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/labels`
+      api: `api/management/workspaces/${workspaceId}/labels`
     });
 
     return this.webClient.get(url, {
@@ -29,7 +29,7 @@ export default class LabelsClient extends BaseAxiosClient {
   getById(token, workspaceId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/labels/${id}`
+      api: `api/management/workspaces/${workspaceId}/labels/${id}`
     });
 
     return this.webClient.get(url, {
@@ -42,7 +42,7 @@ export default class LabelsClient extends BaseAxiosClient {
   create(token, workspaceId, input) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/labels`
+      api: `api/management/workspaces/${workspaceId}/labels`
     });
 
     return this.webClient.post(url, input, {
@@ -55,7 +55,7 @@ export default class LabelsClient extends BaseAxiosClient {
   deleteById(token, workspaceId, id) {
 
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/labels/${id}`
+      api: `api/management/workspaces/${workspaceId}/labels/${id}`
     });
 
     return this.webClient.delete(url, {
