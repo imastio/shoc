@@ -30,6 +30,7 @@
     "commander": "^12.1.0",
     "figlet": "^1.7.0",
     "formdata-node": "^6.0.3",
+    "git-url-parse": "^15.0.0",
     "glob": "^11.0.0",
     "isomorphic-git": "^1.27.1",
     "jose": "^5.9.3",
@@ -45,6 +46,7 @@
     "@types/figlet": "^1.5.8",
     "@types/node": "^22.6.1",
     "@types/prompts": "^2.4.9",
+    "@types/git-url-parse": "^9.0.3",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
   }
