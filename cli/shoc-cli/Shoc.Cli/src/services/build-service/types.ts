@@ -1,3 +1,5 @@
+import { AuthSession } from "@/core/types"
+
 export interface BuildManifest {
     template: string,
     spec: any,
@@ -27,5 +29,7 @@ export interface BuildContext {
     workspace: string,
     dir: string,
     buildFile: string,
-    scope: string
+    scope: string,
+    workspaceReference?: { id: string },
+    session?: AuthSession
 }

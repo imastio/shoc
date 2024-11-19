@@ -10,6 +10,7 @@ import templatesCommand from './templates';
 import jobsCommand from './jobs';
 import buildCommand from './build';
 import gitCommand from './git';
+import runCommand from './run';
 
 const program = createCommand();
 
@@ -23,6 +24,7 @@ program
   .enablePositionalOptions();
 
 program.addCommand(buildCommand);
+program.addCommand(runCommand);
 program.addCommand(configCommand);
 program.addCommand(authCommand);
 program.addCommand(jobsCommand)
