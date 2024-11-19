@@ -46,6 +46,7 @@ public static class DataConfiguration
         services.AddSingleton<IAccessRepository, AccessRepository>();
         services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
         services.AddSingleton<ILabelRepository, LabelRepository>();
+        services.AddSingleton<IGitRepoRepository, GitRepoRepository>();
             
         // chain services
         return services;

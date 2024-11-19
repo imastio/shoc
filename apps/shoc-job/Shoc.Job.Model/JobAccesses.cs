@@ -75,6 +75,36 @@ public class JobAccesses
     public const string JOB_LABELS_DELETE = "job:labels:delete";
     
     /// <summary>
+    /// A read access to git repos objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_READ = "job:git_repos:read";
+
+    /// <summary>
+    /// The list access to git repos objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_LIST = "job:git_repos:list";
+
+    /// <summary>
+    /// A 'create' access to git repos objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_CREATE = "job:git_repos:create";
+    
+    /// <summary>
+    /// An edit access to git repos objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_EDIT = "job:git_repos:edit";
+    
+    /// <summary>
+    /// The manage access to git repos objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_MANAGE = "job:git_repos:manage";
+    
+    /// <summary>
+    /// A delete access to git repo objects
+    /// </summary>
+    public const string JOB_GIT_REPOS_DELETE = "job:git_repos:delete";
+    
+    /// <summary>
     /// Get and initialize all the constants
     /// </summary>
     public static readonly ISet<string> ALL = GetAll();

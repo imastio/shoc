@@ -18,7 +18,7 @@ namespace Shoc.Job.Controllers;
 public class LabelsController : ControllerBase
 {
     /// <summary>
-    /// The secret service
+    /// The label service
     /// </summary>
     private readonly LabelService labelService;
 

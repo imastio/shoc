@@ -24,7 +24,8 @@ public static class JobOperations
             Path.Combine(sourceDirectory, "Operations", "ProtectionKey.xml"),
             Path.Combine(sourceDirectory, "Operations", "Access.xml"),
             Path.Combine(sourceDirectory, "Operations", "WorkspaceAccess.xml"),
-            Path.Combine(sourceDirectory, "Operations", "Label.xml")
+            Path.Combine(sourceDirectory, "Operations", "Label.xml"),
+            Path.Combine(sourceDirectory, "Operations", "GitRepo.xml")
         };
     }
 }

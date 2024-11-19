@@ -14,4 +14,9 @@ public static class JobObjects
     /// The label object
     /// </summary>
     public const string LABEL = "lbl";
+    
+    /// <summary>
+    /// The git repository object
+    /// </summary>
+    public const string GIT_REPOSITORY = "git";
 }

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="GitRepo">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `Repository` Asc;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetByRemoteUrl">
+      <TextCommand>
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId AND `RemoteUrl` = @RemoteUrl;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetBySourceAndRepository">
+      <TextCommand>
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Source` = @Source AND `Repository` = @Repository;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create">
+
+      <TextCommand>
+        INSERT INTO `job_git_repositories`
+        (`Id`, `WorkspaceId`, `Name`, `Owner`, `Source`, `Repository`, `RemoteUrl`)
+        VALUES
+        (@Id, @WorkspaceId, @Name, @Owner, @Source, @Repository, @RemoteUrl);
+
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="Ensure">
+
+      <TextCommand>
+
+        INSERT INTO `job_git_repositories`
+        (`Id`, `WorkspaceId`, `Name`, `Owner`, `Source`, `Repository`, `RemoteUrl`)
+        VALUES
+        (@Id, @WorkspaceId, @Name, @Owner, @Source, @Repository, @RemoteUrl)
+        ON DUPLICATE KEY UPDATE `Name` = `Name`;
+
+        SELECT * FROM `job_git_repositories`
+        WHERE `WorkspaceId` = @WorkspaceId AND (`Id` = @Id OR (`Source` = @Source AND `Repository` = @Repository));
+        
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `job_git_repositories` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `job_git_repositories` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

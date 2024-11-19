@@ -20,6 +20,7 @@ import { UserSecretsTable } from "../(user-secrets)/user-secrets-table";
 import ClustersTable from "../clusters/_components/clusters-table";
 import { LabelsTable } from "../(labels)/labels-table";
 import { SecretsTable } from "../(secrets)/secrets-table";
+import { GitReposTable } from "../(git-repos)/git-repos-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -125,6 +126,11 @@ export default function SingleWorkspaceClientPage() {
                             },
                             {
                                 key: "7",
+                                label: "Git Repositories",
+                                children: <GitReposTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
+                                key: "8",
                                 label: "Labels",
                                 children: <LabelsTable workspaceId={workspaceId} loading={progress} />
                             }

@@ -29,7 +29,9 @@ builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddLogging();
 builder.Services.AddSingleton<LabelValidationService>();
+builder.Services.AddSingleton<GitRepoValidationService>();
 builder.Services.AddSingleton<LabelService>();
+builder.Services.AddSingleton<GitRepoService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

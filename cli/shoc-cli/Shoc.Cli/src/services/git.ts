@@ -9,7 +9,7 @@ interface GitDetails {
     source: string,
     owner: string,
     name: string,
-    fullName: string
+    repo: string
 }
 
 export async function getGitDetails(dir: string): Promise<GitDetails | null> {
@@ -48,6 +48,6 @@ async function getGitDetailsImpl(dir: string): Promise<GitDetails | null> {
         source: parsed.source,
         owner: parsed.owner,
         name: parsed.name,
-        fullName: parsed.full_name
+        repo: parsed.full_name
     };
 }
