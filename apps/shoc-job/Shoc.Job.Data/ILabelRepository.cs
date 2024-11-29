@@ -16,6 +16,12 @@ public interface ILabelRepository
     Task<IEnumerable<LabelModel>> GetAll(string workspaceId);
     
     /// <summary>
+    /// Gets the objects by names
+    /// </summary>
+    /// <returns></returns>
+    Task<IEnumerable<LabelModel>> GetByNames(string workspaceId, IEnumerable<string> names);
+    
+    /// <summary>
     /// Gets the object by id
     /// </summary>
     /// <returns></returns>

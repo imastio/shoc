@@ -1,5 +1,4 @@
 import { DEFAULT_BUILD_FILE } from "@/commands/common";
-import { ResolvedContext } from "@/core/types";
 import fsDirect from "fs";
 import path from "path";
 import * as YAML from 'yaml';

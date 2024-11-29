@@ -45,7 +45,15 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET,
                 WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
                 WorkspacePermissions.WORKSPACE_BUILD_PACKAGE,
-                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE
+                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE,
+                WorkspacePermissions.WORKSPACE_LIST_LABELS,
+                WorkspacePermissions.WORKSPACE_CREATE_LABEL,
+                WorkspacePermissions.WORKSPACE_UPDATE_LABEL,
+                WorkspacePermissions.WORKSPACE_DELETE_LABEL,
+                WorkspacePermissions.WORKSPACE_LIST_GIT_REPOS,
+                WorkspacePermissions.WORKSPACE_CREATE_GIT_REPO,
+                WorkspacePermissions.WORKSPACE_UPDATE_GIT_REPO,
+                WorkspacePermissions.WORKSPACE_DELETE_GIT_REPO
             }
         },
         {
@@ -62,7 +70,11 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET,
                 WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
                 WorkspacePermissions.WORKSPACE_BUILD_PACKAGE,
-                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE
+                WorkspacePermissions.WORKSPACE_DELETE_PACKAGE,
+                WorkspacePermissions.WORKSPACE_LIST_LABELS,
+                WorkspacePermissions.WORKSPACE_CREATE_LABEL,
+                WorkspacePermissions.WORKSPACE_LIST_GIT_REPOS,
+                WorkspacePermissions.WORKSPACE_CREATE_GIT_REPO,
             }
         },
         {
@@ -70,7 +82,9 @@ public class WorkspacePermissionCalculator
             new HashSet<string>
             {
                 WorkspacePermissions.WORKSPACE_VIEW,
-                WorkspacePermissions.WORKSPACE_LIST_PACKAGES
+                WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
+                WorkspacePermissions.WORKSPACE_LIST_LABELS,
+                WorkspacePermissions.WORKSPACE_LIST_GIT_REPOS
             }
         }
     };

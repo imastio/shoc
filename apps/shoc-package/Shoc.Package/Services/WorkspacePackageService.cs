@@ -41,7 +41,8 @@ public class WorkspacePackageService
         await this.workspaceAccessEvaluator.Ensure(
             userId,
             workspaceId,
-            WorkspacePermissions.WORKSPACE_LIST_SECRETS,
+            WorkspacePermissions.WORKSPACE_VIEW,
+            WorkspacePermissions.WORKSPACE_LIST_PACKAGES,
             WorkspacePermissions.WORKSPACE_BUILD_PACKAGE);
         
         // ensure referring to the correct object

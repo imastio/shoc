@@ -16,6 +16,14 @@
       </TextCommand>
     </SqlOperation>
 
+    <SqlOperation Name="GetByNames">
+      <TextCommand>
+        SELECT * FROM `job_labels`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Name` in @Names
+        ORDER BY `Name` Asc;
+      </TextCommand>
+    </SqlOperation>
+
     <SqlOperation Name="GetById">
       <TextCommand>
         SELECT * FROM `job_labels`

@@ -40,6 +40,19 @@ public class LabelRepository : ILabelRepository
     }
 
     /// <summary>
+    /// Gets the objects by names
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<LabelModel>> GetByNames(string workspaceId, IEnumerable<string> names)
+    {
+        return this.dataOps.Connect().Query("Label", "GetByNames").ExecuteAsync<LabelModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Names = names
+        });
+    }
+
+    /// <summary>
     /// Gets the object by id
     /// </summary>
     /// <returns></returns>

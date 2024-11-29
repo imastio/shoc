@@ -2,7 +2,7 @@ import git from 'isomorphic-git'
 import fs from 'fs'
 import gitUrlParse from 'git-url-parse';
 
-interface GitDetails {
+export interface GitDetails {
     remote: string,
     url: string,
     branch: string | void,

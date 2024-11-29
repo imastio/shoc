@@ -133,6 +133,46 @@ public class WorkspacePermissions
     /// Delete package of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_PACKAGE = "workspace_delete_package";
+    
+    /// <summary>
+    /// View labels of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_LABELS = "workspace_list_labels";
+    
+    /// <summary>
+    /// Create labels of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_LABEL = "workspace_create_label";
+    
+    /// <summary>
+    /// Update labels of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_LABEL = "workspace_update_label";
+    
+    /// <summary>
+    /// Delete labels of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_LABEL = "workspace_delete_label";
+    
+    /// <summary>
+    /// View git repos of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_GIT_REPOS = "workspace_list_git_repos";
+    
+    /// <summary>
+    /// Create git repo of the workspace
+    /// </summary>
+    public const string WORKSPACE_CREATE_GIT_REPO = "workspace_create_git_repo";
+    
+    /// <summary>
+    /// Update git repo of the workspace
+    /// </summary>
+    public const string WORKSPACE_UPDATE_GIT_REPO = "workspace_update_git_repo";
+    
+    /// <summary>
+    /// Delete git repo of the workspace
+    /// </summary>
+    public const string WORKSPACE_DELETE_GIT_REPO = "workspace_delete_git_repo";
         
     /// <summary>
     /// Get and initialize all the constants

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Core;
 using Shoc.Job.Data;
@@ -87,6 +88,46 @@ public class LabelService
         
         // create object in the storage
         return await this.labelRepository.Create(workspaceId, input);
+    }
+    
+    /// <summary>
+    /// Ensures that the object with given input exists or creates new
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="input">The creation input</param>
+    /// <returns></returns>
+    public async Task<IEnumerable<LabelModel>> Ensure(string workspaceId, LabelsEnsureModel input)
+    {
+        // ensure referring to the correct object
+        input.WorkspaceId = workspaceId;
+        
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // the unique set of names
+        var names = input.Names?.ToHashSet() ?? new HashSet<string>();
+
+        // no names to ensure
+        if (names.Count == 0)
+        {
+            return Enumerable.Empty<LabelModel>();
+        }
+        
+        // ensure that all the names are valid 
+        foreach (var name in names)
+        {
+            this.validationService.ValidateName(name);
+        }
+
+        // ensure all the objects are created
+        await this.labelRepository.Ensure(workspaceId, new LabelsEnsureModel
+        {
+            WorkspaceId = workspaceId,
+            Names = names
+        });
+        
+        // get objects from the storage by names
+        return await this.labelRepository.GetByNames(workspaceId, names);
     }
     
     /// <summary>

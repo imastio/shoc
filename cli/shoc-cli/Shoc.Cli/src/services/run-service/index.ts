@@ -8,6 +8,7 @@ import ora, { oraPromise } from "ora";
 import { RunContext } from "./types";
 import build from "../build-service";
 import { getGitDetails } from "../git";
+import { getRunManifest, initialize } from "./implementation";
 
 export default async function run(context: ResolvedContext, runContext: RunContext) : Promise<{ }> {
     
@@ -16,15 +17,22 @@ export default async function run(context: ResolvedContext, runContext: RunConte
         failText: err => `Could not authenticate: ${chalk.red(err.message)}` 
     }).catch(() => process.exit(1));
 
-    const workspace = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, runContext.workspace)), {
+    const { id: workspaceId } = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, runContext.workspace)), {
         text: `Validating workspace ${chalk.bold(runContext.workspace)}`,
         successText: res => `🌎 Workspace ${chalk.bold(res.name)} is valid`,
         failText: err => `The workspace ${chalk.bold(runContext.workspace)} could not be found: ${chalk.red(err.message)}`
     }).catch(() => process.exit(1));
 
+    const { manifest } = await oraPromise(getRunManifest(runContext), {
+        successText: res => `📄 Detected build manifest at ${chalk.bold(res.runFile)}`,
+        failText: err => `Build manifest could not be found: ${chalk.red(err.message)}` 
+    }).catch(() => process.exit(1));
 
-    const gitResult = await getGitDetails(runContext.dir);
-    console.log("Git details", gitResult)
+
+    const { gitRepoId, labelIds } = await oraPromise(initialize(context, runContext, workspaceId, manifest), {
+        successText: res => `ℹ️ Initialization completed successfully`,
+        failText: err => `Initialization failed: ${chalk.red(err.message)}` 
+    }).catch(() => process.exit(1));
 
     // const buildResult = await build(context, {
     //     workspace: runContext.workspace,

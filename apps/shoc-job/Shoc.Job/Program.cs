@@ -32,6 +32,8 @@ builder.Services.AddSingleton<LabelValidationService>();
 builder.Services.AddSingleton<GitRepoValidationService>();
 builder.Services.AddSingleton<LabelService>();
 builder.Services.AddSingleton<GitRepoService>();
+builder.Services.AddSingleton<WorkspaceLabelService>();
+builder.Services.AddSingleton<WorkspaceGitRepoService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 
