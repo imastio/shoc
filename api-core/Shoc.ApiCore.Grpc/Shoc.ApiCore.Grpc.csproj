@@ -7,9 +7,9 @@
     <Import Project="../../Shoc.Shared.proj" />
 
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.64.0-pre1"/>
-        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.64.0-pre1" />
-        <PackageReference Include="Grpc.StatusProto" Version="2.64.0-pre1" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.67.0" />
+        <PackageReference Include="Grpc.StatusProto" Version="2.67.0" />
     </ItemGroup>
     
     <ItemGroup>

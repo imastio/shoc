@@ -47,4 +47,9 @@ public class VersionTableMetadata : IVersionTableMetaData
     /// The name of applied-on attribute
     /// </summary>
     public string AppliedOnColumnName => "AppliedOn";
+
+    /// <summary>
+    /// Indicates if it should create table with primary key
+    /// </summary>
+    public bool CreateWithPrimaryKey => false;
 }
