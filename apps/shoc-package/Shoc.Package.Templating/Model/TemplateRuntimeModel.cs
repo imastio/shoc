@@ -23,4 +23,14 @@ public class TemplateRuntimeModel
     /// Indicates if supplying extra arguments is permitted
     /// </summary>
     public bool Args { get; set; }
+    
+    /// <summary>
+    /// The user id
+    /// </summary>
+    public long? Uid { get; set; }
+    
+    /// <summary>
+    /// The username
+    /// </summary>
+    public string User { get; set; }
 }

@@ -24,11 +24,16 @@
       "minItems": 1,
       "description": "An array of entrypoint commands (must be valid binaries or paths)."
     },
-    "UserId": {
+    "Uid": {
       "type": "integer",
       "minimum": 1000,
       "maximum": 65535,
       "description": "A valid user ID (between 1000 and 65535)."
+    },
+    "UserName": {
+      "type": "string",
+      "pattern": "^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\\$)$",
+      "description": "A valid name of the user in the container."
     }
   }
 }

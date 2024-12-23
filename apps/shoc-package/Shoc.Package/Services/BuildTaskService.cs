@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Serialization;
 using Scriban;
+using Scriban.Parsing;
+using Scriban.Runtime;
 using Shoc.Core;
 using Shoc.Package.Data;
 using Shoc.Package.Model;
@@ -49,11 +51,21 @@ public class BuildTaskService
     /// The name of build subdirectory
     /// </summary>
     private const string BUILD_DIRECTORY_NAME = "build";
+
+    /// <summary>
+    /// The prefix for default values
+    /// </summary>
+    private const string TEMPLATE_DEFAULTS_PREFIX = "system";
     
     /// <summary>
     /// The deadline of object creation
     /// </summary>
     private static readonly TimeSpan CREATING_DEADLINE = TimeSpan.FromMinutes(5);
+
+    /// <summary>
+    /// The default values of the spec
+    /// </summary>
+    private static readonly PackageSpecDefaultsModel SPEC_DEFAULTS = GetSpecDefaults();
     
     /// <summary>
     /// The build task repository
@@ -188,8 +200,11 @@ public class BuildTaskService
         // validate the spec against the schema
         ValidateBuildSpec(buildSpec, manifest.Spec);
         
+        // build the final runtime
+        var runtime = BuildRuntime(templateVariant.Runtime, manifest.Spec, SPEC_DEFAULTS);
+        
         // serialize and store the runtime (ensure camel case)
-        input.Runtime = JsonConvert.SerializeObject(templateVariant.Runtime, new JsonSerializerSettings
+        input.Runtime = JsonConvert.SerializeObject(runtime, new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver
             {
@@ -201,7 +216,7 @@ public class BuildTaskService
         });
         
         // render containerfile based on the template and specification
-        input.Containerfile = await RenderContainerfile(templateVariant.Containerfile, manifest.Spec);
+        input.Containerfile = await RenderContainerfile(templateVariant.Containerfile, manifest.Spec, SPEC_DEFAULTS);
 
         // gets the registry to store the image
         input.RegistryId = (await this.registryHandlerService.GetDefaultRegistryId(workspaceId)).Id;
@@ -418,16 +433,35 @@ public class BuildTaskService
     /// </summary>
     /// <param name="containerfileTemplate">The template content</param>
     /// <param name="spec">The specification to render</param>
+    /// <param name="defaults">The default values</param>
     /// <returns></returns>
-    private static async Task<string> RenderContainerfile(string containerfileTemplate, Dictionary<string, object> spec)
+    private static async Task<string> RenderContainerfile(string containerfileTemplate, Dictionary<string, object> spec, PackageSpecDefaultsModel defaults)
     {
+        // the defaults map
+        var defaultsMap = new Dictionary<string, object> { { TEMPLATE_DEFAULTS_PREFIX, defaults } };
+        
         try
         {
             // parse the template file
             var parsed = Template.Parse(containerfileTemplate);
 
-            // render with spec
-            return await parsed.RenderAsync(spec);
+            // create new context based on the lexer lang option
+            var context = parsed.LexerOptions.Lang == ScriptLang.Liquid ? new LiquidTemplateContext() : new TemplateContext();
+
+            // new script object
+            var scriptObject = new ScriptObject();
+
+            // import spec
+            scriptObject.Import(spec);
+            
+            // import defaults map
+            scriptObject.Import(defaultsMap);
+            
+            // add script object to the context
+            context.PushGlobal(scriptObject);
+            
+            // render with context
+            return await parsed.RenderAsync(context);
         }
         catch (Exception e)
         {
@@ -568,4 +602,41 @@ public class BuildTaskService
         };
     }
 
+    /// <summary>
+    /// Builds the runtime object based on the static runtime and spec fields
+    /// </summary>
+    /// <param name="runtime">The static runtime</param>
+    /// <param name="spec">The specification data</param>
+    /// <param name="defaults">The default values</param>
+    /// <returns></returns>
+    private static TemplateRuntimeModel BuildRuntime(TemplateRuntimeModel runtime, IReadOnlyDictionary<string, object> spec, PackageSpecDefaultsModel defaults)
+    {
+        // try getting uid from spec, otherwise fallback to runtime given value or default
+        var uid = spec.TryGetValue(KnownRuntimeProperties.UID, out var givenUid) ? (long) givenUid : runtime.Uid ?? defaults.Uid;
+
+        // try getting user from spec, otherwise fallback to runtime given value or default
+        var user = spec.GetValueOrDefault(KnownRuntimeProperties.USER, null) as string ?? runtime.User ?? defaults.User;
+        
+        // build runtime model
+        return new TemplateRuntimeModel
+        {
+            Type = runtime.Type,
+            Args = runtime.Args,
+            Uid = uid,
+            User = user
+        };
+    }
+
+    /// <summary>
+    /// The spec defaults
+    /// </summary>
+    /// <returns></returns>
+    private static PackageSpecDefaultsModel GetSpecDefaults()
+    {
+        return new PackageSpecDefaultsModel
+        {
+            Uid = PackageDefaultValues.UID,
+            User = PackageDefaultValues.USER
+        };
+    }
 }

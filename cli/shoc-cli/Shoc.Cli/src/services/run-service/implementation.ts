@@ -1,7 +1,7 @@
 import { DEFAULT_RUN_FILE } from "@/commands/common";
 import WorkspaceGitReposClient from "@/clients/shoc/job/workspace-git-repos-client";
 import { getGitDetails, GitDetails } from "../git";
-import { RunContext, RunInitializationResult, RunManifest, RunManifestResult } from "./types";
+import { RunContext, RunInitializationResult, ParsedRunManifestResult, ParsedRunManifest } from "./types";
 import clientGuard from "../client-guard";
 import { ResolvedContext } from "@/core/types";
 import { shocClient } from "@/clients/shoc";
@@ -11,7 +11,7 @@ import { promises as fs } from 'fs';
 import path from "path";
 import WorkspaceLabelsClient from "@/clients/shoc/job/workspace-labels-client";
 
-export async function getRunManifest(context: RunContext): Promise<RunManifestResult> {
+export async function getRunManifest(context: RunContext): Promise<ParsedRunManifestResult> {
 
     const targetRunFile = path.resolve(context.dir, context.runFile || DEFAULT_RUN_FILE)
 
@@ -22,12 +22,12 @@ export async function getRunManifest(context: RunContext): Promise<RunManifestRe
     const file = await fs.readFile(targetRunFile, 'utf8');
 
     return {
-        manifest: YAML.parse(file) as RunManifest,
+        manifest: YAML.parse(file) as ParsedRunManifest,
         runFile: targetRunFile
     }
 }
 
-export async function initialize(context: ResolvedContext, runContext: RunContext, workspaceId: string, manifest: RunManifest): Promise<RunInitializationResult> {
+export async function initialize(context: ResolvedContext, runContext: RunContext, workspaceId: string, manifest: ParsedRunManifest): Promise<RunInitializationResult> {
 
     const gitDetails = await getGitDetails(runContext.dir);
 

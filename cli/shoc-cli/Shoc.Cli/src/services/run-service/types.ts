@@ -6,14 +6,14 @@ export interface RunContext {
     runFile: string
 }
 
-export interface RunManifest {
+export interface ParsedRunManifest {
     kind?: string,
     labels?: string[],
     cluster: string,
 }
 
-export interface RunManifestResult {
-    manifest: RunManifest,
+export interface ParsedRunManifestResult {
+    manifest: ParsedRunManifest,
     runFile: string,
 }
 

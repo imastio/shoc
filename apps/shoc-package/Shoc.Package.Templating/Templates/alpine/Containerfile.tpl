@@ -1,22 +1,23 @@
 # Use the base image "alpine" with a configurable tag (default to latest)
 FROM docker.io/library/alpine:{{ tag ?? "latest" }}
 
-# Define environment variables for user and group IDs with a default value for appUid
-ENV SHOC_UID={{ shocUid ?? 1234 }}
+# Define environment variables for user and group IDs with a default value for uid and user
+ENV SHOC_UID={{ uid ?? system.uid }}
+ENV SHOC_USER={{ user ?? system.user }}
 
 # Create a non-root user with a specific UID and GID
 RUN addgroup \
         --gid=$SHOC_UID \
-        shoc \
+        $SHOC_USER \
     && adduser \
         --uid=$SHOC_UID \
-        --ingroup=shoc \
+        --ingroup=$SHOC_USER \
         --disabled-password \
-        shoc
+        $SHOC_USER
 
 # Set the working directory and ensure it has the right permissions
 WORKDIR /app
-RUN chown -R shoc:shoc /app
+RUN chown -R $SHOC_USER:$SHOC_USER /app
 
 # Copy all files into the /app directory
 COPY . /app

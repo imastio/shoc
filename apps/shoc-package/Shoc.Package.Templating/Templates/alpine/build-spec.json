@@ -9,10 +9,15 @@
       "default": "latest",
       "description": "The tag for the base image."
     },
-    "shocUid": {
-      "$ref": "https://shoc.dev/api/schemas/build-spec-01#/definitions/UserId",
-      "default": 1234,
+    "uid": {
+      "$ref": "https://shoc.dev/api/schemas/build-spec-01#/definitions/Uid",
+      "default": 1000,
       "description": "The user ID to create within the container."
+    },
+    "user": {
+      "$ref": "https://shoc.dev/api/schemas/build-spec-01#/definitions/UserName",
+      "default": "shoc",
+      "description": "The user name to create within the container."
     },
     "packages": {
       "type": ["array", "null"],
