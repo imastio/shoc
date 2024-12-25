@@ -23,6 +23,11 @@ public class JobModel
     public long LocalId { get; set; }
     
     /// <summary>
+    /// The target cluster for the job
+    /// </summary>
+    public string ClusterId { get; set; }
+    
+    /// <summary>
     /// The id of the user submitting the job
     /// </summary>
     public string UserId { get; set; }

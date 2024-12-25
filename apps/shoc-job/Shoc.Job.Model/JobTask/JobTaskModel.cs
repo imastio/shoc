@@ -25,7 +25,7 @@ public class JobTaskModel
     /// <summary>
     /// The task sequence
     /// </summary>
-    public string Sequence { get; set; }
+    public long Sequence { get; set; }
     
     /// <summary>
     /// The target cluster to submit the job on
@@ -55,12 +55,12 @@ public class JobTaskModel
     /// <summary>
     /// A JSON object defining CLI arguments and usage mode
     /// </summary>
-    public string[] Args { get; set; }
+    public string Args { get; set; }
     
     /// <summary>
     /// Overall number of replicas
     /// </summary>
-    public string ArrayReplicas { get; set; }
+    public long ArrayReplicas { get; set; }
     
     /// <summary>
     /// The indexer for the replicas
@@ -96,16 +96,6 @@ public class JobTaskModel
     /// The task specification object json
     /// </summary>
     public string Spec { get; set; }
-    
-    /// <summary>
-    /// The task's external namespace (K8s namespace)
-    /// </summary>
-    public string ExternalNamespace { get; set; }
-    
-    /// <summary>
-    /// The task's external reference within the namespace (K8s object name)
-    /// </summary>
-    public string ExternalReference { get; set; }
     
     /// <summary>
     /// The status of the task 
