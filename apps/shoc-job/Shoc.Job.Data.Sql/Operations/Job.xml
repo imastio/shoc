@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Job">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `job_jobs`
+        WHERE `WorkspaceId` = @WorkspaceId
+        ORDER BY `LocalId` Asc;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetById">
+      <TextCommand>
+        SELECT * FROM `job_jobs`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+    <SqlOperation Name="Create" AutoTransaction="No">
+
+      <TextCommand>
+
+        SET @nextLocalId = (
+          SELECT COALESCE(MAX(LocalId), 0) + 1
+          FROM Jobs
+          WHERE `WorkspaceId` = @WorkspaceId
+        );
+        
+        INSERT INTO `job_jobs`
+        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `TotalTasks`, 
+        `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
+        VALUES
+        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @TotalTasks,
+        @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
+
+        SELECT * FROM `job_jobs`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="CreateTask" AutoTransaction="No">
+
+      <TextCommand>
+
+        INSERT INTO `job_job_tasks`
+        (`Id`, `WorkspaceId`, `JobId`, `Sequence`, `ClusterId`, `PackageId`, `UserId`, `Type`, `Runtime`, `Args`,
+        `ArrayReplicas`, `ArrayIndexer`, `ResolvedEnvEncrypted`, `MemoryRequested`, `CpuRequested`, `NvidiaGpuRequested`, 
+        `AmdGpuRequested`, `Spec`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
+        VALUES
+        (@Id, @WorkspaceId, @JobId, @Sequence, @ClusterId, @PackageId, @UserId, @Type, @Runtime, @Args,
+        @ArrayReplicas, @ArrayIndexer, @ResolvedEnvEncrypted, @MemoryRequested, @CpuRequested, @NvidiaGpuRequested,
+        @AmdGpuRequested, @Spec, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
+        
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="CreateLabel" AutoTransaction="No">
+
+      <TextCommand>
+
+        INSERT INTO `job_job_labels`
+        (`Id`, `WorkspaceId`, `JobId`, `LabelId`)
+        VALUES
+        (@Id, @WorkspaceId, @JobId, @LabelId)
+        ON DUPLICATE KEY UPDATE `LabelId` = @LabelId; 
+        
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="CreateGitRepo" AutoTransaction="No">
+
+      <TextCommand>
+
+        INSERT INTO `job_job_git_repositories`
+        (`Id`, `WorkspaceId`, `JobId`, `GitRepoId`)
+        VALUES
+        (@Id, @WorkspaceId, @JobId, @GitRepoId)
+        ON DUPLICATE KEY UPDATE `GitRepoId` = @GitRepoId;
+
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="DeleteById">
+      <TextCommand>
+        SELECT * FROM `job_jobs` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        DELETE FROM `job_jobs` WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+
+</DataOperations>

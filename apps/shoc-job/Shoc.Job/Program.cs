@@ -34,6 +34,9 @@ builder.Services.AddSingleton<LabelService>();
 builder.Services.AddSingleton<GitRepoService>();
 builder.Services.AddSingleton<WorkspaceLabelService>();
 builder.Services.AddSingleton<WorkspaceGitRepoService>();
+builder.Services.AddSingleton<JobProtectionProvider>();
+builder.Services.AddSingleton<JobValidationService>();
+builder.Services.AddSingleton<JobService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

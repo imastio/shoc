@@ -79,6 +79,21 @@ public class LabelRepository : ILabelRepository
     }
 
     /// <summary>
+    /// Counts the labels by ids
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="labelIds">The label ids</param>
+    /// <returns></returns>
+    public Task<long> CountByIds(string workspaceId, IEnumerable<string> labelIds)
+    {
+        return this.dataOps.Connect().QueryFirst("Label", "CountByIds").ExecuteAsync<long>(new
+        {
+            WorkspaceId = workspaceId,
+            LabelIds = labelIds
+        });
+    }
+    
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

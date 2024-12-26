@@ -37,6 +37,13 @@
         WHERE `WorkspaceId` = @WorkspaceId AND `Name` = @Name;
       </TextCommand>
     </SqlOperation>
+
+    <SqlOperation Name="CountByIds">
+      <TextCommand>
+        SELECT COUNT(Id) as Count FROM `job_labels` 
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` in @LabelIds;
+      </TextCommand>
+    </SqlOperation>
     
     <SqlOperation Name="Create">
 

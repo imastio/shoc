@@ -92,3 +92,33 @@ CREATE TABLE `job_job_tasks` (
     CONSTRAINT `FK_JobTask_User` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_JobTask_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `job_job_labels` (
+    `Id` varchar(100) NOT NULL,
+    `WorkspaceId` varchar(100) NOT NULL,
+    `JobId` varchar(100) NOT NULL,
+    `LabelId` varchar(100) NOT NULL,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY `UNIQUE_JobId_LabelId` (`JobId`,`LabelId`),
+    KEY `FK_JobLabel_Workspace_idx` (`WorkspaceId`),
+    KEY `FK_JobLabel_Job_idx` (`JobId`),
+    KEY `FK_JobLabel_Label_idx` (`LabelId`),
+    CONSTRAINT `FK_JobLabel_Job` FOREIGN KEY (`JobId`) REFERENCES `job_jobs` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_JobLabel_Label` FOREIGN KEY (`LabelId`) REFERENCES `job_labels` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_JobLabel_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `job_job_git_repositories` (
+    `Id` varchar(100) NOT NULL,
+    `WorkspaceId` varchar(100) NOT NULL,
+    `JobId` varchar(100) NOT NULL,
+    `GitRepoId` varchar(100) NOT NULL,
+    PRIMARY KEY (`Id`),
+    UNIQUE KEY `UNIQUE_JobId` (`JobId`),
+    KEY `FK_JobGitRepo_Workspace_idx` (`WorkspaceId`),
+    KEY `FK_JobGitRepo_Job_idx` (`JobId`),
+    KEY `FK_JobGitRepo_GitRepo_idx` (`GitRepoId`),
+    CONSTRAINT `FK_JobGitRepo_GitRepo` FOREIGN KEY (`GitRepoId`) REFERENCES `job_git_repositories` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_JobGitRepo_Job` FOREIGN KEY (`JobId`) REFERENCES `job_jobs` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_JobGitRepo_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

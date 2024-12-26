@@ -34,6 +34,14 @@ public interface ILabelRepository
     Task<LabelModel> GetByName(string workspaceId, string name);
 
     /// <summary>
+    /// Counts the labels by ids
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="labelIds">The label ids</param>
+    /// <returns></returns>
+    Task<long> CountByIds(string workspaceId, IEnumerable<string> labelIds);
+
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
