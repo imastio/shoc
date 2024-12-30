@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-workspace\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Cluster.Data.Sql\Shoc.Cluster.Data.Sql.csproj" />
+    <ProjectReference Include="..\Shoc.Cluster.Grpc\Shoc.Cluster.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Cluster.Model\Shoc.Cluster.Model.csproj" />
   </ItemGroup>
 

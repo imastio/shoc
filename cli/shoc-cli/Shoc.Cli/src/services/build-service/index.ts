@@ -38,7 +38,7 @@ export default async function build(context: ResolvedContext, buildContext: Buil
     const { id: workspaceId } = buildContext.workspaceReference ?? await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, buildContext.workspace)), {
         text: `Validating workspace ${chalk.bold(buildContext.workspace)}`,
         successText: res => `🌎 Workspace ${chalk.bold(res.name)} is valid`,
-        failText: err => `The workspace ${chalk.bold(buildContext.workspace)} could not be found: ${chalk.red(err.message)}`
+        failText: err => `The workspace ${chalk.bold(buildContext.workspace)} is not valid: ${chalk.red(err.message)}`
     }).catch(() => process.exit(1));
 
     const duplicate = await oraPromise(tryCreateFromCache(context, {
@@ -47,7 +47,7 @@ export default async function build(context: ResolvedContext, buildContext: Buil
         listingChecksum: hash
     }), {
         text: 'Checking if the package could be restored from cache',
-        successText: res => res ? '📦 The package has been already built' : 'ℹ️ The package was not cached',
+        successText: res => res ? '📦 The package has been already built' : 'ℹ️  The package was not cached',
         failText: err => `Could not perform the cache check: ${chalk.red(err.message)}`
     }).catch(() => process.exit(1));
 
@@ -71,7 +71,7 @@ export default async function build(context: ResolvedContext, buildContext: Buil
 
     const zip = await createZip(files);
 
-    const uploadData = new FormData()
+    const uploadData: any = new FormData()
     uploadData.append('file', await fileFromPath(zip))
 
     const uploaded = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceBuildTasksClient).uploadBundleById(ctx.token, workspaceId, task.id, uploadData)), {

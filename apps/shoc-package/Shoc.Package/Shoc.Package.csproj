@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\shoc-registry\Shoc.Registry.Grpc\Shoc.Registry.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-workspace\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Package.Data.Sql\Shoc.Package.Data.Sql.csproj" />
+    <ProjectReference Include="..\Shoc.Package.Grpc\Shoc.Package.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Package.Model\Shoc.Package.Model.csproj" />
     <ProjectReference Include="..\Shoc.Package.Templating\Shoc.Package.Templating.csproj" />
   </ItemGroup>

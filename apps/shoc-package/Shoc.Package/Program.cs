@@ -7,8 +7,10 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
+using Shoc.ApiCore.Grpc;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.Package.Config;
+using Shoc.Package.Grpc;
 using Shoc.Package.Services;
 
 // start building web application
@@ -27,7 +29,9 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
+builder.Services.AddGrpcEssentials();
 builder.Services.AddLogging();
+builder.Services.AddSingleton<PackageGrpcMapper>();
 builder.Services.AddSingleton<LocalTemplateProvider>();
 builder.Services.AddSingleton<CommandRunner>();
 builder.Services.AddSingleton<ContainerService>();
@@ -55,5 +59,7 @@ app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGrpcReflectionService().AllowAnonymous();
+app.MapGrpcService<PackageServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();

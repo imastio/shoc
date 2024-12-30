@@ -21,11 +21,6 @@ public class JobSubmissionInput
     public string Scope { get; set; }
     
     /// <summary>
-    /// The serialized manifest
-    /// </summary>
-    public string SerializedManifest { get; set; }
-    
-    /// <summary>
     /// The manifest object
     /// </summary>
     public JobRunManifestModel Manifest { get; set; }

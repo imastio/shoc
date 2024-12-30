@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+	<!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+	<DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL" />
+
+  <OperationGroup Name="PackageAccess">
+
+    <SqlOperation Name="GetAccessReferenceById">
+      <TextCommand>
+          SELECT `Id`, `WorkspaceId`, `UserId`, `Scope` FROM `pkg_packages`
+          WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+    
+  </OperationGroup>
+</DataOperations>

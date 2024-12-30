@@ -7,8 +7,10 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
+using Shoc.ApiCore.Grpc;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.Cluster.Config;
+using Shoc.Cluster.Grpc;
 using Shoc.Cluster.Services;
 
 // start building web application
@@ -27,6 +29,8 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
+builder.Services.AddGrpcEssentials();
+builder.Services.AddSingleton<ClusterGrpcMapper>();
 builder.Services.AddSingleton<ConfigurationProtectionProvider>();
 builder.Services.AddSingleton<ClusterService>();
 builder.Services.AddSingleton<WorkspaceClusterService>();
@@ -46,5 +50,7 @@ app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGrpcReflectionService().AllowAnonymous();
+app.MapGrpcService<ClusterServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();

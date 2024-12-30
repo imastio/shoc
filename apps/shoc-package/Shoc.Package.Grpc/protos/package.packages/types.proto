@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Package.Grpc.Packages";
+package api.grpc.package.packages;
+
+message PackageGrpcModel {
+  string id = 1;
+  string workspaceId = 2;
+  string userId = 3;
+  string scope = 4;
+  string listingChecksum = 5;
+  string manifest = 6;
+  string runtime = 7;
+  string containerfile = 8;
+  string templateReference = 9;
+  string registryId = 10;
+  string image = 11;
+}
+
+message GetPackageByIdRequest {
+  string workspaceId = 1;
+  string id = 2;
+}
+
+message GetPackageResponse {
+  PackageGrpcModel package = 1;
+}

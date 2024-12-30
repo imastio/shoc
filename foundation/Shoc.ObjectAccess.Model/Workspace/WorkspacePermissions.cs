@@ -173,6 +173,16 @@ public class WorkspacePermissions
     /// Delete git repo of the workspace
     /// </summary>
     public const string WORKSPACE_DELETE_GIT_REPO = "workspace_delete_git_repo";
+    
+    /// <summary>
+    /// View jobs of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_JOBS = "workspace_list_jobs";
+    
+    /// <summary>
+    /// Submits job to the workspace
+    /// </summary>
+    public const string WORKSPACE_SUBMIT_JOB = "workspace_submit_job";
         
     /// <summary>
     /// Get and initialize all the constants

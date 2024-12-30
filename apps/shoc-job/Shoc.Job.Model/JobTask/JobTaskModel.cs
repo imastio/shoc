@@ -58,6 +58,11 @@ public class JobTaskModel
     public string Args { get; set; }
     
     /// <summary>
+    /// The package reference in encrypted json form
+    /// </summary>
+    public string PackageReferenceEncrypted { get; set; }
+    
+    /// <summary>
     /// Overall number of replicas
     /// </summary>
     public long ArrayReplicas { get; set; }
@@ -66,6 +71,11 @@ public class JobTaskModel
     /// The indexer for the replicas
     /// </summary>
     public string ArrayIndexer { get; set; }
+    
+    /// <summary>
+    /// The counter for the replicas
+    /// </summary>
+    public string ArrayCounter { get; set; }
     
     /// <summary>
     /// The encrypted JSON with all the environment values (injected and referenced)

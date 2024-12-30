@@ -34,6 +34,7 @@ CREATE TABLE `job_jobs` (
     `UserId` varchar(100) NOT NULL,
     `Scope` varchar(64) NOT NULL,
     `Manifest` longtext NOT NULL,
+    `ClusterConfigEncrypted` text NOT NULL,
     `TotalTasks` bigint NOT NULL,
     `CompletedTasks` bigint NOT NULL,
     `Status` varchar(64) NOT NULL,
@@ -64,8 +65,10 @@ CREATE TABLE `job_job_tasks` (
     `Type` varchar(64) NOT NULL,
     `Runtime` longtext NOT NULL,
     `Args` longtext NOT NULL,
+    `PackageReferenceEncrypted` text NOT NULL,
     `ArrayReplicas` bigint NOT NULL,
     `ArrayIndexer` text NOT NULL,
+    `ArrayCounter` text NOT NULL,
     `ResolvedEnvEncrypted` longtext NOT NULL,
     `MemoryRequested` bigint DEFAULT NULL,
     `CpuRequested` bigint DEFAULT NULL,
@@ -92,6 +95,7 @@ CREATE TABLE `job_job_tasks` (
     CONSTRAINT `FK_JobTask_User` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_JobTask_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE `job_job_labels` (
     `Id` varchar(100) NOT NULL,

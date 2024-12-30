@@ -135,7 +135,7 @@ public class JobRepository : IJobRepository
         using var transactionScope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
         {
             IsolationLevel = IsolationLevel.ReadCommitted
-        });
+        }, TransactionScopeAsyncFlowOption.Enabled);
 
         // create a job record
         var result = await this.dataOps.Connect().QueryFirst("Job", "Create").ExecuteAsync<JobModel>(job);
@@ -153,7 +153,7 @@ public class JobRepository : IJobRepository
         // if repository is attached create a record
         if (gitRepo != null)
         {
-            await this.dataOps.Connect().QueryFirst("Job", "CreateGitRepo").ExecuteAsync<JobModel>(job);
+            await this.dataOps.Connect().NonQuery("Job", "CreateGitRepo").ExecuteAsync(gitRepo);
         }
         
         // complete the transaction

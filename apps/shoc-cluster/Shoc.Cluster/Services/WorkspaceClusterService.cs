@@ -47,6 +47,22 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
     }
     
     /// <summary>
+    /// Gets object by name
+    /// </summary>
+    /// <returns></returns>
+    public async Task<WorkspaceClusterModel> GetByName(string userId, string workspaceId, string name)
+    {
+        // ensure we have a permission to view workspace clusters
+        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+
+        // gets the item by name
+        var item = await this.clusterService.GetExtendedByName(workspaceId, name);
+        
+        // map and return the result
+        return Map(item);
+    }
+    
+    /// <summary>
     /// Counts all objects
     /// </summary>
     /// <returns></returns>

@@ -19,4 +19,9 @@ public class JobRunManifestResourcesModel
     /// The amount of NVIDIA GPU units to allocate
     /// </summary>
     public long? NvidiaGpu { get; set; }
+    
+    /// <summary>
+    /// The amount of AMD GPU units to allocate
+    /// </summary>
+    public long? AmdGpu { get; set; }
 }

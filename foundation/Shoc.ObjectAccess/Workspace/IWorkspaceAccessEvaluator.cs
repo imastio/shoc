@@ -10,7 +10,7 @@ namespace Shoc.ObjectAccess.Workspace;
 public interface IWorkspaceAccessEvaluator
 {
     /// <summary>
-    /// Gets the permissions of the given user to the given workspac
+    /// Gets the permissions of the given user to the given workspace
     /// </summary>
     /// <param name="userId">The user id</param>
     /// <param name="workspaceId">The workspace id</param>

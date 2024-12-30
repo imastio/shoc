@@ -24,6 +24,7 @@ public static class SecretOperations
             Path.Combine(sourceDirectory, "Operations", "ProtectionKey.xml"),
             Path.Combine(sourceDirectory, "Operations", "Access.xml"),
             Path.Combine(sourceDirectory, "Operations", "WorkspaceAccess.xml"),
+            Path.Combine(sourceDirectory, "Operations", "PackageAccess.xml"),
             Path.Combine(sourceDirectory, "Operations", "Secret.xml"),
             Path.Combine(sourceDirectory, "Operations", "Secret.UserSecret.xml")
         };

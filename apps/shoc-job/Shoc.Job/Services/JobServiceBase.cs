@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Shoc.Job.Data;
 
 namespace Shoc.Job.Services;
@@ -33,5 +35,36 @@ public abstract class JobServiceBase
         this.jobRepository = jobRepository;
         this.validationService = validationService;
         this.jobProtectionProvider = jobProtectionProvider;
+    }
+    
+    /// <summary>
+    /// Converts the object to json string with camel case convention
+    /// </summary>
+    /// <param name="input">The input to serialize</param>
+    /// <typeparam name="T">The type to serialize</typeparam>
+    /// <returns></returns>
+    protected static string ToJsonString<T>(T input)
+    {
+        return JsonConvert.SerializeObject(input, new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy
+                {
+                    ProcessDictionaryKeys = false
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Deserialize given json into an object
+    /// </summary>
+    /// <param name="json">The json string</param>
+    /// <typeparam name="T">The type to deserialize to</typeparam>
+    /// <returns></returns>
+    protected static T FromJsonString<T>(string json)
+    {
+        return JsonConvert.DeserializeObject<T>(json);
     }
 }

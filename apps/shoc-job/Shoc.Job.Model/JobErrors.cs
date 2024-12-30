@@ -21,9 +21,29 @@ public static class JobErrors
     public const string INVALID_PACKAGE = "JOB_INVALID_PACKAGE";
 
     /// <summary>
+    /// The cluster is invalid
+    /// </summary>
+    public const string INVALID_CLUSTER = "JOB_INVALID_CLUSTER";
+    
+    /// <summary>
+    /// The package runtime is invalid
+    /// </summary>
+    public const string INVALID_PACKAGE_RUNTIME = "JOB_INVALID_PACKAGE_RUNTIME";
+
+    /// <summary>
+    /// The invalid runtime type
+    /// </summary>
+    public const string INVALID_RUNTIME_TYPE = "JOB_INVALID_RUNTIME_TYPE";
+
+    /// <summary>
     /// The registry is invalid
     /// </summary>
     public const string INVALID_REGISTRY = "JOB_INVALID_REGISTRY";
+
+    /// <summary>
+    /// The registry credentials are invalid
+    /// </summary>
+    public const string INVALID_REGISTRY_CREDENTIALS = "JOB_INVALID_REGISTRY_CREDENTIALS";
     
     /// <summary>
     /// The label name is invalid
@@ -59,6 +79,26 @@ public static class JobErrors
     /// The invalid git repo referenced
     /// </summary>
     public const string INVALID_JOB_GIT_REPO = "JOB_INVALID_JOB_GIT_REPO";
+
+    /// <summary>
+    /// The job arguments are invalid
+    /// </summary>
+    public const string INVALID_JOB_ARGUMENTS = "JOB_INVALID_JOB_ARGUMENTS";
+
+    /// <summary>
+    /// The invalid job array
+    /// </summary>
+    public const string INVALID_JOB_ARRAY = "JOB_INVALID_JOB_ARRAY";
+    
+    /// <summary>
+    /// The invalid job resources
+    /// </summary>
+    public const string INVALID_JOB_RESOURCES = "JOB_INVALID_JOB_RESOURCES";
+    
+    /// <summary>
+    /// The invalid job environment
+    /// </summary>
+    public const string INVALID_JOB_ENVIRONMENT = "JOB_INVALID_JOB_ENVIRONMENT";
     
     /// <summary>
     /// The unknown error

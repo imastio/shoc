@@ -43,6 +43,19 @@ public class WorkspaceClustersController : ControllerBase
     {
         return this.clusterService.GetAll(this.HttpContext.GetPrincipal().Id, workspaceId);
     }
+
+    /// <summary>
+    /// Gets object by name
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="name">The name of object</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpGet("by-name/{name}")]
+    public Task<WorkspaceClusterModel> GetByName(string workspaceId, string name)
+    {
+        return this.clusterService.GetByName(this.HttpContext.GetPrincipal().Id, workspaceId, name);
+    }
     
     /// <summary>
     /// Counts all the objects

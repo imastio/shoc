@@ -11,9 +11,7 @@ interface ClientContext {
 
 export default async function clientGuard(context: ResolvedContext, action: (ctx: ClientContext) => Promise<any>) {
 
-
     const auth = await getAuthenticatedContext(context.providerUrl);
-
 
     try {
         return (await action({ apiRoot: context.providerUrl.toString(), token: auth.accessToken })).data

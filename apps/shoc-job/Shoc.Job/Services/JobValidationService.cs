@@ -18,6 +18,41 @@ public class JobValidationService : ValidationServiceBase
     /// Maximum allowed number of labels
     /// </summary>
     protected const int MAX_LABEL_REFERENCES = 10;
+
+    /// <summary>
+    /// The maximum amount of arguments allowed
+    /// </summary>
+    protected const int MAX_JOB_ARGS = 1000;
+
+    /// <summary>
+    /// The maximum length of job array indexer
+    /// </summary>
+    protected const int MAX_JOB_ARRAY_INDEXER_LENGTH = 1024;
+
+    /// <summary>
+    /// The maximum number of replicas in job array
+    /// </summary>
+    protected const int MAX_JOB_ARRAY_REPLICAS_LIMIT = 10_000;
+
+    /// <summary>
+    /// The maximum amount of memory requested by job (TBs * GBs * MBs * KBs * Bytes) 
+    /// </summary>
+    protected const long MAX_JOB_REQUESTED_MEMORY = 1L * 1024 * 1024 * 1024 * 1024;
+
+    /// <summary>
+    /// The maximum amount of CPU requested by job (N * 1000m)
+    /// </summary>
+    protected const long MAX_JOB_REQUESTED_CPU = 4096L * 1000;
+
+    /// <summary>
+    /// The maximum amount of NVIDIA GPU requested by job (N units)
+    /// </summary>
+    protected const long MAX_JOB_REQUESTED_NVIDIA_GPU = 4096;
+
+    /// <summary>
+    /// The maximum amount of environment variables
+    /// </summary>
+    protected const int MAX_JOB_ENVIRONMENT_VARIABLES = 4096;
     
     /// <summary>
     /// The label repository
@@ -64,6 +99,9 @@ public class JobValidationService : ValidationServiceBase
     /// <returns></returns>
     public async Task ValidateLabels(string workspaceId, ICollection<string> labelIds)
     {
+        // take only distinct value to compare
+        labelIds = labelIds.Distinct().ToList();
+        
         // empty list of labels is valid
         if (labelIds.Count == 0)
         {
@@ -115,5 +153,110 @@ public class JobValidationService : ValidationServiceBase
             throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_GIT_REPO, "Invalid reference to git repository").AsException();
         }
     }
-    
+
+    /// <summary>
+    /// Validate the input arguments
+    /// </summary>
+    /// <param name="args">The arguments to accept</param>
+    public void ValidateArgs(string[] args)
+    {
+        // check maximum length of job arguments
+        if (args.Length > MAX_JOB_ARGS)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ARGUMENTS, "Too many arguments").AsException();
+        }
+    }
+
+    /// <summary>
+    /// Validates the configuration of job array replicas
+    /// </summary>
+    /// <param name="input">The input to validate</param>
+    public void ValidateArray(JobRunManifestArrayModel input)
+    {
+        // check if indexer is empty
+        if (string.IsNullOrWhiteSpace(input.Indexer))
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ARRAY, "Empty indexer for job array").AsException();
+        }
+
+        // validate maximum indexer length
+        if (input.Indexer.Length > MAX_JOB_ARRAY_INDEXER_LENGTH)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ARRAY, "Indexer is too long").AsException();
+        }
+        
+        // check non-positive number of replicas
+        if (input.Replicas <= 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ARRAY, "Number of replicas should be at least 1").AsException();
+        }
+        
+        // check non-positive number of replicas
+        if (input.Replicas > MAX_JOB_ARRAY_REPLICAS_LIMIT)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ARRAY, "Too many job array replicas").AsException();
+        }
+    }
+
+    /// <summary>
+    /// Validates the values for the given resources
+    /// </summary>
+    /// <param name="input">The input to validate</param>
+    public void ValidateResources(JobRunManifestResourcesModel input)
+    {
+        // memory should be non-negative
+        if (input.Memory <= 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Requested memory should be positive").AsException();
+        }
+        
+        // memory should be within limit
+        if (input.Memory > MAX_JOB_REQUESTED_MEMORY)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Too much memory requested").AsException();
+        }
+        
+        // CPU should be non-negative
+        if (input.Cpu <= 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Requested CPU should be positive").AsException();
+        }
+        
+        // CPU should be within limit
+        if (input.Cpu > MAX_JOB_REQUESTED_CPU)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Too much CPU requested").AsException();
+        }
+        
+        // Nvidia GPU should be non-negative
+        if (input.NvidiaGpu <= 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Requested GPU should be positive").AsException();
+        }
+        
+        // Nvidia GPU should be within limit
+        if (input.NvidiaGpu > MAX_JOB_REQUESTED_NVIDIA_GPU)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, "Too much GPU requested").AsException();
+        }
+    }
+
+    /// <summary>
+    /// Validates the environment configuration
+    /// </summary>
+    /// <param name="input">The input to validate</param>
+    public void ValidateEnv(JobRunManifestEnvModel input)
+    {
+        // check if exceeded amount of secrets
+        if (input.Use.Length > MAX_JOB_ENVIRONMENT_VARIABLES)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ENVIRONMENT, "Too many secrets are used").AsException();
+        }
+        
+        // check if exceeded amount of override values
+        if (input.Override.Count > MAX_JOB_ENVIRONMENT_VARIABLES)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_ENVIRONMENT, "Too many environment variable overrides").AsException();
+        }
+    }
 }

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const AUTH_TIMEOUT_SECONDS = 5 * 60;
 
-type TokenResult = {
+export type TokenResult = {
     accessToken: string,
     refreshToken: string
 }
@@ -57,13 +57,14 @@ export async function refresh({ idp, accessToken, refreshToken }: { idp: URL, ac
     });
 
     const response = await axios.post(openidConfiguration.tokenEndpoint, body);
-  
+
     const result = response.data;
 
     return {
         accessToken: result.access_token,
         refreshToken: result.refresh_token
     }
+    
 }
 
 export async function authorize({ idp }: { idp: URL }): Promise<TokenResult> {

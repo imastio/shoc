@@ -8,10 +8,15 @@ public class JobRunManifestArrayModel
     /// <summary>
     /// The number of replicas
     /// </summary>
-    public long Replicas { get; set; }
+    public long? Replicas { get; set; }
     
     /// <summary>
     /// The indexer variable for enumeration
     /// </summary>
     public string Indexer { get; set; }
+    
+    /// <summary>
+    /// The counter variable for enumeration
+    /// </summary>
+    public string Counter { get; set; }
 }

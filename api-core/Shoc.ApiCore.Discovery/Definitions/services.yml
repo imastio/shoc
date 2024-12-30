@@ -152,7 +152,7 @@ services:
         port: 11139
       - protocol: http
         roles: [ 'grpc' ]
-        port: 111340
+        port: 11140
       - protocol: https
         roles: [ 'grpc' ]
         port: 11141

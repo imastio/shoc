@@ -29,15 +29,15 @@
 
         SET @nextLocalId = (
           SELECT COALESCE(MAX(LocalId), 0) + 1
-          FROM Jobs
+          FROM job_jobs
           WHERE `WorkspaceId` = @WorkspaceId
         );
         
         INSERT INTO `job_jobs`
-        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `TotalTasks`, 
+        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `TotalTasks`, 
         `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
         VALUES
-        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @TotalTasks,
+        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @ClusterConfigEncrypted, @TotalTasks,
         @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
 
         SELECT * FROM `job_jobs`
@@ -51,12 +51,12 @@
       <TextCommand>
 
         INSERT INTO `job_job_tasks`
-        (`Id`, `WorkspaceId`, `JobId`, `Sequence`, `ClusterId`, `PackageId`, `UserId`, `Type`, `Runtime`, `Args`,
-        `ArrayReplicas`, `ArrayIndexer`, `ResolvedEnvEncrypted`, `MemoryRequested`, `CpuRequested`, `NvidiaGpuRequested`, 
+        (`Id`, `WorkspaceId`, `JobId`, `Sequence`, `ClusterId`, `PackageId`, `UserId`, `Type`, `Runtime`, `Args`, `PackageReferenceEncrypted`,
+        `ArrayReplicas`, `ArrayIndexer`, `ArrayCounter`, `ResolvedEnvEncrypted`, `MemoryRequested`, `CpuRequested`, `NvidiaGpuRequested`, 
         `AmdGpuRequested`, `Spec`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
         VALUES
-        (@Id, @WorkspaceId, @JobId, @Sequence, @ClusterId, @PackageId, @UserId, @Type, @Runtime, @Args,
-        @ArrayReplicas, @ArrayIndexer, @ResolvedEnvEncrypted, @MemoryRequested, @CpuRequested, @NvidiaGpuRequested,
+        (@Id, @WorkspaceId, @JobId, @Sequence, @ClusterId, @PackageId, @UserId, @Type, @Runtime, @Args, @PackageReferenceEncrypted,
+        @ArrayReplicas, @ArrayIndexer, @ArrayCounter, @ResolvedEnvEncrypted, @MemoryRequested, @CpuRequested, @NvidiaGpuRequested,
         @AmdGpuRequested, @Spec, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
         
       </TextCommand>

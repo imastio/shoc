@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "package.packages/types.proto";
+
+option csharp_namespace = "Shoc.Package.Grpc.Packages";
+package api.grpc.package.packages;
+
+service PackageServiceGrpc {
+  rpc GetById(GetPackageByIdRequest) returns (GetPackageResponse);
+}
+

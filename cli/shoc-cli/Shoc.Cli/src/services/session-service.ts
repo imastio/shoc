@@ -1,7 +1,7 @@
 import { AuthenticatedContext, AuthSession } from '@/core/types';
 import keytar from 'keytar'
 import { decodeJwt } from 'jose'
-import { refresh } from './authorize';
+import { refresh, TokenResult } from './authorize';
 import { getWellKnownEndpoints } from './context-resolver';
 
 const ACCESS_TOKEN_KEY = 'shoc_access_token';
@@ -79,13 +79,20 @@ export async function getAuthenticatedContext(providerUrl: URL): Promise<Authent
 
     const { idp } = await getWellKnownEndpoints(new URL(providerUrl));
 
-    const refreshed = await refresh({ idp, accessToken, refreshToken })
+    let refreshed: TokenResult | null = null;
 
-    await storeSession(providerUrlString, { accessToken: refreshed.accessToken, refreshToken: refreshed.refreshToken || refreshToken })
-
+    try {
+        refreshed = await refresh({ idp, accessToken, refreshToken })
+        await storeSession(providerUrlString, { accessToken: refreshed.accessToken, refreshToken: refreshed.refreshToken || refreshToken })
+    }
+    catch(error){
+        await clearSession(providerUrlString)
+    }
+    
     const newSession = await checkSession(providerUrlString);
 
-    if(!newSession){
+    if(!newSession || !refreshed){
+        await clearSession(providerUrlString)
         throw Error('Could not extend your session, please login again.')
     }
 

@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "cluster.clusters/types.proto";
+
+option csharp_namespace = "Shoc.Cluster.Grpc.Clusters";
+package api.grpc.cluster.clusters;
+
+service ClusterServiceGrpc {
+  rpc GetById(GetClusterByIdRequest) returns (GetClusterResponse);
+}
+

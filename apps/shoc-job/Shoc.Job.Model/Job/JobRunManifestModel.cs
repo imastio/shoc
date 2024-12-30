@@ -16,14 +16,14 @@ public class JobRunManifestModel
     public string[] LabelIds { get; set; }
     
     /// <summary>
-    /// The cluster locator
+    /// The cluster id
     /// </summary>
-    public string ClusterLocator { get; set; }
+    public string ClusterId { get; set; }
     
     /// <summary>
     /// The package id
     /// </summary>
-    public string PackageLocator { get; set; }
+    public string PackageId { get; set; }
     
     /// <summary>
     /// The given arguments

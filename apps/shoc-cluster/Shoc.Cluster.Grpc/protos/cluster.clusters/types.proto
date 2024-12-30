@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Cluster.Grpc.Clusters";
+package api.grpc.cluster.clusters;
+
+enum ClusterStatus {
+  ACTIVE = 0;
+  ARCHIVED = 1;
+}
+message ClusterGrpcModel {
+  string id = 1;
+  string workspaceId = 2;
+  string name = 3;
+  string description = 4;
+  string type = 5;
+  ClusterStatus status = 6;
+  string configuration = 7;
+}
+
+message GetClusterByIdRequest {
+  string workspaceId = 1;
+  string id = 2;
+  bool plain = 3;
+}
+
+message GetClusterResponse {
+  ClusterGrpcModel cluster = 1;
+}

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shoc.ObjectAccess.Package;
 using Shoc.ObjectAccess.Workspace;
 
 namespace Shoc.ApiCore.ObjectAccess;
@@ -16,7 +17,9 @@ public static class ObjectAccessExtensions
     public static IServiceCollection AddObjectAccessEssentials(this IServiceCollection services)
     {
         services.TryAddSingleton<WorkspacePermissionCalculator>();
+        services.TryAddSingleton<PackagePermissionCalculator>();
         services.TryAddSingleton<IWorkspaceAccessEvaluator, WorkspaceAccessEvaluator>();
+        services.TryAddSingleton<IPackageAccessEvaluator, PackageAccessEvaluator>();
 
         return services;
     }

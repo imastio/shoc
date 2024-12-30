@@ -43,6 +43,11 @@ public class JobModel
     public string Manifest { get; set; }
     
     /// <summary>
+    /// The cluster configuration encrypted
+    /// </summary>
+    public string ClusterConfigEncrypted { get; set; }
+    
+    /// <summary>
     /// The total count of tasks
     /// </summary>
     public long TotalTasks { get; set; }
