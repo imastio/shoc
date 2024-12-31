@@ -6,6 +6,7 @@ using Shoc.Core;
 using Shoc.Job.Data;
 using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
+using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.Services;
 
@@ -202,7 +203,7 @@ public class JobValidationService : ValidationServiceBase
     /// Validates the values for the given resources
     /// </summary>
     /// <param name="input">The input to validate</param>
-    public void ValidateResources(JobRunManifestResourcesModel input)
+    public void ValidateResources(JobTaskResourcesModel input)
     {
         // memory should be non-negative
         if (input.Memory <= 0)

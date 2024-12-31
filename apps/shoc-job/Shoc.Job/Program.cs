@@ -28,6 +28,7 @@ builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddLogging();
+builder.Services.AddSingleton<ResourceParser>();
 builder.Services.AddSingleton<LabelValidationService>();
 builder.Services.AddSingleton<GitRepoValidationService>();
 builder.Services.AddSingleton<LabelService>();

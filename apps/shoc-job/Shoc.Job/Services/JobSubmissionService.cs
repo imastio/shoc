@@ -27,7 +27,7 @@ public class JobSubmissionService : JobServiceBase
     /// <summary>
     /// The default job array count
     /// </summary>
-    protected const string DEFAULT_JOB_ARRAY_COUNT = "SHOC_JOB_ARRAY_INDEXER";
+    protected const string DEFAULT_JOB_ARRAY_COUNT = "SHOC_JOB_ARRAY_COUNT";
 
     /// <summary>
     /// The default number of replicas in job array
@@ -45,6 +45,11 @@ public class JobSubmissionService : JobServiceBase
     protected readonly JobClusterResolver clusterResolver;
 
     /// <summary>
+    /// The resource parser
+    /// </summary>
+    protected readonly ResourceParser resourceParser;
+
+    /// <summary>
     /// Creates new instance of job submission service
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
@@ -52,11 +57,13 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="jobProtectionProvider">The job protection provider</param>
     /// <param name="packageResolver">The package resolver</param>
     /// <param name="clusterResolver">The cluster resolver</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver) 
+    /// <param name="resourceParser">The resource parser</param>
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, ResourceParser resourceParser) 
         : base(jobRepository, validationService, jobProtectionProvider)
     {
         this.packageResolver = packageResolver;
         this.clusterResolver = clusterResolver;
+        this.resourceParser = resourceParser;
     }
     
     /// <summary>
@@ -73,6 +80,12 @@ public class JobSubmissionService : JobServiceBase
         // validate the given input
         await this.ValidateInput(input);
 
+        // parse the given resources
+        var resources = ParseResources(input.Manifest.Resources);
+        
+        // validate resources
+        this.validationService.ValidateResources(resources);
+        
         // build wrapped arguments model
         var args = new JobTaskArgsModel
         {
@@ -147,10 +160,10 @@ public class JobSubmissionService : JobServiceBase
                 ArrayIndexer = input.Manifest.Array.Indexer,
                 ArrayCounter = input.Manifest.Array.Counter,
                 ResolvedEnvEncrypted = protector.Protect(ToJsonString(env)),
-                MemoryRequested = input.Manifest.Resources.Memory,
-                CpuRequested = input.Manifest.Resources.Cpu,
-                NvidiaGpuRequested = input.Manifest.Resources.NvidiaGpu,
-                AmdGpuRequested = input.Manifest.Resources.AmdGpu,
+                MemoryRequested = resources.Memory,
+                CpuRequested = resources.Cpu,
+                NvidiaGpuRequested = resources.NvidiaGpu,
+                AmdGpuRequested = resources.AmdGpu,
                 Spec = ToJsonString(input.Manifest.Spec),
                 Status = JobTaskStatuses.CREATED,
                 Message = string.Empty,
@@ -184,6 +197,22 @@ public class JobSubmissionService : JobServiceBase
     }
 
     /// <summary>
+    /// Parses the given resource strings into valid resource quantities
+    /// </summary>
+    /// <param name="resources">The resources to parse</param>
+    /// <returns></returns>
+    private JobTaskResourcesModel ParseResources(JobRunManifestResourcesModel resources)
+    {
+        return new JobTaskResourcesModel
+        {
+            Cpu = this.resourceParser.ParseToMillicores(resources?.Cpu),
+            Memory = this.resourceParser.ParseToBytes(resources?.Memory),
+            NvidiaGpu = this.resourceParser.ParseToGpu(resources?.NvidiaGpu),
+            AmdGpu = this.resourceParser.ParseToGpu(resources?.AmdGpu)
+        };
+    }
+
+    /// <summary>
     /// Maps the runtime type into a task type
     /// </summary>
     /// <param name="runtimeType">The runtime type</param>
@@ -212,9 +241,6 @@ public class JobSubmissionService : JobServiceBase
         
         // validate array of job
         this.validationService.ValidateArray(input.Manifest.Array);
-        
-        // validate resources
-        this.validationService.ValidateResources(input.Manifest.Resources);
         
         // validate environment
         this.validationService.ValidateEnv(input.Manifest.Env);

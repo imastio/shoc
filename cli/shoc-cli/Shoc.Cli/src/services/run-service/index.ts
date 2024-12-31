@@ -10,6 +10,7 @@ import build from "../build-service";
 import { getRunManifest, initialize } from "./implementation";
 import WorkspaceClustersClient from "@/clients/shoc/cluster/workspace-clusters-client";
 import WorkspaceJobsClient from "@/clients/shoc/job/workspace-jobs-client";
+import { mapArgs, mapArray, mapEnv, mapResources, mapSpec } from "./mappers";
 
 export default async function run(context: ResolvedContext, runContext: RunContext) : Promise<{ }> {
     
@@ -57,16 +58,11 @@ export default async function run(context: ResolvedContext, runContext: RunConte
             labelIds: labelIds ?? [],
             clusterId,
             packageId,
-            args: manifest.args  ?? [],
-            array: {
-                replicas: manifest.array?.replicas,
-                indexer: manifest.array?.indexer,
-                counter: manifest.array?.counter
-            },
-            env: {
-                use: manifest.env?.use ?? [],
-                override: manifest.env?.override ?? {}
-            }
+            args: mapArgs(manifest.args),
+            array: mapArray(manifest.array),
+            env: mapEnv(manifest.env),
+            resources: mapResources(manifest.resources),
+            spec: mapSpec(manifest.spec)
         }
     }
 

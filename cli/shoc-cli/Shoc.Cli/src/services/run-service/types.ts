@@ -17,13 +17,29 @@ export interface RunManifestEnv {
     override: Record<string, string> | null | undefined
 }
 
+export interface RunManifestResources {
+    cpu: number | string | null | undefined,
+    memory: number | string | null | undefined,
+    nvidiaGpu: number | string | null | undefined,
+    amdGpu: number | string | null | undefined,
+}
+
+export interface RunManifestSpecMpi {
+}
+
+export interface RunManifestSpec {
+    mpi: RunManifestSpecMpi | null | undefined
+}
+
 export interface ParsedRunManifest {
     kind?: string,
     labels?: string[],
     cluster: string,
     args: string[] | null | undefined,
     array: RunManifestArray | null | undefined,
-    env: RunManifestEnv | null | undefined
+    env: RunManifestEnv | null | undefined,
+    resources: RunManifestResources | null | undefined,
+    spec: RunManifestSpec | null | undefined,
 }
 
 export interface ParsedRunManifestResult {
