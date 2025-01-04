@@ -33,7 +33,7 @@ export async function initialize(context: ResolvedContext, runContext: RunContex
 
     const gitRepoId = gitDetails ? await tryEnsureGitRepo(context, workspaceId, gitDetails) : null;
 
-    const labelIds = !manifest.labels || manifest.labels.length === 0 ? [] : await ensureLabels(context, workspaceId, manifest.labels)
+    const labelIds = (!manifest.labels || manifest.labels.length === 0) ? [] : await ensureLabels(context, workspaceId, manifest.labels)
 
     return {
         gitRepoId,
@@ -73,7 +73,7 @@ async function ensureLabels(context: ResolvedContext, workspaceId: string, label
     try {
         const result = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceLabelsClient).ensure(ctx.token, workspaceId, input));
 
-        return result.id
+        return result.map((item: any) => item.id)
     }
     catch(e){
         throw Error(`Could not resolve labels ([${labels.join(', ')}]): ${(e as Error)?.message || 'Unknown error'}`)

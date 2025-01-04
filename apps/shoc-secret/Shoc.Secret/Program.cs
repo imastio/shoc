@@ -7,8 +7,10 @@ using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
+using Shoc.ApiCore.Grpc;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.Secret.Config;
+using Shoc.Secret.Grpc;
 using Shoc.Secret.Services;
 
 // start building web application
@@ -27,6 +29,8 @@ builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
+builder.Services.AddGrpcEssentials();
+builder.Services.AddSingleton<UnifiedSecretGrpcMapper>();
 builder.Services.AddSingleton<SecretProtectionProvider>();
 builder.Services.AddSingleton<UserSecretProtectionProvider>();
 builder.Services.AddSingleton<SecretValidationService>();
@@ -34,6 +38,7 @@ builder.Services.AddSingleton<SecretService>();
 builder.Services.AddSingleton<UserSecretService>();
 builder.Services.AddSingleton<WorkspaceSecretService>();
 builder.Services.AddSingleton<WorkspaceUserSecretService>();
+builder.Services.AddSingleton<UnifiedSecretService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 
@@ -49,5 +54,7 @@ app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGrpcReflectionService().AllowAnonymous();
+app.MapGrpcService<UnifiedSecretServiceGrpc>();
 app.UseCors(ApiDefaults.DEFAULT_CORS);
 app.Run();

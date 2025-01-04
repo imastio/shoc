@@ -15,5 +15,5 @@ public class JobRunManifestEnvModel
     /// <summary>
     /// The variables and values to override the secrets
     /// </summary>
-    public IDictionary<string, string> Override { get; set; }
+    public Dictionary<string, string> Override { get; set; }
 }

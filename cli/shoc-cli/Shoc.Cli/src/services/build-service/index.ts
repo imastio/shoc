@@ -7,15 +7,16 @@ import UserWorkspacesClient from "@/clients/shoc/workspace/user-workspaces-clien
 import WorkspaceBuildTasksClient from "@/clients/shoc/package/workspace-build-tasks-client";
 import { fileFromPath } from "formdata-node/file-from-path";
 import chalk from "chalk";
-import { requireSession } from "@/services/session-service";
+import { getAuthenticatedContext } from "@/services/session-service";
 import WorkspacePackagesClient from "@/clients/shoc/package/workspace-packages-client";
 import { ApiError } from "@/error-handling/error-types";
 import ora, { oraPromise } from "ora";
 
 export default async function build(context: ResolvedContext, buildContext: BuildContext) : Promise<{ packageId: string }> {
     
-    buildContext.session ?? await oraPromise(requireSession(context.providerUrl.toString()), {
-        successText: res => `🔑 Authenticated by ${chalk.bold(res.name)} at ${chalk.bold(buildContext.workspace)}`,
+    buildContext.authenticatedContext ?? await oraPromise(getAuthenticatedContext(context.providerUrl), {
+        text: 'Validating user authentication',
+        successText: res => `🔑 Authenticated by ${chalk.bold(res.session.name)} at ${chalk.bold(buildContext.workspace)}`,
         failText: err => `Could not authenticate: ${chalk.red(err.message)}` 
     }).catch(() => process.exit(1));
 

@@ -1,0 +1,10 @@
+syntax = "proto3";
+import "secret.secrets/types.proto";
+
+option csharp_namespace = "Shoc.Secret.Grpc.Secrets";
+package api.grpc.secret.secrets;
+
+service UnifiedSecretServiceGrpc {
+  rpc GetByNames(GetUnifiedSecretsByNameRequest) returns (GetUnifiedSecretsResponse);
+}
+

@@ -37,17 +37,6 @@ export async function checkSession(providerUrl: string): Promise<AuthSession | n
     }
 }
 
-export async function requireSession(providerUrl: string): Promise<AuthSession> {
-
-    const session = await checkSession(providerUrl);
-
-    if(!session){
-        throw Error('Need to authenticate to perform the operation!')
-    }
-
-    return session;
-}
-
 export async function clearSession(providerUrl: string): Promise<void> {
 
     await keytar.deletePassword(providerUrl, ACCESS_TOKEN_KEY);

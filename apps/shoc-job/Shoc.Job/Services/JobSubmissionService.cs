@@ -11,6 +11,7 @@ using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobGitRepo;
 using Shoc.Job.Model.JobLabel;
 using Shoc.Job.Model.JobTask;
+using Shoc.Secret.Grpc.Secrets;
 
 namespace Shoc.Job.Services;
 
@@ -45,6 +46,11 @@ public class JobSubmissionService : JobServiceBase
     protected readonly JobClusterResolver clusterResolver;
 
     /// <summary>
+    /// The secret resolver
+    /// </summary>
+    protected readonly JobSecretResolver secretResolver;
+
+    /// <summary>
     /// The resource parser
     /// </summary>
     protected readonly ResourceParser resourceParser;
@@ -57,12 +63,14 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="jobProtectionProvider">The job protection provider</param>
     /// <param name="packageResolver">The package resolver</param>
     /// <param name="clusterResolver">The cluster resolver</param>
+    /// <param name="secretResolver">The secret resolver</param>
     /// <param name="resourceParser">The resource parser</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, ResourceParser resourceParser) 
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser) 
         : base(jobRepository, validationService, jobProtectionProvider)
     {
         this.packageResolver = packageResolver;
         this.clusterResolver = clusterResolver;
+        this.secretResolver = secretResolver;
         this.resourceParser = resourceParser;
     }
     
@@ -80,6 +88,9 @@ public class JobSubmissionService : JobServiceBase
         // validate the given input
         await this.ValidateInput(input);
 
+        // the protection provider
+        var protector = this.jobProtectionProvider.Create();
+        
         // parse the given resources
         var resources = ParseResources(input.Manifest.Resources);
         
@@ -92,11 +103,17 @@ public class JobSubmissionService : JobServiceBase
             Args = input.Manifest.Args
         };
         
+        // arguments in json
+        var argsJson = ToJsonString(args);
+        
         // resolve the referenced package
         var package = await this.packageResolver.ResolveById(input.WorkspaceId, input.Manifest.PackageId);
 
         // deserialize the runtime model
         var runtime = DeserializeRuntime(package.Runtime);
+
+        // the runtime as json back serialized
+        var runtimeJson = ToJsonString(runtime);
         
         // gets the user's pull credentials for the package's registry within the workspace
         var credentials = await this.packageResolver.GetPullCredential(package.RegistryId, input.WorkspaceId, input.UserId);
@@ -109,18 +126,19 @@ public class JobSubmissionService : JobServiceBase
             PullPasswordPlain = credentials.PasswordPlain
         };
         
+        // the package reference json
+        var packageReferenceJson = ToJsonString(packageReference);
+        var packageReferenceJsonProtected = protector.Protect(packageReferenceJson);
+        
         // resolve the cluster with proper validation
         var cluster = await this.clusterResolver.ResolveById(input.WorkspaceId, input.Manifest.ClusterId);
 
         // combined set of decrypted environment key values
-        // TODO: replace with resolved secret values
-        var env = new JobTaskEnvModel
-        {
-            Env = new Dictionary<string, string>()
-        };
+        var env = await this.ResolveEnvironment(input);
         
-        // the protection provider
-        var protector = this.jobProtectionProvider.Create();
+        // the resolved env json
+        var resolvedEnvJson = ToJsonString(env);
+        var resolvedEnvJsonProtected = protector.Protect(resolvedEnvJson);
         
         // create a job instance
         var job = new JobModel
@@ -142,7 +160,10 @@ public class JobSubmissionService : JobServiceBase
 
         // a set of tasks
         var tasks = new List<JobTaskModel>();
-
+        
+        // the spec as json
+        var specJson = ToJsonString(input.Manifest.Spec);
+        
         // create tasks corresponding to number of replicas
         for (var i = 0; i < job.TotalTasks; ++i)
         {
@@ -153,18 +174,18 @@ public class JobSubmissionService : JobServiceBase
                 PackageId = input.Manifest.PackageId,
                 UserId = input.UserId,
                 Type = MapTaskType(runtime.Type),
-                Runtime = ToJsonString(runtime),
-                Args = ToJsonString(args),
-                PackageReferenceEncrypted = protector.Protect(ToJsonString(packageReference)),
+                Runtime = runtimeJson,
+                Args = argsJson,
+                PackageReferenceEncrypted = packageReferenceJsonProtected,
                 ArrayReplicas = job.TotalTasks,
                 ArrayIndexer = input.Manifest.Array.Indexer,
                 ArrayCounter = input.Manifest.Array.Counter,
-                ResolvedEnvEncrypted = protector.Protect(ToJsonString(env)),
+                ResolvedEnvEncrypted = resolvedEnvJsonProtected,
                 MemoryRequested = resources.Memory,
                 CpuRequested = resources.Cpu,
                 NvidiaGpuRequested = resources.NvidiaGpu,
                 AmdGpuRequested = resources.AmdGpu,
-                Spec = ToJsonString(input.Manifest.Spec),
+                Spec = specJson,
                 Status = JobTaskStatuses.CREATED,
                 Message = string.Empty,
                 PendingAt = null,
@@ -194,6 +215,66 @@ public class JobSubmissionService : JobServiceBase
             Labels = labels,
             GitRepo = gitRepo
         });
+    }
+
+    /// <summary>
+    /// Resolves the environment for submission
+    /// </summary>
+    /// <param name="input">The input</param>
+    /// <returns></returns>
+    private async Task<JobTaskEnvModel> ResolveEnvironment(JobSubmissionInput input)
+    {
+        // get the unique set of names
+        var names = input.Manifest.Env.Use.ToHashSet();
+        
+        // do not consider names of secrets that are subject of overriding 
+        names.ExceptWith(input.Manifest.Env.Override.Keys);
+
+        // get the items 
+        var items = (await this.secretResolver.ResolveByNames(input.WorkspaceId, input.UserId, names)).ToList();
+
+        // separate workspace secrets
+        var workspaceSecrets = items.Where(item => item.Kind == UnifiedSecretKind.Workspace && !item.Disabled).ToList();
+
+        // separate user secrets 
+        var userSecrets = items.Where(item => item.Kind == UnifiedSecretKind.User && !item.Disabled).ToList();
+
+        // prepare sets 
+        var plain = new Dictionary<string, string>();
+        var encrypted = new Dictionary<string, string>();
+        
+        // add workspaces values first
+        foreach (var secret in workspaceSecrets)
+        {
+            // the target collection
+            var target = secret.Encrypted ? encrypted : plain;
+            
+            // add to the collection
+            target[secret.Name] = secret.Value;
+        }
+        
+        // then add user values to override workspace values if any
+        foreach (var secret in userSecrets)
+        {
+            // the target collection
+            var target = secret.Encrypted ? encrypted : plain;
+            
+            // add to the collection
+            target[secret.Name] = secret.Value;
+        }
+        
+        // add overriding values to plain values
+        foreach (var pairs in input.Manifest.Env.Override)
+        {
+            plain[pairs.Key] = pairs.Value;
+        }
+        
+        // build result
+        return new JobTaskEnvModel
+        {
+            Plain = plain,
+            Encrypted = encrypted
+        };
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-import { AuthSession } from "@/core/types"
+import { AuthenticatedContext, AuthSession } from "@/core/types"
 
 export interface BuildManifest {
     template: string,
@@ -31,5 +31,5 @@ export interface BuildContext {
     buildFile: string,
     scope: string,
     workspaceReference?: { id: string },
-    session?: AuthSession
+    authenticatedContext?: AuthenticatedContext
 }

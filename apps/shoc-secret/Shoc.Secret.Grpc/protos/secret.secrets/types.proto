@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shoc.Secret.Grpc.Secrets";
+package api.grpc.secret.secrets;
+
+enum UnifiedSecretKind {
+  WORKSPACE = 0;
+  USER = 1;
+}
+
+message UnifiedSecretGrpcModel {
+  string id = 1;
+  string workspaceId = 2;
+  optional string userId = 3;
+  UnifiedSecretKind kind = 4;
+  string name = 5;
+  string description = 6;
+  bool disabled = 7;
+  bool encrypted = 8;
+  string value = 9;
+}
+
+message GetUnifiedSecretsByNameRequest {
+  string workspaceId = 1;
+  string userId = 2;
+  repeated string names = 3;
+  bool plain = 4;
+}
+
+message GetUnifiedSecretsResponse {
+  repeated UnifiedSecretGrpcModel secrets = 1;
+}

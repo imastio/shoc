@@ -6,9 +6,9 @@ export function mapArgs(args: string[] | null | undefined){
 
 export function mapArray(array: RunManifestArray | null | undefined): any{
     return {
-        replicas: array?.replicas,
-        indexer: array?.indexer,
-        counter: array?.counter
+        replicas: array?.replicas ?? null,
+        indexer: array?.indexer ?? null,
+        counter: array?.counter ?? null
     }
 }
 
@@ -21,10 +21,10 @@ export function mapEnv(env: RunManifestEnv | null | undefined): any{
 
 export function mapResources(resources: RunManifestResources | null | undefined): any{
     return {
-        cpu: resources?.cpu,
-        memory: resources?.memory,
-        nvidiaGpu: resources?.nvidiaGpu,
-        amdGpu: resources?.amdGpu,
+        cpu: asString(resources?.cpu ?? null),
+        memory: asString(resources?.memory ?? null),
+        nvidiaGpu: asString(resources?.nvidiaGpu ?? null),
+        amdGpu: asString(resources?.amdGpu ?? null),
     }
 }
 
@@ -42,4 +42,21 @@ export function mapSpec(spec: RunManifestSpec | null | undefined): any{
     }
 
     return result
+}
+
+function asString(input: any){
+    
+    if(input === null || input === undefined || typeof input === 'undefined'){
+        return null
+    }
+
+    if(typeof input === 'bigint' || typeof input === 'number' || typeof input === 'boolean'){
+        return String(input);
+    }
+
+    if(typeof input === 'string' || typeof input === 'symbol'){
+        return input;
+    }
+
+    return null;
 }

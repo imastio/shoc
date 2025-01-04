@@ -8,7 +8,12 @@ namespace Shoc.Job.Model.JobTask;
 public class JobTaskEnvModel
 {
     /// <summary>
-    /// The environment variable key values
+    /// The plain environment variable key values
     /// </summary>
-    public Dictionary<string, string> Env { get; set; }
+    public Dictionary<string, string> Plain { get; set; }
+    
+    /// <summary>
+    /// The encrypted environment variable key values
+    /// </summary>
+    public Dictionary<string, string> Encrypted { get; set; }
 }

@@ -37,6 +37,7 @@ builder.Services.AddSingleton<WorkspaceLabelService>();
 builder.Services.AddSingleton<WorkspaceGitRepoService>();
 builder.Services.AddSingleton<JobClusterResolver>();
 builder.Services.AddSingleton<JobPackageResolver>();
+builder.Services.AddSingleton<JobSecretResolver>();
 builder.Services.AddSingleton<JobProtectionProvider>();
 builder.Services.AddSingleton<JobValidationService>();
 builder.Services.AddSingleton<JobSubmissionService>();

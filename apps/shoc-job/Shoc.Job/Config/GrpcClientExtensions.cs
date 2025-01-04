@@ -4,6 +4,7 @@ using Shoc.Cluster.Grpc.Clusters;
 using Shoc.Identity.Grpc.Users;
 using Shoc.Package.Grpc.Packages;
 using Shoc.Registry.Grpc.Registries;
+using Shoc.Secret.Grpc.Secrets;
 using Shoc.Workspace.Grpc.Workspaces;
 
 namespace Shoc.Job.Config;
@@ -27,6 +28,7 @@ public static class GrpcClientExtensions
         services.AddDiscoverableGrpcClient("shoc-registry", invoker => new RegistryPlainCredentialServiceGrpc.RegistryPlainCredentialServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-package", invoker => new PackageServiceGrpc.PackageServiceGrpcClient(invoker));
         services.AddDiscoverableGrpcClient("shoc-cluster", invoker => new ClusterServiceGrpc.ClusterServiceGrpcClient(invoker));
+        services.AddDiscoverableGrpcClient("shoc-secret", invoker => new UnifiedSecretServiceGrpc.UnifiedSecretServiceGrpcClient(invoker));
         
         return services;
     }

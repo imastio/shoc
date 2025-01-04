@@ -50,6 +50,7 @@ public static class DataConfiguration
         services.AddSingleton<IPackageAccessRepository, PackageAccessRepository>();
         services.AddSingleton<ISecretRepository, SecretRepository>();
         services.AddSingleton<IUserSecretRepository, UserSecretRepository>();
+        services.AddSingleton<IUnifiedSecretRepository, UnifiedSecretRepository>();
             
         // chain services
         return services;

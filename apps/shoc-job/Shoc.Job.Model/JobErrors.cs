@@ -24,6 +24,11 @@ public static class JobErrors
     /// The cluster is invalid
     /// </summary>
     public const string INVALID_CLUSTER = "JOB_INVALID_CLUSTER";
+
+    /// <summary>
+    /// The secrets are invalid
+    /// </summary>
+    public const string INVALID_SECRETS = "JOB_INVALID_SECRETS";
     
     /// <summary>
     /// The package runtime is invalid

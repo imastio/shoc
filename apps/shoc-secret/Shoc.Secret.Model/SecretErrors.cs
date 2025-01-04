@@ -29,6 +29,11 @@ public static class SecretErrors
     /// The user is invalid
     /// </summary>
     public const string INVALID_USER = "SECRET_INVALID_USER";
+
+    /// <summary>
+    /// The kind is invalid
+    /// </summary>
+    public const string INVALID_KIND = "SECRET_INVALID_KIND";
     
     /// <summary>
     /// The unknown error

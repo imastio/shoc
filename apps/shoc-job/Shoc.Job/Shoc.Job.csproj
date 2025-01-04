@@ -26,6 +26,7 @@
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-package\Shoc.Package.Grpc\Shoc.Package.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-registry\Shoc.Registry.Grpc\Shoc.Registry.Grpc.csproj" />
+    <ProjectReference Include="..\..\shoc-secret\Shoc.Secret.Grpc\Shoc.Secret.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-workspace\Shoc.Workspace.Grpc\Shoc.Workspace.Grpc.csproj" />
     <ProjectReference Include="..\Shoc.Job.Data.Sql\Shoc.Job.Data.Sql.csproj" />
     <ProjectReference Include="..\Shoc.Job.Model\Shoc.Job.Model.csproj" />
