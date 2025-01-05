@@ -75,6 +75,27 @@ public class JobSubmissionService : JobServiceBase
     }
     
     /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<JobModel> GetById(string workspaceId, string id)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // get from the storage
+        var result = await this.jobRepository.GetById(workspaceId, id);
+
+        // ensure object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+
+        return result;
+    }
+    
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
@@ -215,6 +236,48 @@ public class JobSubmissionService : JobServiceBase
             Labels = labels,
             GitRepo = gitRepo
         });
+    }
+
+    /// <summary>
+    /// Submit the created job to the target cluster
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The job id</param>
+    /// <returns></returns>
+    public async Task<JobModel> Submit(string userId, string workspaceId, string id)
+    {
+        // get the job instance
+        var job = await this.GetById(workspaceId, id);
+
+        // the user initiating the job is not matching the submitting user
+        if (!string.Equals(job.UserId, userId))
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_USER, "The submitting user does not match the invoking user").AsException();
+        }
+
+        // ensure only job is just created
+        if (job.Status != JobStatuses.CREATED)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_STATUS, "The job was already submitted").AsException();
+        }
+
+        // load the tasks associated with the job
+        var tasks = (await this.jobRepository.GetTasksById(workspaceId, id)).OrderBy(task => task.Sequence).ToList();
+
+        // check if number of existing tasks matches the jobs total tasks
+        if (tasks.Count != job.TotalTasks)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_TASKS, "The job tasks are not valid").AsException();
+        }
+
+        // check if there is any task not in the created state
+        if (tasks.Any(task => task.Status != JobTaskStatuses.CREATED))
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_STATUS, "At least one task has been already submitted").AsException();
+        }
+        
+        tasks[0].
     }
 
     /// <summary>

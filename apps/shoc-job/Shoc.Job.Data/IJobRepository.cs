@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
+using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.Data;
 
@@ -20,6 +21,12 @@ public interface IJobRepository
     /// </summary>
     /// <returns></returns>
     Task<JobModel> GetById(string workspaceId, string id);
+    
+    /// <summary>
+    /// Gets the task objects by id
+    /// </summary>
+    /// <returns></returns>
+    Task<IEnumerable<JobTaskModel>> GetTasksById(string workspaceId, string id);
     
     /// <summary>
     /// Creates the object with given input

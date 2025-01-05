@@ -57,6 +57,19 @@ public class JobRepository : IJobRepository
     }
 
     /// <summary>
+    /// Gets the task objects by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<JobTaskModel>> GetTasksById(string workspaceId, string id)
+    {
+        return this.dataOps.Connect().Query("Job", "GetTasksById").ExecuteAsync<JobTaskModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id
+        });
+    }
+
+    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

@@ -14,6 +14,11 @@ public static class JobErrors
     /// The user is invalid
     /// </summary>
     public const string INVALID_USER = "JOB_INVALID_USER";
+
+    /// <summary>
+    /// The status is invalid
+    /// </summary>
+    public const string INVALID_STATUS = "JOB_INVALID_STATUS";
     
     /// <summary>
     /// The package is invalid
@@ -104,6 +109,11 @@ public static class JobErrors
     /// The invalid job environment
     /// </summary>
     public const string INVALID_JOB_ENVIRONMENT = "JOB_INVALID_JOB_ENVIRONMENT";
+
+    /// <summary>
+    /// The job tasks are not valid
+    /// </summary>
+    public const string INVALID_TASKS = "JOB_INVALID_TASKS";
     
     /// <summary>
     /// The unknown error
