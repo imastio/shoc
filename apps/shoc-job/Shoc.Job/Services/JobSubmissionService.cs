@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
 using Shoc.Core;
 using Shoc.Job.Data;
+using Shoc.Job.K8s;
 using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobGitRepo;
@@ -101,7 +102,7 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="input">The creation input</param>
     /// <returns></returns>
-    public async Task<JobModel> Create(string workspaceId, JobSubmissionInput input)
+    public async Task<JobModel> Create(string workspaceId, JobSubmissionCreateInput input)
     {
         // enrich with defaults
         input = BuildInputWithDefaults(workspaceId, input);
@@ -241,17 +242,17 @@ public class JobSubmissionService : JobServiceBase
     /// <summary>
     /// Submit the created job to the target cluster
     /// </summary>
-    /// <param name="userId">The user id</param>
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="id">The job id</param>
+    /// <param name="input">The input object</param>
     /// <returns></returns>
-    public async Task<JobModel> Submit(string userId, string workspaceId, string id)
+    public async Task<JobModel> Submit(string workspaceId, string id, JobSubmissionInput input)
     {
         // get the job instance
         var job = await this.GetById(workspaceId, id);
 
         // the user initiating the job is not matching the submitting user
-        if (!string.Equals(job.UserId, userId))
+        if (!string.Equals(job.UserId, input.UserId))
         {
             throw ErrorDefinition.Validation(JobErrors.INVALID_USER, "The submitting user does not match the invoking user").AsException();
         }
@@ -270,14 +271,31 @@ public class JobSubmissionService : JobServiceBase
         {
             throw ErrorDefinition.Validation(JobErrors.INVALID_TASKS, "The job tasks are not valid").AsException();
         }
-
+    
         // check if there is any task not in the created state
         if (tasks.Any(task => task.Status != JobTaskStatuses.CREATED))
         {
             throw ErrorDefinition.Validation(JobErrors.INVALID_STATUS, "At least one task has been already submitted").AsException();
         }
+
+        // the protection provider
+        var protector = this.jobProtectionProvider.Create();
+
+        // the cluster configuration
+        var clusterConfig = protector.Unprotect(job.ClusterConfigEncrypted);
+
+        // the job client for kubernetes
+        var jobClient = new KubernetesJobClient(clusterConfig);
+
+        // the initialization result
+        await jobClient.InitJob(job);
         
-        tasks[0].
+        // tasks are created
+        // start submitting to the cluster
+        // create namespace, service account, role, role binding
+        // create N 
+
+        return job;
     }
 
     /// <summary>
@@ -285,7 +303,7 @@ public class JobSubmissionService : JobServiceBase
     /// </summary>
     /// <param name="input">The input</param>
     /// <returns></returns>
-    private async Task<JobTaskEnvModel> ResolveEnvironment(JobSubmissionInput input)
+    private async Task<JobTaskEnvModel> ResolveEnvironment(JobSubmissionCreateInput input)
     {
         // get the unique set of names
         var names = input.Manifest.Env.Use.ToHashSet();
@@ -375,7 +393,7 @@ public class JobSubmissionService : JobServiceBase
     /// Performs the initial validation of given input
     /// </summary>
     /// <param name="input">The input to validate</param>
-    private async Task ValidateInput(JobSubmissionInput input)
+    private async Task ValidateInput(JobSubmissionCreateInput input)
     {
         // validate the scope
         this.validationService.ValidateScope(input.Scope);
@@ -408,10 +426,10 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="input">The input object</param>
     /// <returns></returns>
-    private static JobSubmissionInput BuildInputWithDefaults(string workspaceId, JobSubmissionInput input)
+    private static JobSubmissionCreateInput BuildInputWithDefaults(string workspaceId, JobSubmissionCreateInput input)
     {
         // clone the object not to mutate
-        input = JsonSerializer.Deserialize<JobSubmissionInput>(JsonSerializer.Serialize(input));
+        input = JsonSerializer.Deserialize<JobSubmissionCreateInput>(JsonSerializer.Serialize(input));
 
         // initialize parent object
         input.WorkspaceId = workspaceId;

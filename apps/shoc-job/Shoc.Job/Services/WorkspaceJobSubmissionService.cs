@@ -28,7 +28,7 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
     /// Creates a new object
     /// </summary>
     /// <returns></returns>
-    public async Task<WorkspaceJobCreatedModel> Create(string userId, string workspaceId, JobSubmissionInput input)
+    public async Task<WorkspaceJobCreatedModel> Create(string userId, string workspaceId, JobSubmissionCreateInput input)
     {
         // ensure have required access to workspace
         await this.workspaceAccessEvaluator.Ensure(
@@ -54,6 +54,29 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
 
         // create the object
         var result = await this.jobSubmissionService.Create(workspaceId, input);
+        
+        // build result
+        return new WorkspaceJobCreatedModel
+        {
+            Id = result.Id,
+            WorkspaceId = result.WorkspaceId,
+            LocalId = result.LocalId
+        };
+    }
+
+    /// <summary>
+    /// Submits the job object
+    /// </summary>
+    /// <returns></returns>
+    public async Task<WorkspaceJobCreatedModel> Submit(string userId, string workspaceId, string id, JobSubmissionInput input)
+    {
+        // ensure referring to the correct object
+        input.WorkspaceId = workspaceId;
+        input.UserId = userId;
+        input.Id = id;
+        
+        // submit the object
+        var result = await this.jobSubmissionService.Submit(workspaceId, id, input);
         
         // build result
         return new WorkspaceJobCreatedModel

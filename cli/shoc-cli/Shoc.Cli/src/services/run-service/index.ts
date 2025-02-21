@@ -73,5 +73,11 @@ export default async function run(context: ResolvedContext, runContext: RunConte
         failText: err => `Could not initialize a job with the given manifest: ${chalk.red(err.message)}`
     });
 
+    const submitted = await oraPromise(clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceJobsClient).submit(ctx.token, workspaceId, job.id, input)), {
+        text: 'Submitting job to the cluster',
+        successText: res => `✅️ Job ${chalk.bold(res.localId)} is submitted to the cluster ${chalk.bold(manifest.cluster)}`,
+        failText: err => `Could not submit the job to the cluster: ${chalk.red(err.message)}`
+    });
+
     return { }
 }

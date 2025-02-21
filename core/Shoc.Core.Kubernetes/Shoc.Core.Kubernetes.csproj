@@ -7,7 +7,7 @@
   <Import Project="../../Shoc.Shared.proj" />
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="15.0.1" />
+    <PackageReference Include="KubernetesClient" Version="16.0.2" />
   </ItemGroup>
 
   <ItemGroup>

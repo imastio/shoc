@@ -40,9 +40,22 @@ public class WorkspaceJobsController : ControllerBase
     /// <param name="input">The creation input</param>
     /// <returns></returns>
     [HttpPost]
-    public Task<WorkspaceJobCreatedModel> Create(string workspaceId, [FromBody] JobSubmissionInput input)
+    public Task<WorkspaceJobCreatedModel> Create(string workspaceId, [FromBody] JobSubmissionCreateInput input)
     {
         return this.submissionService.Create(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+    }
+
+    /// <summary>
+    /// Submits the job object
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The job id</param>
+    /// <param name="input">The creation input</param>
+    /// <returns></returns>
+    [HttpPost("{id}/submit")]
+    public Task<WorkspaceJobCreatedModel> Submit(string workspaceId, string id, [FromBody] JobSubmissionInput input)
+    {
+        return this.submissionService.Submit(this.HttpContext.GetPrincipal().Id, workspaceId, id, input);
     }
 }
 

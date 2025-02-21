@@ -21,4 +21,16 @@ export default class WorkspaceJobsClient extends BaseAxiosClient {
     });
   }
 
+  submit(token, workspaceId, id, input) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/jobs/${id}/submit`
+    });
+    
+    return this.webClient.post(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
 }
