@@ -1,8 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
+﻿using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Shoc.Core.OpenId;
 
 namespace Shoc.ApiCore.Auth;
@@ -26,9 +26,6 @@ public static class AuthExtensions
         // add settings
         services.AddSingleton(settings);
 
-        // default inbound claim mapping should be disabled
-        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
         // add bearer authentication layer
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -36,6 +33,9 @@ public static class AuthExtensions
                 // base-address of your identity provider
                 options.Authority = settings.Authority;
 
+                // disable inbound claims mapping
+                options.MapInboundClaims = false;
+                
                 // if you are using API resources, you can specify the name here
                 options.Audience = settings.Audience;
 
@@ -44,6 +44,9 @@ public static class AuthExtensions
 
                 // disabled audience validation
                 options.TokenValidationParameters.ValidateAudience = false;
+
+                // the signature validation breaking change
+                options.TokenValidationParameters.SignatureValidator = (token, _) => new JsonWebToken(token);
 
                 // skip the issuer validation only for known cases
                 if (settings.SkipIssuerValidation)
@@ -63,7 +66,6 @@ public static class AuthExtensions
                     {
                         ServerCertificateCustomValidationCallback = (_, _, _, _) => true
                     };
-
                 }
             });
 
