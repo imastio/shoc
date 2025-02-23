@@ -41,11 +41,11 @@
         );
         
         INSERT INTO `job_jobs`
-        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `TotalTasks`, 
-        `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
+        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `Namespace`, 
+        `TotalTasks`, `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
         VALUES
-        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @ClusterConfigEncrypted, @TotalTasks,
-        @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
+        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @ClusterConfigEncrypted, @Namespace,
+        @TotalTasks, @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
 
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
@@ -94,6 +94,20 @@
         (@Id, @WorkspaceId, @JobId, @GitRepoId)
         ON DUPLICATE KEY UPDATE `GitRepoId` = @GitRepoId;
 
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="UpdateNamespaceById" AutoTransaction="No">
+
+      <TextCommand>
+        UPDATE `job_jobs`
+        SET
+          `Namespace` = @Namespace
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        
+        SELECT * FROM `job_jobs`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
       </TextCommand>
 
     </SqlOperation>

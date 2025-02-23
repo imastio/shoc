@@ -35,6 +35,15 @@ public interface IJobRepository
     /// <param name="input">The creation input</param>
     /// <returns></returns>
     Task<JobModel> Create(string workspaceId, JobCreateModel input);
+
+    /// <summary>
+    /// Updates the namespaces by id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The object id</param>
+    /// <param name="ns">The namespace value</param>
+    /// <returns></returns>
+    Task<JobModel> UpdateNamespaceById(string workspaceId, string id, string ns);
     
     /// <summary>
     /// Deletes the object by id

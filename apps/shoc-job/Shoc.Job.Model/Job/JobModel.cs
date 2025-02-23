@@ -48,6 +48,11 @@ public class JobModel
     public string ClusterConfigEncrypted { get; set; }
     
     /// <summary>
+    /// The namespace value for the job
+    /// </summary>
+    public string Namespace { get; set; }
+    
+    /// <summary>
     /// The total count of tasks
     /// </summary>
     public long TotalTasks { get; set; }

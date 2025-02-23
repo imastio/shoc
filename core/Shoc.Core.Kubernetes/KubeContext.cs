@@ -40,7 +40,7 @@ public class KubeContext
         }
         catch (Exception)
         {
-            throw ErrorDefinition.Validation().AsException();
+            throw ErrorDefinition.Validation(Errors.VALIDATION_ERROR, "Invalid Kubernetes Cluster Config").AsException();
         }
     }
 }

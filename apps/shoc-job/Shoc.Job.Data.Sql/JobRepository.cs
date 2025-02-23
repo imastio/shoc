@@ -177,6 +177,23 @@ public class JobRepository : IJobRepository
     }
 
     /// <summary>
+    /// Updates the namespaces by id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The object id</param>
+    /// <param name="ns">The namespace value</param>
+    /// <returns></returns>
+    public Task<JobModel> UpdateNamespaceById(string workspaceId, string id, string ns)
+    {
+        return this.dataOps.Connect().QueryFirst("Job", "UpdateNamespaceById").ExecuteAsync<JobModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id,
+            Namespace = ns
+        });
+    }
+
+    /// <summary>
     /// Deletes the object by id
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

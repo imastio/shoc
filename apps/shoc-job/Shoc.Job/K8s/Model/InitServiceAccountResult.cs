@@ -5,13 +5,8 @@ namespace Shoc.Job.K8s.Model;
 /// <summary>
 /// The Kubernetes init result
 /// </summary>
-public class K8sJobInitResult
+public class InitServiceAccountResult
 {
-    /// <summary>
-    /// The namespace object
-    /// </summary>
-    public V1Namespace Namespace { get; set; }
-    
     /// <summary>
     /// The service account object
     /// </summary>

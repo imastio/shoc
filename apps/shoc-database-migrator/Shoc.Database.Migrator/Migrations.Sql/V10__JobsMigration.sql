@@ -35,6 +35,7 @@ CREATE TABLE `job_jobs` (
     `Scope` varchar(64) NOT NULL,
     `Manifest` longtext NOT NULL,
     `ClusterConfigEncrypted` text NOT NULL,
+    `Namespace` varchar(256) DEFAULT NULL,
     `TotalTasks` bigint NOT NULL,
     `CompletedTasks` bigint NOT NULL,
     `Status` varchar(64) NOT NULL,
@@ -53,6 +54,7 @@ CREATE TABLE `job_jobs` (
     CONSTRAINT `FK_Job_User` FOREIGN KEY (`UserId`) REFERENCES `idp_users` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_Job_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE `job_job_tasks` (
     `Id` varchar(100) NOT NULL,

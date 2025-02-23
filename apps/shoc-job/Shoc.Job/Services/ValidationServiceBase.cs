@@ -31,7 +31,7 @@ public class ValidationServiceBase
     /// Validate workspace by id
     /// </summary>
     /// <param name="id">The id to validate</param>
-    public async Task RequireWorkspace(string id)
+    public async Task<WorkspaceGrpcModel> RequireWorkspace(string id)
     {
         // no workspace id given
         if (string.IsNullOrWhiteSpace(id))
@@ -41,9 +41,11 @@ public class ValidationServiceBase
         
         // try getting object
         try {
-            await this.grpcClientProvider
+            var result = await this.grpcClientProvider
                 .Get<WorkspaceServiceGrpc.WorkspaceServiceGrpcClient>()
                 .DoAuthorized(async (client, metadata) => await client.GetByIdAsync(new GetWorkspaceByIdRequest{Id = id}, metadata));
+            
+            return result.Workspace;
         }
         catch(Exception)
         {

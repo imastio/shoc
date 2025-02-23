@@ -130,7 +130,7 @@ public class JobSubmissionService : JobServiceBase
         
         // resolve the referenced package
         var package = await this.packageResolver.ResolveById(input.WorkspaceId, input.Manifest.PackageId);
-
+        
         // deserialize the runtime model
         var runtime = DeserializeRuntime(package.Runtime);
 
@@ -248,6 +248,9 @@ public class JobSubmissionService : JobServiceBase
     /// <returns></returns>
     public async Task<JobModel> Submit(string workspaceId, string id, JobSubmissionInput input)
     {
+        // load the workspace
+        var workspace = await this.validationService.RequireWorkspace(workspaceId);
+        
         // get the job instance
         var job = await this.GetById(workspaceId, id);
 
@@ -283,12 +286,33 @@ public class JobSubmissionService : JobServiceBase
 
         // the cluster configuration
         var clusterConfig = protector.Unprotect(job.ClusterConfigEncrypted);
+        
+        // we assume that all the tasks in the job has same package reference
+        var packageReference = FromJsonString<JobTaskPackageReferenceModel>(protector.Unprotect(tasks[0].PackageReferenceEncrypted));
+        
+        // we assume that all the tasks in the job has same package reference
+        var envs = FromJsonString<JobTaskEnvModel>(protector.Unprotect(tasks[0].ResolvedEnvEncrypted));
 
         // the job client for kubernetes
         var jobClient = new KubernetesJobClient(clusterConfig);
 
-        // the initialization result
-        await jobClient.InitJob(job);
+        // build the namespace name from workspace name and job local id
+        var ns = $"job-{workspace.Name}-{job.LocalId}";
+        
+        // update the namespace of the job
+        job = await this.jobRepository.UpdateNamespaceById(workspaceId, id, ns);
+
+        // create a namespace object in the cluster
+        var nsResult = await jobClient.InitNamespace(job);
+
+        // initialize the service account within the namespace
+        var saResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitServiceAccount(job));
+
+        // initialize the shared secrets for all the job tasks
+        var envsResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitSharedEnvironment(job, envs));
+        
+        // initialize the shared pull secret for the package
+        var pullSecretResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitPullSecret(job, packageReference));
         
         // tasks are created
         // start submitting to the cluster
