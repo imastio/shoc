@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using k8s.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Shoc.Core;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
+using Shoc.Job.K8s.Model;
+using Shoc.Job.K8s.TaskClients;
 using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobGitRepo;
@@ -57,6 +60,11 @@ public class JobSubmissionService : JobServiceBase
     protected readonly ResourceParser resourceParser;
 
     /// <summary>
+    /// The task client factory for Kubernetes
+    /// </summary>
+    protected readonly KubernetesTaskClientFactory taskClientFactory;
+
+    /// <summary>
     /// Creates new instance of job submission service
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
@@ -66,13 +74,15 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="clusterResolver">The cluster resolver</param>
     /// <param name="secretResolver">The secret resolver</param>
     /// <param name="resourceParser">The resource parser</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser) 
+    /// <param name="taskClientFactory">The task client factory for Kubernetes</param>
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory) 
         : base(jobRepository, validationService, jobProtectionProvider)
     {
         this.packageResolver = packageResolver;
         this.clusterResolver = clusterResolver;
         this.secretResolver = secretResolver;
         this.resourceParser = resourceParser;
+        this.taskClientFactory = taskClientFactory;
     }
     
     /// <summary>
@@ -161,6 +171,15 @@ public class JobSubmissionService : JobServiceBase
         // the resolved env json
         var resolvedEnvJson = ToJsonString(env);
         var resolvedEnvJsonProtected = protector.Protect(resolvedEnvJson);
+
+        // check if cluster configuration is missing
+        if (string.IsNullOrWhiteSpace(cluster.Configuration))
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_CLUSTER, "The cluster configuration is missing").AsException();
+        }
+
+        // validates the cluster resources
+        await this.ValidateClusterResources(cluster.Configuration, resources);
         
         // create a job instance
         var job = new JobModel
@@ -238,7 +257,7 @@ public class JobSubmissionService : JobServiceBase
             GitRepo = gitRepo
         });
     }
-
+    
     /// <summary>
     /// Submit the created job to the target cluster
     /// </summary>
@@ -293,8 +312,14 @@ public class JobSubmissionService : JobServiceBase
         // we assume that all the tasks in the job has same package reference
         var envs = FromJsonString<JobTaskEnvModel>(protector.Unprotect(tasks[0].ResolvedEnvEncrypted));
 
+        // create a task submission client for the cluster, assuming all the tasks has same type
+        using var taskClient = this.taskClientFactory.Create(clusterConfig, tasks[0].Type);
+
+        // check if the task can be executed on the given cluster
+        await taskClient.EnsureSupported();
+
         // the job client for kubernetes
-        var jobClient = new KubernetesJobClient(clusterConfig);
+        using var jobClient = new KubernetesJobClient(clusterConfig);
 
         // build the namespace name from workspace name and job local id
         var ns = $"job-{workspace.Name}-{job.LocalId}";
@@ -313,6 +338,25 @@ public class JobSubmissionService : JobServiceBase
         
         // initialize the shared pull secret for the package
         var pullSecretResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitPullSecret(job, packageReference));
+
+        // process each task
+        foreach (var task in tasks)
+        {
+            // create the task input
+            var taskInput = new InitTaskInput
+            {
+                Job = job,
+                Task = task,
+                Runtime = DeserializeRuntime(task.Runtime),
+                Namespace = nsResult.Namespace.Name(),
+                ServiceAccount = saResult.ServiceAccount.Name(),
+                PullSecret = pullSecretResult,
+                SharedEnv = envsResult
+            };
+
+            // handle task submission
+            await jobClient.WithCleanup(job.Namespace, () => this.SubmitTask(taskClient, taskInput));
+        }
         
         // tasks are created
         // start submitting to the cluster
@@ -320,6 +364,20 @@ public class JobSubmissionService : JobServiceBase
         // create N 
 
         return job;
+    }
+
+    /// <summary>
+    /// Submit the task to the cluster
+    /// </summary>
+    /// <param name="taskClient">The task client reference</param>
+    /// <param name="taskInput">The task input</param>
+    /// <returns></returns>
+    private async Task<JobTaskModel> SubmitTask(IKubernetesTaskClient taskClient, InitTaskInput taskInput)
+    {
+        // submit to the cluster
+        await taskClient.Submit(taskInput);
+
+        return taskInput.Task;
     }
 
     /// <summary>
@@ -479,6 +537,81 @@ public class JobSubmissionService : JobServiceBase
         return input;
     }
 
+    /// <summary>
+    /// Validates the cluster resources
+    /// </summary>
+    /// <param name="clusterConfiguration">The cluster config</param>
+    /// <param name="requirement">The resources to validate against</param>
+    private async Task ValidateClusterResources(string clusterConfiguration, JobTaskResourcesModel requirement)
+    {
+        // create a client to kubernetes
+        using var client = new KubernetesClusterClient(clusterConfiguration);
+
+        // get all node resources
+        var nodeResources = (await client.GetNodeResources()).ToList();
+
+        // no allocatable nodes at all
+        if (nodeResources.Count == 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_CLUSTER, "No nodes available").AsException();
+        }
+        
+        // count capable nodes
+        var capableNodes = 0;
+        
+        // check each node
+        foreach (var nodeResource in nodeResources)
+        {
+            // assume node has enough capacity
+            var enoughCapacity = true;
+            
+            var cpu = this.resourceParser.ParseToMillicores(nodeResource.Cpu);
+            var memory = this.resourceParser.ParseToBytes(nodeResource.Memory);
+            var nvidiaGpu = this.resourceParser.ParseToGpu(nodeResource.NvidiaGpu);
+            var amdGpu = this.resourceParser.ParseToGpu(nodeResource.AmdGpu);
+            
+            // CPU is required
+            if (requirement.Cpu.HasValue)
+            {
+                // still enough if required CPU is less than is available
+                enoughCapacity = requirement.Cpu.Value <= cpu;
+            }
+            
+            // memory is required
+            if (requirement.Memory.HasValue)
+            {
+                // still enough if required memory is less than available
+                enoughCapacity = enoughCapacity && requirement.Memory.Value <= memory;
+            }
+            
+            // Nvidia GPU is required
+            if (requirement.NvidiaGpu.HasValue)
+            {
+                // still enough if required memory is less than available
+                enoughCapacity = enoughCapacity && requirement.NvidiaGpu.Value <= nvidiaGpu;
+            }
+            
+            // AMD GPU is required
+            if (requirement.AmdGpu.HasValue)
+            {
+                // still enough if required memory is less than available
+                enoughCapacity = enoughCapacity && requirement.AmdGpu.Value <= amdGpu;
+            }
+
+            // if enough based on all resource requirement stop the process
+            if (enoughCapacity)
+            {
+                capableNodes++;
+            }
+        }
+
+        // if there are no capable nodes to take one task, report not feasible
+        if (capableNodes == 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_CLUSTER, "None of the nodes has enough allocatable resources").AsException();
+        }
+    }
+    
     /// <summary>
     /// Deserialize the package runtime into an executable model
     /// </summary>

@@ -9,6 +9,7 @@ using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.Job.Config;
+using Shoc.Job.K8s;
 using Shoc.Job.Services;
 
 // start building web application
@@ -43,6 +44,7 @@ builder.Services.AddSingleton<JobValidationService>();
 builder.Services.AddSingleton<JobSubmissionService>();
 builder.Services.AddSingleton<JobService>();
 builder.Services.AddSingleton<WorkspaceJobSubmissionService>();
+builder.Services.AddSingleton<KubernetesTaskClientFactory>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

@@ -15,7 +15,7 @@ namespace Shoc.Job.K8s;
 /// <summary>
 /// The kubernetes job client
 /// </summary>
-public class KubernetesJobClient
+public class KubernetesJobClient : IDisposable
 {
     /// <summary>
     /// The unspecific container registry
@@ -78,7 +78,7 @@ public class KubernetesJobClient
                 new()
                 {
                     ApiGroups = new [] { "" },
-                    Resources = new[] { "pods", "services", "configmaps", "secrets", "jobs" },
+                    Resources = new[] { "pods", "services", "configmaps", "secrets", "jobs", "logs" },
                     Verbs = new[] { "get", "list", "watch", "create", "update", "delete" }
                 }
             }
@@ -211,7 +211,10 @@ public class KubernetesJobClient
         }
         catch (Exception)
         {
-            await this.client.DeleteNamespaceAsync(ns);
+            await this.client.DeleteNamespaceAsync(ns, new V1DeleteOptions
+            {
+                GracePeriodSeconds = 0
+            });
             throw;
         }
     }
@@ -234,5 +237,14 @@ public class KubernetesJobClient
 
         // if it contains a domain (e.g., ghcr.io/org/image or registry.example.com/image)
         return parts[0].Contains('.') || parts[0].Contains(':') ? parts[0] : UNSPECIFIED_CONTAINER_REGISTRY;
+    }
+
+    /// <summary>
+    /// Disposes the client
+    /// </summary>
+    public void Dispose()
+    {
+        this.client?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
