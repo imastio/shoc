@@ -50,7 +50,12 @@ public class KubernetesJobClient : IDisposable
             {
                 Metadata = new V1ObjectMeta
                 {
-                    Name = job.Namespace
+                    Name = job.Namespace,
+                    Labels = new Dictionary<string, string>
+                    {
+                        { JobAnnotations.SHOC_JOB, job.Id },
+                        { JobAnnotations.SHOC_WORKSPACE, job.WorkspaceId }
+                    }
                 }
             })
         };

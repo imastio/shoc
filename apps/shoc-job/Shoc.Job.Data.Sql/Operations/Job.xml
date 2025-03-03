@@ -42,10 +42,10 @@
         
         INSERT INTO `job_jobs`
         (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `Namespace`, 
-        `TotalTasks`, `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
+        `TotalTasks`, `SucceededTasks`, `FailedTasks`, `CancelledTasks`, `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
         VALUES
         (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @ClusterConfigEncrypted, @Namespace,
-        @TotalTasks, @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
+        @TotalTasks, @SucceededTasks, @FailedTasks, @CancelledTasks, @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
 
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
@@ -105,6 +105,33 @@
         SET
           `Namespace` = @Namespace
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+        
+        SELECT * FROM `job_jobs`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="FailById">
+
+      <TextCommand>
+        UPDATE `job_jobs`
+        SET
+        `Message` = @Message,
+        `CompletedAt` = @CompletedAt,
+        `Status` = @Status,
+        `SucceededTasks` = 0,
+        `CancelledTasks` = 0,
+        `FailedTasks` = `TotalTasks`,
+        `CompletedTasks` = `TotalTasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+
+        UPDATE `job_job_tasks`
+        SET
+        `Status` = @TaskStatus,
+        `CompletedAt` = @CompletedAt,
+        `Message` = @Message
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @Id;
         
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;

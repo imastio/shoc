@@ -51,6 +51,7 @@ public static class DataConfiguration
         services.AddSingleton<ILabelRepository, LabelRepository>();
         services.AddSingleton<IGitRepoRepository, GitRepoRepository>();
         services.AddSingleton<IJobRepository, JobRepository>();
+        services.AddSingleton<IJobTaskStatusRepository, JobTaskStatusRepository>();
             
         // chain services
         return services;

@@ -58,6 +58,21 @@ public class JobModel
     public long TotalTasks { get; set; }
     
     /// <summary>
+    /// The number of succeeded tasks
+    /// </summary>
+    public long SucceededTasks { get; set; }
+    
+    /// <summary>
+    /// The number of failed tasks
+    /// </summary>
+    public long FailedTasks { get; set; }
+    
+    /// <summary>
+    /// The number of cancelled tasks
+    /// </summary>
+    public long CancelledTasks { get; set; }
+    
+    /// <summary>
     /// The number of completed tasks
     /// </summary>
     public long CompletedTasks { get; set; }

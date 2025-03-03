@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Job.TaskStatus">
+
+    
+    <SqlOperation Name="SubmitTaskById">
+
+      <TextCommand>
+        UPDATE `job_job_tasks`
+        SET
+        `Status` = @PendingTaskStatus,
+        `PendingAt` = @PendingAt,
+        `Message` = @Message
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+
+        UPDATE `job_jobs`
+        SET
+        `Status` = @PendingJobStatus,
+        `PendingAt` = @PendingAt
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @JobId AND `Status` IN @TargetJobStatuses;
+
+        SELECT * FROM `job_job_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+    <SqlOperation Name="CompleteTaskById">
+
+      <TextCommand>
+        UPDATE `job_job_tasks`
+        SET
+        `Status` = @Status,
+        `CompletedAt` = @CompletedAt,
+        `Message` = @Message
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+
+        UPDATE `job_jobs`
+        SET
+        `SucceededTasks` = `SucceededTasks` + @SucceededTaskIncrement,
+        `FailedTasks` = `FailedTasks` + @FailedTaskIncrement,
+        `CancelledTasks` = `CancelledTasks` + @CancelledTaskIncrement,
+        `CompletedTasks` = `CompletedTasks` + 1
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @JobId;
+
+        UPDATE `job_jobs`
+        SET `Status` =
+        CASE
+          WHEN `SucceededTasks` = `TotalTasks` THEN @SucceededJobStatus
+          WHEN `FailedTasks` = `TotalTasks` THEN @FailedJobStatus
+          WHEN `CancelledTasks` = `TotalTasks` THEN @CancelledJobStatus
+          WHEN `CompletedTasks` = `TotalTasks` AND `SucceededTasks` > 0 THEN @PartiallySucceededJobStatus
+          ELSE `Status`
+          END
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @JobId;
+        
+        SELECT * FROM `job_job_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+  </OperationGroup>
+
+</DataOperations>

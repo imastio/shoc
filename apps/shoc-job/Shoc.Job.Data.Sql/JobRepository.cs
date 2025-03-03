@@ -194,6 +194,30 @@ public class JobRepository : IJobRepository
     }
 
     /// <summary>
+    /// Update the job to fail all the tasks of job and the job itself
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The object id</param>
+    /// <param name="input">The job fail input</param>
+    /// <returns></returns>
+    public Task<JobModel> FailById(string workspaceId, string id, JobFailInputModel input)
+    {
+        // refer to correct object
+        input.WorkspaceId = workspaceId;
+        input.Id = id;
+        
+        return this.dataOps.Connect().QueryFirst("Job", "FailById").ExecuteAsync<JobModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id,
+            input.Message,
+            input.CompletedAt,
+            Status = JobStatuses.FAILED,
+            TaskStatus = JobStatuses.FAILED
+        });
+    }
+    
+    /// <summary>
     /// Deletes the object by id
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

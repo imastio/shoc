@@ -44,6 +44,15 @@ public interface IJobRepository
     /// <param name="ns">The namespace value</param>
     /// <returns></returns>
     Task<JobModel> UpdateNamespaceById(string workspaceId, string id, string ns);
+
+    /// <summary>
+    /// Update the job to fail all the tasks of job and the job itself
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The object id</param>
+    /// <param name="input">The job fail input</param>
+    /// <returns></returns>
+    Task<JobModel> FailById(string workspaceId, string id, JobFailInputModel input);
     
     /// <summary>
     /// Deletes the object by id
@@ -52,4 +61,5 @@ public interface IJobRepository
     /// <param name="id">The id of the object</param>
     /// <returns></returns>
     Task<JobModel> DeleteById(string workspaceId, string id);
+
 }

@@ -16,6 +16,7 @@ using Shoc.Job.Model.JobGitRepo;
 using Shoc.Job.Model.JobLabel;
 using Shoc.Job.Model.JobTask;
 using Shoc.Secret.Grpc.Secrets;
+using Shoc.Workspace.Grpc.Workspaces;
 
 namespace Shoc.Job.Services;
 
@@ -65,6 +66,11 @@ public class JobSubmissionService : JobServiceBase
     protected readonly KubernetesTaskClientFactory taskClientFactory;
 
     /// <summary>
+    /// The task status repository
+    /// </summary>
+    protected readonly IJobTaskStatusRepository taskStatusRepository;
+
+    /// <summary>
     /// Creates new instance of job submission service
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
@@ -75,7 +81,8 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="secretResolver">The secret resolver</param>
     /// <param name="resourceParser">The resource parser</param>
     /// <param name="taskClientFactory">The task client factory for Kubernetes</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory) 
+    /// <param name="taskStatusRepository">The task status repository</param>
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory, IJobTaskStatusRepository taskStatusRepository) 
         : base(jobRepository, validationService, jobProtectionProvider)
     {
         this.packageResolver = packageResolver;
@@ -83,6 +90,7 @@ public class JobSubmissionService : JobServiceBase
         this.secretResolver = secretResolver;
         this.resourceParser = resourceParser;
         this.taskClientFactory = taskClientFactory;
+        this.taskStatusRepository = taskStatusRepository;
     }
     
     /// <summary>
@@ -185,12 +193,16 @@ public class JobSubmissionService : JobServiceBase
         var job = new JobModel
         {
             WorkspaceId = input.WorkspaceId,
+            LocalId = 0,
             ClusterId = cluster.Id,
             UserId = input.UserId,
             Scope = input.Scope,
             Manifest = ToJsonString(input.Manifest),
             ClusterConfigEncrypted = protector.Protect(cluster.Configuration),
             TotalTasks = input.Manifest.Array.Replicas.GetValueOrDefault(DEFAULT_JOB_ARRAY_REPLICAS),
+            SucceededTasks = 0,
+            FailedTasks = 0,
+            CancelledTasks = 0,
             CompletedTasks = 0,
             Status = JobStatuses.CREATED,
             Message = string.Empty,
@@ -285,21 +297,51 @@ public class JobSubmissionService : JobServiceBase
             throw ErrorDefinition.Validation(JobErrors.INVALID_STATUS, "The job was already submitted").AsException();
         }
 
+        try
+        {
+            // perform submission
+            return await this.SubmitImpl(workspace, job);
+        }
+        catch (Exception e)
+        {
+            // mark job as failed
+            return await this.jobRepository.FailById(workspaceId, id, new JobFailInputModel
+            {
+                WorkspaceId = workspaceId,
+                Id = id,
+                Message = $"Job failed: {e.Message}",
+                CompletedAt = DateTime.UtcNow
+            });
+        }
+        
+    }
+
+    /// <summary>
+    /// The implementation of job submission logic
+    /// </summary>
+    /// <param name="workspace">The workspace reference</param>
+    /// <param name="job">The job model reference</param>
+    /// <returns></returns>
+    private async Task<JobModel> SubmitImpl(WorkspaceGrpcModel workspace, JobModel job)
+    {
         // load the tasks associated with the job
-        var tasks = (await this.jobRepository.GetTasksById(workspaceId, id)).OrderBy(task => task.Sequence).ToList();
+        var tasks = (await this.jobRepository.GetTasksById(workspace.Id, job.Id)).OrderBy(task => task.Sequence).ToList();
 
         // check if number of existing tasks matches the jobs total tasks
         if (tasks.Count != job.TotalTasks)
         {
             throw ErrorDefinition.Validation(JobErrors.INVALID_TASKS, "The job tasks are not valid").AsException();
         }
-    
-        // check if there is any task not in the created state
-        if (tasks.Any(task => task.Status != JobTaskStatuses.CREATED))
-        {
-            throw ErrorDefinition.Validation(JobErrors.INVALID_STATUS, "At least one task has been already submitted").AsException();
-        }
 
+        // keep only tasks that are in created state
+        tasks = tasks.Where(task => task.Status == JobTaskStatuses.CREATED).ToList();
+
+        // no tasks to process
+        if (tasks.Count == 0)
+        {
+            return job;
+        }
+        
         // the protection provider
         var protector = this.jobProtectionProvider.Create();
 
@@ -325,7 +367,7 @@ public class JobSubmissionService : JobServiceBase
         var ns = $"job-{workspace.Name}-{job.LocalId}";
         
         // update the namespace of the job
-        job = await this.jobRepository.UpdateNamespaceById(workspaceId, id, ns);
+        job = await this.jobRepository.UpdateNamespaceById(workspace.Id, job.Id, ns);
 
         // create a namespace object in the cluster
         var nsResult = await jobClient.InitNamespace(job);
@@ -339,31 +381,28 @@ public class JobSubmissionService : JobServiceBase
         // initialize the shared pull secret for the package
         var pullSecretResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitPullSecret(job, packageReference));
 
-        // process each task
-        foreach (var task in tasks)
+        // initiate all submissions for all tasks
+        var allSubmissions = tasks.Select(task => this.SubmitTask(taskClient, new InitTaskInput
         {
-            // create the task input
-            var taskInput = new InitTaskInput
-            {
-                Job = job,
-                Task = task,
-                Runtime = DeserializeRuntime(task.Runtime),
-                Namespace = nsResult.Namespace.Name(),
-                ServiceAccount = saResult.ServiceAccount.Name(),
-                PullSecret = pullSecretResult,
-                SharedEnv = envsResult
-            };
+            Job = job,
+            Task = task,
+            Runtime = DeserializeRuntime(task.Runtime),
+            Namespace = nsResult.Namespace.Name(),
+            ServiceAccount = saResult.ServiceAccount.Name(),
+            PullSecret = pullSecretResult,
+            SharedEnv = envsResult
+        })).ToList();
 
-            // handle task submission
-            await jobClient.WithCleanup(job.Namespace, () => this.SubmitTask(taskClient, taskInput));
-        }
+        // wait for all results to complete
+        var results = await Task.WhenAll(allSubmissions);
         
-        // tasks are created
-        // start submitting to the cluster
-        // create namespace, service account, role, role binding
-        // create N 
+        // update statuses
+        foreach (var submission in results)
+        {
+            _ = await this.UpdateSubmissionStatus(submission);
+        }
 
-        return job;
+        return await this.GetById(workspace.Id, job.Id);
     }
 
     /// <summary>
@@ -372,12 +411,84 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="taskClient">The task client reference</param>
     /// <param name="taskInput">The task input</param>
     /// <returns></returns>
-    private async Task<JobTaskModel> SubmitTask(IKubernetesTaskClient taskClient, InitTaskInput taskInput)
+    private async Task<TaskSubmissionResult> SubmitTask(IKubernetesTaskClient taskClient, InitTaskInput taskInput)
+    {
+        var task = taskInput.Task;
+        
+        // the submission result
+        var result = new TaskSubmissionResult
+        {
+            WorkspaceId = task.WorkspaceId,
+            JobId = task.JobId,
+            Id = task.Id
+        };
+        
+        try
+        {
+            // try submitting the task
+            result.InitResult = await this.SubmitTaskImpl(taskClient, taskInput);
+
+            // task is submitted
+            result.Success = true;
+        }
+        catch (Exception e)
+        {
+            // task failed
+            result.Success = false;
+            
+            // record task exception
+            result.Exception = e;
+        }
+
+        return result;
+    }
+    
+    /// <summary>
+    /// Submit the task to the cluster
+    /// </summary>
+    /// <param name="taskClient">The task client reference</param>
+    /// <param name="taskInput">The task input</param>
+    /// <returns></returns>
+    private async Task<InitTaskResult> SubmitTaskImpl(IKubernetesTaskClient taskClient, InitTaskInput taskInput)
     {
         // submit to the cluster
-        await taskClient.Submit(taskInput);
+        var initResult = await taskClient.Submit(taskInput);
+        
+        // TODO: submit a monitoring task to quartz
+        
+        return initResult;
+    }
 
-        return taskInput.Task;
+    /// <summary>
+    /// Updates the task status when the submission is completed (success or failure)
+    /// </summary>
+    /// <param name="input">The submission result as an input</param>
+    /// <returns></returns>
+    private async Task<JobTaskModel> UpdateSubmissionStatus(TaskSubmissionResult input)
+    {
+        // handle status update when submission failed for any reason
+        if (!input.Success)
+        {
+            return await this.taskStatusRepository.CompleteTaskById(input.WorkspaceId, input.JobId, input.Id, new JobTaskCompleteInputModel
+            {
+                WorkspaceId = input.WorkspaceId,
+                JobId = input.Id,
+                Id = input.Id,
+                Status = JobTaskStatuses.FAILED,
+                Message = $"Failed to submit the task: {input.Exception?.Message ?? "Unknown Error"}",
+                CompletedAt = DateTime.UtcNow
+            });
+        }
+        
+        // mark task as submitted when it's successfully added to the cluster
+        return await this.taskStatusRepository.SubmitTaskById(input.WorkspaceId, input.JobId, input.Id, new JobTaskSubmitInputModel
+        {
+            WorkspaceId = input.WorkspaceId,
+            JobId = input.JobId,
+            Id = input.Id,
+            Message = "Task is submitted to the cluster",
+            PendingAt = DateTime.UtcNow
+        });
     }
 
     /// <summary>
