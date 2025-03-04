@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using Dapper;
 using Imast.DataOps.Api;
 using Shoc.Core;
 using Shoc.Job.Model;
@@ -150,8 +151,17 @@ public class JobRepository : IJobRepository
             IsolationLevel = IsolationLevel.ReadCommitted
         }, TransactionScopeAsyncFlowOption.Enabled);
 
+        // build args for job creation
+        var jobArg = new DynamicParameters();
+        
+        // add job
+        jobArg.AddDynamicParams(job);
+        
+        // add other params
+        jobArg.AddDynamicParams(new { JobIdentityType = JobIdentityObjectTypes.JOB });
+        
         // create a job record
-        var result = await this.dataOps.Connect().QueryFirst("Job", "Create").ExecuteAsync<JobModel>(job);
+        var result = await this.dataOps.Connect().QueryFirst("Job", "Create").ExecuteAsync<JobModel>(jobArg);
         
         // create the set of tasks
         await this.dataOps.Connect().NonQuery("Job", "CreateTask").ExecuteAsync(tasks);

@@ -34,10 +34,16 @@
 
       <TextCommand>
 
+        INSERT INTO `job_identity_states` 
+        (WorkspaceId, ObjectType, Identity)
+        VALUES 
+        (@WorkspaceId, @JobIdentityType, 1)
+        ON DUPLICATE KEY UPDATE `Identity` = `Identity` + 1;
+
         SET @nextLocalId = (
-          SELECT COALESCE(MAX(LocalId), 0) + 1
-          FROM job_jobs
-          WHERE `WorkspaceId` = @WorkspaceId
+          SELECT `Identity` 
+          FROM job_identity_states
+          WHERE `WorkspaceId` = @WorkspaceId AND `ObjectType` = @JobIdentityType
         );
         
         INSERT INTO `job_jobs`

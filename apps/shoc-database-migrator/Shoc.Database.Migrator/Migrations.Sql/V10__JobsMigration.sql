@@ -1,4 +1,12 @@
-﻿CREATE TABLE `job_labels` (
+﻿CREATE TABLE `job_identity_states` (
+    `WorkspaceId` varchar(100) NOT NULL,
+    `ObjectType` varchar(64) NOT NULL,
+    `Identity` bigint NOT NULL,
+    PRIMARY KEY (`WorkspaceId`,`ObjectType`),
+    CONSTRAINT `FK_IdentityState_Workspace` FOREIGN KEY (`WorkspaceId`) REFERENCES `wspc_workspaces` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `job_labels` (
     `Id` varchar(100) NOT NULL,
     `WorkspaceId` varchar(100) NOT NULL,
     `Name` varchar(256) NOT NULL,
