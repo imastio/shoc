@@ -8,6 +8,7 @@ using Shoc.ApiCore.Auth;
 using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
 using Shoc.ApiCore.ObjectAccess;
+using Shoc.ApiCore.Quartz;
 using Shoc.Job.Config;
 using Shoc.Job.K8s;
 using Shoc.Job.Services;
@@ -29,6 +30,7 @@ builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddLogging();
+builder.Services.AddQuartzEssentials(builder.Configuration);
 builder.Services.AddSingleton<ResourceParser>();
 builder.Services.AddSingleton<LabelValidationService>();
 builder.Services.AddSingleton<GitRepoValidationService>();
@@ -46,6 +48,7 @@ builder.Services.AddSingleton<JobService>();
 builder.Services.AddSingleton<WorkspaceJobSubmissionService>();
 builder.Services.AddSingleton<KubernetesTaskClientFactory>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
+builder.Services.AddQuartzHosting(builder.Configuration);
 builder.Services.AddControllers();
 
 // build the application

@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.GrpcClient\Shoc.ApiCore.GrpcClient.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Grpc\Shoc.ApiCore.Grpc.csproj" />
     <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.ObjectAccess\Shoc.ApiCore.ObjectAccess.csproj" />
+    <ProjectReference Include="..\..\..\api-core\Shoc.ApiCore.Quartz\Shoc.ApiCore.Quartz.csproj" />
     <ProjectReference Include="..\..\..\core\Shoc.Core.Kubernetes\Shoc.Core.Kubernetes.csproj" />
     <ProjectReference Include="..\..\shoc-cluster\Shoc.Cluster.Grpc\Shoc.Cluster.Grpc.csproj" />
     <ProjectReference Include="..\..\shoc-identity\Shoc.Identity.Grpc\Shoc.Identity.Grpc.csproj" />

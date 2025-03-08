@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
+
+    <Import Project="../../Shoc.Shared.proj" />
+
+    <ItemGroup>
+        <ProjectReference Include="../Shoc.ApiCore/Shoc.ApiCore.csproj" />
+        <ProjectReference Include="..\..\core\Shoc.Data.Sql\Shoc.Data.Sql.csproj" />
+        <ProjectReference Include="..\..\core\Shoc.Quartz\Shoc.Quartz.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.14.0" />
+      <PackageReference Include="Quartz.Serialization.SystemTextJson" Version="3.14.0" />
+    </ItemGroup>
+
+</Project>

@@ -1,7 +1,6 @@
 ﻿using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MySql.Data.MySqlClient;
 using Shoc.ApiCore;
 using Shoc.Data.Sql;
 using Shoc.Database.Migrator.Config;
@@ -31,16 +30,10 @@ public static class MigrationExtensions
         services.AddSingleton(dataSettings);
         services.AddSingleton(migrationSettings);
 
-        // create new connection string builder
-        var connectionStringBuilder = new MySqlConnectionStringBuilder(dataSettings.ConnectionString)
-        {
-            Database = dataSettings.Database
-        };
-
         // add fluent migrator for mysql based on given connection string
         services.AddFluentMigratorCore()
             .ConfigureRunner(builder => builder.AddMySql5()
-                .WithGlobalConnectionString(connectionStringBuilder.ToString())
+                .WithGlobalConnectionString(SqlExt.BuildConnectionString(dataSettings))
                 .ScanIn(typeof(MigrationManifest).Assembly).For.Migrations().For.VersionTableMetaData())
             .AddLogging(lb => lb.AddFluentMigratorConsole());
         

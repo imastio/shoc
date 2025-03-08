@@ -4,17 +4,17 @@ using FluentMigrator;
 namespace Shoc.Database.Migrator.Migrations;
 
 /// <summary>
-/// Job Management Migration
+/// Quartz Tables Migration
 /// </summary>
-[Migration(10, TransactionBehavior.Default, "Add job management essentials")]
-public class V10__JobsMigration : Migration
+[Migration(10, TransactionBehavior.Default, "Add quartz tables")]
+public class V10__QuartzMigration : Migration
 {
     /// <summary>
     /// Migrate database up
     /// </summary>
     public override void Up()
     {
-        this.Execute.Script("Migrations.Sql/V10__JobsMigration.sql");
+        this.Execute.Script("Migrations.Sql/V10__QuartzMigration.sql");
     }
 
     /// <summary>

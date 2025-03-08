@@ -19,15 +19,11 @@ public class OperationsInitializer
     public static DataOperations Init(DataSourceSettings settings, params string[] sources)
     {
         // create new connection string builder
-        var connectionStringBuilder = new MySqlConnectionStringBuilder(settings.ConnectionString)
-        {
-            Database = settings.Database,
-            AllowUserVariables = true
-        };
+        var connectionString = SqlExt.BuildConnectionString(settings);
 
         // build and init new ops object
         var dataOps = DataOperationsBuilder.New()
-            .WithConnection(SqlProvider.MySQL, () => new MySqlConnection(connectionStringBuilder.ToString()))
+            .WithConnection(SqlProvider.MySQL, () => new MySqlConnection(connectionString))
             .WithDefaultProvider(SqlProvider.MySQL)
             .WithSchemaValidation();
 
