@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
+using Shoc.Job.Model.Job;
 using Shoc.Job.Services;
 
 namespace Shoc.Job.Quartz;
@@ -19,6 +21,11 @@ public class KubernetesWatchQuartzJob : IJob
     private readonly IJobRepository jobRepository;
 
     /// <summary>
+    /// The task repository
+    /// </summary>
+    private readonly IJobTaskRepository taskRepository;
+
+    /// <summary>
     /// The task status repository
     /// </summary>
     private readonly IJobTaskStatusRepository taskStatusRepository;
@@ -26,28 +33,48 @@ public class KubernetesWatchQuartzJob : IJob
     /// <summary>
     /// The task client factory for Kubernetes
     /// </summary>
-    protected readonly KubernetesTaskClientFactory taskClientFactory;
+    private readonly KubernetesTaskClientFactory taskClientFactory;
     
     /// <summary>
     /// The protection provider
     /// </summary>
-    protected readonly JobProtectionProvider jobProtectionProvider;
+    private readonly JobProtectionProvider jobProtectionProvider;
+
+    /// <summary>
+    /// The scheduler factory
+    /// </summary>
+    private readonly ISchedulerFactory schedulerFactory;
 
     /// <summary>
     /// Creates new instance of watch job
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
+    /// <param name="taskRepository">The task repository</param>
     /// <param name="taskStatusRepository">The task status repository</param>
     /// <param name="taskClientFactory">The task client factory for Kubernetes</param>
     /// <param name="jobProtectionProvider">The protection provider</param>
-    public KubernetesWatchQuartzJob(IJobRepository jobRepository, IJobTaskStatusRepository taskStatusRepository, KubernetesTaskClientFactory taskClientFactory, JobProtectionProvider jobProtectionProvider)
+    /// <param name="schedulerFactory">The scheduler factory</param>
+    public KubernetesWatchQuartzJob(IJobRepository jobRepository, IJobTaskRepository taskRepository, IJobTaskStatusRepository taskStatusRepository, KubernetesTaskClientFactory taskClientFactory, JobProtectionProvider jobProtectionProvider, ISchedulerFactory schedulerFactory)
     {
         this.jobRepository = jobRepository;
+        this.taskRepository = taskRepository;
         this.taskStatusRepository = taskStatusRepository;
         this.taskClientFactory = taskClientFactory;
         this.jobProtectionProvider = jobProtectionProvider;
+        this.schedulerFactory = schedulerFactory;
     }
 
+    /// <summary>
+    /// Builds a job key for the given job type
+    /// </summary>
+    /// <param name="jobId">The job id</param>
+    /// <param name="taskId">The task id</param>
+    /// <returns></returns>
+    public static JobKey BuildKey(string jobId, string taskId)
+    {
+        return new JobKey($"{KubernetesWatchConstants.WATCH_JOB_PREFIX}-{taskId}", jobId);
+    }
+    
     /// <summary>
     /// Sync the statuses from Kubernetes with Shoc objects
     /// </summary>
@@ -58,12 +85,12 @@ public class KubernetesWatchQuartzJob : IJob
         try
         {
             // execute the job logic
-            await this.Execute(context);
+            await this.ExecuteImpl(context);
         }
         catch (Exception e)
         {
             // should fire again
-            var refireImmediately = e is FatalQuartzException;
+            var refireImmediately = e is not FatalQuartzException;
             
             // fire the trigger again immediately
             throw new JobExecutionException(e, refireImmediately);
@@ -81,14 +108,17 @@ public class KubernetesWatchQuartzJob : IJob
         var data = context.MergedJobDataMap;
 
         // the workspace id
-        var workspaceId = data.GetValueOrDefault("workspaceId") as string;
+        var workspaceId = data.GetValueOrDefault(KubernetesWatchConstants.WORKSPACE_ID) as string;
 
         // the job id
-        var jobId = data.GetValueOrDefault("jobId") as string;
+        var jobId = data.GetValueOrDefault(KubernetesWatchConstants.JOB_ID) as string;
 
         // the task id
-        var taskId = data.GetValueOrDefault("taskId") as string;
+        var taskId = data.GetValueOrDefault(KubernetesWatchConstants.TASK_ID) as string;
 
+        // the trigger index
+        var triggerIndexStr = data.GetValueOrDefault(KubernetesWatchConstants.TRIGGER_INDEX) as string;
+        
         // ensure workspace id is given
         if (string.IsNullOrWhiteSpace(workspaceId))
         {
@@ -106,6 +136,12 @@ public class KubernetesWatchQuartzJob : IJob
         {
             throw new FatalQuartzException("The task id is required");
         }
+
+        // ensure trigger index is available
+        if (!int.TryParse(triggerIndexStr, out var triggerIndex))
+        {
+            throw new FatalQuartzException("The trigger index should be a valid integer");
+        }
         
         // require the job 
         var job = await this.jobRepository.GetById(workspaceId, jobId);
@@ -115,7 +151,59 @@ public class KubernetesWatchQuartzJob : IJob
         {
             return;
         }
+
+        // require the task
+        var task = await this.taskRepository.GetById(workspaceId, jobId, taskId);
         
-        Console.WriteLine($"Doing something important");
+        // ensure task exist to continue
+        if (task == null)
+        {
+            await this.jobRepository.FailById(workspaceId, jobId, new JobFailInputModel
+            {
+                WorkspaceId = workspaceId,
+                Id = jobId,
+                Message = $"The task {taskId} is missing",
+                CompletedAt = DateTime.UtcNow
+            });
+            return;
+        }
+        
+        Console.WriteLine($"Executing Task {task.Sequence} of Job {job.LocalId} at {DateTimeOffset.UtcNow}");
+
+        // schedule next trigger to check again
+        await this.ScheduleNextTrigger(context, triggerIndex);
+    }
+
+    /// <summary>
+    /// Schedule another trigger for later
+    /// </summary>
+    /// <param name="context">The execution context</param>
+    /// <param name="triggerIndex">The trigger index</param>
+    /// <returns></returns>
+    private async Task ScheduleNextTrigger(IJobExecutionContext context, int triggerIndex)
+    {
+        // next trigger data
+        var nextTriggerData = new JobDataMap();
+        nextTriggerData.PutAll(context.Trigger.JobDataMap);
+        nextTriggerData.Put(KubernetesWatchConstants.TRIGGER_INDEX, (triggerIndex + 1).ToString());
+
+        // get next delay based on the current trigger index
+        var nextDelay = triggerIndex < KubernetesWatchConstants.NEXT_TRIGGERS.Length
+            ? KubernetesWatchConstants.NEXT_TRIGGERS[triggerIndex]
+            : KubernetesWatchConstants.NEXT_TRIGGERS.Last();
+        
+        // build the next trigger
+        var nextTrigger = context.Trigger
+            .GetTriggerBuilder()
+            .ForJob(context.JobDetail)
+            .UsingJobData(nextTriggerData)
+            .StartAt(DateTimeOffset.UtcNow.AddSeconds(nextDelay))
+            .Build();
+
+        // get the scheduler
+        var scheduler = await this.schedulerFactory.GetScheduler();
+
+        // reschedule the same job with the new trigger
+        await scheduler.RescheduleJob(context.Trigger.Key, nextTrigger);
     }
 }

@@ -29,6 +29,9 @@
         <None Update="Operations\Job.TaskStatus.xml">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Operations\Job.Task.xml">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

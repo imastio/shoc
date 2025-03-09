@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using k8s.Models;
 using Microsoft.AspNetCore.DataProtection;
+using Quartz;
 using Shoc.Core;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
@@ -15,6 +16,7 @@ using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobGitRepo;
 using Shoc.Job.Model.JobLabel;
 using Shoc.Job.Model.JobTask;
+using Shoc.Job.Quartz;
 using Shoc.Secret.Grpc.Secrets;
 using Shoc.Workspace.Grpc.Workspaces;
 
@@ -71,6 +73,11 @@ public class JobSubmissionService : JobServiceBase
     protected readonly IJobTaskStatusRepository taskStatusRepository;
 
     /// <summary>
+    /// The scheduler factory
+    /// </summary>
+    protected readonly ISchedulerFactory schedulerFactory;
+
+    /// <summary>
     /// Creates new instance of job submission service
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
@@ -82,7 +89,8 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="resourceParser">The resource parser</param>
     /// <param name="taskClientFactory">The task client factory for Kubernetes</param>
     /// <param name="taskStatusRepository">The task status repository</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory, IJobTaskStatusRepository taskStatusRepository) 
+    /// <param name="schedulerFactory">The scheduler factory</param>
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory, IJobTaskStatusRepository taskStatusRepository, ISchedulerFactory schedulerFactory) 
         : base(jobRepository, validationService, jobProtectionProvider)
     {
         this.packageResolver = packageResolver;
@@ -91,6 +99,7 @@ public class JobSubmissionService : JobServiceBase
         this.resourceParser = resourceParser;
         this.taskClientFactory = taskClientFactory;
         this.taskStatusRepository = taskStatusRepository;
+        this.schedulerFactory = schedulerFactory;
     }
     
     /// <summary>
@@ -453,8 +462,41 @@ public class JobSubmissionService : JobServiceBase
     {
         // submit to the cluster
         var initResult = await taskClient.Submit(taskInput);
+
+        // the task to submit
+        var task = taskInput.Task;
         
-        // TODO: submit a monitoring task to quartz
+        // prepare data for the job
+        var data = new JobDataMap();
+        data.Put(KubernetesWatchConstants.WORKSPACE_ID, task.WorkspaceId);
+        data.Put(KubernetesWatchConstants.JOB_ID, task.JobId);
+        data.Put(KubernetesWatchConstants.TASK_ID, task.Id);
+
+        // get scheduler
+        var scheduler = await this.schedulerFactory.GetScheduler();
+
+        // building a quartz job for monitoring
+        var quartzJob = JobBuilder.Create<KubernetesWatchQuartzJob>()
+            .WithIdentity(KubernetesWatchQuartzJob.BuildKey(task.JobId, task.Id))
+            .RequestRecovery()
+            .StoreDurably(false)
+            .UsingJobData(data)
+            .Build();
+
+        // data for trigger
+        var triggerData = new JobDataMap();
+        triggerData.Put(KubernetesWatchConstants.TRIGGER_INDEX, "0");
+        
+        // building an initial trigger
+        var initialTrigger = TriggerBuilder.Create()
+            .ForJob(quartzJob)
+            .UsingJobData(triggerData)
+            .StartAt(DateTimeOffset.UtcNow.AddSeconds(KubernetesWatchConstants.TRIGGER_DELAY_SECONDS))
+            .WithSimpleSchedule(schedule => schedule.WithMisfireHandlingInstructionFireNow())
+            .Build();
+        
+        // add to quartz
+        await scheduler.ScheduleJob(quartzJob, initialTrigger);
         
         return initResult;
     }

@@ -28,6 +28,7 @@ public static class JobOperations
             Path.Combine(sourceDirectory, "Operations", "Label.xml"),
             Path.Combine(sourceDirectory, "Operations", "GitRepo.xml"),
             Path.Combine(sourceDirectory, "Operations", "Job.xml"),
+            Path.Combine(sourceDirectory, "Operations", "Job.Task.xml"),
             Path.Combine(sourceDirectory, "Operations", "Job.TaskStatus.xml")
         };
     }

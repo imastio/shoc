@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+  <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+  <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+  <OperationGroup Name="Job.Task">
+    
+    <SqlOperation Name="GetById">
+
+      <TextCommand>
+        SELECT * FROM `job_job_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
+
+  </OperationGroup>
+
+</DataOperations>
