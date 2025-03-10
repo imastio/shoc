@@ -15,25 +15,19 @@ namespace Shoc.Job.K8s;
 /// <summary>
 /// The kubernetes job client
 /// </summary>
-public class KubernetesJobClient : IDisposable
+public class KubernetesJobClient : KubernetesClientBase, IDisposable
 {
     /// <summary>
     /// The unspecific container registry
     /// </summary>
     private const string UNSPECIFIED_CONTAINER_REGISTRY = "docker.io";
-    
-    /// <summary>
-    /// The underlying kubernetes client
-    /// </summary>
-    private readonly Kubernetes client;
 
     /// <summary>
     /// The kubernetes client for job operations
     /// </summary>
     /// <param name="config">The cluster config for authentication</param>
-    public KubernetesJobClient(string config)
+    public KubernetesJobClient(string config) : base(config)
     {
-        this.client = new Kubernetes(new KubeContext { Config = config }.AsClientConfiguration());
     }
     
     /// <summary>
@@ -43,6 +37,16 @@ public class KubernetesJobClient : IDisposable
     /// <returns></returns>
     public async Task<InitNamespaceResult> InitNamespace(JobModel job)
     {
+        // create default labels 
+        var labels = CreateManagedLabels(new ManagedMetadata
+        {
+            Name = job.Namespace,
+            Component = ShocK8sComponents.JOB,
+            PartOf = ShocK8sComponents.JOB,
+            WorkspaceId = job.WorkspaceId,
+            JobId = job.Id
+        });
+        
         // create a namespace object
         return new InitNamespaceResult
         {
@@ -51,11 +55,7 @@ public class KubernetesJobClient : IDisposable
                 Metadata = new V1ObjectMeta
                 {
                     Name = job.Namespace,
-                    Labels = new Dictionary<string, string>
-                    {
-                        { JobAnnotations.SHOC_JOB, job.Id },
-                        { JobAnnotations.SHOC_WORKSPACE, job.WorkspaceId }
-                    }
+                    Labels = labels
                 }
             })
         };
@@ -68,16 +68,42 @@ public class KubernetesJobClient : IDisposable
     /// <returns></returns>
     public async Task<InitServiceAccountResult> InitServiceAccount(JobModel job)
     {
+        // create default labels 
+        var labels = CreateManagedLabels(new ManagedMetadata
+        {
+            Name = job.Id,
+            Component = ShocK8sComponents.SECURITY,
+            PartOf = ShocK8sComponents.JOB,
+            WorkspaceId = job.WorkspaceId,
+            JobId = job.Id
+        });
+        
         // create a ServiceAccount object to work inside the namespace
         var sa = await client.CoreV1.CreateNamespacedServiceAccountAsync(new V1ServiceAccount
         {
-            Metadata = new V1ObjectMeta { Name = K8sConstants.SHOC_SERVICE_ACCOUNT_NAME, NamespaceProperty = job.Namespace }
+            Metadata = new V1ObjectMeta
+            {
+                Name = K8sConstants.SHOC_SERVICE_ACCOUNT_NAME, 
+                NamespaceProperty = job.Namespace,
+                Labels = new Dictionary<string, string>(labels)
+                {
+                    [WellKnownLabels.NAME] = K8sConstants.SHOC_SERVICE_ACCOUNT_NAME
+                }
+            }
         }, job.Namespace);
         
         // create Role with restrictions (only allows actions within the namespace)
         var role = await client.RbacAuthorizationV1.CreateNamespacedRoleAsync(new V1Role
         {
-            Metadata = new V1ObjectMeta { Name = K8sConstants.SHOC_ROLE_NAME, NamespaceProperty = job.Namespace },
+            Metadata = new V1ObjectMeta
+            {
+                Name = K8sConstants.SHOC_ROLE_NAME, 
+                NamespaceProperty = job.Namespace,
+                Labels = new Dictionary<string, string>(labels)
+                {
+                    [WellKnownLabels.NAME] = K8sConstants.SHOC_ROLE_NAME
+                }
+            },
             Rules = new List<V1PolicyRule>
             {
                 new()
@@ -92,7 +118,15 @@ public class KubernetesJobClient : IDisposable
         // create a role binding to add service account to the role
         var roleBinding = await client.RbacAuthorizationV1.CreateNamespacedRoleBindingAsync(new V1RoleBinding
         {
-            Metadata = new V1ObjectMeta { Name = K8sConstants.SHOC_ROLE_BINDING_NAME, NamespaceProperty = job.Namespace },
+            Metadata = new V1ObjectMeta
+            {
+                Name = K8sConstants.SHOC_ROLE_BINDING_NAME, 
+                NamespaceProperty = job.Namespace,
+                Labels = new Dictionary<string, string>(labels)
+                {
+                    [WellKnownLabels.NAME] = K8sConstants.SHOC_ROLE_BINDING_NAME
+                }
+            },
             Subjects = new List<Rbacv1Subject>
             {
                 new()
@@ -126,14 +160,28 @@ public class KubernetesJobClient : IDisposable
     /// <returns></returns>
     public async Task<InitSharedEnvsResult> InitSharedEnvironment(JobModel job, JobTaskEnvModel envs)
     {
+        // create default labels 
+        var labels = CreateManagedLabels(new ManagedMetadata
+        {
+            Name = job.Id,
+            Component = ShocK8sComponents.ENVIRONMENT,
+            PartOf = ShocK8sComponents.JOB,
+            WorkspaceId = job.WorkspaceId,
+            JobId = job.Id
+        });
+        
         // creates a new secret for encrypted values
         var secret = await this.client.CreateNamespacedSecretAsync(new V1Secret
         {
             Immutable = null,
             Metadata = new V1ObjectMeta
             {
-                Name = "shared-secret-all",
-                NamespaceProperty = job.Namespace
+                Name = K8sConstants.SHOC_SHARED_SECRET_ALL,
+                NamespaceProperty = job.Namespace,
+                Labels = new Dictionary<string, string>(labels)
+                {
+                    [WellKnownLabels.NAME] = K8sConstants.SHOC_SHARED_SECRET_ALL
+                }
             },
             StringData = envs.Encrypted ?? new Dictionary<string, string>(),
             Type = "Opaque"
@@ -145,8 +193,12 @@ public class KubernetesJobClient : IDisposable
             Immutable = null,
             Metadata = new V1ObjectMeta
             {
-                Name = "shared-configmap-all",
-                NamespaceProperty = job.Namespace
+                Name = K8sConstants.SHOC_SHARED_CONFIGS_ALL,
+                NamespaceProperty = job.Namespace,
+                Labels = new Dictionary<string, string>(labels)
+                {
+                    [WellKnownLabels.NAME] = K8sConstants.SHOC_SHARED_CONFIGS_ALL
+                }
             },
             Data = envs.Plain
         }, job.Namespace);
@@ -166,6 +218,16 @@ public class KubernetesJobClient : IDisposable
     /// <returns></returns>
     public async Task<InitPullSecretResult> InitPullSecret(JobModel job, JobTaskPackageReferenceModel packageReference)
     {
+        // create default labels 
+        var labels = CreateManagedLabels(new ManagedMetadata
+        {
+            Name = K8sConstants.SHOC_SHARED_PULL_SECRET,
+            Component = ShocK8sComponents.SECURITY,
+            PartOf = ShocK8sComponents.JOB,
+            WorkspaceId = job.WorkspaceId,
+            JobId = job.Id
+        });
+        
         // resolve the registry
         var registry = ResolveRegistry(packageReference.Image);
         
@@ -188,8 +250,9 @@ public class KubernetesJobClient : IDisposable
             {
                 Metadata = new V1ObjectMeta
                 {
-                    Name = "shared-pull-secret",
-                    NamespaceProperty = job.Namespace
+                    Name = K8sConstants.SHOC_SHARED_PULL_SECRET,
+                    NamespaceProperty = job.Namespace,
+                    Labels = labels
                 },
                 Type = "kubernetes.io/dockerconfigjson",
                 Data = new Dictionary<string, byte[]>

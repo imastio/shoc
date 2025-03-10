@@ -1,30 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using k8s;
-using k8s.Models;
 using Shoc.Core;
-using Shoc.Core.Kubernetes;
 using Shoc.Job.K8s.Model;
 using Shoc.Job.Model;
+using Shoc.Job.Model.Job;
+using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.K8s.TaskClients;
 
 /// <summary>
 /// The base Kubernetes task client
 /// </summary>
-public abstract class BaseKubernetesTaskClient : IKubernetesTaskClient
+public abstract class BaseKubernetesTaskClient : KubernetesClientBase, IKubernetesTaskClient
 {
     /// <summary>
     /// The default restart policy
     /// </summary>
     protected const string DEFAULT_RESTART_POLICY = "Never";
-    
-    /// <summary>
-    /// The Kubernetes client instance
-    /// </summary>
-    protected readonly Kubernetes client;
     
     /// <summary>
     /// The task runtime type
@@ -36,9 +28,8 @@ public abstract class BaseKubernetesTaskClient : IKubernetesTaskClient
     /// </summary>
     /// <param name="config">The cluster configuration</param>
     /// <param name="type">The task runtime type</param>
-    protected BaseKubernetesTaskClient(string config, string type)
+    protected BaseKubernetesTaskClient(string config, string type) : base(config)
     {
-        this.client = new Kubernetes(new KubeContext { Config = config }.AsClientConfiguration());
         this.type = type;
     }
 
@@ -72,52 +63,12 @@ public abstract class BaseKubernetesTaskClient : IKubernetesTaskClient
     public abstract Task<InitTaskResult> Submit(InitTaskInput input);
 
     /// <summary>
-    /// Gets the list of pull secrets based on the task input
+    /// Gets the task status in the cluster
     /// </summary>
-    /// <param name="input">The input</param>
+    /// <param name="job">The job instance</param>
+    /// <param name="task">The task instance</param>
     /// <returns></returns>
-    protected IList<V1LocalObjectReference> GetPullSecrets(InitTaskInput input)
-    {
-        return new List<V1LocalObjectReference>
-        {
-            new()
-            {
-                Name = input.PullSecret.PullSecret.Name()
-            }
-        };
-    }
-
-    /// <summary>
-    /// Gets the env sources from the input
-    /// </summary>
-    /// <param name="input">The task input</param>
-    /// <returns></returns>
-    protected IList<V1EnvFromSource> GetEnvSources(InitTaskInput input)
-    {
-        // the result collection
-        var result = new List<V1EnvFromSource>();
-
-        // add secrets
-        result.AddRange(input.SharedEnv.Secrets.Select(sec => new V1EnvFromSource
-        {
-            SecretRef = new V1SecretEnvSource
-            {
-                Name = sec.Name()
-            }
-        }));
-        
-        // add config maps
-        result.AddRange(input.SharedEnv.ConfigMaps.Select(sec => new V1EnvFromSource
-        {
-            ConfigMapRef = new V1ConfigMapEnvSource
-            {
-                Name = sec.Name()
-            }
-        }));
-        
-        // return result
-        return result;
-    }
+    public abstract Task<TaskK8sStatusResult> GetTaskStatus(JobModel job, JobTaskModel task);
     
     /// <summary>
     /// Disposes the client

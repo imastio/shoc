@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.WorkspaceJob;
+using Shoc.ObjectAccess.Cluster;
+using Shoc.ObjectAccess.Model.Cluster;
 using Shoc.ObjectAccess.Model.Package;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Package;
@@ -19,8 +21,9 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
     /// <param name="jobSubmissionService">The job submission service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
-    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator)
-        : base(jobSubmissionService, workspaceAccessEvaluator, packageAccessEvaluator)
+    /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
+    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
+        : base(jobSubmissionService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator)
     {
     }
     
@@ -47,6 +50,14 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
             input.Manifest?.PackageId,
             PackagePermissions.PACKAGE_VIEW,
             PackagePermissions.PACKAGE_USE);
+        
+        // ensure having the required access to cluster
+        await this.clusterAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            input.Manifest?.ClusterId,
+            ClusterPermissions.CLUSTER_VIEW,
+            ClusterPermissions.CLUSTER_VIEW);
         
         // ensure referring to the correct object
         input.WorkspaceId = workspaceId;

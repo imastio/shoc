@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shoc.ObjectAccess.Cluster;
 using Shoc.ObjectAccess.Package;
 using Shoc.ObjectAccess.Workspace;
 
@@ -18,8 +19,10 @@ public static class ObjectAccessExtensions
     {
         services.TryAddSingleton<WorkspacePermissionCalculator>();
         services.TryAddSingleton<PackagePermissionCalculator>();
+        services.TryAddSingleton<ClusterPermissionCalculator>();
         services.TryAddSingleton<IWorkspaceAccessEvaluator, WorkspaceAccessEvaluator>();
         services.TryAddSingleton<IPackageAccessEvaluator, PackageAccessEvaluator>();
+        services.TryAddSingleton<IClusterAccessEvaluator, ClusterAccessEvaluator>();
 
         return services;
     }

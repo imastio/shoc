@@ -11,20 +11,14 @@ namespace Shoc.Job.K8s;
 /// <summary>
 /// The kubernetes cluster client
 /// </summary>
-public class KubernetesClusterClient : IDisposable
+public class KubernetesClusterClient : KubernetesClientBase, IDisposable
 {
-    /// <summary>
-    /// The underlying kubernetes client
-    /// </summary>
-    private readonly Kubernetes client;
-
     /// <summary>
     /// The kubernetes client for job operations
     /// </summary>
     /// <param name="config">The cluster config for authentication</param>
-    public KubernetesClusterClient(string config)
+    public KubernetesClusterClient(string config) : base(config)
     {
-        this.client = new Kubernetes(new KubeContext { Config = config }.AsClientConfiguration());
     }
     
     /// <summary>
@@ -40,10 +34,10 @@ public class KubernetesClusterClient : IDisposable
         return nodes.Items.Select(node => new NodeResourceResult
         {
             Name = node.Metadata.Name,
-            Cpu = node.Status.Allocatable["cpu"].ToString(),
-            Memory = node.Status.Allocatable["memory"].ToString(),
-            NvidiaGpu = node.Status.Allocatable.TryGetValue("nvidia.com/gpu", out var nvidiaValue) ? nvidiaValue.ToString() : "0",
-            AmdGpu = node.Status.Allocatable.TryGetValue("amd.com/gpu", out var amdValue) ? amdValue.ToString() : "0"
+            Cpu = node.Status.Allocatable[WellKnownResources.CPU].ToString(),
+            Memory = node.Status.Allocatable[WellKnownResources.MEMORY].ToString(),
+            NvidiaGpu = node.Status.Allocatable.TryGetValue(WellKnownResources.NVIDIA_GPU, out var nvidiaValue) ? nvidiaValue.ToString() : "0",
+            AmdGpu = node.Status.Allocatable.TryGetValue(WellKnownResources.AMD_GPU, out var amdValue) ? amdValue.ToString() : "0"
         });
     }
     

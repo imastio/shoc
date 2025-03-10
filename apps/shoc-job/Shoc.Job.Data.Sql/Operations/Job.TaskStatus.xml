@@ -31,6 +31,28 @@
 
     </SqlOperation>
 
+    <SqlOperation Name="RunningTaskById">
+
+      <TextCommand>
+        UPDATE `job_job_tasks`
+        SET
+        `Status` = @RunningTaskStatus,
+        `RunningAt` = @RunningAt,
+        `Message` = @Message
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+
+        UPDATE `job_jobs`
+        SET
+        `Status` = @RunningJobStatus,
+        `RunningAt` = @RunningAt
+        WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @JobId AND `Status` IN @TargetJobStatuses;
+
+        SELECT * FROM `job_job_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+      </TextCommand>
+
+    </SqlOperation>
+
     <SqlOperation Name="CompleteTaskById">
 
       <TextCommand>

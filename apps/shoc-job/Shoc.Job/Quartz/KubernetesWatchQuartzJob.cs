@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.DataProtection;
 using Quartz;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
+using Shoc.Job.K8s.Model;
 using Shoc.Job.Model.Job;
+using Shoc.Job.Model.JobTask;
 using Shoc.Job.Services;
 
 namespace Shoc.Job.Quartz;
@@ -15,6 +18,11 @@ namespace Shoc.Job.Quartz;
 /// </summary>
 public class KubernetesWatchQuartzJob : IJob
 {
+    /// <summary>
+    /// The terminal statuses for the task
+    /// </summary>
+    private static readonly ISet<string> TASK_TERMINAL_STATUSES = new HashSet<string> {JobTaskStatuses.SUCCEEDED, JobTaskStatuses.FAILED, JobTaskStatuses.CANCELLED };
+    
     /// <summary>
     /// The job repository
     /// </summary>
@@ -119,30 +127,6 @@ public class KubernetesWatchQuartzJob : IJob
         // the trigger index
         var triggerIndexStr = data.GetValueOrDefault(KubernetesWatchConstants.TRIGGER_INDEX) as string;
         
-        // ensure workspace id is given
-        if (string.IsNullOrWhiteSpace(workspaceId))
-        {
-            throw new FatalQuartzException("The workspace id is required");
-        }
-        
-        // ensure job id is given
-        if (string.IsNullOrWhiteSpace(jobId))
-        {
-            throw new FatalQuartzException("The job id is required");
-        }
-        
-        // ensure task id is given
-        if (string.IsNullOrWhiteSpace(taskId))
-        {
-            throw new FatalQuartzException("The task id is required");
-        }
-
-        // ensure trigger index is available
-        if (!int.TryParse(triggerIndexStr, out var triggerIndex))
-        {
-            throw new FatalQuartzException("The trigger index should be a valid integer");
-        }
-        
         // require the job 
         var job = await this.jobRepository.GetById(workspaceId, jobId);
 
@@ -151,7 +135,20 @@ public class KubernetesWatchQuartzJob : IJob
         {
             return;
         }
-
+        
+        // ensure task id is given
+        if (string.IsNullOrWhiteSpace(taskId))
+        {
+            await this.jobRepository.FailById(workspaceId, jobId, new JobFailInputModel
+            {
+                WorkspaceId = workspaceId,
+                Id = jobId,
+                Message = "The identifier of the task is missing. Job is in invalid state.",
+                CompletedAt = DateTime.UtcNow
+            });
+            return;
+        }
+        
         // require the task
         var task = await this.taskRepository.GetById(workspaceId, jobId, taskId);
         
@@ -167,9 +164,88 @@ public class KubernetesWatchQuartzJob : IJob
             });
             return;
         }
-        
-        Console.WriteLine($"Executing Task {task.Sequence} of Job {job.LocalId} at {DateTimeOffset.UtcNow}");
 
+        // the task is completed or is in terminal state do not continue
+        if (task.CompletedAt.HasValue || TASK_TERMINAL_STATUSES.Contains(task.Status))
+        {
+            return;
+        }
+        
+        // ensure trigger index is available
+        if (!int.TryParse(triggerIndexStr, out var triggerIndex))
+        {
+            await this.taskStatusRepository.CompleteTaskById(workspaceId, jobId, taskId, new JobTaskCompleteInputModel
+            {
+                WorkspaceId = workspaceId,
+                JobId = jobId,
+                Id = taskId,
+                Status = JobTaskStatuses.FAILED,
+                Message = "The job task is in invalid state: trigger index is missing or not valid.",
+                CompletedAt = DateTime.UtcNow
+            });
+            return;
+        }
+        
+        // the protector
+        var protector = this.jobProtectionProvider.Create();
+
+        // create a kubernetes client for the task
+        using var client = this.taskClientFactory.Create(protector.Unprotect(job.ClusterConfigEncrypted), task.Type);
+
+        // get the task result
+        var taskResult = await client.GetTaskStatus(job, task);
+
+        // the state is not OK for some unknown reason
+        if (taskResult.ObjectState != K8sObjectState.OK)
+        {
+            // determine the message
+            var message = taskResult.ObjectState switch
+            {
+                K8sObjectState.NOT_FOUND => "The target task object is not found in the cluster",
+                K8sObjectState.DUPLICATE_OBJECT => "The target task has a duplicate object in the cluster",
+                _ => "The task object is in invalid state in the cluster"
+            };
+            
+            await this.taskStatusRepository.CompleteTaskById(workspaceId, jobId, taskId, new JobTaskCompleteInputModel
+            {
+                WorkspaceId = workspaceId,
+                JobId = jobId,
+                Id = taskId,
+                Status = JobTaskStatuses.FAILED,
+                Message = message,
+                CompletedAt = DateTime.UtcNow
+            });
+            return;
+        }
+
+        // the task in the cluster has a start time so should be reported as running
+        if (taskResult.StartTime.HasValue && task.Status == JobTaskStatuses.PENDING)
+        {
+            await this.taskStatusRepository.RunningTaskById(workspaceId, jobId, taskId, new JobTaskRunningInputModel
+            {
+                WorkspaceId = workspaceId,
+                JobId = jobId,
+                Id = taskId,
+                RunningAt = taskResult.StartTime.Value,
+                Message = "The task executed started"
+            });
+        }
+        
+        // if task object in the cluster is in terminal state 
+        if (taskResult.CompletionTime.HasValue)
+        {
+            await this.taskStatusRepository.CompleteTaskById(workspaceId, jobId, taskId, new JobTaskCompleteInputModel
+            {
+                WorkspaceId = workspaceId,
+                JobId = jobId,
+                Id = taskId,
+                Status = taskResult.Succeeded ? JobTaskStatuses.SUCCEEDED : JobTaskStatuses.FAILED,
+                Message = "The task execution completed",
+                CompletedAt = taskResult.CompletionTime.Value 
+            });
+            return;
+        }
+        
         // schedule next trigger to check again
         await this.ScheduleNextTrigger(context, triggerIndex);
     }

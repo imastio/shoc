@@ -19,4 +19,29 @@ public static class K8sConstants
     /// The role binding name for shoc roles
     /// </summary>
     public const string SHOC_ROLE_BINDING_NAME = "shoc-role-binding";
+    
+    /// <summary>
+    /// The shared set of secrets
+    /// </summary>
+    public const string SHOC_SHARED_SECRET_ALL = "shared-secret-all";
+
+    /// <summary>
+    /// The shared set of configs
+    /// </summary>
+    public const string SHOC_SHARED_CONFIGS_ALL = "shared-configmap-all";
+    
+    /// <summary>
+    /// The shared pull secret
+    /// </summary>
+    public const string SHOC_SHARED_PULL_SECRET = "shared-pull-secret";
+    
+    /// <summary>
+    /// The default version for managed objects
+    /// </summary>
+    public const string SHOC_DEFAULT_OBJECT_VERSION = "0.0.0";
+
+    /// <summary>
+    /// The managed by default value
+    /// </summary>
+    public const string SHOC_MANAGED_BY = "Shoc";
 }

@@ -55,6 +55,36 @@ public class JobTaskStatusRepository : IJobTaskStatusRepository
     }
     
     /// <summary>
+    /// Reports the task running state by id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="jobId">The job id</param>
+    /// <param name="id">The task id</param>
+    /// <param name="input">The input for run</param>
+    /// <returns></returns>
+    public Task<JobTaskModel> RunningTaskById(string workspaceId, string jobId, string id, JobTaskRunningInputModel input)
+    {
+        // ensure referring to the right object
+        input.WorkspaceId = workspaceId;
+        input.JobId = jobId;
+        input.Id = id;
+        
+        // build the argument
+        var arg = new {
+            input.WorkspaceId,
+            input.JobId,
+            input.Id,
+            input.RunningAt,
+            input.Message,
+            RunningTaskStatus = JobTaskStatuses.RUNNING,
+            RunningJobStatus = JobStatuses.RUNNING,
+            TargetJobStatuses = new [] {JobStatuses.CREATED, JobStatuses.PENDING}
+        };
+        
+        return this.dataOps.Connect().QueryFirst("Job.TaskStatus", "RunningTaskById").ExecuteAsync<JobTaskModel>(arg);
+    }
+    
+    /// <summary>
     /// Reports the task completion by id
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

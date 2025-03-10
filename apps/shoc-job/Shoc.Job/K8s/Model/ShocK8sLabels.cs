@@ -1,9 +1,9 @@
-namespace Shoc.Job.Model.Job;
+namespace Shoc.Job.K8s.Model;
 
 /// <summary>
 /// The definitions of job annotations for Kubernetes
 /// </summary>
-public class JobAnnotations
+public class ShocK8sLabels
 {
     /// <summary>
     /// The base namespace for kubernetes annotations
@@ -24,4 +24,9 @@ public class JobAnnotations
     /// The shoc task label
     /// </summary>
     public const string SHOC_JOB_TASK = $"{BASE_NS}/task";
+    
+    /// <summary>
+    /// The shoc pod role label
+    /// </summary>
+    public const string SHOC_POD_ROLE = $"{BASE_NS}/pod-role";
 }

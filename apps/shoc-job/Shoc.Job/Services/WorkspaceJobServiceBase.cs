@@ -1,8 +1,4 @@
-using System.Threading.Tasks;
-using Shoc.Job.Model.Job;
-using Shoc.Job.Model.WorkspaceJob;
-using Shoc.ObjectAccess.Model.Package;
-using Shoc.ObjectAccess.Model.Workspace;
+using Shoc.ObjectAccess.Cluster;
 using Shoc.ObjectAccess.Package;
 using Shoc.ObjectAccess.Workspace;
 
@@ -29,15 +25,22 @@ public class WorkspaceJobServiceBase
     protected readonly IPackageAccessEvaluator packageAccessEvaluator;
 
     /// <summary>
+    /// The cluster access evaluator
+    /// </summary>
+    protected readonly IClusterAccessEvaluator clusterAccessEvaluator;
+
+    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="jobSubmissionService">The job submission service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
-    protected WorkspaceJobServiceBase(JobSubmissionService jobSubmissionService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator)
+    /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
+    protected WorkspaceJobServiceBase(JobSubmissionService jobSubmissionService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
     {
         this.jobSubmissionService = jobSubmissionService;
         this.workspaceAccessEvaluator = workspaceAccessEvaluator;
         this.packageAccessEvaluator = packageAccessEvaluator;
+        this.clusterAccessEvaluator = clusterAccessEvaluator;
     }
 }

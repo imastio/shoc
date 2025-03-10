@@ -389,7 +389,7 @@ public class JobSubmissionService : JobServiceBase
         
         // initialize the shared pull secret for the package
         var pullSecretResult = await jobClient.WithCleanup(job.Namespace, () => jobClient.InitPullSecret(job, packageReference));
-
+        
         // initiate all submissions for all tasks
         var allSubmissions = tasks.Select(task => this.SubmitTask(taskClient, new InitTaskInput
         {

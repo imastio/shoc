@@ -106,7 +106,7 @@ public class JobRepository : IJobRepository
             task.ClusterId = job.ClusterId;
             
             // the next task 
-            task.Sequence = i + 1;
+            task.Sequence = i;
         }
 
         // the labels

@@ -116,6 +116,16 @@ public static class JobErrors
     public const string INVALID_TASKS = "JOB_INVALID_TASKS";
     
     /// <summary>
+    /// The argument is not valid
+    /// </summary>
+    public const string INVALID_ARGUMENT = "JOB_INVALID_ARGUMENT";
+
+    /// <summary>
+    /// The state in Kubernetes is invalid
+    /// </summary>
+    public const string INVALID_KUBERNETES_STATE = "JOB_INVALID_KUBERNETES_STATE";
+    
+    /// <summary>
     /// The unknown error
     /// </summary>
     public const string UNKNOWN_ERROR = "JOB_UNKNOWN_ERROR";
