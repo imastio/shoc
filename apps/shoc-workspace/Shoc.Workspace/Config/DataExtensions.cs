@@ -7,7 +7,9 @@ using Shoc.ApiCore;
 using Shoc.Data.Sql;
 using Shoc.DataProtection;
 using Shoc.DataProtection.Sql;
+using Shoc.ObjectAccess.Job;
 using Shoc.ObjectAccess.Package;
+using Shoc.ObjectAccess.Sql.Job;
 using Shoc.ObjectAccess.Sql.Package;
 using Shoc.ObjectAccess.Sql.Workspace;
 using Shoc.ObjectAccess.Workspace;
@@ -48,6 +50,7 @@ public static class DataConfiguration
         services.AddSingleton<IAccessRepository, AccessRepository>();
         services.AddSingleton<IWorkspaceAccessRepository, WorkspaceAccessRepository>();
         services.AddSingleton<IPackageAccessRepository, PackageAccessRepository>();
+        services.AddSingleton<IJobAccessRepository, JobAccessRepository>();
         services.AddSingleton<IWorkspaceRepository, WorkspaceRepository>();
         services.AddSingleton<IUserWorkspaceRepository, UserWorkspaceRepository>();
         services.AddSingleton<IWorkspaceMemberRepository, WorkspaceMemberRepository>();

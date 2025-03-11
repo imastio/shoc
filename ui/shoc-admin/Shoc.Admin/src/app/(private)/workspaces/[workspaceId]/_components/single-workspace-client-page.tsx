@@ -21,6 +21,7 @@ import ClustersTable from "../clusters/_components/clusters-table";
 import { LabelsTable } from "../(labels)/labels-table";
 import { SecretsTable } from "../(secrets)/secrets-table";
 import { GitReposTable } from "../(git-repos)/git-repos-table";
+import { JobsTable } from "../jobs/_components/jobs-table";
 
 export default function SingleWorkspaceClientPage() {
 
@@ -95,6 +96,11 @@ export default function SingleWorkspaceClientPage() {
                         destroyInactiveTabPane: true,
                         items: [
                             {
+                                key: "0",
+                                label: "Jobs",
+                                children: <JobsTable workspaceId={workspaceId} loading={progress} />
+                            },
+                            {
                                 key: "1",
                                 label: "Members",
                                 children: <WorkspaceMembersTable workspaceId={workspaceId} loading={progress} />
@@ -137,6 +143,9 @@ export default function SingleWorkspaceClientPage() {
                         ]
                     }}
                     tabList={[
+                        {
+                            tabKey: "0"
+                        },
                         {
                             tabKey: "1",
                         },

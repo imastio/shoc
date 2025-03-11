@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Job.Data;
@@ -10,6 +11,11 @@ namespace Shoc.Job.Services;
 /// </summary>
 public class JobService : JobServiceBase
 {
+    /// <summary>
+    /// The default page size
+    /// </summary>
+    private const int DEFAULT_PAGE_SIZE = 20;
+    
     /// <summary>
     /// Creates new instance of the job service
     /// </summary>
@@ -32,6 +38,19 @@ public class JobService : JobServiceBase
 
         // get from the storage
         return await this.jobRepository.GetAll(workspaceId);
+    }
+    
+    /// <summary>
+    /// Gets page of objects by filter
+    /// </summary>
+    /// <returns></returns>
+    public async Task<JobPageResult<JobExtendedModel>> GetExtendedPageBy(string workspaceId, JobFilter filter, int page, int? size)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // get from the storage
+        return await this.jobRepository.GetExtendedPageBy(workspaceId, filter, Math.Abs(page), Math.Abs(size ?? DEFAULT_PAGE_SIZE));
     }
     
     /// <summary>

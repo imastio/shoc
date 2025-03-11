@@ -25,6 +25,7 @@ public static class ClusterOperations
             Path.Combine(sourceDirectory, "Operations", "Access.xml"),
             Path.Combine(sourceDirectory, "Operations", "WorkspaceAccess.xml"),
             Path.Combine(sourceDirectory, "Operations", "PackageAccess.xml"),
+            Path.Combine(sourceDirectory, "Operations", "JobAccess.xml"),
             Path.Combine(sourceDirectory, "Operations", "Cluster.xml")
         };
     }

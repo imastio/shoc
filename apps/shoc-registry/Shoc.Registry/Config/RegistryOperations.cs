@@ -25,6 +25,7 @@ public static class RegistryOperations
             Path.Combine(sourceDirectory, "Operations", "Access.xml"),
             Path.Combine(sourceDirectory, "Operations", "WorkspaceAccess.xml"),
             Path.Combine(sourceDirectory, "Operations", "PackageAccess.xml"),
+            Path.Combine(sourceDirectory, "Operations", "JobAccess.xml"),
             Path.Combine(sourceDirectory, "Operations", "Registry.xml"),
             Path.Combine(sourceDirectory, "Operations", "Registry.Credential.xml"),
             Path.Combine(sourceDirectory, "Operations", "Registry.SigningKey.xml")

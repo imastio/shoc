@@ -32,7 +32,7 @@ public class WorkspaceJobsController : ControllerBase
     {
         this.submissionService = submissionService;
     }
-
+    
     /// <summary>
     /// Creates a new object
     /// </summary>

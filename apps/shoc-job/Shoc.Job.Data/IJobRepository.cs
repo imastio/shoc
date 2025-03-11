@@ -17,6 +17,12 @@ public interface IJobRepository
     Task<IEnumerable<JobModel>> GetAll(string workspaceId);
     
     /// <summary>
+    /// Gets page of the extended objects
+    /// </summary>
+    /// <returns></returns>
+    Task<JobPageResult<JobExtendedModel>> GetExtendedPageBy(string workspaceId, JobFilter filter, int page, int size);
+    
+    /// <summary>
     /// Gets the object by id
     /// </summary>
     /// <returns></returns>

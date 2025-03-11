@@ -12,7 +12,36 @@
       <TextCommand>
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId
-        ORDER BY `LocalId` Asc;
+        ORDER BY `LocalId` DESC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetExtendedPageBy">
+      <TextCommand>
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName
+        FROM `job_jobs` j
+        INNER JOIN `wspc_workspaces` w
+        ON j.WorkspaceId = w.Id
+        INNER JOIN `idp_users` u
+        ON j.UserId = u.Id
+        WHERE j.`WorkspaceId` = @WorkspaceId
+        {if:ByUser {AND j.UserId = @UserId} else {}}
+        {if:ByScope {AND j.`Scope` = @Scope} else {}}
+        {if:ByStatus {AND j.`Status` = @Status} else {}}
+        ORDER BY j.`Updated` DESC
+        LIMIT @Offset, @Count;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="CountBy">
+      <TextCommand>
+        SELECT COUNT(j.Id) as TotalCount
+        FROM `job_jobs` j
+        WHERE j.`WorkspaceId` = @WorkspaceId
+        {if:ByUser {AND j.UserId = @UserId} else {}}
+        {if:ByScope {AND j.`Scope` = @Scope} else {}}
+        {if:ByScope {AND j.`Status` = @Status} else {}}
+        ORDER BY j.`Updated` DESC;
       </TextCommand>
     </SqlOperation>
 
