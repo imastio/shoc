@@ -4,7 +4,6 @@ using Shoc.ApiCore;
 using Shoc.ApiCore.Access;
 using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
-using Shoc.Job.Model.Label;
 using Shoc.Job.Services;
 
 namespace Shoc.Job.Controllers;
@@ -50,6 +49,17 @@ public class JobsController : ControllerBase
             Scope = scope,
             Status = status
         }, page, size);
+    }
+    
+    /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("{id}/extended")]
+    [AuthorizeAnyAccess(JobAccesses.JOB_JOBS_READ)]
+    public Task<JobExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        return this.jobService.GetExtendedById(workspaceId, id);
     }
 }
 

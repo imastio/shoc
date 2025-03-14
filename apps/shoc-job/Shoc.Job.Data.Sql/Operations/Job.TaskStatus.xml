@@ -72,8 +72,12 @@
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @JobId;
 
         UPDATE `job_jobs`
-        SET `Status` =
-        CASE
+        SET 
+        `CompletedAt` = CASE
+          WHEN `CompletedTasks` = `TotalTasks` THEN @CompletedAt
+          ELSE `CompletedAt`
+        END,
+        `Status` = CASE
           WHEN `SucceededTasks` = `TotalTasks` THEN @SucceededJobStatus
           WHEN `FailedTasks` = `TotalTasks` THEN @FailedJobStatus
           WHEN `CancelledTasks` = `TotalTasks` THEN @CancelledJobStatus

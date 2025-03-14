@@ -51,7 +51,7 @@ public class PackagesController : ControllerBase
     }
     
     /// <summary>
-    /// Gets page of the extended objects
+    /// Gets the extended object by id
     /// </summary>
     /// <returns></returns>
     [HttpGet("{id}/extended")]

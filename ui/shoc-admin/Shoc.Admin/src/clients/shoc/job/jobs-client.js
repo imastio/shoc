@@ -27,4 +27,17 @@ export default class JobsClient extends BaseAxiosClient {
     });
   }
 
+  getExtendedById(token, workspaceId, id) {
+
+    const url = this.urlify({
+      api: `api/management/workspaces/${workspaceId}/jobs/${id}/extended`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
 }

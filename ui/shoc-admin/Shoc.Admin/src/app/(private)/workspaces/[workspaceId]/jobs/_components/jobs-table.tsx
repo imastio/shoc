@@ -43,10 +43,10 @@ export function JobsTable({ workspaceId, loading, onUpdate = () => { } }: any) {
             render: (userId: string, row: any) => <Link prefetch={false} href={`/users/${userId}`}>{row.userFullName}</Link>
         },
         {
-            title: "Message",
-            key: "message",
-            dataIndex: "message",
-            ellipsis: true
+            title: "Cluster",
+            key: "clusterId",
+            dataIndex: "clusterId",
+            render: (clusterId: string, row: any) => <Link prefetch={false} href={`/workspaces/${row.workspaceId}/clusters/${clusterId}`}>{row.clusterName}</Link>
         },
         {
             title: "Completed",

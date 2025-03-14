@@ -29,6 +29,12 @@ public interface IJobRepository
     Task<JobModel> GetById(string workspaceId, string id);
     
     /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    Task<JobExtendedModel> GetExtendedById(string workspaceId, string id);
+    
+    /// <summary>
     /// Gets the task objects by id
     /// </summary>
     /// <returns></returns>

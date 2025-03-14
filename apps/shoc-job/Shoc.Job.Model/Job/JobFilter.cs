@@ -19,4 +19,9 @@ public class JobFilter
     /// The status of the job
     /// </summary>
     public string Status { get; set; }
+    
+    /// <summary>
+    /// The target cluster
+    /// </summary>
+    public string ClusterId { get; set; }
 }

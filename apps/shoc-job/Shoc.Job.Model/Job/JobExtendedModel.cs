@@ -33,6 +33,11 @@ public class JobExtendedModel
     public string ClusterId { get; set; }
     
     /// <summary>
+    /// The name of the cluster
+    /// </summary>
+    public string ClusterName { get; set; }
+    
+    /// <summary>
     /// The id of the user submitting the job
     /// </summary>
     public string UserId { get; set; }

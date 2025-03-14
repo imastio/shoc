@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shoc.Core;
 using Shoc.Job.Data;
 using Shoc.Job.Model.Job;
 
@@ -52,17 +53,26 @@ public class JobService : JobServiceBase
         // get from the storage
         return await this.jobRepository.GetExtendedPageBy(workspaceId, filter, Math.Abs(page), Math.Abs(size ?? DEFAULT_PAGE_SIZE));
     }
-    
+        
     /// <summary>
-    /// Gets the object by id
+    /// Gets the extended object by id
     /// </summary>
     /// <returns></returns>
-    public async Task<JobModel> GetById(string workspaceId, string id)
+    public async Task<JobExtendedModel> GetExtendedById(string workspaceId, string id)
     {
         // require the parent object
         await this.validationService.RequireWorkspace(workspaceId);
 
-        // get from the storage
-        return await this.jobRepository.GetById(workspaceId, id);
+        // try load the object
+        var result = await this.jobRepository.GetExtendedById(workspaceId, id);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
     }
 }

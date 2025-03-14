@@ -18,16 +18,19 @@
 
     <SqlOperation Name="GetExtendedPageBy">
       <TextCommand>
-        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName
         FROM `job_jobs` j
         INNER JOIN `wspc_workspaces` w
         ON j.WorkspaceId = w.Id
         INNER JOIN `idp_users` u
         ON j.UserId = u.Id
+        INNER JOIN `clstr_clusters` c
+        ON j.ClusterId = c.Id
         WHERE j.`WorkspaceId` = @WorkspaceId
         {if:ByUser {AND j.UserId = @UserId} else {}}
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
         {if:ByStatus {AND j.`Status` = @Status} else {}}
+        {if:ByCluster {AND j.`ClusterId` = @ClusterId} else {}}
         ORDER BY j.`Updated` DESC
         LIMIT @Offset, @Count;
       </TextCommand>
@@ -41,6 +44,7 @@
         {if:ByUser {AND j.UserId = @UserId} else {}}
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
         {if:ByScope {AND j.`Status` = @Status} else {}}
+        {if:ByCluster {AND j.`ClusterId` = @ClusterId} else {}}
         ORDER BY j.`Updated` DESC;
       </TextCommand>
     </SqlOperation>
@@ -49,6 +53,20 @@
       <TextCommand>
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetExtendedById">
+      <TextCommand>
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName
+        FROM `job_jobs` j
+        INNER JOIN `wspc_workspaces` w
+        ON j.WorkspaceId = w.Id
+        INNER JOIN `idp_users` u
+        ON j.UserId = u.Id
+        INNER JOIN `clstr_clusters` c
+        ON j.ClusterId = c.Id
+        WHERE j.`WorkspaceId` = @WorkspaceId AND j.`Id` = @Id;
       </TextCommand>
     </SqlOperation>
 

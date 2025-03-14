@@ -57,6 +57,7 @@ public class JobRepository : IJobRepository
             filter.UserId,
             filter.Scope,
             filter.Status,
+            filter.ClusterId,
             Offset = page * size,
             Count = size
         };
@@ -66,6 +67,7 @@ public class JobRepository : IJobRepository
             .WithBinding("ByUser", !string.IsNullOrWhiteSpace(arg.UserId))
             .WithBinding("ByScope", !string.IsNullOrWhiteSpace(arg.Scope))
             .WithBinding("ByStatus", !string.IsNullOrWhiteSpace(arg.Status))
+            .WithBinding("ByCluster", !string.IsNullOrWhiteSpace(arg.ClusterId))
             .ExecuteAsync<JobExtendedModel>(arg);
         
         // count total count separately by now
@@ -74,6 +76,7 @@ public class JobRepository : IJobRepository
             .WithBinding("ByUser", !string.IsNullOrWhiteSpace(arg.UserId))
             .WithBinding("ByScope", !string.IsNullOrWhiteSpace(arg.Scope))
             .WithBinding("ByStatus", !string.IsNullOrWhiteSpace(arg.Status))
+            .WithBinding("ByCluster", !string.IsNullOrWhiteSpace(arg.ClusterId))
             .ExecuteAsync<long>(arg);
         
         return new JobPageResult<JobExtendedModel>
@@ -90,6 +93,19 @@ public class JobRepository : IJobRepository
     public Task<JobModel> GetById(string workspaceId, string id)
     {
         return this.dataOps.Connect().QueryFirst("Job", "GetById").ExecuteAsync<JobModel>(new
+        {
+            WorkspaceId = workspaceId,
+            Id = id
+        });
+    }
+
+    /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<JobExtendedModel> GetExtendedById(string workspaceId, string id)
+    {
+        return this.dataOps.Connect().QueryFirst("Job", "GetExtendedById").ExecuteAsync<JobExtendedModel>(new
         {
             WorkspaceId = workspaceId,
             Id = id
