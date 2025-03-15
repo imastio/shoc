@@ -61,12 +61,7 @@ public class JobSubmissionService : JobServiceBase
     /// The resource parser
     /// </summary>
     protected readonly ResourceParser resourceParser;
-
-    /// <summary>
-    /// The task client factory for Kubernetes
-    /// </summary>
-    protected readonly KubernetesTaskClientFactory taskClientFactory;
-
+    
     /// <summary>
     /// The task status repository
     /// </summary>
@@ -83,6 +78,7 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="jobRepository">The job repository</param>
     /// <param name="validationService">The validation service</param>
     /// <param name="jobProtectionProvider">The job protection provider</param>
+    /// <param name="taskRepository">The task repository</param>
     /// <param name="packageResolver">The package resolver</param>
     /// <param name="clusterResolver">The cluster resolver</param>
     /// <param name="secretResolver">The secret resolver</param>
@@ -90,14 +86,13 @@ public class JobSubmissionService : JobServiceBase
     /// <param name="taskClientFactory">The task client factory for Kubernetes</param>
     /// <param name="taskStatusRepository">The task status repository</param>
     /// <param name="schedulerFactory">The scheduler factory</param>
-    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory, IJobTaskStatusRepository taskStatusRepository, ISchedulerFactory schedulerFactory) 
-        : base(jobRepository, validationService, jobProtectionProvider)
+    public JobSubmissionService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, IJobTaskRepository taskRepository, JobPackageResolver packageResolver, JobClusterResolver clusterResolver, JobSecretResolver secretResolver, ResourceParser resourceParser, KubernetesTaskClientFactory taskClientFactory, IJobTaskStatusRepository taskStatusRepository, ISchedulerFactory schedulerFactory) 
+        : base(jobRepository, validationService, jobProtectionProvider, taskClientFactory, taskRepository)
     {
         this.packageResolver = packageResolver;
         this.clusterResolver = clusterResolver;
         this.secretResolver = secretResolver;
         this.resourceParser = resourceParser;
-        this.taskClientFactory = taskClientFactory;
         this.taskStatusRepository = taskStatusRepository;
         this.schedulerFactory = schedulerFactory;
     }
@@ -334,7 +329,7 @@ public class JobSubmissionService : JobServiceBase
     private async Task<JobModel> SubmitImpl(WorkspaceGrpcModel workspace, JobModel job)
     {
         // load the tasks associated with the job
-        var tasks = (await this.jobRepository.GetTasksById(workspace.Id, job.Id)).OrderBy(task => task.Sequence).ToList();
+        var tasks = (await this.taskRepository.GetAll(workspace.Id, job.Id)).OrderBy(task => task.Sequence).ToList();
 
         // check if number of existing tasks matches the jobs total tasks
         if (tasks.Count != job.TotalTasks)

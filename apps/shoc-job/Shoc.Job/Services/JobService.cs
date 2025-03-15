@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Core;
 using Shoc.Job.Data;
+using Shoc.Job.K8s;
 using Shoc.Job.Model.Job;
 
 namespace Shoc.Job.Services;
@@ -16,15 +17,17 @@ public class JobService : JobServiceBase
     /// The default page size
     /// </summary>
     private const int DEFAULT_PAGE_SIZE = 20;
-    
+
     /// <summary>
     /// Creates new instance of the job service
     /// </summary>
     /// <param name="jobRepository">The job repository</param>
     /// <param name="validationService">The validation service</param>
     /// <param name="jobProtectionProvider">The protection provider</param>
-    public JobService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider) 
-        : base(jobRepository, validationService, jobProtectionProvider)
+    /// <param name="taskClientFactory">The task client factory</param>
+    /// <param name="taskRepository">The task repository</param>
+    public JobService(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, KubernetesTaskClientFactory taskClientFactory, IJobTaskRepository taskRepository) 
+        : base(jobRepository, validationService, jobProtectionProvider, taskClientFactory, taskRepository)
     {
     }
     
@@ -54,6 +57,15 @@ public class JobService : JobServiceBase
         return await this.jobRepository.GetExtendedPageBy(workspaceId, filter, Math.Abs(page), Math.Abs(size ?? DEFAULT_PAGE_SIZE));
     }
         
+    /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<JobModel> GetById(string workspaceId, string id)
+    {
+        return this.RequireById(workspaceId, id);
+    }
+    
     /// <summary>
     /// Gets the extended object by id
     /// </summary>

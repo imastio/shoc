@@ -45,3 +45,45 @@ export const jobStatuses = [
 ]
 
 export const jobStatusesMap = Object.assign({}, ...jobStatuses.map((entry) => ({[entry.key]: entry.display})));
+
+export const jobTaskStatuses = [ 
+    {
+        key: 'created', 
+        display: 'Created'
+    },
+    {
+        key: 'pending', 
+        display: 'Pending'
+    },
+    {
+        key: 'running', 
+        display: 'Running'
+    },
+    {
+        key: 'succeeded', 
+        display: 'Succeeded'
+    },
+    {
+        key: 'failed', 
+        display: 'Failed'
+    },
+    {
+        key: 'cancelled', 
+        display: 'Cancelled'
+    }
+]
+
+export const jobTaskStatusesMap = Object.assign({}, ...jobTaskStatuses.map((entry) => ({[entry.key]: entry.display})));
+
+export const jobTaskTypes = [ 
+    {
+        key: 'function', 
+        display: 'Function'
+    },
+    {
+        key: 'mpi', 
+        display: 'MPI'
+    }
+] 
+
+export const jobTaskTypesMap = Object.assign({}, ...jobTaskTypes.map((entry) => ({[entry.key]: entry.display})));

@@ -35,12 +35,6 @@ public interface IJobRepository
     Task<JobExtendedModel> GetExtendedById(string workspaceId, string id);
     
     /// <summary>
-    /// Gets the task objects by id
-    /// </summary>
-    /// <returns></returns>
-    Task<IEnumerable<JobTaskModel>> GetTasksById(string workspaceId, string id);
-    
-    /// <summary>
     /// Creates the object with given input
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>

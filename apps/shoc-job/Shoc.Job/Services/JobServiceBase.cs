@@ -1,6 +1,10 @@
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Shoc.Core;
 using Shoc.Job.Data;
+using Shoc.Job.K8s;
+using Shoc.Job.Model.Job;
 
 namespace Shoc.Job.Services;
 
@@ -23,6 +27,16 @@ public abstract class JobServiceBase
     /// The protection provider
     /// </summary>
     protected readonly JobProtectionProvider jobProtectionProvider;
+    
+    /// <summary>
+    /// The task client factory for Kubernetes
+    /// </summary>
+    protected readonly KubernetesTaskClientFactory taskClientFactory;
+
+    /// <summary>
+    /// The task repository
+    /// </summary>
+    protected readonly IJobTaskRepository taskRepository;
 
     /// <summary>
     /// The job base service
@@ -30,11 +44,37 @@ public abstract class JobServiceBase
     /// <param name="jobRepository">The job repository</param>
     /// <param name="validationService">The validation service</param>
     /// <param name="jobProtectionProvider">The protection provider</param>
-    protected JobServiceBase(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider)
+    /// <param name="taskClientFactory">The task client factory</param>
+    /// <param name="taskRepository">The task repository</param>
+    protected JobServiceBase(IJobRepository jobRepository, JobValidationService validationService, JobProtectionProvider jobProtectionProvider, KubernetesTaskClientFactory taskClientFactory, IJobTaskRepository taskRepository)
     {
         this.jobRepository = jobRepository;
         this.validationService = validationService;
         this.jobProtectionProvider = jobProtectionProvider;
+        this.taskClientFactory = taskClientFactory;
+        this.taskRepository = taskRepository;
+    }
+    
+    /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    protected async Task<JobModel> RequireById(string workspaceId, string id)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // try load the object
+        var result = await this.jobRepository.GetById(workspaceId, id);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
     }
     
     /// <summary>

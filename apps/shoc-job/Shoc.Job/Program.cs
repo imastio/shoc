@@ -45,6 +45,7 @@ builder.Services.AddSingleton<JobProtectionProvider>();
 builder.Services.AddSingleton<JobValidationService>();
 builder.Services.AddSingleton<JobSubmissionService>();
 builder.Services.AddSingleton<JobService>();
+builder.Services.AddSingleton<JobTaskService>();
 builder.Services.AddSingleton<WorkspaceJobSubmissionService>();
 builder.Services.AddSingleton<KubernetesTaskClientFactory>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);

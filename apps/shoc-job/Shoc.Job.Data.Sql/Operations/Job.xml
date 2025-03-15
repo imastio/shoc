@@ -70,13 +70,6 @@
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetTasksById">
-      <TextCommand>
-        SELECT * FROM `job_job_tasks`
-        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @Id;
-      </TextCommand>
-    </SqlOperation>
-    
     <SqlOperation Name="Create" AutoTransaction="No">
 
       <TextCommand>

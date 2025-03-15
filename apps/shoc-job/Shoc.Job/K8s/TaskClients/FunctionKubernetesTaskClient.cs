@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
+using Shoc.Core;
 using Shoc.Job.K8s.Model;
+using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobTask;
 
@@ -116,7 +119,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
     public override async Task<TaskK8sStatusResult> GetTaskStatus(JobModel job, JobTaskModel task)
     {
         // get the target job
-        var batchJobs = await this.GetKubernetesJob(job, task);
+        var batchJobs = await this.GetKubernetesJobs(job, task);
 
         // the target object is not found
         if (batchJobs == null || batchJobs.Count == 0)
@@ -146,5 +149,29 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
             CompletionTime = batchJob.Status.CompletionTime,
             Succeeded = batchJob.Status.Succeeded is > 0
         };
+    }
+
+    /// <summary>
+    /// Gets the task logs
+    /// </summary>
+    /// <param name="job">The job</param>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    public override async Task<Stream> GetTaskLogs(JobModel job, JobTaskModel task)
+    {
+        // get executor pods
+        var pods = await this.GetExecutorPods(job, task);
+
+        // no executor pod
+        if (pods.Count == 0)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_KUBERNETES_STATE, "No executor pod found").AsException();
+        }
+
+        // take the first executor pod (should be one anyway)
+        var pod = pods.First();
+        
+        // return the logs
+        return await this.GetPodLogs(pod);
     }
 }

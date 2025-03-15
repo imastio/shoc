@@ -7,16 +7,54 @@
   <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
 
   <OperationGroup Name="Job.Task">
+
+    <SqlOperation Name="GetAll">
+      <TextCommand>
+        SELECT * FROM `job_job_tasks`
+        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId
+        ORDER BY Sequence ASC;
+      </TextCommand>
+    </SqlOperation>
+
+    <SqlOperation Name="GetAllExtended">
+      <TextCommand>
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.Image as PackageImage
+        FROM `job_job_tasks` j
+        INNER JOIN `wspc_workspaces` w
+        ON j.WorkspaceId = w.Id
+        INNER JOIN `idp_users` u
+        ON j.UserId = u.Id
+        INNER JOIN `clstr_clusters` c
+        ON j.ClusterId = c.Id
+        INNER JOIN `pkg_packages` p
+        ON j.PackageId = p.Id
+        WHERE j.`WorkspaceId` = @WorkspaceId AND j.`JobId` = @JobId
+        ORDER BY j.Sequence ASC;
+      </TextCommand>
+    </SqlOperation>
     
     <SqlOperation Name="GetById">
-
       <TextCommand>
         SELECT * FROM `job_job_tasks`
         WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
       </TextCommand>
-
     </SqlOperation>
 
+    <SqlOperation Name="GetExtendedById">
+      <TextCommand>
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.Image as PackageImage
+        FROM `job_job_tasks` j
+        INNER JOIN `wspc_workspaces` w
+        ON j.WorkspaceId = w.Id
+        INNER JOIN `idp_users` u
+        ON j.UserId = u.Id
+        INNER JOIN `clstr_clusters` c
+        ON j.ClusterId = c.Id
+        INNER JOIN `pkg_packages` p
+        ON j.PackageId = p.Id
+        WHERE j.`WorkspaceId` = @WorkspaceId AND j.`JobId` = @JobId AND j.`Id` = @Id;
+      </TextCommand>
+    </SqlOperation>
 
   </OperationGroup>
 

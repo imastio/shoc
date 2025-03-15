@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Shoc.Core;
 using Shoc.Job.K8s.Model;
@@ -69,6 +70,14 @@ public abstract class BaseKubernetesTaskClient : KubernetesClientBase, IKubernet
     /// <param name="task">The task instance</param>
     /// <returns></returns>
     public abstract Task<TaskK8sStatusResult> GetTaskStatus(JobModel job, JobTaskModel task);
+    
+    /// <summary>
+    /// Gets the task logs
+    /// </summary>
+    /// <param name="job">The job</param>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    public abstract Task<Stream> GetTaskLogs(JobModel job, JobTaskModel task);
     
     /// <summary>
     /// Disposes the client

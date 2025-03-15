@@ -1,14 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
-using Dapper;
 using Imast.DataOps.Api;
-using Shoc.Core;
-using Shoc.Job.Model;
-using Shoc.Job.Model.Job;
-using Shoc.Job.Model.JobGitRepo;
-using Shoc.Job.Model.JobLabel;
 using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.Data.Sql;
@@ -33,12 +25,52 @@ public class JobTaskRepository : IJobTaskRepository
     }
 
     /// <summary>
+    /// Gets all the objects
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<JobTaskModel>> GetAll(string workspaceId, string jobId)
+    {
+        return this.dataOps.Connect().Query("Job.Task", "GetAll").ExecuteAsync<JobTaskModel>(new
+        {
+            WorkspaceId = workspaceId,
+            JobId = jobId
+        });
+    }
+
+    /// <summary>
+    /// Gets all the extended objects
+    /// </summary>
+    /// <returns></returns>
+    public Task<IEnumerable<JobTaskExtendedModel>> GetAllExtended(string workspaceId, string jobId)
+    {
+        return this.dataOps.Connect().Query("Job.Task", "GetAllExtended").ExecuteAsync<JobTaskExtendedModel>(new
+        {
+            WorkspaceId = workspaceId,
+            JobId = jobId
+        });
+    }
+
+    /// <summary>
     /// Gets the object by id
     /// </summary>
     /// <returns></returns>
     public Task<JobTaskModel> GetById(string workspaceId, string jobId, string id)
     {
         return this.dataOps.Connect().QueryFirst("Job.Task", "GetById").ExecuteAsync<JobTaskModel>(new
+        {
+            WorkspaceId = workspaceId,
+            JobId = jobId,
+            Id = id
+        });
+    }
+    
+    /// <summary>
+    /// Gets the extended object by id
+    /// </summary>
+    /// <returns></returns>
+    public Task<JobTaskExtendedModel> GetExtendedById(string workspaceId, string jobId, string id)
+    {
+        return this.dataOps.Connect().QueryFirst("Job.Task", "GetExtendedById").ExecuteAsync<JobTaskExtendedModel>(new
         {
             WorkspaceId = workspaceId,
             JobId = jobId,

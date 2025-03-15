@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Shoc.Job.K8s.Model;
 using Shoc.Job.Model.Job;
@@ -37,4 +38,12 @@ public interface IKubernetesTaskClient : IDisposable
     /// <param name="task">The task instance</param>
     /// <returns></returns>
     Task<TaskK8sStatusResult> GetTaskStatus(JobModel job, JobTaskModel task);
+
+    /// <summary>
+    /// Gets the task logs
+    /// </summary>
+    /// <param name="job">The job</param>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    Task<Stream> GetTaskLogs(JobModel job, JobTaskModel task);
 }

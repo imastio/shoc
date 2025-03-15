@@ -1,6 +1,7 @@
 import dayjs from "@/extended/time";
 
 export const localDateTime = (dateStr: string) => dateStr ? dayjs.utc(dateStr).local().format("YYYY-MM-DD HH:mm") : "";
+export const localDateTimeWithSec = (dateStr: string) => dateStr ? dayjs.utc(dateStr).local().format("YYYY-MM-DD HH:mm:ss") : "";
 export const localDate = (dateStr: string) => dateStr ? dayjs.utc(dateStr).local().format("YYYY-MM-DD") : "";
 export const localYear = (dateStr: string) => dateStr ? dayjs.utc(dateStr).local().format("YYYY") : "";
 

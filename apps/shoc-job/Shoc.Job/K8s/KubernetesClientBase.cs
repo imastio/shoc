@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using k8s;
@@ -83,7 +84,7 @@ public abstract class KubernetesClientBase
     /// <param name="job">The job instance</param>
     /// <param name="task">The task instance</param>
     /// <returns></returns>
-    protected async Task<IList<V1Job>> GetKubernetesJob(JobModel job, JobTaskModel task)
+    protected async Task<IList<V1Job>> GetKubernetesJobs(JobModel job, JobTaskModel task)
     {
         // load matching jobs
         var matches = await this.client.BatchV1.ListNamespacedJobAsync(
@@ -91,7 +92,39 @@ public abstract class KubernetesClientBase
             labelSelector: $"{ShocK8sLabels.SHOC_JOB_TASK}={task.Id}"
         );
 
-        // try to pick the first job
+        // return matching items
+        return matches.Items;
+    }
+    
+    /// <summary>
+    /// Gets the stream of logs based on the pod
+    /// </summary>
+    /// <param name="pod">The pod to watch</param>
+    /// <returns></returns>
+    protected async Task<Stream> GetPodLogs(V1Pod pod)
+    {
+        // get the logs stream
+        var result = await this.client.CoreV1.ReadNamespacedPodLogWithHttpMessagesAsync(pod.Name(), pod.Namespace(), follow: true);
+
+        // return matching items
+        return result.Body;
+    }
+    
+    /// <summary>
+    /// Gets the kubernetes job based on the selector
+    /// </summary>
+    /// <param name="job">The job instance</param>
+    /// <param name="task">The task instance</param>
+    /// <returns></returns>
+    protected async Task<IList<V1Pod>> GetExecutorPods(JobModel job, JobTaskModel task)
+    {
+        // load matching jobs
+        var matches = await this.client.ListNamespacedPodAsync(
+            job.Namespace,
+            labelSelector: $"{ShocK8sLabels.SHOC_JOB_TASK}={task.Id},{ShocK8sLabels.SHOC_POD_ROLE}={ShocK8sPodRoles.EXECUTOR}"
+        );
+
+        // return matching items
         return matches.Items;
     }
     

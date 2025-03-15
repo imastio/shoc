@@ -11,12 +11,11 @@ import PageContainer from "@/components/general/page-container";
 import { localDateTime } from "@/extended/format";
 import Link from "antd/es/typography/Link";
 import CodeBlock from "@/components/general/code-block";
-import JobsClient from "@/clients/shoc/job/jobs-client";
-import { jobScopesMap } from "@/well-known/jobs";
-import JobStatus from "@/components/job/job-status";
-import { JobTasksTable } from "./job-tasks-table";
+import { jobTaskTypesMap } from "@/well-known/jobs";
+import JobTasksClient from "@/clients/shoc/job/job-tasks-client";
+import JobTaskStatus from "@/components/job/job-task-status";
 
-export default function SingleJobClientPage() {
+export default function SingleJobTaskClientPage() {
 
     const params = useParams();
     const { withToken } = useApiAuthentication();
@@ -26,12 +25,13 @@ export default function SingleJobClientPage() {
 
     const workspaceId = params?.workspaceId as string || '';
     const jobId = params?.jobId as string || '';
+    const taskId = params?.taskId as string || '';
 
-    const load = useCallback(async (workspaceId: string, id: string) => {
+    const load = useCallback(async (workspaceId: string, jobId: string, id: string) => {
 
         setProgress(true);
 
-        const result = await withToken((token: string) => selfClient(JobsClient).getExtendedById(token, workspaceId, id));
+        const result = await withToken((token: string) => selfClient(JobTasksClient).getExtendedById(token, workspaceId, jobId, id));
 
         setProgress(false);
 
@@ -44,41 +44,41 @@ export default function SingleJobClientPage() {
     }, [withToken]);
 
     useEffect(() => {
-        if(workspaceId && jobId){
-            load(workspaceId, jobId);
+        if(workspaceId && jobId && taskId){
+            load(workspaceId, jobId, taskId);
         }
-    }, [load, workspaceId, jobId])
+    }, [load, workspaceId, jobId, taskId])
 
     return (
         <>
             <ObjectContainer loading={progress} fatalError={fatalError}>
-                <PageContainer fluid title={item.localId ? `Job ${item.localId}` : "Job Details"}
-                    tags={<JobStatus status={item.status} />} 
+                <PageContainer fluid title={Number.isSafeInteger(item.sequence) ? `Task ${item.sequence}` : "Job Task Details"}
+                    tags={<JobTaskStatus status={item.status} />} 
                     extra={[
-                        <Button key="reload" title="Reload" type="default" disabled={progress} onClick={() => load(workspaceId, jobId)}><ReloadOutlined /></Button>,
+                        <Button key="reload" title="Reload" type="default" disabled={progress} onClick={() => load(workspaceId, jobId, taskId)}><ReloadOutlined /></Button>,
                     ]}
                     tabProps={{
                         destroyInactiveTabPane: true,
                         items: [
                             {
-                                key: "0",
-                                label: "Tasks",
-                                children: <JobTasksTable workspaceId={workspaceId} jobId={jobId} />
+                                key: "1",
+                                label: "Spec",
+                                children: <CodeBlock language="json" code={item.spec ? JSON.stringify(JSON.parse(item.spec), null, 4) : ''} />
                             },
                             {
-                                key: "1",
-                                label: "Manifest",
-                                children: <CodeBlock language="json" code={item.manifest ? JSON.stringify(JSON.parse(item.manifest), null, 4) : ''} />
+                                key: "2",
+                                label: "Runtime",
+                                children: <CodeBlock language="json" code={item.runtime ? JSON.stringify(JSON.parse(item.runtime), null, 4) : ''} />
                             }
                         ]
                     }}
-                    tabList={[{ key: "0" }, { key: "1" }]}
+                    tabList={[]}
                     content={<>
                         <Row gutter={16}>
                             <Col span={24}>
                                 <Descriptions column={2}>
-                                    <Descriptions.Item label="Identity">{item.localId}</Descriptions.Item>
-                                    <Descriptions.Item label="Scope">{jobScopesMap[item.scope] || item.scope}</Descriptions.Item>
+                                    <Descriptions.Item label="Identity">{item.sequence}</Descriptions.Item>
+                                    <Descriptions.Item label="Type">{jobTaskTypesMap[item.type] || item.type}</Descriptions.Item>
                                     <Descriptions.Item label="Cluster"><Link href={`/workspaces/${item.workspaceId}/clusters/${item.clusterId}`}>{item.clusterName}</Link></Descriptions.Item>
                                     <Descriptions.Item label="Workspace"><Link href={`/workspaces/${item.workspaceId}`}>{item.workspaceName}</Link></Descriptions.Item>
                                     <Descriptions.Item label="Owner"><Link href={`/users/${item.userId}`}>{item.userFullName}</Link></Descriptions.Item>
