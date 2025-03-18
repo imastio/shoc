@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Access;
+using Shoc.ApiCore.Auth;
 using Shoc.Job.Model;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Services;
@@ -40,13 +41,17 @@ public class JobsController : ControllerBase
         [FromQuery] string userId,
         [FromQuery] string scope,
         [FromQuery] string status,
+        [FromQuery] string clusterId,
         [FromQuery] int page, 
         [FromQuery] int? size)
     {
         return this.jobService.GetExtendedPageBy(workspaceId, new JobFilter
         {
+            AccessibleOnly = false,
+            AccessingUserId = this.HttpContext.GetPrincipal().Id,
             UserId = userId,
             Scope = scope,
+            ClusterId = clusterId,
             Status = status
         }, page, size);
     }

@@ -42,7 +42,7 @@ public class WorkspaceLabelService
         var items = await this.labelService.GetAll(workspaceId);
         
         // ensure we have a permission to view workspace secrets
-        await this.accessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_LABELS);
+        await this.accessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_LABELS);
 
         // map and return the result
         return items;

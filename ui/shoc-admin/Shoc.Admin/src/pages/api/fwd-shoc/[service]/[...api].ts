@@ -1,13 +1,12 @@
 import { auth } from "@/addons/auth";
 import { getJwtNode } from "@/addons/auth/actions";
-import { decodeJwt } from "@/addons/oauth2/utils";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse, PageConfig } from "next";
 
 export const config: PageConfig = {
   api: {
     externalResolver: true,
-    bodyParser: false,
+    bodyParser: false
   },
 };
 
@@ -26,6 +25,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   req.url = req.url?.replace('/api/fwd-shoc', '');
 
+  const sse = req.headers["x-shoc-sse"];
+  if(Array.isArray(sse) && sse[0] === 'yes' || sse === 'yes'){ 
+    res.appendHeader('Content-Encoding', 'none')
+  }
+  
   proxy.web(req, res, {
     changeOrigin: true,
     target: apiRoot,

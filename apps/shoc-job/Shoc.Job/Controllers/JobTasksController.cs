@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.ApiCore;
@@ -24,12 +24,19 @@ public class JobTasksController : ControllerBase
     private readonly JobTaskService jobTaskService;
 
     /// <summary>
+    /// The log streaming service
+    /// </summary>
+    private readonly LogStreamingService logStreamingService;
+
+    /// <summary>
     /// Creates new instance of controller
     /// </summary>
     /// <param name="jobTaskService">The reference to service</param>
-    public JobTasksController(JobTaskService jobTaskService)
+    /// <param name="logStreamingService">The log streaming service</param>
+    public JobTasksController(JobTaskService jobTaskService, LogStreamingService logStreamingService)
     {
         this.jobTaskService = jobTaskService;
+        this.logStreamingService = logStreamingService;
     }
 
     /// <summary>
@@ -60,16 +67,13 @@ public class JobTasksController : ControllerBase
     /// <returns></returns>
     [HttpGet("{id}/logs")]
     [AuthorizeAnyAccess(JobAccesses.JOB_JOBS_READ)]
-    public async Task<Stream> GetLogsById(string workspaceId, string jobId, string id)
+    public async Task GetLogsById(string workspaceId, string jobId, string id, CancellationToken cancellationToken)
     {
-        // get the stream
-        var stream = this.jobTaskService.GetLogsById(workspaceId, jobId, id);
+        // get the log stream
+        var stream = await this.jobTaskService.GetLogsById(workspaceId, jobId, id);
         
-        // ensure stream is disposed afterwards
-        this.Response.RegisterForDispose(stream);
-        
-        // return the stream
-        return await stream;
+        // redirect the input stream to response
+        await this.logStreamingService.StreamLogs(stream, this.Response, cancellationToken);
     }
 }
 

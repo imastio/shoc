@@ -39,18 +39,12 @@ export default class JobTasksClient extends BaseAxiosClient {
     });
   }
 
-  getLogsById(token, workspaceId, jobId, id, onProgress) {
+  getLogsByIdUrl(workspaceId, jobId, id){
 
     const url = this.urlify({
       api: `api/management/workspaces/${workspaceId}/jobs/${jobId}/tasks/${id}/logs`
     });
 
-    return this.webClient.get(url, {
-      onDownloadProgress: onProgress,
-      headers: {
-        ...this.authBearer(token)
-      }
-    });
+    return { url }
   }
-
 }

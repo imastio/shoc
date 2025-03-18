@@ -6,6 +6,16 @@ namespace Shoc.Job.Model.Job;
 public class JobFilter
 {
     /// <summary>
+    /// Show only accessible jobs
+    /// </summary>
+    public bool AccessibleOnly { get; set; }
+    
+    /// <summary>
+    /// The accessing user id
+    /// </summary>
+    public string AccessingUserId { get; set; }
+    
+    /// <summary>
     /// The owner of the job
     /// </summary>
     public string UserId { get; set; }

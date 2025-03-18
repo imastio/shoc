@@ -19,11 +19,12 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
     /// Creates new instance of the service
     /// </summary>
     /// <param name="jobSubmissionService">The job submission service</param>
+    /// <param name="jobService">The job service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
     /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
-    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
-        : base(jobSubmissionService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator)
+    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
+        : base(jobSubmissionService, jobService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator)
     {
     }
     

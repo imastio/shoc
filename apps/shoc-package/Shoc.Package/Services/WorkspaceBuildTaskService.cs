@@ -43,7 +43,7 @@ public class WorkspaceBuildTaskService
         var items = await this.buildTaskService.GetAll(workspaceId);
         
         // ensure we have a permission to view workspace secrets
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_PACKAGES);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_PACKAGES);
 
         // map and return the result
         return items;

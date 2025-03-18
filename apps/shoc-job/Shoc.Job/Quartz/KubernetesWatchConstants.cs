@@ -38,5 +38,5 @@ public static class KubernetesWatchConstants
     /// <summary>
     /// Triggers to automatically apply for watching job
     /// </summary>
-    public static readonly int[] NEXT_TRIGGERS = new[] { 10, 30, 60, 90, 120 };
+    public static readonly int[] NEXT_TRIGGERS = [5, 5, 5, 5, 10, 10, 10, 10, 20, 20, 20, 20, 30, 30, 60, 90, 120];
 }

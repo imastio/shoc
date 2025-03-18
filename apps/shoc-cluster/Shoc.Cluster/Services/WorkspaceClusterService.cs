@@ -40,7 +40,7 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         var items = await this.clusterService.GetAllExtended(workspaceId);
         
         // ensure we have a permission to view workspace clusters
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
 
         // map and return the result
         return items.Select(Map);
@@ -53,7 +53,7 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
     public async Task<WorkspaceClusterModel> GetByName(string userId, string workspaceId, string name)
     {
         // ensure we have a permission to view workspace clusters
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
 
         // gets the item by name
         var item = await this.clusterService.GetExtendedByName(workspaceId, name);
@@ -72,7 +72,7 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         var count = await this.clusterService.CountAll(workspaceId);
         
         // ensure we have a permission to view workspace clusters
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
 
         // map and return the result
         return new WorkspaceClusterCountModel

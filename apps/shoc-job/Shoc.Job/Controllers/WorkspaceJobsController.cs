@@ -20,6 +20,11 @@ namespace Shoc.Job.Controllers;
 public class WorkspaceJobsController : ControllerBase
 {
     /// <summary>
+    /// The job service
+    /// </summary>
+    private readonly WorkspaceJobService jobService;
+    
+    /// <summary>
     /// The submission service
     /// </summary>
     private readonly WorkspaceJobSubmissionService submissionService;
@@ -27,10 +32,37 @@ public class WorkspaceJobsController : ControllerBase
     /// <summary>
     /// Creates new instance of controller
     /// </summary>
+    /// <param name="jobService">The job service</param>
     /// <param name="submissionService">The submission service</param>
-    public WorkspaceJobsController(WorkspaceJobSubmissionService submissionService)
+    public WorkspaceJobsController(WorkspaceJobService jobService, WorkspaceJobSubmissionService submissionService)
     {
+        this.jobService = jobService;
         this.submissionService = submissionService;
+    }
+    
+    /// <summary>
+    /// Gets all the objects
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public Task<JobPageResult<WorkspaceJobModel>> GetPageBy(string workspaceId, 
+        [FromQuery] string userId,
+        [FromQuery] string scope,
+        [FromQuery] string status,
+        [FromQuery] string clusterId,
+        [FromQuery] bool all,
+        [FromQuery] int page, 
+        [FromQuery] int? size)
+    {
+        return this.jobService.GetPageBy(this.HttpContext.GetPrincipal().Id, workspaceId, new JobFilter
+        {
+            AccessibleOnly = !all,
+            AccessingUserId = this.HttpContext.GetPrincipal().Id,
+            UserId = userId,
+            Scope = scope,
+            ClusterId = clusterId,
+            Status = status
+        }, page, size);
     }
     
     /// <summary>

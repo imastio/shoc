@@ -55,6 +55,7 @@ public class WorkspacePermissionCalculator
                 WorkspacePermissions.WORKSPACE_UPDATE_GIT_REPO,
                 WorkspacePermissions.WORKSPACE_DELETE_GIT_REPO,
                 WorkspacePermissions.WORKSPACE_LIST_JOBS,
+                WorkspacePermissions.WORKSPACE_LIST_ALL_JOBS,
                 WorkspacePermissions.WORKSPACE_SUBMIT_JOB
             }
         },

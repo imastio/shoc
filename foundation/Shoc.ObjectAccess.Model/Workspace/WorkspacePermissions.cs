@@ -180,6 +180,11 @@ public class WorkspacePermissions
     public const string WORKSPACE_LIST_JOBS = "workspace_list_jobs";
     
     /// <summary>
+    /// View all jobs of the workspace
+    /// </summary>
+    public const string WORKSPACE_LIST_ALL_JOBS = "workspace_list_all_jobs";
+    
+    /// <summary>
     /// Submits job to the workspace
     /// </summary>
     public const string WORKSPACE_SUBMIT_JOB = "workspace_submit_job";

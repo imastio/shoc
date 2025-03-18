@@ -104,10 +104,10 @@ public abstract class KubernetesClientBase
     protected async Task<Stream> GetPodLogs(V1Pod pod)
     {
         // get the logs stream
-        var result = await this.client.CoreV1.ReadNamespacedPodLogWithHttpMessagesAsync(pod.Name(), pod.Namespace(), follow: true);
+        var result = await this.client.CoreV1.ReadNamespacedPodLogAsync(pod.Name(), pod.Namespace(), follow: true);
 
         // return matching items
-        return result.Body;
+        return result;
     }
     
     /// <summary>

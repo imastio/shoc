@@ -49,7 +49,7 @@ public class WorkspaceUserSecretService
         var items = await this.userSecretService.GetAllExtended(workspaceId, userId);
         
         // ensure we have a permission to view workspace secrets
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS);
 
         // map and return the result
         return items.Select(Map);
@@ -65,7 +65,7 @@ public class WorkspaceUserSecretService
         var count = await this.userSecretService.CountAll(workspaceId, userId);
         
         // ensure we have a permission to view workspace secrets
-        await this.workspaceAccessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS);
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_USER_SECRETS);
 
         // map and return the result
         return new WorkspaceUserSecretCountModel

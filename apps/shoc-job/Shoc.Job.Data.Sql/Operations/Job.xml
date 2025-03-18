@@ -27,6 +27,7 @@
         INNER JOIN `clstr_clusters` c
         ON j.ClusterId = c.Id
         WHERE j.`WorkspaceId` = @WorkspaceId
+        {if:AccessibleOnly {AND (j.Scope in @AccessibleScopes OR j.UserId = @AccessingUserId)} else {}}
         {if:ByUser {AND j.UserId = @UserId} else {}}
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
         {if:ByStatus {AND j.`Status` = @Status} else {}}
@@ -41,9 +42,10 @@
         SELECT COUNT(j.Id) as TotalCount
         FROM `job_jobs` j
         WHERE j.`WorkspaceId` = @WorkspaceId
+        {if:AccessibleOnly {AND (j.Scope in @AccessibleScopes OR j.UserId = @AccessingUserId)} else {}}
         {if:ByUser {AND j.UserId = @UserId} else {}}
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
-        {if:ByScope {AND j.`Status` = @Status} else {}}
+        {if:ByStatus {AND j.`Status` = @Status} else {}}
         {if:ByCluster {AND j.`ClusterId` = @ClusterId} else {}}
         ORDER BY j.`Updated` DESC;
       </TextCommand>

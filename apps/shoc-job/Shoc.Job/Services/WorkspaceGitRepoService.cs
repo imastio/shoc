@@ -42,7 +42,7 @@ public class WorkspaceGitRepoService
         var items = await this.gitRepoService.GetAll(workspaceId);
         
         // ensure we have a permission to view workspace secrets
-        await this.accessEvaluator.Evaluate(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_GIT_REPOS);
+        await this.accessEvaluator.Ensure(userId, workspaceId, WorkspacePermissions.WORKSPACE_VIEW, WorkspacePermissions.WORKSPACE_LIST_GIT_REPOS);
 
         // map and return the result
         return items;

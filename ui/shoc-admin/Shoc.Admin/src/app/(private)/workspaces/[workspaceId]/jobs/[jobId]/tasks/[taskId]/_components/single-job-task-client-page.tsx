@@ -14,6 +14,7 @@ import CodeBlock from "@/components/general/code-block";
 import { jobTaskTypesMap } from "@/well-known/jobs";
 import JobTasksClient from "@/clients/shoc/job/job-tasks-client";
 import JobTaskStatus from "@/components/job/job-task-status";
+import LogsArea from "./logs-area";
 
 export default function SingleJobTaskClientPage() {
 
@@ -61,15 +62,20 @@ export default function SingleJobTaskClientPage() {
                         destroyInactiveTabPane: true,
                         items: [
                             {
-                                key: "1",
+                                key: "0",
                                 label: "Spec",
                                 children: <CodeBlock language="json" code={item.spec ? JSON.stringify(JSON.parse(item.spec), null, 4) : ''} />
                             },
                             {
-                                key: "2",
+                                key: "1",
                                 label: "Runtime",
                                 children: <CodeBlock language="json" code={item.runtime ? JSON.stringify(JSON.parse(item.runtime), null, 4) : ''} />
-                            }
+                            },
+                            {
+                                key: "2",
+                                label: "Logs",
+                                children: <LogsArea workspaceId={workspaceId} jobId={jobId} taskId={taskId} />
+                            },
                         ]
                     }}
                     tabList={[]}

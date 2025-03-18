@@ -54,6 +54,9 @@ public class JobRepository : IJobRepository
         var arg = new
         {
             WorkspaceId = workspaceId,
+            filter.AccessibleOnly,
+            filter.AccessingUserId,
+            AccessibleScopes = new[] {JobScopes.WORKSPACE},
             filter.UserId,
             filter.Scope,
             filter.Status,
@@ -64,6 +67,7 @@ public class JobRepository : IJobRepository
         
         // load page of objects
         var items = await this.dataOps.Connect().Query("Job", "GetExtendedPageBy")
+            .WithBinding("AccessibleOnly", arg.AccessibleOnly && !string.IsNullOrWhiteSpace(arg.AccessingUserId))
             .WithBinding("ByUser", !string.IsNullOrWhiteSpace(arg.UserId))
             .WithBinding("ByScope", !string.IsNullOrWhiteSpace(arg.Scope))
             .WithBinding("ByStatus", !string.IsNullOrWhiteSpace(arg.Status))
@@ -73,6 +77,7 @@ public class JobRepository : IJobRepository
         // count total count separately by now
         // fix the multi-query with binding
         var totalCount = await this.dataOps.Connect().QueryFirst("Job", "CountBy")
+            .WithBinding("AccessibleOnly", arg.AccessibleOnly && !string.IsNullOrWhiteSpace(arg.AccessingUserId))
             .WithBinding("ByUser", !string.IsNullOrWhiteSpace(arg.UserId))
             .WithBinding("ByScope", !string.IsNullOrWhiteSpace(arg.Scope))
             .WithBinding("ByStatus", !string.IsNullOrWhiteSpace(arg.Status))
