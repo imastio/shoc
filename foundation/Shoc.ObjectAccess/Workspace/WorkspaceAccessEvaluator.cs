@@ -100,6 +100,6 @@ public class WorkspaceAccessEvaluator : IWorkspaceAccessEvaluator
             return;
         }
 
-        throw ErrorDefinition.Access().AsException();
+        throw ErrorDefinition.Access(Errors.ACCESS_ERROR, $"Access denied due to lack of permissions: {string.Join(", ", evaluationResult.RejectedPermissions)}").AsException();
     }
 }

@@ -36,12 +36,14 @@ public class WorkspaceJobService : WorkspaceJobServiceBase
         // ensure accessing with proper user
         filter.AccessingUserId = userId;
         
-        // ensure we have a permissions
-        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, 
+        //ensure we have a permissions
+        await this.workspaceAccessEvaluator.Ensure(
+            userId, 
+            workspaceId, 
             WorkspacePermissions.WORKSPACE_VIEW, 
             filter.AccessibleOnly ? WorkspacePermissions.WORKSPACE_LIST_JOBS : WorkspacePermissions.WORKSPACE_LIST_ALL_JOBS
         );
-        
+
         // load items
         var items = await this.jobService.GetExtendedPageBy(workspaceId, filter, page, size);
 
