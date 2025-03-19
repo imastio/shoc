@@ -28,8 +28,20 @@ public interface IJobTaskRepository
     Task<JobTaskModel> GetById(string workspaceId, string jobId, string id);
     
     /// <summary>
+    /// Gets the object by sequence
+    /// </summary>
+    /// <returns></returns>
+    Task<JobTaskModel> GetBySequence(string workspaceId, string jobId, long sequence);
+    
+    /// <summary>
     /// Gets the extended object by id
     /// </summary>
     /// <returns></returns>
     Task<JobTaskExtendedModel> GetExtendedById(string workspaceId, string jobId, string id);
+
+    /// <summary>
+    /// Gets the extended object by sequence
+    /// </summary>
+    /// <returns></returns>
+    Task<JobTaskExtendedModel> GetExtendedBySequence(string workspaceId, string jobId, long sequence);
 }

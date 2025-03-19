@@ -48,6 +48,7 @@ builder.Services.AddSingleton<JobService>();
 builder.Services.AddSingleton<JobTaskService>();
 builder.Services.AddSingleton<WorkspaceJobSubmissionService>();
 builder.Services.AddSingleton<WorkspaceJobService>();
+builder.Services.AddSingleton<WorkspaceJobTaskService>();
 builder.Services.AddSingleton<KubernetesTaskClientFactory>();
 builder.Services.AddSingleton<LogStreamingService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);

@@ -9,8 +9,8 @@ import workspaceSecretsCommand from './workspace-secrets';
 import templatesCommand from './templates';
 import jobsCommand from './jobs';
 import buildCommand from './build';
-import gitCommand from './git';
 import runCommand from './run';
+import logsCommand from './logs';
 
 const program = createCommand();
 
@@ -28,13 +28,12 @@ program.addCommand(runCommand);
 program.addCommand(configCommand);
 program.addCommand(authCommand);
 program.addCommand(jobsCommand)
+program.addCommand(logsCommand)
 program.addCommand(templatesCommand);
 program.addCommand(workspacesCommand);
 program.addCommand(clustersCommand);
 program.addCommand(userSecretsCommand);
 program.addCommand(workspaceSecretsCommand);
-program.addCommand(gitCommand);
-
 
 export default program;
 

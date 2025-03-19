@@ -20,6 +20,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
             "@/*": [

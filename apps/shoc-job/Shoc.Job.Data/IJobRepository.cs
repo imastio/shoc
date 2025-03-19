@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
-using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.Data;
 
@@ -33,6 +32,12 @@ public interface IJobRepository
     /// </summary>
     /// <returns></returns>
     Task<JobExtendedModel> GetExtendedById(string workspaceId, string id);
+
+    /// <summary>
+    /// Gets the extended object by local id
+    /// </summary>
+    /// <returns></returns>
+    Task<JobExtendedModel> GetExtendedByLocalId(string workspaceId, long localId);
     
     /// <summary>
     /// Creates the object with given input

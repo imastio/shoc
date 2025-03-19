@@ -7,6 +7,7 @@ import WorkspaceJobsClient from '@/clients/shoc/job/workspace-jobs-client';
 import UserWorkspacesClient from '@/clients/shoc/workspace/user-workspaces-client';
 import { logger } from '@/services/logger';
 import { table } from 'table';
+import { durationBetween } from '@/extended/format';
 
 const jobsCommand = createCommand('jobs');
 
@@ -37,7 +38,7 @@ jobsCommand.description('List available jobs')
 
         const { items, totalCount } = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceJobsClient).getBy(ctx.token, workspace.id, filter))
 
-        const header = ['Job', 'Status', 'Cluster', 'User', 'Completed', 'Scope'];
+        const header = ['Job', 'Status', 'Cluster', 'User', 'Completed', 'Scope', 'Waiting', 'Running'];
         const rows = [header];
 
         items.forEach((item: any) => rows.push([
@@ -46,13 +47,18 @@ jobsCommand.description('List available jobs')
             item.clusterName ?? '',
             item.userFullName ?? '',
             `${item.completedTasks} / ${item.totalTasks}`,
-            item.scope
+            item.scope,
+            durationBetween(item.created, item.runningAt),
+            item.runningAt ? durationBetween(item.runningAt, item.completedAt) : "N/A"
         ]))
+        
 
         logger.just(table(rows, { 
             drawHorizontalLine: () => false, 
             drawVerticalLine: () => false 
         }));
+
+        logger.just(`Current page ${page}: ${items.length} jobs out of ${totalCount}`)
     }));
 
 export default jobsCommand;

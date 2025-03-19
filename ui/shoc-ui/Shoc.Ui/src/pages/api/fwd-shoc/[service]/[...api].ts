@@ -24,6 +24,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   req.url = req.url?.replace('/api/fwd-shoc', '');
 
+  const sse = req.headers["x-shoc-sse"];
+  if(Array.isArray(sse) && sse[0] === 'yes' || sse === 'yes'){ 
+    res.appendHeader('Content-Encoding', 'none')
+  }
+  
   proxy.web(req, res, {
     changeOrigin: true,
     target: apiRoot,

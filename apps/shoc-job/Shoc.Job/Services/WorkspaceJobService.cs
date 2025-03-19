@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.WorkspaceJob;
 using Shoc.ObjectAccess.Cluster;
+using Shoc.ObjectAccess.Job;
+using Shoc.ObjectAccess.Model.Job;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Package;
 using Shoc.ObjectAccess.Workspace;
@@ -10,7 +12,7 @@ using Shoc.ObjectAccess.Workspace;
 namespace Shoc.Job.Services;
 
 /// <summary>
-/// The workspace job submission service
+/// The workspace job service
 /// </summary>
 public class WorkspaceJobService : WorkspaceJobServiceBase
 {
@@ -22,8 +24,9 @@ public class WorkspaceJobService : WorkspaceJobServiceBase
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
     /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
-    public WorkspaceJobService(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
-        : base(jobSubmissionService, jobService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator)
+    /// <param name="jobAccessEvaluator">The job access evaluator</param>
+    public WorkspaceJobService(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator, IJobAccessEvaluator jobAccessEvaluator)
+        : base(jobSubmissionService, jobService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator, jobAccessEvaluator)
     {
     }
     
@@ -36,7 +39,7 @@ public class WorkspaceJobService : WorkspaceJobServiceBase
         // ensure accessing with proper user
         filter.AccessingUserId = userId;
         
-        //ensure we have a permissions
+        // ensure we have a permissions
         await this.workspaceAccessEvaluator.Ensure(
             userId, 
             workspaceId, 
@@ -53,5 +56,47 @@ public class WorkspaceJobService : WorkspaceJobServiceBase
             TotalCount = items.TotalCount,
             Items = items.Items.Select(MapJob)
         };
+    }
+    
+    /// <summary>
+    /// Gets object by id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<WorkspaceJobModel> GetById(string userId, string workspaceId, string id)
+    {
+        // ensure we have a necessary permissions
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, 
+            WorkspacePermissions.WORKSPACE_VIEW, 
+            WorkspacePermissions.WORKSPACE_LIST_JOBS);
+
+        // gets the item by id
+        var item = await this.jobService.GetExtendedById(workspaceId, id);
+        
+        // ensure we have job permission
+        await this.jobAccessEvaluator.Ensure(userId, workspaceId, item.Id, JobPermissions.JOB_VIEW);
+        
+        // map and return the result
+        return MapJob(item);
+    }
+    
+    /// <summary>
+    /// Gets object by local id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<WorkspaceJobModel> GetByLocalId(string userId, string workspaceId, long localId)
+    {
+        // ensure we have a necessary permissions
+        await this.workspaceAccessEvaluator.Ensure(userId, workspaceId, 
+            WorkspacePermissions.WORKSPACE_VIEW, 
+            WorkspacePermissions.WORKSPACE_LIST_JOBS);
+
+        // gets the item by id
+        var item = await this.jobService.GetExtendedByLocalId(workspaceId, localId);
+        
+        // ensure we have job permission
+        await this.jobAccessEvaluator.Ensure(userId, workspaceId, item.Id, JobPermissions.JOB_VIEW);
+        
+        // map and return the result
+        return MapJob(item);
     }
 }

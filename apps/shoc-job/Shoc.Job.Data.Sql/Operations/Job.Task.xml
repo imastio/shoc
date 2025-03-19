@@ -33,14 +33,17 @@
       </TextCommand>
     </SqlOperation>
     
-    <SqlOperation Name="GetById">
+    <SqlOperation Name="GetByIdOrSequence">
       <TextCommand>
         SELECT * FROM `job_job_tasks`
-        WHERE `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId AND `Id` = @Id;
+        WHERE 1=1
+        {if:ById {AND `Id` = @Id} else {}}
+        {if:BySequence {AND `Sequence` = @Sequence} else {}}
+        AND `WorkspaceId` = @WorkspaceId AND `JobId` = @JobId;
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetExtendedById">
+    <SqlOperation Name="GetExtendedByIdOrSequence">
       <TextCommand>
         SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.Image as PackageImage
         FROM `job_job_tasks` j
@@ -52,7 +55,10 @@
         ON j.ClusterId = c.Id
         INNER JOIN `pkg_packages` p
         ON j.PackageId = p.Id
-        WHERE j.`WorkspaceId` = @WorkspaceId AND j.`JobId` = @JobId AND j.`Id` = @Id;
+        WHERE 1=1
+        {if:ById {AND j.`Id` = @Id} else {}}
+        {if:BySequence {AND j.`Sequence` = @Sequence} else {}}
+        AND j.`WorkspaceId` = @WorkspaceId AND j.`JobId` = @JobId;
       </TextCommand>
     </SqlOperation>
 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Shoc.ObjectAccess.Model.Job;
-using Shoc.ObjectAccess.Model.Package;
 using Shoc.ObjectAccess.Model.Workspace;
 
 namespace Shoc.ObjectAccess.Job;
@@ -48,7 +47,7 @@ public class JobPermissionCalculator
         // for workspace owners and admins we allow all operations
         if (role is WorkspaceRoles.ADMIN or WorkspaceRoles.OWNER)
         {
-            return PackagePermissions.ALL;
+            return JobPermissions.ALL;
         }
 
         // if job is user-scoped but the owner is not the requesting user then reject all permissions

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
 using Shoc.Job.Model.WorkspaceJob;
 using Shoc.ObjectAccess.Cluster;
+using Shoc.ObjectAccess.Job;
 using Shoc.ObjectAccess.Model.Cluster;
 using Shoc.ObjectAccess.Model.Package;
 using Shoc.ObjectAccess.Model.Workspace;
@@ -11,7 +12,7 @@ using Shoc.ObjectAccess.Workspace;
 namespace Shoc.Job.Services;
 
 /// <summary>
-/// The workspace job service
+/// The workspace job submission service
 /// </summary>
 public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
 {
@@ -23,8 +24,9 @@ public class WorkspaceJobSubmissionService : WorkspaceJobServiceBase
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
     /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
-    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
-        : base(jobSubmissionService, jobService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator)
+    /// <param name="jobAccessEvaluator">The job access evaluator</param>
+    public WorkspaceJobSubmissionService(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator, IJobAccessEvaluator jobAccessEvaluator)
+        : base(jobSubmissionService, jobService, workspaceAccessEvaluator, packageAccessEvaluator, clusterAccessEvaluator, jobAccessEvaluator)
     {
     }
     

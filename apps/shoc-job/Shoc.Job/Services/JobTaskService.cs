@@ -6,6 +6,7 @@ using Shoc.Core;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
 using Shoc.Job.Model;
+using Shoc.Job.Model.Job;
 using Shoc.Job.Model.JobTask;
 
 namespace Shoc.Job.Services;
@@ -75,6 +76,28 @@ public class JobTaskService : JobServiceBase
         // return result
         return result;
     }
+    
+    /// <summary>
+    /// Gets the object by sequence
+    /// </summary>
+    /// <returns></returns>
+    public async Task<JobTaskModel> GetBySequence(string workspaceId, string jobId, long sequence)
+    {
+        // require the parent object
+        await this.RequireById(workspaceId, jobId);
+        
+        // try load the object
+        var result = await this.taskRepository.GetBySequence(workspaceId, jobId, sequence);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
+    }
         
     /// <summary>
     /// Gets the extended object by id
@@ -97,7 +120,29 @@ public class JobTaskService : JobServiceBase
         // return result
         return result;
     }
+    
+    /// <summary>
+    /// Gets the extended object by sequence
+    /// </summary>
+    /// <returns></returns>
+    public async Task<JobTaskExtendedModel> GetExtendedBySequence(string workspaceId, string jobId, long sequence)
+    {
+        // require the parent object
+        await this.RequireById(workspaceId, jobId);
 
+        // try load the object
+        var result = await this.taskRepository.GetExtendedBySequence(workspaceId, jobId, sequence);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
+    }
+    
     /// <summary>
     /// Gets the logs of the task
     /// </summary>
@@ -109,7 +154,35 @@ public class JobTaskService : JobServiceBase
 
         // require the task to exist 
         var task = await this.GetById(workspaceId, jobId, id);
-        
+
+        // gets the logs of the task
+        return await this.GetTaskLogs(job, task);
+    }
+    
+    /// <summary>
+    /// Gets the logs of the task by sequence
+    /// </summary>
+    /// <returns></returns>
+    public async Task<Stream> GetLogsBySequence(string workspaceId, string jobId, long sequence)
+    {
+        // require the parent object
+        var job = await this.RequireById(workspaceId, jobId);
+
+        // require the task to exist 
+        var task = await this.GetBySequence(workspaceId, jobId, sequence);
+
+        // gets the logs of the task
+        return await this.GetTaskLogs(job, task);
+    }
+
+    /// <summary>
+    /// Gets the task logs by given job and task
+    /// </summary>
+    /// <param name="job">The job</param>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    private async Task<Stream> GetTaskLogs(JobModel job, JobTaskModel task)
+    {
         // created or pending tasks cannot have logs
         if (task.Status is JobTaskStatuses.CREATED or JobTaskStatuses.PENDING)
         {

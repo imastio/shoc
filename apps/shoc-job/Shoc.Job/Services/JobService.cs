@@ -87,4 +87,26 @@ public class JobService : JobServiceBase
         // return result
         return result;
     }
+    
+    /// <summary>
+    /// Gets the extended object by local id
+    /// </summary>
+    /// <returns></returns>
+    public async Task<JobExtendedModel> GetExtendedByLocalId(string workspaceId, long localId)
+    {
+        // require the parent object
+        await this.validationService.RequireWorkspace(workspaceId);
+
+        // try load the object
+        var result = await this.jobRepository.GetExtendedByLocalId(workspaceId, localId);
+
+        // check if object exists
+        if (result == null)
+        {
+            throw ErrorDefinition.NotFound().AsException();
+        }
+        
+        // return result
+        return result;
+    }
 }

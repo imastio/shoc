@@ -22,6 +22,18 @@ export default class WorkspaceJobsClient extends BaseAxiosClient {
     });
   }
 
+  getByLocalId(token, workspaceId, localId) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/jobs/by-local-id/${localId}`
+    });
+    
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
   create(token, workspaceId, input) {
     const url = this.urlify({
       api: `api/workspaces/${workspaceId}/jobs`

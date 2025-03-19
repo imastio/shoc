@@ -1,6 +1,9 @@
 using Shoc.Job.Model.Job;
+using Shoc.Job.Model.JobTask;
 using Shoc.Job.Model.WorkspaceJob;
+using Shoc.Job.Model.WorkspaceJobTask;
 using Shoc.ObjectAccess.Cluster;
+using Shoc.ObjectAccess.Job;
 using Shoc.ObjectAccess.Package;
 using Shoc.ObjectAccess.Workspace;
 
@@ -37,6 +40,11 @@ public class WorkspaceJobServiceBase
     protected readonly IClusterAccessEvaluator clusterAccessEvaluator;
 
     /// <summary>
+    /// The job access evaluator
+    /// </summary>
+    protected readonly IJobAccessEvaluator jobAccessEvaluator;
+
+    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="jobSubmissionService">The job submission service</param>
@@ -44,13 +52,15 @@ public class WorkspaceJobServiceBase
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="packageAccessEvaluator">The package access evaluator</param>
     /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
-    protected WorkspaceJobServiceBase(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
+    /// <param name="jobAccessEvaluator">The job access evaluator</param>
+    protected WorkspaceJobServiceBase(JobSubmissionService jobSubmissionService, JobService jobService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IPackageAccessEvaluator packageAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator, IJobAccessEvaluator jobAccessEvaluator)
     {
         this.jobSubmissionService = jobSubmissionService;
         this.jobService = jobService;
         this.workspaceAccessEvaluator = workspaceAccessEvaluator;
         this.packageAccessEvaluator = packageAccessEvaluator;
         this.clusterAccessEvaluator = clusterAccessEvaluator;
+        this.jobAccessEvaluator = jobAccessEvaluator;
     }
 
     /// <summary>
@@ -78,6 +88,47 @@ public class WorkspaceJobServiceBase
             FailedTasks = item.FailedTasks,
             CancelledTasks = item.CancelledTasks,
             CompletedTasks = item.CompletedTasks,
+            Status = item.Status,
+            Message = item.Message,
+            PendingAt = item.PendingAt,
+            RunningAt = item.RunningAt,
+            CompletedAt = item.CompletedAt,
+            Created = item.Created,
+            Updated = item.Updated
+        };
+    }
+    
+    /// <summary>
+    /// Maps an extended model of job to a workspace job task model
+    /// </summary>
+    /// <param name="item">The item to map</param>
+    /// <returns></returns>
+    protected static WorkspaceJobTaskModel MapJobTask(JobTaskExtendedModel item)
+    {
+        return new WorkspaceJobTaskModel
+        {
+            Id = item.Id,
+            WorkspaceId = item.WorkspaceId,
+            WorkspaceName = item.WorkspaceName,
+            JobId = item.JobId,
+            Sequence = item.Sequence,
+            ClusterId = item.ClusterId,
+            ClusterName = item.ClusterName,
+            PackageId = item.PackageId,
+            PackageImage = item.PackageImage,
+            UserId = item.UserId,
+            UserFullName = item.UserFullName,
+            Type = item.Type,
+            Runtime = item.Runtime,
+            Args = item.Args,
+            ArrayReplicas = item.ArrayReplicas,
+            ArrayIndexer = item.ArrayIndexer,
+            ArrayCounter = item.ArrayCounter,
+            MemoryRequested = item.MemoryRequested,
+            CpuRequested = item.CpuRequested,
+            NvidiaGpuRequested = item.NvidiaGpuRequested,
+            AmdGpuRequested = item.AmdGpuRequested,
+            Spec = item.Spec,
             Status = item.Status,
             Message = item.Message,
             PendingAt = item.PendingAt,

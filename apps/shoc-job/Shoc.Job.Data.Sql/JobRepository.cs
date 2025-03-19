@@ -110,11 +110,30 @@ public class JobRepository : IJobRepository
     /// <returns></returns>
     public Task<JobExtendedModel> GetExtendedById(string workspaceId, string id)
     {
-        return this.dataOps.Connect().QueryFirst("Job", "GetExtendedById").ExecuteAsync<JobExtendedModel>(new
+        return this.dataOps.Connect().QueryFirst("Job", "GetExtendedByIdOrLocalId")
+            .WithBinding("ById", true)
+            .WithBinding("ByLocalId", false)
+            .ExecuteAsync<JobExtendedModel>(new
         {
             WorkspaceId = workspaceId,
             Id = id
         });
+    }
+    
+    /// <summary>
+    /// Gets the extended object by local id
+    /// </summary>
+    /// <returns></returns>
+    public Task<JobExtendedModel> GetExtendedByLocalId(string workspaceId, long localId)
+    {
+        return this.dataOps.Connect().QueryFirst("Job", "GetExtendedByIdOrLocalId")
+            .WithBinding("ById", false)
+            .WithBinding("ByLocalId", true)
+            .ExecuteAsync<JobExtendedModel>(new
+            {
+                WorkspaceId = workspaceId,
+                LocalId = localId
+            });
     }
 
     /// <summary>

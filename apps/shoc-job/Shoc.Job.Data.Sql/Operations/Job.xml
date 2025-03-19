@@ -58,7 +58,7 @@
       </TextCommand>
     </SqlOperation>
 
-    <SqlOperation Name="GetExtendedById">
+    <SqlOperation Name="GetExtendedByIdOrLocalId">
       <TextCommand>
         SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName
         FROM `job_jobs` j
@@ -68,7 +68,10 @@
         ON j.UserId = u.Id
         INNER JOIN `clstr_clusters` c
         ON j.ClusterId = c.Id
-        WHERE j.`WorkspaceId` = @WorkspaceId AND j.`Id` = @Id;
+        WHERE 1=1
+        {if:ById {AND j.`Id` = @Id} else {}}
+        {if:ByLocalId {AND j.`LocalId` = @LocalId} else {}}
+        AND j.`WorkspaceId` = @WorkspaceId;
       </TextCommand>
     </SqlOperation>
 

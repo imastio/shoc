@@ -57,7 +57,7 @@ public class JobAccessEvaluator : IJobAccessEvaluator
         
         // try load the access model
         var workspaceRoles = (await this.workspaceAccessRepository.GetRoles(workspaceId, userId)).Select(item => item.Role).ToHashSet();
-
+        
         // if user does not have any role in the workspace then no permissions on job
         if (workspaceRoles.Count == 0)
         {
@@ -75,7 +75,7 @@ public class JobAccessEvaluator : IJobAccessEvaluator
         
         // get all the granted permissions
         var granted = this.permissionCalculator.Calculate(userId, reference, workspaceRoles);
-
+        
         // return resulting set
         return granted;
     }
@@ -132,6 +132,6 @@ public class JobAccessEvaluator : IJobAccessEvaluator
             return;
         }
 
-        throw ErrorDefinition.Access().AsException();
+        throw ErrorDefinition.Access(Errors.ACCESS_ERROR, $"Access denied due to lack of permissions: {string.Join(", ", evaluationResult.RejectedPermissions)}").AsException();
     }
 }

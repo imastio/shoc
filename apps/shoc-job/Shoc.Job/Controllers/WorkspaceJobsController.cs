@@ -66,6 +66,26 @@ public class WorkspaceJobsController : ControllerBase
     }
     
     /// <summary>
+    /// Gets the object by id
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+    public Task<WorkspaceJobModel> GetById(string workspaceId, string id)
+    {
+        return this.jobService.GetById(this.HttpContext.GetPrincipal().Id, workspaceId, id);
+    }
+    
+    /// <summary>
+    /// Gets the object by local id
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("by-local-id/{id:long}")]
+    public Task<WorkspaceJobModel> GetById(string workspaceId, long id)
+    {
+        return this.jobService.GetByLocalId(this.HttpContext.GetPrincipal().Id, workspaceId, id);
+    }
+    
+    /// <summary>
     /// Creates a new object
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
