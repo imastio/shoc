@@ -7,8 +7,7 @@ import UserWorkspacesClient from "@/clients/shoc/workspace/user-workspaces-clien
 import clientGuard from "@/services/client-guard";
 import WorkspaceJobsClient from "@/clients/shoc/job/workspace-jobs-client";
 import { table } from "table";
-import chalk from "chalk";
-import { durationBetween, localDateTimeWithSec } from "@/extended/format";
+import { durationBetween } from "@/extended/format";
 import WorkspaceJobTasksClient from "@/clients/shoc/job/workspace-job-tasks-client";
 
 const jobTasksCommand = createCommand('tasks')
@@ -49,7 +48,6 @@ jobTasksCommand
             durationBetween(item.created, item.runningAt),
             item.runningAt ? durationBetween(item.runningAt, item.completedAt) : "N/A"
         ]))
-
 
         logger.just(table(rows, {
             drawHorizontalLine: () => false,
