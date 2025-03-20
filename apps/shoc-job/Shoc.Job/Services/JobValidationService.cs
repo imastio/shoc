@@ -16,6 +16,16 @@ namespace Shoc.Job.Services;
 public class JobValidationService : ValidationServiceBase
 {
     /// <summary>
+    /// The maximum length of the name
+    /// </summary>
+    protected const int MAX_NAME_LENGTH = 255;
+    
+    /// <summary>
+    /// The maximum length of the description
+    /// </summary>
+    protected const int MAX_DESCRIPTION_LENGTH = 1024;
+    
+    /// <summary>
     /// Maximum allowed number of labels
     /// </summary>
     protected const int MAX_LABEL_REFERENCES = 10;
@@ -75,6 +85,32 @@ public class JobValidationService : ValidationServiceBase
     {
         this.labelRepository = labelRepository;
         this.gitRepoRepository = gitRepoRepository;
+    }
+
+    /// <summary>
+    /// Validate the object name
+    /// </summary>
+    /// <param name="name">The name to validate</param>
+    public virtual void ValidateName(string name)
+    {
+        // ensure name exists but not longer than allowed
+        if (name == null || name.Length > MAX_NAME_LENGTH)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_NAME, "The name is not valid").AsException();
+        }
+    }
+    
+    /// <summary>
+    /// Validate the object description
+    /// </summary>
+    /// <param name="description">The description to validate</param>
+    public virtual void ValidateDescription(string description)
+    {
+        // ensure description exists but not longer than allowed
+        if (description == null || description.Length > MAX_NAME_LENGTH)
+        {
+            throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_DESCRIPTION, "The description is not valid").AsException();
+        }
     }
     
     /// <summary>

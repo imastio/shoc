@@ -55,6 +55,8 @@ export default async function run(context: ResolvedContext, runContext: RunConte
         workspaceId,
         scope: runContext.scope,
         manifest: {
+            name: manifest.name ?? '',
+            description: manifest.description ?? '',
             gitRepoId: gitRepoId,
             labelIds: labelIds ?? [],
             clusterId,

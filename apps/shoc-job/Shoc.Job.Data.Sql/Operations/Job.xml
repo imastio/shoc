@@ -32,7 +32,7 @@
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
         {if:ByStatus {AND j.`Status` = @Status} else {}}
         {if:ByCluster {AND j.`ClusterId` = @ClusterId} else {}}
-        ORDER BY j.`Updated` DESC
+        ORDER BY j.`LocalId` DESC
         LIMIT @Offset, @Count;
       </TextCommand>
     </SqlOperation>
@@ -47,7 +47,7 @@
         {if:ByScope {AND j.`Scope` = @Scope} else {}}
         {if:ByStatus {AND j.`Status` = @Status} else {}}
         {if:ByCluster {AND j.`ClusterId` = @ClusterId} else {}}
-        ORDER BY j.`Updated` DESC;
+        ORDER BY j.`LocalId` DESC;
       </TextCommand>
     </SqlOperation>
 
@@ -92,11 +92,11 @@
         );
         
         INSERT INTO `job_jobs`
-        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `Namespace`, 
-        `TotalTasks`, `SucceededTasks`, `FailedTasks`, `CancelledTasks`, `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`)
+        (`Id`, `WorkspaceId`, `LocalId`, `ClusterId`, `UserId`, `Name`, `Description`, `Scope`, `Manifest`, `ClusterConfigEncrypted`, `Namespace`, 
+        `TotalTasks`, `SucceededTasks`, `FailedTasks`, `CancelledTasks`, `CompletedTasks`, `Status`, `Message`, `PendingAt`, `RunningAt`, `CompletedAt`, `CleanupAt`)
         VALUES
-        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Scope, @Manifest, @ClusterConfigEncrypted, @Namespace,
-        @TotalTasks, @SucceededTasks, @FailedTasks, @CancelledTasks, @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt);
+        (@Id, @WorkspaceId, @nextLocalId, @ClusterId, @UserId, @Name, @Description, @Scope, @Manifest, @ClusterConfigEncrypted, @Namespace,
+        @TotalTasks, @SucceededTasks, @FailedTasks, @CancelledTasks, @CompletedTasks, @Status, @Message, @PendingAt, @RunningAt, @CompletedAt, @CleanupAt);
 
         SELECT * FROM `job_jobs`
         WHERE `WorkspaceId` = @WorkspaceId AND `Id` = @Id;

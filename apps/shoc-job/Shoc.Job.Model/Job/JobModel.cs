@@ -33,6 +33,16 @@ public class JobModel
     public string UserId { get; set; }
     
     /// <summary>
+    /// The name for the job
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// The description of the job
+    /// </summary>
+    public string Description { get; set; }
+    
+    /// <summary>
     /// The scope of the job (user or workspace)
     /// </summary>
     public string Scope { get; set; }
@@ -98,9 +108,14 @@ public class JobModel
     public DateTime? RunningAt { get; set; }
     
     /// <summary>
-    /// The completion status (failed, cancelled, succeeded) at 
+    /// The completion status assigned (failed, cancelled, succeeded) at 
     /// </summary>
     public DateTime? CompletedAt { get; set; }
+    
+    /// <summary>
+    /// The job is cleaned up at
+    /// </summary>
+    public DateTime? CleanupAt { get; set; }
     
     /// <summary>
     /// The creation time

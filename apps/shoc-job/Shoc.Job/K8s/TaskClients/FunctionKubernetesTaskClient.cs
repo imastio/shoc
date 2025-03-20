@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,7 +43,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
     public override async Task<InitTaskResult> Submit(InitTaskInput input)
     {
         // the instance name
-        var instanceName = $"shoc-task-{input.Task.Sequence}";
+        var instanceName = GetInstanceName(input.Task);
         
         // the default labels
         var labels = CreateManagedLabels(new ManagedMetadata
@@ -86,7 +87,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
                             new()
                             {
                                 EnvFrom = GetEnvSources(input),
-                                Name = $"{instanceName}-container",
+                                Name = GetMainContainerName(input.Task),
                                 Image = input.PullSecret.Image,
                                 Env = GetIndexerVars(input.Task),
                                 Resources = new V1ResourceRequirements
@@ -141,11 +142,35 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
 
         // the first object
         var batchJob = batchJobs.First();
+
+        // get executor pods
+        var pods = await this.GetExecutorPods(job, task);
+
+        // container statuses
+        var containers = pods.FirstOrDefault()?.Status?.ContainerStatuses ?? Enumerable.Empty<V1ContainerStatus>();
+
+        // try getting the main container
+        var mainContainer = containers.FirstOrDefault(container => container.Name == GetMainContainerName(task));
+
+        // the start time
+        var startTime = default(DateTime?);
+        
+        // if container is running 
+        if (mainContainer?.State?.Running != null)
+        {
+            startTime = mainContainer.State.Running.StartedAt;
+        }
+        
+        // if container is terminated
+        if (mainContainer?.State?.Terminated != null)
+        {
+            startTime = mainContainer.State.Terminated.StartedAt;
+        }
         
         return new TaskK8sStatusResult
         {
             ObjectState = K8sObjectState.OK,
-            StartTime = batchJob.Status.StartTime,
+            StartTime = startTime,
             CompletionTime = batchJob.Status.CompletionTime,
             Succeeded = batchJob.Status.Succeeded is > 0
         };
@@ -173,5 +198,25 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
         
         // return the logs
         return await this.GetPodLogs(pod);
+    }
+
+    /// <summary>
+    /// Gets the task instance name
+    /// </summary>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    private static string GetInstanceName(JobTaskModel task)
+    {
+        return $"shoc-task-{task.Sequence}";
+    }
+    
+    /// <summary>
+    /// Gets the task instance name
+    /// </summary>
+    /// <param name="task">The task</param>
+    /// <returns></returns>
+    private static string GetMainContainerName(JobTaskModel task)
+    {
+        return $"{GetInstanceName(task)}-container";
     }
 }

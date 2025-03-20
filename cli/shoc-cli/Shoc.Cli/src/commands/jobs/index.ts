@@ -10,6 +10,7 @@ import { table } from 'table';
 import { durationBetween } from '@/extended/format';
 import jobDetailsCommand from './details';
 import jobTasksCommand from './tasks';
+import chalk from 'chalk';
 
 const jobsCommand = createCommand('jobs').aliases(['job']);
 
@@ -43,11 +44,12 @@ jobsCommand.description('List available jobs')
 
         const { items, totalCount } = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceJobsClient).getBy(ctx.token, workspace.id, filter))
 
-        const header = ['Job', 'Status', 'Cluster', 'User', 'Completed', 'Scope', 'Waiting', 'Running'];
+        const header = ['Job', 'Name', 'Status', 'Cluster', 'User', 'Completed', 'Scope', 'Waiting', 'Running'];
         const rows = [header];
 
         items.forEach((item: any) => rows.push([
             item.localId ?? '',
+            item.name ? item.name : chalk.italic('No name'),
             item.status ?? '',
             item.clusterName ?? '',
             item.userFullName ?? '',
@@ -56,7 +58,6 @@ jobsCommand.description('List available jobs')
             durationBetween(item.created, item.runningAt),
             item.runningAt ? durationBetween(item.runningAt, item.completedAt) : "N/A"
         ]))
-        
 
         logger.just(table(rows, { 
             drawHorizontalLine: () => false, 

@@ -200,6 +200,8 @@ public class JobSubmissionService : JobServiceBase
             LocalId = 0,
             ClusterId = cluster.Id,
             UserId = input.UserId,
+            Name = input.Manifest.Name,
+            Description = input.Manifest.Description,
             Scope = input.Scope,
             Manifest = ToJsonString(input.Manifest),
             ClusterConfigEncrypted = protector.Protect(cluster.Configuration),
@@ -212,7 +214,8 @@ public class JobSubmissionService : JobServiceBase
             Message = string.Empty,
             PendingAt = null,
             RunningAt = null,
-            CompletedAt = null
+            CompletedAt = null,
+            CleanupAt = null
         };
 
         // a set of tasks
@@ -628,6 +631,12 @@ public class JobSubmissionService : JobServiceBase
         // validate the scope
         this.validationService.ValidateScope(input.Scope);
         
+        // validate the name
+        this.validationService.ValidateName(input.Manifest.Name);
+        
+        // validate the description
+        this.validationService.ValidateDescription(input.Manifest.Description);
+        
         // validate arguments
         this.validationService.ValidateArgs(input.Manifest.Args);
         
@@ -667,6 +676,8 @@ public class JobSubmissionService : JobServiceBase
 
         // initialize with default if missing
         input.Manifest ??= new JobRunManifestModel();
+        input.Manifest.Name ??= string.Empty;
+        input.Manifest.Description ??= string.Empty;
         input.Manifest.Args ??= [];
         input.Manifest.Array ??= new JobRunManifestArrayModel();
         input.Manifest.LabelIds ??= [];

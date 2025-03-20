@@ -18,7 +18,7 @@
 
     <SqlOperation Name="GetAllExtended">
       <TextCommand>
-        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.Image as PackageImage
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.TemplateReference as PackageTemplateReference
         FROM `job_job_tasks` j
         INNER JOIN `wspc_workspaces` w
         ON j.WorkspaceId = w.Id
@@ -45,7 +45,7 @@
 
     <SqlOperation Name="GetExtendedByIdOrSequence">
       <TextCommand>
-        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.Image as PackageImage
+        SELECT j.*, w.Name as WorkspaceName, u.FullName as UserFullName, c.Name as ClusterName, p.TemplateReference as PackageTemplateReference
         FROM `job_job_tasks` j
         INNER JOIN `wspc_workspaces` w
         ON j.WorkspaceId = w.Id

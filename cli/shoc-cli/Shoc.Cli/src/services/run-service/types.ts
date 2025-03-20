@@ -33,6 +33,8 @@ export interface RunManifestSpec {
 
 export interface ParsedRunManifest {
     kind?: string,
+    name?: string,
+    description?: string,
     labels?: string[],
     cluster: string,
     args: string[] | null | undefined,

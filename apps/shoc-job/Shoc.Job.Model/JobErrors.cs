@@ -66,6 +66,16 @@ public static class JobErrors
     public const string EXISTING_LABEL_NAME = "JOB_EXISTING_LABEL_NAME";
 
     /// <summary>
+    /// The name is invalid
+    /// </summary>
+    public const string INVALID_JOB_NAME = "JOB_INVALID_JOB_NAME";
+    
+    /// <summary>
+    /// The description is invalid
+    /// </summary>
+    public const string INVALID_JOB_DESCRIPTION = "JOB_INVALID_JOB_DESCRIPTION";
+    
+    /// <summary>
     /// The scope is invalid
     /// </summary>
     public const string INVALID_JOB_SCOPE = "JOB_INVALID_JOB_SCOPE";

@@ -48,6 +48,16 @@ public class WorkspaceJobModel
     public string UserFullName { get; set; }
     
     /// <summary>
+    /// The name for the job
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// The description of the job
+    /// </summary>
+    public string Description { get; set; }
+    
+    /// <summary>
     /// The scope of the job (user or workspace)
     /// </summary>
     public string Scope { get; set; }

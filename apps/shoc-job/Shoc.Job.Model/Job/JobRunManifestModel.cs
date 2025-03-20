@@ -6,6 +6,16 @@ namespace Shoc.Job.Model.Job;
 public class JobRunManifestModel
 {
     /// <summary>
+    /// The name of the job
+    /// </summary>
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// The description of the job
+    /// </summary>
+    public string Description { get; set; }
+    
+    /// <summary>
     /// The git repo to associate with
     /// </summary>
     public string GitRepoId { get; set; }

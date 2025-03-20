@@ -48,9 +48,9 @@ public class WorkspaceJobTaskModel
     public string PackageId { get; set; }
     
     /// <summary>
-    /// The package image
+    /// The package template reference
     /// </summary>
-    public string PackageImage { get; set; }
+    public string PackageTemplateReference { get; set; }
     
     /// <summary>
     /// The submitting user id
