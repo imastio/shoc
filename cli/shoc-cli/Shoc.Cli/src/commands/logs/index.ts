@@ -11,20 +11,19 @@ import { logger } from '@/services/logger';
 const logsCommand = createCommand('logs');
 
 logsCommand.description('Watch logs of the job tasks')
-    .argument('<jobKey>', 'The number of job to watch', (value) => {
-        const parsedValue = parseInt(value, 10);
-        if (isNaN(parsedValue)) {
-            throw new Error('Job must be an integer.');
-        }
-        return parsedValue;
-    })
+    .requiredOption('-j, --job <number>', 'The job number')
     .option('-t, --task <number>', 'The task number', '0')
-    .action(asyncHandler(async (jobKey, options, cmd) => {
+    .action(asyncHandler(async (options, cmd) => {
 
         const context = await resolveContext(getRootOptions(cmd));
         const workspace = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, UserWorkspacesClient).getByName(ctx.token, context.workspace));
 
+        const jobKey = parseInt(options.job, 10); 
         const task = options.task ?? 0;
+
+        if(!Number.isSafeInteger(jobKey)){
+            throw Error(`The ${options.job} is not valid key for job`)
+        }
 
         const job = await clientGuard(context, (ctx) => shocClient(ctx.apiRoot, WorkspaceJobsClient).getByLocalId(ctx.token, workspace.id, jobKey))
 
@@ -50,7 +49,7 @@ async function getLogs(logsUrl: string, token: string) {
         if(response.status === 403){
             throw Error('No enough permissions for the operation')
         }
-        
+
         const { errors } = (await response.json()) ?? { errors: [] };
         throw Error(errors.length > 0 ? `${errors[0].code} ${errors[0]?.message}` : 'Unknown error');
     }

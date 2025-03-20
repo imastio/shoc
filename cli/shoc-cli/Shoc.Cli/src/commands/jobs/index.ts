@@ -8,8 +8,13 @@ import UserWorkspacesClient from '@/clients/shoc/workspace/user-workspaces-clien
 import { logger } from '@/services/logger';
 import { table } from 'table';
 import { durationBetween } from '@/extended/format';
+import jobDetailsCommand from './details';
+import jobTasksCommand from './tasks';
 
-const jobsCommand = createCommand('jobs');
+const jobsCommand = createCommand('jobs').aliases(['job']);
+
+jobsCommand.addCommand(jobDetailsCommand);
+jobsCommand.addCommand(jobTasksCommand);
 
 jobsCommand.description('List available jobs')
     .option('--page <number>', 'The page number', '0')

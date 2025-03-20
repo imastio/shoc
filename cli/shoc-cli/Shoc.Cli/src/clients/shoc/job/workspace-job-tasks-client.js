@@ -9,6 +9,19 @@ export default class WorkspaceJobTasksClient extends BaseAxiosClient {
     super("shoc-job", config);
   }
 
+  getAll(token, workspaceId, jobId){
+
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/jobs/${jobId}/tasks`
+    });
+
+    return this.webClient.get(url, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
   getLogsBySequenceUrl(token, workspaceId, jobId, sequence){
 
     const url = this.urlify({
