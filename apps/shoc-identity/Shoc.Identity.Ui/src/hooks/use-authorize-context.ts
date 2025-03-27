@@ -11,8 +11,6 @@ export default function useAuthorizeContext(){
         returnUrl = '/'
     }
 
-    let loginHint = searchParams.get('login_hint') || searchParams.get('loginHint') || '';
-
     let logoutId = searchParams.get('logout_id') || searchParams.get('logoutId') || '';
 
     let errorId = searchParams.get('error_id') || searchParams.get('errorId') || '';
@@ -24,7 +22,6 @@ export default function useAuthorizeContext(){
 
     return useMemo(() => ({
         returnUrl,
-        loginHint,
         prompt,
         logoutId,
         errorId

@@ -3,7 +3,7 @@ import SessionContext from "./session-context";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useInterval } from 'usehooks-ts';
 
-export default function AuthProvider({ children }) {
+export default function SessionProvider({ children }) {
 
     const [session, setSession] = useState({});
     const [progress, setProgress] = useState(true);

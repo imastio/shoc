@@ -54,7 +54,11 @@ export default function SignInChooser({ className = '', ...props }) {
             <Button
                 variant="outline"
                 type="button"
-                onClick={() => window.location.href = `/api-auth/external/google?returnUrl=${returnUrl}`}>
+                onClick={() => {
+                    const params = new URLSearchParams();
+                    params.set('returnUrl', returnUrl);
+                    window.location.href = `/api-auth/external/google?${params.toString()}`
+                }}>
                 <Icons.google className="mr-2 h-4 w-4" />
                 {" "}
                 {intl.formatMessage({id: 'auth.signIn.methods.google'})}

@@ -11,6 +11,7 @@ import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import RequestConfirmationButton from "./request-confirmation-button"
+import useOidc from "@/providers/oidc-provider/use-oidc"
 
 const MIN_CODE_LENGTH = 6;
 
@@ -19,6 +20,7 @@ export default function ConfirmForm() {
     const [errors, setErrors] = useState([]);
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
+    const oidc = useOidc();
 
     const formSchema = z.object({
         email: z.string().email(intl.formatMessage({id: 'auth.validation.email'})),
@@ -28,7 +30,7 @@ export default function ConfirmForm() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: authorizeContext.loginHint,
+            email: oidc.loginHint,
             code: ''
         },
         shouldUseNativeValidation: false

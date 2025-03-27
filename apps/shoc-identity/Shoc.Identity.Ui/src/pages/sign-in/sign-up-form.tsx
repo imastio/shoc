@@ -13,6 +13,7 @@ import useNavigateExt from "@/hooks/use-navigate-ext"
 import { useIntl } from "react-intl"
 import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
+import useOidc from "@/providers/oidc-provider/use-oidc"
 
 const MIN_FULL_NAME_LENGTH = 5;
 const MIN_PASSWORD_LENGTH = 6
@@ -25,6 +26,7 @@ export default function SignUpForm({ className = '', ...props }) {
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
     const navigateExt = useNavigateExt();
+    const oidc = useOidc();
 
     const formSchema = z.object({
         fullName: z.string().min(MIN_FULL_NAME_LENGTH, intl.formatMessage({id: 'auth.validation.fullName'})),
@@ -39,7 +41,7 @@ export default function SignUpForm({ className = '', ...props }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             fullName: '',
-            email: authorizeContext.loginHint,
+            email: oidc.loginHint,
             password: '',
             passwordConfirmation: ''
         },

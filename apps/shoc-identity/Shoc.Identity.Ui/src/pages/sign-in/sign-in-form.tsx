@@ -13,6 +13,7 @@ import { authClient, clientGuard } from "@/clients"
 import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import RequestOtpButton from "./request-otp-button"
+import useOidc from "@/providers/oidc-provider/use-oidc"
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -22,6 +23,7 @@ export default function SignInForm() {
     const [errors, setErrors] = useState([]);
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
+    const oidc = useOidc();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
@@ -32,7 +34,7 @@ export default function SignInForm() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: authorizeContext.loginHint,
+            email: oidc.loginHint,
             password: ''
         },
         shouldUseNativeValidation: false

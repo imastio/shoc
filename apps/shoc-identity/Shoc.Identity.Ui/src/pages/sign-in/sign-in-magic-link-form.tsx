@@ -15,6 +15,7 @@ import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { RocketIcon } from "@radix-ui/react-icons"
+import useOidc from "@/providers/oidc-provider/use-oidc"
 
 export default function SignInMagicLinkForm() {
     const [searchParams] = useSearchParams();
@@ -23,6 +24,7 @@ export default function SignInMagicLinkForm() {
     const [done, setDone] = useState(false);
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
+    const oidc = useOidc();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
@@ -32,7 +34,7 @@ export default function SignInMagicLinkForm() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: authorizeContext.loginHint,
+            email: oidc.loginHint,
         },
         shouldUseNativeValidation: false
     })

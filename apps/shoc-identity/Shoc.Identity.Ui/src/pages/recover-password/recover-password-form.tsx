@@ -15,6 +15,7 @@ import ErrorAlert from "@/components/generic/error-alert"
 import { useIntl } from "react-intl";
 import { validateEmail } from "@/lib/validation"
 import RequestRecoveryButton from "./request-recovery-button"
+import useOidc from "@/providers/oidc-provider/use-oidc"
 
 const MIN_PASSWORD_LENGTH = 6;
 const MIN_CODE_LENGTH = 6;
@@ -25,6 +26,7 @@ export default function RecoverPasswordForm() {
     const [errors, setErrors] = useState([]);
     const intl = useIntl();
     const authorizeContext = useAuthorizeContext();
+    const oidc = useOidc();
     const navigateExt = useNavigateExt();
 
     const formSchema = z.object({
@@ -40,7 +42,7 @@ export default function RecoverPasswordForm() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: authorizeContext.loginHint,
+            email: oidc.loginHint,
             code: '',
             password: '',
             passwordConfirmation: ''
