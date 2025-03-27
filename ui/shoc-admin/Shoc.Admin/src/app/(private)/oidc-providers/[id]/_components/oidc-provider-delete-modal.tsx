@@ -1,6 +1,5 @@
 import { selfClient } from "@/clients/shoc";
 import OidcProvidersClient from "@/clients/shoc/identity/oidc-providers-client";
-import RolesClient from "@/clients/shoc/identity/roles-client";
 import StandardAlert from "@/components/general/standard-alert";
 import { useApiAuthentication } from "@/providers/api-authentication/use-api-authentication";
 import { Modal } from "antd";
