@@ -1,3 +1,4 @@
+using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Shoc.ApiCore.Intl;
 using Shoc.ApiCore.Mailing;
 using Shoc.ApiCore.RazorEngine;
 using Shoc.Identity.Config;
+using Shoc.Identity.Config.Oidc;
 using Shoc.Identity.Grpc;
 using Shoc.Identity.Provider.Config;
 using Shoc.Identity.Provider.Services;
@@ -30,7 +32,17 @@ builder.Services.AddRepositories(builder.Configuration);
 builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddSignOnEssentials(builder.Configuration);
 builder.Services.AddIdentityEssentials(builder.Configuration);
-builder.Services.AddAuthenticationMiddleware(builder.Configuration);
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+    })
+    .AddJwtAuthentication(builder.Configuration)
+    .AddExternalOidcEssentials();
+builder.Services.AddAuthorization();
 builder.Services.AddAccessAuthorization();
 builder.Services.AddPersistenceDataProtection();
 builder.Services.AddMailing(builder.Configuration);
@@ -63,6 +75,9 @@ builder.Services.AddSingleton<ApplicationService>();
 builder.Services.AddSingleton<ApplicationSecretService>();
 builder.Services.AddSingleton<ApplicationUriService>();
 builder.Services.AddSingleton<ApplicationClaimService>();
+builder.Services.AddSingleton<IdentityProviderProtectionProvider>();
+builder.Services.AddSingleton<OidcProviderService>();
+builder.Services.AddSingleton<OidcProviderDomainService>();
 builder.Services.AddScoped<PasswordRecoveryService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<OtpService>();
@@ -90,6 +105,7 @@ else
 app.UseCookiePolicy();
 app.UseRouting();
 app.UseIdentityServer();
+app.UseAuthentication();
 app.UseAccessEnrichment();
 app.UseAuthorization();
 app.MapControllers();

@@ -20,7 +20,7 @@ export default function ApplicationGeneralCard({ application = {}, loading = fal
     return <Card>
         <ApplicationGeneralUpdateModal application={application} open={updateActive} onClose={() => setUpdateActive(false)} onSuccess={({ id } : { id: string }) => onUpdate(id)} />
         <Skeleton loading={loading} paragraph={{ rows: 5 }}>
-            <Descriptions size="small" column={1} layout="horizontal" bordered={false} labelStyle={{}} title="General Configuration" extra={[
+            <Descriptions size="small" column={1} layout="horizontal" bordered={false} styles={{ label: {} }} title="General Configuration" extra={[
                 <Button key="edit" size="middle" type="text" onClick={() => setUpdateActive(true)} disabled={loading || !application}>
                     <EditOutlined />
                 </Button>

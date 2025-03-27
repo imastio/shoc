@@ -5,6 +5,7 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -61,7 +62,7 @@ public static class IdentityExtended
             options.KeyManagement.DataProtectKeys = true;
             options.Authentication.CookieAuthenticationScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
         });
-
+        
         // add CORS policy service
         services.AddSingleton<ICorsPolicyService>(sp => new DefaultCorsPolicyService(sp.GetRequiredService<ILogger<DefaultCorsPolicyService>>()));
 

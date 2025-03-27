@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Identity.OidcProvider">
+
+        <SqlOperation Name="GetAll">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_providers`
+                ORDER BY Created DESC;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetById">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_providers` 
+                WHERE `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetByCode">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_providers`
+                WHERE `Code` = @Code;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `idp_oidc_providers`
+                (`Id`, `Code`, `Type`, `Name`, `IconUrl`, `Authority`, `ResponseType`, `ClientId`, `ClientSecretEncrypted`, `Scope`, `FetchUserInfo`, `Pkce`, `Disabled`, `Trusted`)
+                VALUES
+                (@Id, @Code, @Type, @Name, @IconUrl, @Authority, @ResponseType, @ClientId, @ClientSecretEncrypted, @Scope, @FetchUserInfo, @Pkce, @Disabled, @Trusted);
+
+                SELECT *
+                FROM `idp_oidc_providers` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+                
+        <SqlOperation Name="UpdateById">
+
+            <TextCommand>
+                UPDATE `idp_oidc_providers`
+                SET
+                `Code` = @Code,
+                `Type` = @Type,
+                `Name` = @Name,
+                `IconUrl` = @IconUrl,
+                `Authority` = @Authority,
+                `ResponseType` = @ResponseType,
+                `ClientId` = @ClientId,
+                `Scope` = @Scope,
+                `FetchUserInfo` = @FetchUserInfo,
+                `Pkce` = @Pkce,
+                `Disabled` = @Disabled,
+                `Trusted` = @Trusted
+                WHERE `Id` = @Id;
+
+                SELECT *
+                FROM `idp_oidc_providers` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="UpdateClientSecretById">
+
+            <TextCommand>
+                UPDATE `idp_oidc_providers`
+                SET
+                `ClientSecretEncrypted` = @ClientSecretEncrypted
+                WHERE `Id` = @Id;
+
+                SELECT *
+                FROM `idp_oidc_providers` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteById">
+
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_providers` 
+                WHERE `Id` = @Id;
+
+                DELETE FROM `idp_oidc_providers` WHERE `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

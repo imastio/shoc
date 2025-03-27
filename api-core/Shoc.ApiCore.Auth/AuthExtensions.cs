@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -16,19 +16,29 @@ public static class AuthExtensions
     /// Adds the authentication essentials to the system
     /// </summary>
     /// <param name="services">The services collection</param>
+    /// <param name="defaultScheme">The default authentication scheme</param>
+    /// <returns></returns>
+    public static AuthenticationBuilder AddDefaultAuthenticationMiddleware(this IServiceCollection services, string defaultScheme)
+    {
+        return services.AddAuthentication(defaultScheme);
+    }
+
+    /// <summary>
+    /// Adds the authentication essentials to the system
+    /// </summary>
+    /// <param name="builder">The authentication builder</param>
     /// <param name="configuration">The configuration</param>
     /// <returns></returns>
-    public static IServiceCollection AddAuthenticationMiddleware(this IServiceCollection services, IConfiguration configuration)
+    public static AuthenticationBuilder AddJwtAuthentication(this AuthenticationBuilder builder, IConfiguration configuration)
     {
         // get settings
         var settings = configuration.BindAs<AuthSettings>("Auth");
 
         // add settings
-        services.AddSingleton(settings);
+        builder.Services.AddSingleton(settings);
 
         // add bearer authentication layer
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        builder.AddJwtBearer(options =>
             {
                 // base-address of your identity provider
                 options.Authority = settings.Authority;
@@ -69,7 +79,7 @@ public static class AuthExtensions
                 }
             });
 
-        return services;
+        return builder;
     }
 
     /// <summary>

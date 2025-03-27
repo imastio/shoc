@@ -196,6 +196,61 @@ public static class IdentityErrors
     public const string EXISTING_GROUP_USER = "IDENTITY_EXISTING_GROUP_USER";
 
     /// <summary>
+    /// The provider name is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_NAME = "IDENTITY_INVALID_PROVIDER_NAME";
+    
+    /// <summary>
+    /// The provider code is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_CODE = "IDENTITY_INVALID_PROVIDER_CODE";
+    
+    /// <summary>
+    /// The provider code is invalid
+    /// </summary>
+    public const string EXISTING_PROVIDER_CODE = "IDENTITY_EXISTING_PROVIDER_CODE";
+    
+    /// <summary>
+    /// The provider type is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_TYPE = "IDENTITY_INVALID_PROVIDER_TYPE";
+    
+    /// <summary>
+    /// The provider scope is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_SCOPE = "IDENTITY_INVALID_PROVIDER_SCOPE";
+    
+    /// <summary>
+    /// The provider client id is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_CLIENT_ID = "IDENTITY_INVALID_PROVIDER_CLIENT_ID";
+    
+    /// <summary>
+    /// The provider client secret is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_CLIENT_SECRET = "IDENTITY_INVALID_PROVIDER_CLIENT_SECRET";
+
+    /// <summary>
+    /// The provider icon url is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_ICON_URL = "IDENTITY_INVALID_PROVIDER_ICON_URL";
+    
+    /// <summary>
+    /// The provider domain name is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_DOMAIN_NAME = "IDENTITY_INVALID_PROVIDER_DOMAIN_NAME";
+    
+    /// <summary>
+    /// The provider domain name already exists
+    /// </summary>
+    public const string EXISTING_PROVIDER_DOMAIN_NAME = "IDENTITY_EXISTING_PROVIDER_DOMAIN_NAME";
+    
+    /// <summary>
+    /// The provider authority is invalid
+    /// </summary>
+    public const string INVALID_PROVIDER_AUTHORITY = "IDENTITY_INVALID_PROVIDER_AUTHORITY";
+    
+    /// <summary>
     /// The unknown error
     /// </summary>
     public const string UNKNOWN_ERROR = "IDENTITY_UNKNOWN_ERROR";

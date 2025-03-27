@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataOperations xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="DataOps.xsd">
+
+    <!-- The configuration applies to any operation in this file. Using global timeout for 5 minutes -->
+    <DataConfiguration Timeout="PT5M" AutoTransaction="RepeatableRead" Compatibility="MySQL"/>
+
+    <OperationGroup Name="Identity.OidcProvider.Domain">
+
+        <SqlOperation Name="GetAll">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_provider_domains`
+                WHERE `ProviderId` = @ProviderId
+                ORDER BY Created DESC;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetById">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_provider_domains` 
+                WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+            </TextCommand>
+        </SqlOperation>
+
+        <SqlOperation Name="GetByDomainName">
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_provider_domains`
+                WHERE `ProviderId` = @ProviderId AND `DomainName` = @DomainName;
+            </TextCommand>
+        </SqlOperation>
+        
+        <SqlOperation Name="Create">
+
+            <TextCommand>
+                INSERT INTO `idp_oidc_provider_domains`
+                (`Id`, `ProviderId`, `DomainName`, `Verified`)
+                VALUES
+                (@Id, @ProviderId, @DomainName, @Verified);
+
+                SELECT *
+                FROM `idp_oidc_provider_domains` WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+                
+        <SqlOperation Name="UpdateById">
+
+            <TextCommand>
+                UPDATE `idp_oidc_provider_domains`
+                SET
+                `DomainName` = @DomainName,
+                `Verified` = @Verified
+                WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+
+                SELECT *
+                FROM `idp_oidc_provider_domains` WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+        <SqlOperation Name="DeleteById">
+
+            <TextCommand>
+                SELECT *
+                FROM `idp_oidc_provider_domains` 
+                WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+
+                DELETE FROM `idp_oidc_provider_domains` WHERE `ProviderId` = @ProviderId AND `Id` = @Id;
+            </TextCommand>
+
+        </SqlOperation>
+
+    </OperationGroup>
+
+</DataOperations>

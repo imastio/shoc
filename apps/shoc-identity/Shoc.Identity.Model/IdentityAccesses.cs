@@ -180,6 +180,31 @@ public static class IdentityAccesses
     public const string IDENTITY_APPLICATIONS_MANAGE = "identity:applications:manage";
    
     /// <summary>
+    /// The oidc providers read
+    /// </summary>
+    public const string IDENTITY_OIDC_PROVIDERS_READ = "identity:oidc_providers:read";
+
+    /// <summary>
+    /// The oidc providers list
+    /// </summary>
+    public const string IDENTITY_OIDC_PROVIDERS_LIST = "identity:oidc_providers:list";
+
+    /// <summary>
+    /// The oidc provider create
+    /// </summary>
+    public const string IDENTITY_OIDC_PROVIDERS_CREATE = "identity:oidc_providers:create";
+    
+    /// <summary>
+    /// The oidc provider manage
+    /// </summary>
+    public const string IDENTITY_OIDC_PROVIDERS_MANAGE = "identity:oidc_providers:manage";
+    
+    /// <summary>
+    /// The oidc provider delete
+    /// </summary>
+    public const string IDENTITY_OIDC_PROVIDERS_DELETE = "identity:oidc_providers:delete";
+    
+    /// <summary>
     /// Get and initialize all the constants
     /// </summary>
     public static readonly ISet<string> ALL = GetAll();

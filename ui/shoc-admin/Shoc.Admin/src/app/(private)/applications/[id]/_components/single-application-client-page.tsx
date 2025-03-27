@@ -12,6 +12,7 @@ import { ObjectContainer } from "@/components/general/object-container";
 import PageContainer from "@/components/general/page-container";
 import ApplicationDetailsTab from "./application-details-tab";
 import { localDateTime } from "@/extended/format";
+import ApplicationUpdateModal from "./application-update-modal";
 
 export default function SingleApplicationClientPage() {
 
@@ -83,17 +84,21 @@ export default function SingleApplicationClientPage() {
                 ]}
                 content={
                     <Row gutter={16} align="middle" >
-                    <Col lg={24} md={24}>
-                        <Descriptions column={{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 2, xs: 1 }}>
-                            <Descriptions.Item label="Name">{application.name}</Descriptions.Item>
-                            <Descriptions.Item label="Client Id">{application.applicationClientId}</Descriptions.Item>
-                            <Descriptions.Item label="Enabled">{application.enabled ? 'Enabled' : 'Disabled'}</Descriptions.Item>
-                            <Descriptions.Item label="Description">{application.description}</Descriptions.Item>
-                            <Descriptions.Item label="Created">{localDateTime(application.created)}</Descriptions.Item>
-                            <Descriptions.Item label="Updated">{localDateTime(application.updated)}</Descriptions.Item>
-                        </Descriptions>
-                    </Col>
-                </Row>
+                        <Col lg={24} md={24}>
+                            <ApplicationUpdateModal open={updateActive}
+                                application={application}
+                                onClose={() => setUpdateActive(false)}
+                                onSuccess={() => load(applicationId)} />
+                            <Descriptions column={{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 2, xs: 1 }}>
+                                <Descriptions.Item label="Name">{application.name}</Descriptions.Item>
+                                <Descriptions.Item label="Client Id">{application.applicationClientId}</Descriptions.Item>
+                                <Descriptions.Item label="Enabled">{application.enabled ? 'Enabled' : 'Disabled'}</Descriptions.Item>
+                                <Descriptions.Item label="Description">{application.description}</Descriptions.Item>
+                                <Descriptions.Item label="Created">{localDateTime(application.created)}</Descriptions.Item>
+                                <Descriptions.Item label="Updated">{localDateTime(application.updated)}</Descriptions.Item>
+                            </Descriptions>
+                        </Col>
+                    </Row>
                 }
             >
             </PageContainer >

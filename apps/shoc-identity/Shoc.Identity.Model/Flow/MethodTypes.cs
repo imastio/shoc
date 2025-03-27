@@ -19,4 +19,9 @@ public static class MethodTypes
     /// The one-time password sign-in type
     /// </summary>
     public const string OTP = "otp";
+    
+    /// <summary>
+    /// The external provider sign-in type
+    /// </summary>
+    public const string EXTERNAL = "external";
 }

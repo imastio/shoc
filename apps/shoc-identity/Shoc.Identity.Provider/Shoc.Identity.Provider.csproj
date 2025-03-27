@@ -82,6 +82,12 @@
     <None Update="Operations/Identity.Role.Member.xml">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Operations\Identity.OidcProvider.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Operations\Identity.OidcProvider.Domain.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

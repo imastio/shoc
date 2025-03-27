@@ -72,5 +72,4 @@ public interface IJobRepository
     /// <param name="id">The id of the object</param>
     /// <returns></returns>
     Task<JobModel> DeleteById(string workspaceId, string id);
-
 }

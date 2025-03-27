@@ -6,11 +6,15 @@ import SignInForm from "./sign-in-form"
 import useSignInMethod from "./use-sign-in-method"
 import SignInMagicLinkForm from "./sign-in-magic-link-form"
 import { useIntl } from "react-intl"
+import {useSearchParams} from "react-router-dom";
 
 export default function SignInChooser({ className = '', ...props }) {
     const method = useSignInMethod();
     const navigateSearch = useNavigateSearch();
     const intl = useIntl();
+    const [searchParams] = useSearchParams();
+
+    const returnUrl = searchParams.get('return_url') || searchParams.get('returnUrl') || '/';
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
@@ -47,6 +51,14 @@ export default function SignInChooser({ className = '', ...props }) {
                     {intl.formatMessage({id: 'auth.signIn.methods.password'})}
                 </Button>
             )}
+            <Button
+                variant="outline"
+                type="button"
+                onClick={() => window.location.href = `/api-auth/external/google?returnUrl=${returnUrl}`}>
+                <Icons.google className="mr-2 h-4 w-4" />
+                {" "}
+                {intl.formatMessage({id: 'auth.signIn.methods.google'})}
+            </Button>
         </div>
     )
 }

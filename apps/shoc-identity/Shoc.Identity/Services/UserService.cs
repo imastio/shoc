@@ -225,6 +225,9 @@ public class UserService : UserServiceBase
         // make sure user has state by default
         input.UserState ??= UserStates.ACTIVE;
 
+        // ensure email is lowercase
+        input.Email = input.Email?.ToLowerInvariant();
+
         // password hash is not given but plain password is given
         if (string.IsNullOrWhiteSpace(input.PasswordHash) && !string.IsNullOrWhiteSpace(input.Password))
         {

@@ -84,4 +84,14 @@ public static class IdentityObjects
     /// The access grant object
     /// </summary>
     public const string ACCESS_GRANT = "ag";
+
+    /// <summary>
+    /// The OIDC provider
+    /// </summary>
+    public const string OIDC_PROVIDER = "oidc";
+    
+    /// <summary>
+    /// The OIDC provider domain
+    /// </summary>
+    public const string OIDC_PROVIDER_DOMAIN = "oidc-dn";
 }

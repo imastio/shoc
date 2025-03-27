@@ -65,6 +65,8 @@ public static class DataConfiguration
         services.AddSingleton<IRoleRepository, RoleRepository>();
         services.AddSingleton<IRolePrivilegeRepository, RolePrivilegeRepository>();
         services.AddSingleton<IRoleMemberRepository, RoleMemberRepository>();
+        services.AddSingleton<IOidcProviderRepository, OidcProviderRepository>();
+        services.AddSingleton<IOidcProviderDomainRepository, OidcProviderDomainRepository>();
 
         // chain services
         return services;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ builder.Services.AddDiscovery(builder.Configuration);
 builder.Services.AddRepositories(builder.Configuration);
 builder.Services.AddSelf(builder.Configuration);
 builder.Services.AddPersistenceDataProtection();
-builder.Services.AddAuthenticationMiddleware(builder.Configuration);
+builder.Services.AddDefaultAuthenticationMiddleware(JwtBearerDefaults.AuthenticationScheme).AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAccessAuthorization();
 builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();

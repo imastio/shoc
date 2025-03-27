@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Shoc.ApiCore.Intl;
 using Shoc.Core;
+using Shoc.Core.OpenId;
 using Shoc.Identity.Config;
 using Shoc.Identity.Model;
 using Shoc.Identity.Model.Flow;
@@ -21,7 +26,12 @@ public class AuthService
     /// The default redirect URI
     /// </summary>
     private const string DEFAULT_REDIRECT = "/";
-        
+
+    /// <summary>
+    /// The length of randomly generated password
+    /// </summary>
+    private const int USER_RANDOM_PASSWORD_LENGTH = 16;
+
     /// <summary>
     /// The sign-in handler
     /// </summary>
@@ -31,7 +41,7 @@ public class AuthService
     /// The confirmation service
     /// </summary>
     private readonly ConfirmationService confirmationService;
-        
+
     /// <summary>
     /// The user internal repository
     /// </summary>
@@ -68,6 +78,11 @@ public class AuthService
     private readonly IIntlService intlService;
 
     /// <summary>
+    /// The OIDC provider service
+    /// </summary>
+    private readonly OidcProviderService oidcProviderService;
+
+    /// <summary>
     /// Creates a new instance of auth service
     /// </summary>
     /// <param name="signinHandler">The sign-in handler</param>
@@ -79,16 +94,18 @@ public class AuthService
     /// <param name="credentialEvaluator">The credential evaluator service</param>
     /// <param name="identityInteraction">The identity interaction</param>
     /// <param name="intlService">The intl service</param>
+    /// <param name="oidcProviderService">The oidc provider service</param>
     public AuthService(
         SigninHandler signinHandler,
         ConfirmationService confirmationService,
-        IUserInternalRepository userInternalRepository, 
+        IUserInternalRepository userInternalRepository,
         IOtpRepository otpRepository,
-        SignOnSettings signOnSettings, 
+        SignOnSettings signOnSettings,
         UserService userService,
         CredentialEvaluator credentialEvaluator,
-        IIdentityServerInteractionService identityInteraction, 
-        IIntlService intlService)
+        IIdentityServerInteractionService identityInteraction,
+        IIntlService intlService,
+        OidcProviderService oidcProviderService)
     {
         this.signinHandler = signinHandler;
         this.confirmationService = confirmationService;
@@ -99,6 +116,7 @@ public class AuthService
         this.credentialEvaluator = credentialEvaluator;
         this.identityInteraction = identityInteraction;
         this.intlService = intlService;
+        this.oidcProviderService = oidcProviderService;
         this.credentialEvaluator = credentialEvaluator;
     }
 
@@ -125,13 +143,13 @@ public class AuthService
 
         // get user from result
         var user = validUser.User;
-            
+
         // if signed in using OTP try complete confirmation as well
         if (validUser.Otp != null)
         {
             // delete OTP as no longer needed
             await this.otpRepository.DeleteById(validUser.Otp.Id);
-                
+
             // confirm user if needed
             user = await this.confirmationService.PerformConfirmation(user, validUser.Otp.TargetType);
         }
@@ -178,7 +196,7 @@ public class AuthService
 
         // try get lang parameter
         var lang = ctx?.Parameters.Get("lang") ?? ctx?.Parameters.Get("locale") ?? this.intlService.GetDefaultLocale();
-            
+
         // return sign-in context response
         return new SignInContextResponse
         {
@@ -186,7 +204,7 @@ public class AuthService
             LoginHint = ctx?.LoginHint
         };
     }
-    
+
     /// <summary>
     /// The public auth error resolution endpoint
     /// </summary>
@@ -229,7 +247,7 @@ public class AuthService
         {
             return DEFAULT_REDIRECT;
         }
-            
+
         // create otp proof to check
         var otpProof = otp.Created.ToString("O").ToSafeSha512();
 
@@ -247,7 +265,7 @@ public class AuthService
         {
             return DEFAULT_REDIRECT;
         }
-            
+
         // try get user by id
         var user = await this.userInternalRepository.GetById(otp.UserId);
 
@@ -259,7 +277,7 @@ public class AuthService
 
         // confirm target (email or phone) if needed
         user = await this.confirmationService.PerformConfirmation(user, otp.TargetType);
-            
+
         // sign-in if valid
         await this.signinHandler.Signin(httpContext, new SigninPrincipal
         {
@@ -282,7 +300,132 @@ public class AuthService
 
         return DEFAULT_REDIRECT;
     }
+
+    /// <summary>
+    /// Sign in with external provider
+    /// </summary>
+    /// <param name="providerCode">The provider code</param>
+    /// <param name="httpContext">The Http context</param>
+    /// <returns></returns>
+    public async Task<SignInFlowResult> SignInExternal(string providerCode, HttpContext httpContext)
+    {
+        // try getting the provider
+        var provider = await this.oidcProviderService.GetByCodeOrNull(providerCode);
+
+        // make sure provider exists
+        if (provider == null)
+        {
+            throw ErrorDefinition.Unknown("The provider is not recognized").AsException();
+        }
+
+        // authenticate request to scheme
+        var authenticateResult =
+            await httpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+        // if authentication to external provider failed
+        if (!authenticateResult.Succeeded)
+        {
+            throw ErrorDefinition.Unknown("Could not login to the external provider").AsException();
+        }
+
+        // get external user principal
+        var principal = authenticateResult.Principal.Clone();
         
+        // delete temporary cookie used during external authentication
+        await httpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+        // get id for the user
+        var userIdClaim = principal.FindFirst(KnownClaims.SUBJECT) ?? principal.FindFirst(ClaimTypes.NameIdentifier);
+
+        // make sure user id exists
+        if (userIdClaim == null)
+        {
+            throw ErrorDefinition.Unknown("Identity does not have a subject").AsException();
+        }
+
+        // get email
+        var userEmailClaim = principal.FindFirst(KnownClaims.EMAIL) ?? principal.FindFirst(ClaimTypes.Email);
+
+        // make sure user email exists
+        if (userEmailClaim == null)
+        {
+            throw ErrorDefinition.Unknown("Identity does not have an email").AsException();
+        }
+
+        // get the domain name from the email
+        var domainName = userEmailClaim.Value.Split('@', StringSplitOptions.RemoveEmptyEntries).Last();
+
+        // check if domain name of email is not valid
+        if (Uri.CheckHostName(domainName) != UriHostNameType.Dns)
+        {
+            throw ErrorDefinition.Unknown($"The domain name {domainName} is not recognized").AsException();
+        }
+
+        // now supporting only trusted providers
+        if (!provider.Trusted)
+        {
+            throw ErrorDefinition.Unknown($"The provider {provider.Code} is not trusted").AsException();
+        }
+
+        // ensure email is lowercase
+        var email = userEmailClaim.Value.ToLowerInvariant();
+        
+        // extract user info
+        var firstName = principal.FindFirst(KnownClaims.GIVEN_NAME) ?? principal.FindFirst(ClaimTypes.GivenName);
+        var lastName = principal.FindFirst(KnownClaims.FAMILY_NAME) ?? principal.FindFirst(ClaimTypes.Surname);
+        var name = principal.FindFirst(KnownClaims.NAME) ?? principal.FindFirst(ClaimTypes.Name);
+        var picture = principal.FindFirst(KnownClaims.PICTURE);
+
+        // get user by email if available
+        var user = await this.userInternalRepository.GetByEmail(email);
+
+        // no such user
+        if (user == null)
+        {
+            // create one
+            var created = await this.userService.Create(new UserCreateModel
+            {
+                Email = email,
+                EmailVerified = true,
+                FirstName = firstName?.Value,
+                LastName = lastName?.Value,
+                FullName = name?.Value,
+                PictureUri = picture?.Value,
+                Password = Rnd.GetString(USER_RANDOM_PASSWORD_LENGTH),
+                Type = UserTypes.EXTERNAL
+            });
+
+            // load newly created user
+            user = await this.userInternalRepository.GetById(created.Id);
+        }
+
+        // something went wrong
+        if (user == null)
+        {
+            throw ErrorDefinition.Unknown($"The user could not be created").AsException();
+        }
+        
+        await this.signinHandler.Signin(httpContext, new SigninPrincipal
+        {
+            Subject = user.Id,
+            Email = user.Email,
+            DisplayName = user.FullName,
+            Provider = providerCode,
+            MethodType = MethodTypes.EXTERNAL,
+            MultiFactorType = MultiFactoryTypes.NONE
+        });
+        
+        // retrieve return URL
+        var returnUrl = authenticateResult.Properties.Items["returnUrl"] ?? "~/";
+
+        return new SignInFlowResult
+        {
+            Subject = user.Id,
+            ContinueFlow = true,
+            ReturnUrl = returnUrl
+        };
+    }
+
     /// <summary>
     /// The sign-up operation based on input
     /// </summary>
@@ -313,7 +456,7 @@ public class AuthService
         var root = await this.userInternalRepository.GetRoot();
 
         // use guest role as default, if no root yet create as root
-        var type = root == null ? UserTypes.ROOT :  UserTypes.EXTERNAL;
+        var type = root == null ? UserTypes.ROOT : UserTypes.EXTERNAL;
 
         // the email is not verified by default, in case if creating root email is already verified
         var emailVerified = root == null;
@@ -330,7 +473,7 @@ public class AuthService
             Timezone = input.Timezone,
             Country = input.Country
         });
-            
+
         // user is missing
         if (userCreated == null)
         {
@@ -339,7 +482,7 @@ public class AuthService
 
         // gets the user by id
         var user = await this.userInternalRepository.GetById(userCreated.Id);
-            
+
         // confirmation message sent
         var confirmationSent = false;
 
@@ -378,7 +521,7 @@ public class AuthService
                 MultiFactorType = MultiFactoryTypes.NONE
             });
         }
-            
+
         // build sign-up flow result
         return new SignUpFlowResult
         {

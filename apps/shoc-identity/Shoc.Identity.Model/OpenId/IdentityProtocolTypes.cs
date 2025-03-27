@@ -1,4 +1,4 @@
-﻿namespace Shoc.Identity.Model;
+﻿namespace Shoc.Identity.Model.OpenId;
 
 /// <summary>
 /// The identity protocol types

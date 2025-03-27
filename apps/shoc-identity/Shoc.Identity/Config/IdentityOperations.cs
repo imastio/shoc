@@ -41,6 +41,8 @@ public static class IdentityOperations
             Path.Combine(sourceDirectory, "Operations", "Identity.Role.xml"),
             Path.Combine(sourceDirectory, "Operations", "Identity.Role.Privilege.xml"),
             Path.Combine(sourceDirectory, "Operations", "Identity.Role.Member.xml"),
+            Path.Combine(sourceDirectory, "Operations", "Identity.OidcProvider.xml"),
+            Path.Combine(sourceDirectory, "Operations", "Identity.OidcProvider.Domain.xml"),
             Path.Combine(sourceDirectory, "Operations", "ProtectionKey.xml"),
             Path.Combine(sourceDirectory, "Operations", "Mailing.xml"),
             Path.Combine(sourceDirectory, "Operations", "Access.xml")

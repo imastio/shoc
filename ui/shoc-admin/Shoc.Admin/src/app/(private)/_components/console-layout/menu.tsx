@@ -49,6 +49,10 @@ const menuPrototypes: MenuDataItem[] = [
                 name: 'Applications'
             },
             {
+                path: '/oidc-providers',
+                name: 'Oidc Providers'
+            },
+            {
                 path: '/mailing-profiles',
                 name: 'Mailing Profiles'
             }
