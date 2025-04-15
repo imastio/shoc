@@ -14,7 +14,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   const proxy: httpProxy = httpProxy.createProxy();
 
-  let apiRoot = process.env.SHOC_UI_API_ROOT || '';
+  let apiRoot = process.env.SHOC_API_ROOT || '';
   if (apiRoot.endsWith('/')) {
     apiRoot = apiRoot.replace(/\/$/, "");
   }

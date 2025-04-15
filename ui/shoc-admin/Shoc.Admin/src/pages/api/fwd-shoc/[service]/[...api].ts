@@ -18,7 +18,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   const jwt = await getJwtNode(req.headers);
   const proxy: httpProxy = httpProxy.createProxy();
 
-  let apiRoot = process.env.SHOC_ADMIN_API_ROOT || '';
+  let apiRoot = process.env.SHOC_API_ROOT || '';
   if (apiRoot.endsWith('/')) {
     apiRoot = apiRoot.replace(/\/$/, "");
   }
