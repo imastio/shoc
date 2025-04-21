@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.271090-alpha">
   <PropertyGroup>
     <StartupCommand>pnpm dev</StartupCommand>
-    <BuildCommand>pnpm build</BuildCommand>
+    <BuildCommand>pnpm i &amp;&amp; pnpm build</BuildCommand>
     <PublishCommand>pnpm build</PublishCommand>
     <JavaScriptTestRoot>src\</JavaScriptTestRoot>
     <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
