@@ -1,6 +1,5 @@
-FROM mysql:8.4.0
+FROM mysql:8.0.42-debian
 
-MAINTAINER imast.io
 COPY cnf/all.cnf /etc/mysql/conf.d/ 
 
 COPY init/000_shoc-database/* /docker-entrypoint-initdb.d/
