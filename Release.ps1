@@ -49,9 +49,6 @@ Write-Host "Services selected to be released: $($AllRequested.Count)"
 Write-Host "Environment: $Env"
 Write-Host "Version: $Version"
 
-$env:SHOC_VERSION=$Version
-$env:SHOC_REGISTRY_REPO="shoc/$Env"
-
 foreach($service in $AllRequested){
 
     if($SkipPublish){
