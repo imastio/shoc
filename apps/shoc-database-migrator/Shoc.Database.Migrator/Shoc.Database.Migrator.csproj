@@ -55,6 +55,9 @@
 	  <None Update="Migrations.Sql\V10__QuartzMigration.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Migrations.Sql\V12__OidcProvidersMigration.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  
 	</ItemGroup>
 
