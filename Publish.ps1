@@ -77,6 +77,7 @@ if(-not [string]::IsNullOrWhiteSpace($CsharpProj)){
 elseif(-not [string]::IsNullOrWhiteSpace($NodeProj)) {
 	Write-Host "Detected package.json at $NodeProj to publish..."
     pnpm --dir $NodeProj install  
+    pnpm --dir $NodeProj pre-build  
     pnpm --dir $NodeProj build  
     Exit
 }

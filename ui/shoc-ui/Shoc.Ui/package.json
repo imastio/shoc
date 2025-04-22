@@ -6,6 +6,7 @@
     "dev": "next dev -p 11050",
     "dev:https": "next dev -p 11051 --experimental-https",
     "build": "next build",
+    "pre-build": "node scripts/pre-build.js",
     "start": "next start -p 11050",
     "start:https": "next start -p 110451 --experimental-https",
     "lint": "next lint"
