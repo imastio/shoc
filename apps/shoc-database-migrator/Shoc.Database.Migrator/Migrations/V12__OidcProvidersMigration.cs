@@ -7,14 +7,14 @@ namespace Shoc.Database.Migrator.Migrations;
 /// Job Management Migration
 /// </summary>
 [Migration(12, TransactionBehavior.Default, "Add job oidc providers essentials")]
-public class V12__OidcProvidersMigrator : Migration
+public class V12__OidcProvidersMigration : Migration
 {
     /// <summary>
     /// Migrate database up
     /// </summary>
     public override void Up()
     {
-        this.Execute.Script("Migrations.Sql/V12__OidcProvidersMigrator.sql");
+        this.Execute.Script("Migrations.Sql/V12__OidcProvidersMigration.sql");
     }
 
     /// <summary>
