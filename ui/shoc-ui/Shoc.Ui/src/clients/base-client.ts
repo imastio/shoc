@@ -140,7 +140,12 @@ export default class BaseClient {
    */
   getApi(api: string) {
 
-    const root = this.config.root;
+    let root = this.config.root;
+
+    if(root.length > 0 && !root.endsWith('/')){
+      root = `${root}/`
+    }
+    
     const gateway = this.config.gateway;
     const gatewayEnding = gateway === "" ? "" : "/";
 
