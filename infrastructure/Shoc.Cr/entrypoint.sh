@@ -7,8 +7,8 @@ CONFIG_FILE="/etc/docker/registry/config.yml"
 JWK_FILE="/etc/certs/jwks/jwks.json"
 
 # Try to get realm from environment variable first, fall back to config file
-if [ -n "$AUTH_TOKEN_REALM" ]; then
-    REALM_URL="$AUTH_TOKEN_REALM"
+if [ -n "$REGISTRY_AUTH_TOKEN_REALM" ]; then
+    REALM_URL="$REGISTRY_AUTH_TOKEN_REALM"
 else
     # Extract the realm URL from the config file
     REALM_URL=$(grep 'realm:' "$CONFIG_FILE" | awk '{print $2}' | tr -d '"')
