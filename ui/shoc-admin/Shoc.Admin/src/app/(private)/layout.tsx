@@ -13,7 +13,7 @@ export default async function PrivateRootLayout({
     const accesses = await getEffectiveAccesses();
 
     return (
-        <AccessProvider accesses={accesses.data || new Set<string>}>
+        <AccessProvider accesses={new Set<string>(accesses.data || [])}>
             <PrivateInitLayout>
                 <AccessGuardLayout>
                     <ConsoleLayout>
