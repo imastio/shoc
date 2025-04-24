@@ -26,11 +26,11 @@ export default function AccessGuardLayout({ children }: { children: ReactNode })
    }, [pathname, isAllowed, router]);
 
    if (authorized === null) {
-      return false;
+      return null;
    }
 
    if (!authorized) {
-      return false;
+      return null;
    }
 
    return children;
