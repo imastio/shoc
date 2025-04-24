@@ -13,7 +13,7 @@ networks:
 services:   
 
   shoc-ingress:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-ingress:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-ingress:${SHOC_VERSION_TAG:-latest}
     build: ./infrastructure/Shoc.Ingress
     container_name: shoc-ingress
     hostname: shoc.local
@@ -32,7 +32,7 @@ services:
          - admin.shoc.local
   
   shoc-database:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-database:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-database:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./infrastructure/Shoc.Database
     container_name: shoc-database
@@ -46,7 +46,7 @@ services:
       - shoc-database-volume:/var/lib/mysql
 
   shoc-cr:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-cr:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-cr:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./infrastructure/Shoc.Cr
     container_name: shoc-cr
@@ -60,7 +60,7 @@ services:
       - shoc-cr-data-volume:/var/lib/registry
 
   shoc-ui:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-ui:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-ui:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./ui/shoc-ui/Shoc.Ui
     container_name: shoc-ui
@@ -76,7 +76,7 @@ services:
       - shoc-network
 
   shoc-admin:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-admin:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-admin:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./ui/shoc-admin/Shoc.Admin
     container_name: shoc-admin
@@ -92,7 +92,7 @@ services:
       - shoc-network
 
   shoc-webgtw:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-webgtw:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-webgtw:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-webgtw/Shoc.Webgtw
     container_name: shoc-webgtw
@@ -107,7 +107,7 @@ services:
       - shoc-network
 
   shoc-identity:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-identity:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-identity:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-identity/Shoc.Identity
     container_name: shoc-identity
@@ -129,7 +129,7 @@ services:
       - shoc-network
 
   shoc-database-migrator:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-database-migrator:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-database-migrator:${SHOC_VERSION_TAG:-latest}
     build: ./apps/shoc-database-migrator/Shoc.Database.Migrator
     container_name: shoc-database-migrator
     restart: "no"
@@ -146,7 +146,7 @@ services:
       - shoc-network
 
   shoc-settings:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-settings:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-settings:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-settings/Shoc.Settings
     container_name: shoc-settings
@@ -167,7 +167,7 @@ services:
       - shoc-network
   
   shoc-workspace:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-workspace:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-workspace:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-workspace/Shoc.Workspace
     container_name: shoc-workspace
@@ -188,7 +188,7 @@ services:
       - shoc-network
 
   shoc-registry:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-registry:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-registry:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-registry/Shoc.Registry
     container_name: shoc-registry
@@ -209,7 +209,7 @@ services:
       - shoc-network
 
   shoc-cluster:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-cluster:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-cluster:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-cluster/Shoc.Cluster
     container_name: shoc-cluster
@@ -230,7 +230,7 @@ services:
       - shoc-network
   
   shoc-secret:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-secret:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-secret:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-secret/Shoc.Secret
     container_name: shoc-secret
@@ -251,7 +251,7 @@ services:
       - shoc-network
 
   shoc-package:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-package:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-package:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-package/Shoc.Package
     container_name: shoc-package
@@ -273,7 +273,7 @@ services:
       - shoc-network
 
   shoc-job:
-    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-imastio/shoc/public}/shoc-job:${SHOC_VERSION_TAG:-latest}
+    image: ${SHOC_REGISTRY_NAME:-ghcr.io}/${SHOC_REGISTRY_REPOSITORY:-shoc-dev/shoc/public}/shoc-job:${SHOC_VERSION_TAG:-latest}
     restart: always
     build: ./apps/shoc-job/Shoc.Job
     container_name: shoc-job
