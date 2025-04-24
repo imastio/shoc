@@ -18,7 +18,7 @@ export default function PageContainer({ fluid = false, title, onBack, children, 
 
 
     return <>
-        <AntPageContainer {...rest} title={ title as string ? pageTitle : title } onBack={onBack ? onBack : () => router.back()}>
+        <AntPageContainer {...rest} title={ title as string ? title : pageTitle } onBack={onBack ? onBack : () => router.back()}>
             { children }
         </AntPageContainer>
     </>
