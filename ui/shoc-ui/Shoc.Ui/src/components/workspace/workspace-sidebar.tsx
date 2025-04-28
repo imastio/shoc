@@ -1,7 +1,6 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import useWorkspaceMenu from "@/app/workspaces/[name]/use-workspace-menu";
@@ -28,14 +27,11 @@ export default function WorkspaceSidebar({ name }: { name: string }) {
             </div>
             <div className="mt-auto p-4">
                 <Card x-chunk="dashboard-02-chunk-0">
-                    <CardHeader className="p-2 pt-0 md:p-4">
-                        <CardTitle>Upgrade to Pro</CardTitle>
-                        <CardDescription>Unlock all features and get unlimited access to our support team.</CardDescription>
+                    <CardHeader>
+                        <CardTitle>Version: Alpha</CardTitle>
+                        <CardDescription>The application is still in a very early testing phase. If you face any problems while using it, just let us know.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                        <Button size="sm" className="w-full">
-                            Upgrade
-                        </Button>
                     </CardContent>
                 </Card>
             </div>

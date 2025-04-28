@@ -46,13 +46,10 @@ export default function WorkspaceMobileSidebar({ name }: { name: string }) {
       <div className="mt-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Upgrade to Pro</CardTitle>
-            <CardDescription>Unlock all features and get unlimited access to our support team.</CardDescription>
+            <CardTitle>Version: Alpha</CardTitle>
+            <CardDescription>The application is still in a very early testing phase. If you face any problems while using it, just let us know.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button size="sm" className="w-full">
-              Upgrade
-            </Button>
           </CardContent>
         </Card>
       </div>

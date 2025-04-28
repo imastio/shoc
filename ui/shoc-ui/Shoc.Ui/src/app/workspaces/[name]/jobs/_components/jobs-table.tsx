@@ -32,6 +32,7 @@ export default function JobsTable({ items, workspaceName, className }: { items: 
                 <TableHead className="w-[180px]">{intl.formatMessage({ id: 'global.labels.status' })}</TableHead>
                 <TableHead className="w-[180px]">{intl.formatMessage({ id: 'jobs.labels.scope' })}</TableHead>
                 <TableHead className="w-[300px]">{intl.formatMessage({ id: 'jobs.labels.cluster' })}</TableHead>
+                <TableHead className="w-[300px]">{intl.formatMessage({ id: 'jobs.labels.actor' })}</TableHead>
                 <TableHead className="w-[150px]">{intl.formatMessage({ id: 'jobs.labels.waiting' })}</TableHead>
                 <TableHead className="w-[150px]">{intl.formatMessage({ id: 'jobs.labels.running' })}</TableHead>
                 <TableHead className="text-right">{intl.formatMessage({ id: 'global.labels.actions' })}</TableHead>
@@ -72,6 +73,11 @@ export default function JobsTable({ items, workspaceName, className }: { items: 
                             <Link prefetch={false} className="underline" target="_blank" href={`/workspaces/${workspaceName}/clusters/${item.clusterName}`}>
                                  {item.clusterName}
                             </Link>
+                    </TableCell>
+                    <TableCell className="font-medium">
+                        <span>
+                            {item.userFullName}
+                        </span>
                     </TableCell>
                     <TableCell className="font-medium">
                         { durationBetween(item.created, item.runningAt) }

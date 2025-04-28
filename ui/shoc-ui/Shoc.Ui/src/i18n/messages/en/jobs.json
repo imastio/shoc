@@ -16,6 +16,7 @@
     "jobs.labels.untitled": "No name",
     "jobs.labels.noDesc": "No description",
     "jobs.labels.cluster": "Cluster",
+    "jobs.labels.actor": "Actor",
     "jobs.labels.tasks": "Tasks",
     "jobs.labels.scope": "Scope",
     "jobs.labels.waiting": "Waiting",
