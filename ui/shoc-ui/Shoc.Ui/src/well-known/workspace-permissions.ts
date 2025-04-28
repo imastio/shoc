@@ -22,4 +22,18 @@ export enum WorkspacePermissions {
     WORKSPACE_CREATE_USER_SECRET = "workspace_create_user_cluster",
     WORKSPACE_UPDATE_USER_SECRET = "workspace_update_user_cluster",
     WORKSPACE_DELETE_USER_SECRET = "workspace_delete_user_cluster",
+    WORKSPACE_LIST_PACKAGES = "workspace_list_packages",
+    WORKSPACE_BUILD_PACKAGE = "workspace_build_package",
+    WORKSPACE_DELETE_PACKAGE = "workspace_delete_package",
+    WORKSPACE_LIST_LABELS = "workspace_list_labels",
+    WORKSPACE_CREATE_LABEL = "workspace_create_label",
+    WORKSPACE_UPDATE_LABEL = "workspace_update_label",
+    WORKSPACE_DELETE_LABEL = "workspace_delete_label",
+    WORKSPACE_LIST_GIT_REPOS = "workspace_list_git_repos",
+    WORKSPACE_CREATE_GIT_REPO = "workspace_create_git_repo",
+    WORKSPACE_UPDATE_GIT_REPO = "workspace_update_git_repo",
+    WORKSPACE_DELETE_GIT_REPO = "workspace_delete_git_repo",
+    WORKSPACE_LIST_JOBS = "workspace_list_jobs",
+    WORKSPACE_LIST_ALL_JOBS = "workspace_list_all_jobs",
+    WORKSPACE_SUBMIT_JOB = "workspace_submit_job"
 }

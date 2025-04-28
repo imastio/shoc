@@ -5,6 +5,7 @@ import errorsEn from "./messages/en/errors.json";
 import workspacesEn from "./messages/en/workspaces.json";
 import secretsEn from "./messages/en/secrets.json";
 import templatesEn from "./messages/en/templates.json";
+import jobsEn from "./messages/en/jobs.json";
 import localeConfig from "./locale-config";
 
 export const localeMessages = {
@@ -16,7 +17,8 @@ export const localeMessages = {
         ...errorsEn,
         ...workspacesEn,
         ...secretsEn,
-        ...templatesEn
+        ...templatesEn,
+        ...jobsEn
     }
 };
 

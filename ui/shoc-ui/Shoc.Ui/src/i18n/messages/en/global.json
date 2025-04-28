@@ -26,6 +26,7 @@
     "global.labels.encrypted": "Encrypted",
     "global.labels.value": "Value",
     "global.labels.configuration": "Configuration",
+    "global.labels.status": "Status",
     "global.labels.created": "Created At",
     "global.labels.updated": "Updated At",
     "global.labels.expiration": "Expires At",

@@ -1,0 +1,23 @@
+{
+    "jobs": "Jobs",
+    "jobs.job": "Job",
+    "jobs.noJobs": "You have no jobs yet",
+    "jobs.noJobs.note": "Your jobs will appear here whenever you submit them with CLI.",
+    "jobs.statuses.created": "Created",
+    "jobs.statuses.pending": "Pending",
+    "jobs.statuses.running": "Running",
+    "jobs.statuses.partially_succeeded": "Partially succeeded",
+    "jobs.statuses.succeeded": "Succeeded",
+    "jobs.statuses.failed": "Failed",
+    "jobs.statuses.cancelled": "Cancelled",
+    "jobs.scopes.user": "User",
+    "jobs.scopes.workspace": "Workspace",
+    "jobs.menu.jobs": "Jobs",
+    "jobs.labels.untitled": "No name",
+    "jobs.labels.noDesc": "No description",
+    "jobs.labels.cluster": "Cluster",
+    "jobs.labels.tasks": "Tasks",
+    "jobs.labels.scope": "Scope",
+    "jobs.labels.waiting": "Waiting",
+    "jobs.labels.running": "Running"
+}

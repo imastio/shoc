@@ -8,6 +8,7 @@ import { serverActions as workspaceClusters } from './actions/cluster/workspace-
 import { serverActions as workspaceSecrets } from './actions/secret/workspace-secrets'
 import { serverActions as workspaceUserSecrets } from './actions/secret/workspace-user-secrets'
 import { serverActions as templates } from './actions/template/templates'
+import { serverActions as workspaceJobs } from './actions/job/workspace-jobs'
 
 const allRpc = {
     ...index,
@@ -19,7 +20,8 @@ const allRpc = {
     ...workspaceClusters,
     ...workspaceSecrets,
     ...workspaceUserSecrets,
-    ...templates
+    ...templates,
+    ...workspaceJobs
 }
 
 export default allRpc;
