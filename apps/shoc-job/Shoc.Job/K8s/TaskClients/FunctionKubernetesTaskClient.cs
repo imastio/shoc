@@ -173,7 +173,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
             ObjectState = K8sObjectState.OK,
             StartTime = startTime,
             CompletionTime = mainContainer?.State?.Terminated.FinishedAt ?? batchJob.Status.CompletionTime,
-            Succeeded = batchJob.Status.Succeeded is > 0
+            Succeeded = mainContainer?.State?.Terminated?.ExitCode == 0
         };
     }
 
