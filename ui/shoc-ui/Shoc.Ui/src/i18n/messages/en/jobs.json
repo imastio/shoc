@@ -20,5 +20,9 @@
     "jobs.labels.tasks": "Tasks",
     "jobs.labels.scope": "Scope",
     "jobs.labels.waiting": "Waiting",
-    "jobs.labels.running": "Running"
+    "jobs.labels.running": "Running",
+    "jobs.filters.scope.placeholder": "Select scope",
+    "jobs.filters.scope.prefix": "Scope:",
+    "jobs.filters.status.placeholder": "Select status",
+    "jobs.filters.status.prefix": "Status:"
 }
