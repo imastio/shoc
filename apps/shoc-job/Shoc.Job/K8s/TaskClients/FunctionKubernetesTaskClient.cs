@@ -156,14 +156,14 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
         // the start time
         var startTime = default(DateTime?);
         
-        // if container is running 
-        if (mainContainer?.State?.Running != null)
+        // if container is in running state and there is a valid start time (after task was created)
+        if (mainContainer?.State?.Running is { StartedAt: not null } && mainContainer.State.Running.StartedAt > task.Created)
         {
             startTime = mainContainer.State.Running.StartedAt;
         }
         
-        // if container is terminated start time should be considered only if not minimum utc time
-        if (mainContainer?.State?.Terminated is { StartedAt: not null } && mainContainer.State.Terminated.StartedAt > DateTime.MinValue )
+        // if container is in terminated state and there is a valid start time (after task was created)
+        if (mainContainer?.State?.Terminated is { StartedAt: not null } && mainContainer.State.Terminated.StartedAt > task.Created)
         {
             startTime = mainContainer.State.Terminated.StartedAt;
         }
