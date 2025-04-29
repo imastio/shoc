@@ -162,8 +162,8 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
             startTime = mainContainer.State.Running.StartedAt;
         }
         
-        // if container is terminated
-        if (mainContainer?.State?.Terminated != null)
+        // if container is terminated start time should be considered only if not minimum utc time
+        if (mainContainer?.State?.Terminated is { StartedAt: not null } && mainContainer.State.Terminated.StartedAt > DateTime.MinValue )
         {
             startTime = mainContainer.State.Terminated.StartedAt;
         }
@@ -172,7 +172,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
         {
             ObjectState = K8sObjectState.OK,
             StartTime = startTime,
-            CompletionTime = batchJob.Status.CompletionTime,
+            CompletionTime = mainContainer?.State?.Terminated.FinishedAt ?? batchJob.Status.CompletionTime,
             Succeeded = batchJob.Status.Succeeded is > 0
         };
     }
