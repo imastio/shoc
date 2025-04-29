@@ -46,7 +46,7 @@ export default function WorkspaceMobileSidebar({ name }: { name: string }) {
       <div className="mt-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Version: Alpha</CardTitle>
+            <CardTitle>Version Alpha</CardTitle>
             <CardDescription>The application is still in a very early testing phase. If you face any problems while using it, just let us know.</CardDescription>
           </CardHeader>
           <CardContent>

@@ -7,26 +7,18 @@ import { useIntl } from "react-intl";
 import BasicHeader from "@/components/general/basic-header";
 import NoJobs from "./no-jobs";
 import JobsTable from "./jobs-table";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import LoadingContainer from "@/components/general/loading-container";
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 10;
 
 export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: any) {
 
     const [progress, setProgress] = useState(true);
     const [data, setData] = useState<any>(null);
     const [errors, setErrors] = useState<any[]>([]);
-    const [paging, setPaging] = useState<{ page: number, size: number }>({ page: 0, size: DEFAULT_SIZE })
+    const [paging, setPaging] = useState<{ page: number, size: number }>({ page: 0, size: DEFAULT_PAGE_SIZE })
     const intl = useIntl();
 
     const load = useCallback(async (workspaceId: string, page: number, size: number) => {
@@ -37,7 +29,6 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
             setErrors(errors);
             setData(null);
         } else {
-            console.log("data", data)
             setErrors([]);
             setData(data)
         }
@@ -66,26 +57,32 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
             </div>]}
         />
 
-        <div className="flex flex-col mt-4">
-            <JobsTable className="mt-4" workspaceName={workspaceName} items={data?.items || []} />
-            <div className="flex mx-auto space-x-2">
-                <Button variant="outline" disabled={paging.page === 0} onClick={() => setPaging(prev => ({
-                    ...prev,
-                    page: prev.page - 1
-                }))}>
-                    <ChevronLeft className="mr-2 w-4 h-4" />
-                    {intl.formatMessage({ id: 'global.navigation.prev' })}
-                </Button>
-                <Button variant="outline" disabled={paging.page + 1 >= data?.totalCount / DEFAULT_SIZE} onClick={() => setPaging(prev => ({
-                    ...prev,
-                    page: prev.page + 1
-                }
-                ))}>
-                    {intl.formatMessage({ id: 'global.navigation.next' })}
-                    <ChevronRight className="ml-2 w-4 h-4" />
-                </Button>
-            </div>
-        </div>
+        {(data?.totalCount === 0) && <NoJobs className="w-full h-min-screen my-4" workspaceId={workspaceId} />}
+        <LoadingContainer className="w-full h-min-screen m-auto mt-4" loading={progress}>
+            {(!data || data.totalCount > 0) &&
+                <div className="flex flex-col">
+                    <JobsTable className="mt-4" workspaceName={workspaceName} items={data?.items || []} />
+                    {data && data.totalCount > paging.size && <div className="flex mx-auto space-x-2">
+                        <Button variant="outline" disabled={paging.page === 0} onClick={() => setPaging(prev => ({
+                            ...prev,
+                            page: prev.page - 1
+                        }))}>
+                            <ChevronLeft className="mr-2 w-4 h-4" />
+                            {intl.formatMessage({ id: 'global.navigation.prev' })}
+                        </Button>
+                        <Button variant="outline" disabled={paging.page + 1 >= data?.totalCount / paging.size} onClick={() => setPaging(prev => ({
+                            ...prev,
+                            page: prev.page + 1
+                        }
+                        ))}>
+                            {intl.formatMessage({ id: 'global.navigation.next' })}
+                            <ChevronRight className="ml-2 w-4 h-4" />
+                        </Button>
+                    </div>
+                    }
+                </div>
+            }
+        </LoadingContainer>
 
     </div>
 }

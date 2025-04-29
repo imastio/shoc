@@ -16,7 +16,7 @@ export default function WorkspaceCardList({ progress, items = [] }: { progress?:
   const intl = useIntl();
 
   const current = useMemo(() => {
-    return items.slice(page * DEFAULT_PAGE_SIZE, Math.max((page + 1) * DEFAULT_PAGE_SIZE, items.length - 1))
+    return items.slice(page * DEFAULT_PAGE_SIZE, Math.min((page + 1) * DEFAULT_PAGE_SIZE, items.length))
   }, [page, items])
 
   if (progress) {

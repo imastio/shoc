@@ -28,7 +28,7 @@ export default function WorkspaceSidebar({ name }: { name: string }) {
             <div className="mt-auto p-4">
                 <Card x-chunk="dashboard-02-chunk-0">
                     <CardHeader>
-                        <CardTitle>Version: Alpha</CardTitle>
+                        <CardTitle>Version Alpha</CardTitle>
                         <CardDescription>The application is still in a very early testing phase. If you face any problems while using it, just let us know.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
