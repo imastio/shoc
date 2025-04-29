@@ -69,6 +69,7 @@ public class FunctionKubernetesTaskClient : BaseKubernetesTaskClient
             },
             Spec = new V1JobSpec
             {
+                BackoffLimit = 0, 
                 Template = new V1PodTemplateSpec
                 {
                     Metadata = new V1ObjectMeta
