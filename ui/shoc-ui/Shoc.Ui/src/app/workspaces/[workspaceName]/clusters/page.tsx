@@ -6,21 +6,20 @@ import WorkspaceClustersClientPage from "./_components/workspace-clusters-client
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.clusters' });
-  const title = name ? `${defaultTitle} - ${name}` : defaultTitle;
+  const title = workspaceName ? `${defaultTitle} - ${workspaceName}` : defaultTitle;
 
   return {
     title
   }
 }
 
-export default async function WorkspaceClustersPage({ params: { name } }: any) {
+export default async function WorkspaceClustersPage({ params: { workspaceName } }: any) {
 
-  const { data: workspace, errors: workspaceErrors } = await getByName(name);
-  const intl = await getIntl();
+  const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);
 
   if (workspaceErrors) {
     return <ErrorScreen errors={workspaceErrors} />
@@ -28,7 +27,7 @@ export default async function WorkspaceClustersPage({ params: { name } }: any) {
 
   return <>
     <div className="flex flex-col h-full">
-      <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={name} />
+      <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
     </div>
   </>
 }

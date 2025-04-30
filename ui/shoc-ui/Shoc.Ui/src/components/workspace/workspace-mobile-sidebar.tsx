@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
-import useWorkspaceMenu from "@/app/workspaces/[name]/use-workspace-menu";
+import useWorkspaceMenu from "@/app/workspaces/[workspaceName]/use-workspace-menu";
 import { cn } from "@/lib/utils";
 import MenuIcon from "../icons/menu-icon";
 import { useIntl } from "react-intl";

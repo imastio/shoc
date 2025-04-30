@@ -6,19 +6,19 @@ import DashboardClientPage from "./_components/dashboard-client-page";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.dashboard' });
-  const title = name ? `${defaultTitle} - ${name}` : defaultTitle;
+  const title = workspaceName ? `${defaultTitle} - ${workspaceName}` : defaultTitle;
 
   return {
     title
   }
 }
 
-export default async function WorkspaceDashboardPage({ params: { name } }: any) {
-  const { data, errors } = await getByName(name)
+export default async function WorkspaceDashboardPage({ params: { workspaceName } }: any) {
+  const { data, errors } = await getByName(workspaceName)
   if (errors) {
     return <ErrorScreen errors={errors} />
   }

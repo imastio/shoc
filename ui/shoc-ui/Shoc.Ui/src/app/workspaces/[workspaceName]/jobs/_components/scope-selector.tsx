@@ -14,13 +14,14 @@ const options: { key: JobScope, display: IntlMessageId }[] = [
     }
 ]
 
-export default function ScopeSelector({ className, value, onChange }: { className?: string, value?: string, onChange: (value?: string) => void }) {
+export default function ScopeSelector({ className, value, onChange, disabled }: { className?: string, value?: string, onChange: (value?: string) => void, disabled?: boolean }) {
 
     const intl = useIntl();
 
     return <Select
         value={value}
         onValueChange={onChange}
+        disabled={disabled}
     >
         <SelectTrigger className={className}>
             <SelectValue placeholder={intl.formatMessage({ id: 'jobs.filters.scope.placeholder' })} />

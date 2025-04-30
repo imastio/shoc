@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Shoc.Cluster.Model.Cluster;
 using Shoc.Cluster.Model.WorkspaceCluster;
 using Shoc.Core.Kubernetes;
+using Shoc.ObjectAccess.Cluster;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
 
@@ -25,7 +26,8 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
     /// <param name="clusterService">The cluster service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
     /// <param name="k8sService">The k8s service</param>
-    public WorkspaceClusterService(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, K8sService k8sService) : base(clusterService, workspaceAccessEvaluator)
+    /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
+    public WorkspaceClusterService(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator, K8sService k8sService) : base(clusterService, workspaceAccessEvaluator, clusterAccessEvaluator)
     {
         this.k8SService = k8sService;
     }
@@ -60,6 +62,21 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         
         // map and return the result
         return Map(item);
+    }
+
+    /// <summary>
+    /// Gets object permissions by name
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="name">The name of object</param>
+    /// <returns></returns>
+    public async Task<ISet<string>> GetPermissionsByName(string userId, string workspaceId, string name)
+    {
+        // make sure object exists
+        var result = await this.GetByName(userId, workspaceId, name);
+        
+        return await this.clusterAccessEvaluator.GetPermissions(userId, result.WorkspaceId, result.Id);
     }
     
     /// <summary>

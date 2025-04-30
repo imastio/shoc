@@ -6,20 +6,20 @@ import UserSecretsTable from "./_components/user-secrets-table";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'secrets.menu.userSecrets' });
-  const title = name ? `${defaultTitle} - ${name}` : defaultTitle;
+  const title = workspaceName ? `${defaultTitle} - ${workspaceName}` : defaultTitle;
 
   return {
     title
   }
 }
 
-export default async function WorkspaceUserSecretsPage({ params: { name } }: any) {
+export default async function WorkspaceUserSecretsPage({ params: { workspaceName } }: any) {
 
-  const { data: workspace, errors: workspaceErrors } = await getByName(name);
+  const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);
   const intl = await getIntl();
 
   if (workspaceErrors) {

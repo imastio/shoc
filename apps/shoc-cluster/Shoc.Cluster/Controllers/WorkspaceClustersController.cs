@@ -50,11 +50,23 @@ public class WorkspaceClustersController : ControllerBase
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="name">The name of object</param>
     /// <returns></returns>
-    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
     [HttpGet("by-name/{name}")]
     public Task<WorkspaceClusterModel> GetByName(string workspaceId, string name)
     {
         return this.clusterService.GetByName(this.HttpContext.GetPrincipal().Id, workspaceId, name);
+    }
+
+    /// <summary>
+    /// Gets object permissions by name
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="name">The name of object</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpGet("by-name/{name}/permissions")]
+    public Task<ISet<string>> GetPermissionsByName(string workspaceId, string name)
+    {
+        return this.clusterService.GetPermissionsByName(this.HttpContext.GetPrincipal().Id, workspaceId, name);
     }
     
     /// <summary>

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import useWorkspaceMenu from "@/app/workspaces/[name]/use-workspace-menu";
+import useWorkspaceMenu from "@/app/workspaces/[workspaceName]/use-workspace-menu";
 
 export default function WorkspaceSidebar({ name }: { name: string }) {
 

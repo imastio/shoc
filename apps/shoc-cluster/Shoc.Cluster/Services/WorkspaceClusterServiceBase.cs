@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Shoc.Cluster.Model.Cluster;
 using Shoc.Cluster.Model.WorkspaceCluster;
+using Shoc.ObjectAccess.Cluster;
 using Shoc.ObjectAccess.Workspace;
 
 namespace Shoc.Cluster.Services;
@@ -21,14 +22,21 @@ public abstract class WorkspaceClusterServiceBase
     protected readonly IWorkspaceAccessEvaluator workspaceAccessEvaluator;
 
     /// <summary>
+    /// The cluster access evaluator
+    /// </summary>
+    protected readonly IClusterAccessEvaluator clusterAccessEvaluator;
+
+    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="clusterService">The cluster service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
-    protected WorkspaceClusterServiceBase(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator)
+    /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
+    protected WorkspaceClusterServiceBase(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator)
     {
         this.clusterService = clusterService;
         this.workspaceAccessEvaluator = workspaceAccessEvaluator;
+        this.clusterAccessEvaluator = clusterAccessEvaluator;
     }
     
     /// <summary>

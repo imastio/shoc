@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Job.Model.Job;
@@ -98,5 +99,20 @@ public class WorkspaceJobService : WorkspaceJobServiceBase
         
         // map and return the result
         return MapJob(item);
+    }
+    
+    /// <summary>
+    /// Gets object permissions by local id
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="localId">The local id of object</param>
+    /// <returns></returns>
+    public async Task<ISet<string>> GetPermissionsByLocalId(string userId, string workspaceId, long localId)
+    {
+        // make sure object exists
+        var result = await this.GetByLocalId(userId, workspaceId, localId);
+        
+        return await this.jobAccessEvaluator.GetPermissions(userId, result.WorkspaceId, result.Id);
     }
 }

@@ -10,6 +10,14 @@ export const getAll = defineServerAction(({ workspaceId }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).getAll(token, workspaceId)));
 });
 
+export const getByName = defineServerAction(({ workspaceId, name }) => {
+    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).getByName(token, workspaceId, name)));
+});
+
+export const getPermissionsByName = defineServerAction(({ workspaceId, name }) => {
+    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).getPermissionsByName(token, workspaceId, name)));
+});
+
 export const countAll = defineServerAction(({ workspaceId }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).countAll(token, workspaceId)));
 });
@@ -24,6 +32,8 @@ export const ping = defineServerAction(({ workspaceId, input }) => {
 
 export const serverActions = {
     'cluster/workspace-clusters/getAll': getAll,
+    'cluster/workspace-clusters/getByName': getByName,
+    'cluster/workspace-clusters/getPermissionsByName': getPermissionsByName,
     'cluster/workspace-clusters/countAll': countAll,
     'cluster/workspace-clusters/create': create,
     'cluster/workspace-clusters/ping': ping

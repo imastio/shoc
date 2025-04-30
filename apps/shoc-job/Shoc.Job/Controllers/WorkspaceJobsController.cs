@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shoc.Access.Model;
 using Shoc.ApiCore;
@@ -80,9 +81,22 @@ public class WorkspaceJobsController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("by-local-id/{id:long}")]
-    public Task<WorkspaceJobModel> GetById(string workspaceId, long id)
+    public Task<WorkspaceJobModel> GetByLocalId(string workspaceId, long id)
     {
         return this.jobService.GetByLocalId(this.HttpContext.GetPrincipal().Id, workspaceId, id);
+    }
+    
+    /// <summary>
+    /// Gets object permissions by local id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The local id of object</param>
+    /// <returns></returns>
+    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
+    [HttpGet("by-local-id/{id:long}/permissions")]
+    public Task<ISet<string>> GetPermissionsByLocalId(string workspaceId, long id)
+    {
+        return this.jobService.GetPermissionsByLocalId(this.HttpContext.GetPrincipal().Id, workspaceId, id);
     }
     
     /// <summary>

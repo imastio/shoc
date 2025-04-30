@@ -72,18 +72,18 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
             actions={[<div key="workspace-header-operations" className="flex space-x-1">
             </div>]}
         />
-            <div className="flex flex-row space-x-2 my-4">
-                <ScopeSelector className="w-[150px]" value={filter.scope || 'all'} onChange={newValue => setFilter(prev => ({
-                    ...prev,
-                    scope: newValue !== 'all' ? newValue as JobScope : undefined,
-                    page: 0
-                }))} />
-                <StatusSelector className="w-[220px]" value={filter.status || 'all'} onChange={newValue => setFilter(prev => ({
-                    ...prev,
-                    status: newValue !== 'all' ? newValue as JobStatus : undefined,
-                    page: 0
-                }))} />
-            </div>
+        <div className="flex flex-row space-x-2 my-4">
+            <ScopeSelector className="w-[150px]" value={filter.scope || 'all'} onChange={newValue => setFilter(prev => ({
+                ...prev,
+                scope: newValue !== 'all' ? newValue as JobScope : undefined,
+                page: 0
+            }))}  disabled={progress} />
+            <StatusSelector className="w-[220px]" value={filter.status || 'all'} onChange={newValue => setFilter(prev => ({
+                ...prev,
+                status: newValue !== 'all' ? newValue as JobStatus : undefined,
+                page: 0
+            }))} disabled={progress} />
+        </div>
         {(data?.totalCount === 0) && <NoJobs className="w-full h-min-screen my-4" workspaceId={workspaceId} />}
         <LoadingContainer className="w-full h-min-screen m-auto mt-4" loading={progress}>
             {(!data || data.totalCount > 0) &&

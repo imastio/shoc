@@ -7,27 +7,27 @@ import ErrorScreen from "@/components/error/error-screen";
 import WorkspaceAccessProvider from "@/providers/workspace-access/workspace-access-provider";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
-    const { data } = await getByName(name);
+    const { data } = await getByName(workspaceName);
 
     return {
         description: data?.description || ''
     }
 }
 
-export default async function SingleWorkspaceLayout({ params: { name }, children }: { children: ReactNode, params: any }) {
+export default async function SingleWorkspaceLayout({ params: { workspaceName }, children }: { children: ReactNode, params: any }) {
 
-    const [workspace, permissions] = await Promise.all([getByName(name), getPermissionsByName(name)])
+    const [workspace, permissions] = await Promise.all([getByName(workspaceName), getPermissionsByName(workspaceName)])
 
     if (workspace.errors || permissions.errors) {
         return <ErrorScreen errors={workspace.errors || permissions.errors} />
     }
 
     return <WorkspaceAccessProvider permissions={permissions.data || []}>
-        <AppHeader mobileSidebar={<WorkspaceMobileSidebar name={name} />} />
+        <AppHeader mobileSidebar={<WorkspaceMobileSidebar name={workspaceName} />} />
         <main className="flex h-full">
-            <WorkspaceSidebar name={name} />
+            <WorkspaceSidebar name={workspaceName} />
             {children}
         </main>
     </WorkspaceAccessProvider>

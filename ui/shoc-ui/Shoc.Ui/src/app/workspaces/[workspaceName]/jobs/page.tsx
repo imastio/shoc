@@ -6,21 +6,20 @@ import WorkspaceJobsClientPage from "./_components/workspace-jobs-client-page";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { name } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.jobs' });
-  const title = name ? `${defaultTitle} - ${name}` : defaultTitle;
+  const title = workspaceName ? `${defaultTitle} - ${workspaceName}` : defaultTitle;
 
   return {
     title
   }
 }
 
-export default async function WorkspaceJobsPage({ params: { name } }: any) {
+export default async function WorkspaceJobsPage({ params: { workspaceName } }: any) {
 
-  const { data: workspace, errors: workspaceErrors } = await getByName(name);
-  const intl = await getIntl();
+  const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);
 
   if (workspaceErrors) {
     return <ErrorScreen errors={workspaceErrors} />
@@ -28,7 +27,7 @@ export default async function WorkspaceJobsPage({ params: { name } }: any) {
 
   return <>
     <div className="flex flex-col h-full">
-      <WorkspaceJobsClientPage workspaceId={workspace.id} workspaceName={name} />
+      <WorkspaceJobsClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
     </div>
   </>
 }

@@ -30,7 +30,7 @@ const descriptions: Record<ErrorKind, IntlMessageId> = {
 export default function ErrorScreen({ errors, kind: givenKind, title: givenTitle, description: givenDescription, children }: { errors?: any[] | null, kind?: ErrorKind, title?: string, description?: string, children?: ReactNode }) {
   const intl = useIntl();
   const router = useRouter();
-  const kind: ErrorKind = givenKind || (errors || [])[0].kind as ErrorKind || 'unknown';
+  const kind: ErrorKind = givenKind || (errors || [])[0]?.kind as ErrorKind || 'unknown';
 
   const title = givenTitle || intl.formatMessage({ id: titles[kind] });
   const description = givenDescription || intl.formatMessage({ id: descriptions[kind] });
