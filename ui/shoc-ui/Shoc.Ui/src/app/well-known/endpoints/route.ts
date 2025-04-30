@@ -9,7 +9,7 @@ export async function GET() {
 
   const data = {
     idp: idp.endsWith('/') ? idp.substring(0, idp.length - 1) : idp,
-    api: api.endsWith('/') ? api.substring(0, idp.length - 1) : api
+    api: api.endsWith('/') ? api.substring(0, api.length - 1) : api
   };
 
   return NextResponse.json(data);
