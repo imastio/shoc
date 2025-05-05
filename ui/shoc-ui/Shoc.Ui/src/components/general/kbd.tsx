@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const kbdVariants = cva(
-  "select-none rounded border px-1.5 py-px font-mono text-[0.7rem] font-normal shadow-sm disabled:opacity-50",
+  "select-none rounded border px-1.5 py-px font-mono text-[0.7rem] font-normal shadow-xs disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -30,25 +30,34 @@ export interface KbdProps
   abbrTitle?: string
 }
 
-const Kbd = React.forwardRef<HTMLUnknownElement, KbdProps>(
-  ({ abbrTitle, children, className, variant, ...props }, ref) => {
-    return (
-      <kbd
-        className={cn(kbdVariants({ variant, className }))}
-        ref={ref}
-        {...props}
-      >
-        {abbrTitle ? (
-          <abbr title={abbrTitle} className="no-underline">
-            {children}
-          </abbr>
-        ) : (
-          children
-        )}
-      </kbd>
-    )
+const Kbd = (
+  {
+    ref,
+    abbrTitle,
+    children,
+    className,
+    variant,
+    ...props
+  }: KbdProps & {
+    ref: React.RefObject<HTMLUnknownElement>;
   }
-)
+) => {
+  return (
+    <kbd
+      className={cn(kbdVariants({ variant, className }))}
+      ref={ref}
+      {...props}
+    >
+      {abbrTitle ? (
+        <abbr title={abbrTitle} className="no-underline">
+          {children}
+        </abbr>
+      ) : (
+        children
+      )}
+    </kbd>
+  )
+}
 Kbd.displayName = "Kbd"
 
 export default Kbd;

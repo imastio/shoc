@@ -139,7 +139,7 @@ export default function WorkspaceInvitationsTable({ workspaceId, className }: { 
                 {intl.formatMessage({ 'id': 'global.actions.update' })}
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-red-600 hover:!text-red-600 hover:!bg-red-100"
+                className="text-red-600 hover:text-red-600! hover:bg-red-100!"
                 onClick={() => setDeletingItem(row.original)}
                 disabled={row.original.role === 'owner' || !hasAny([WorkspacePermissions.WORKSPACE_DELETE_INVITATION])}
               >

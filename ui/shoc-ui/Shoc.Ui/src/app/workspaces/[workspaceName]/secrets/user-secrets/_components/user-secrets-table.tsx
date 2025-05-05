@@ -149,7 +149,7 @@ export default function UserSecretsTable({ workspaceId, className }: { workspace
                 {intl.formatMessage({ 'id': 'secrets.updateValue.action' })}
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-red-600 hover:!text-red-600 hover:!bg-red-100"
+                className="text-red-600 hover:text-red-600! hover:bg-red-100!"
                 onClick={() => setDeletingItem(row.original)}
                 disabled={!hasAny([WorkspacePermissions.WORKSPACE_DELETE_USER_SECRET])}
               >

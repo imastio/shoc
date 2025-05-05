@@ -6,6 +6,8 @@ import { getByName, getPermissionsByName } from "./cached-workspace-actions";
 import ErrorScreen from "@/components/error/error-screen";
 import WorkspaceAccessProvider from "@/providers/workspace-access/workspace-access-provider";
 import { Metadata } from "next";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/sidebar/app-sidebar";
 
 export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
 
@@ -25,10 +27,11 @@ export default async function SingleWorkspaceLayout({ params: { workspaceName },
     }
 
     return <WorkspaceAccessProvider permissions={permissions.data || []}>
-        <AppHeader mobileSidebar={<WorkspaceMobileSidebar name={workspaceName} />} />
-        <main className="flex h-full">
-            <WorkspaceSidebar name={workspaceName} />
-            {children}
-        </main>
+        <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+                {children}
+            </SidebarInset>
+        </SidebarProvider>
     </WorkspaceAccessProvider>
 }
