@@ -1,15 +1,18 @@
-import AppHeader from "@/components/layout/app-header";
-import WorkspaceMobileSidebar from "@/components/workspace/workspace-mobile-sidebar";
-import WorkspaceSidebar from "@/components/workspace/workspace-sidebar";
 import { ReactNode } from "react";
 import { getByName, getPermissionsByName } from "./cached-workspace-actions";
 import ErrorScreen from "@/components/error/error-screen";
 import WorkspaceAccessProvider from "@/providers/workspace-access/workspace-access-provider";
 import { Metadata } from "next";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/sidebar/app-sidebar";
+import WorkspaceProvider from "@/providers/workspace/workspace-provider";
+import WorkspaceSidebar from "@/components/sidebar/workspace-sidebar";
 
-export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<any> }): Promise<Metadata> {
+    const params = await props.params;
+
+    const {
+        workspaceName
+    } = params;
 
     const { data } = await getByName(workspaceName);
 
@@ -18,7 +21,16 @@ export async function generateMetadata({ params: { workspaceName } }: { params: 
     }
 }
 
-export default async function SingleWorkspaceLayout({ params: { workspaceName }, children }: { children: ReactNode, params: any }) {
+export default async function SingleWorkspaceLayout(props: { children: ReactNode, params: Promise<any> }) {
+    const params = await props.params;
+
+    const {
+        workspaceName
+    } = params;
+
+    const {
+        children
+    } = props;
 
     const [workspace, permissions] = await Promise.all([getByName(workspaceName), getPermissionsByName(workspaceName)])
 
@@ -26,12 +38,14 @@ export default async function SingleWorkspaceLayout({ params: { workspaceName },
         return <ErrorScreen errors={workspace.errors || permissions.errors} />
     }
 
-    return <WorkspaceAccessProvider permissions={permissions.data || []}>
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-                {children}
-            </SidebarInset>
-        </SidebarProvider>
-    </WorkspaceAccessProvider>
+    return <WorkspaceProvider workspace={workspace.data}>
+        <WorkspaceAccessProvider permissions={permissions.data || []}>
+            <SidebarProvider>
+                <WorkspaceSidebar variant="inset" />
+                <SidebarInset>
+                    {children}
+                </SidebarInset>
+            </SidebarProvider>
+        </WorkspaceAccessProvider>
+    </WorkspaceProvider>
 }

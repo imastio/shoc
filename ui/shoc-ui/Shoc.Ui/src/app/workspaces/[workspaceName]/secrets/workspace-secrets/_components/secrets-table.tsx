@@ -200,7 +200,7 @@ export default function SecretsTable({ workspaceId, className }: { workspaceId: 
         columns={columns}
         progress={progress}
         errors={errors}
-        toolbar={(table) => <DataTableToolbar table={table}>
+        toolbar={(table) => <DataTableToolbar className="flex flex-col items-start" table={table}>
           <Button variant="outline" onClick={() => setCreatingActive(true)}>
             <KeyRoundIcon className="mr-2 h-4 w-4" /> {intl.formatMessage({ id: 'secrets.create.action' })}
           </Button>

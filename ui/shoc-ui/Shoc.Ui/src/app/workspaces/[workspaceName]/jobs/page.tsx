@@ -3,10 +3,17 @@ import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
 import { getByName } from "../cached-workspace-actions";
 import WorkspaceJobsClientPage from "./_components/workspace-jobs-client-page";
+import WorkspacePageWrapper from "../_components/workspace-page-wrapper";
+import WorkspacePageHeader from "@/components/general/workspace-page-header";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<any> }): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    workspaceName
+  } = params;
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.jobs' });
@@ -17,17 +24,22 @@ export async function generateMetadata({ params: { workspaceName } }: { params: 
   }
 }
 
-export default async function WorkspaceJobsPage({ params: { workspaceName } }: any) {
+export default async function WorkspaceJobsPage(props: any) {
+  const params = await props.params;
+
+  const {
+    workspaceName
+  } = params;
 
   const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);
-
+  const intl = await getIntl();
   if (workspaceErrors) {
     return <ErrorScreen errors={workspaceErrors} />
   }
 
-  return <>
-    <div className="flex flex-col h-full">
-      <WorkspaceJobsClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
-    </div>
-  </>
+  return <WorkspacePageWrapper header={
+    <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.sidebar.jobs' })} />
+  }>
+    <WorkspaceJobsClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
+  </WorkspacePageWrapper>
 }

@@ -6,7 +6,12 @@ import { getClusterByName } from "../cached-cluster-actions";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<any> }): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    workspaceName
+  } = params;
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.clusters' });
@@ -17,7 +22,13 @@ export async function generateMetadata({ params: { workspaceName } }: { params: 
   }
 }
 
-export default async function WorkspaceClustersPage({ params: { workspaceName, clusterName } }: any) {
+export default async function WorkspaceClustersPage(props: any) {
+  const params = await props.params;
+
+  const {
+    workspaceName,
+    clusterName
+  } = params;
 
   const intl = await getIntl();
   const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);

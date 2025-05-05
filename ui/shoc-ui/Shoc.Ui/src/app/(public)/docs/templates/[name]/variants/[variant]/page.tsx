@@ -16,12 +16,18 @@ import {
 } from "@/components/ui/accordion"
 
 type PageProps = {
-    params: { name: string, variant: string };
+    params: Promise<{ name: string, variant: string }>;
 };
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { name, variant } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<any> }): Promise<Metadata> {
+    const params = await props.params;
+
+    const {
+        name,
+        variant
+    } = params;
 
     const intl = await getIntl();
     const defaultTitle = intl.formatMessage({ id: 'templates' });
@@ -32,7 +38,13 @@ export async function generateMetadata({ params: { name, variant } }: { params: 
     }
 }
 
-export default async function VariantPage({ params: { name, variant } }: PageProps) {
+export default async function VariantPage(props: PageProps) {
+    const params = await props.params;
+
+    const {
+        name,
+        variant
+    } = params;
 
     const { data: template, errors } = await getVariant(name, variant)
     const intl = await getIntl();

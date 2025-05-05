@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react"
 import ErrorScreen from "@/components/error/error-screen";
 import { rpc } from "@/server-actions/rpc";
 import { useIntl } from "react-intl";
-import BasicHeader from "@/components/general/basic-header";
 import NoJobs from "./no-jobs";
 import JobsTable from "./jobs-table";
 import { Button } from "@/components/ui/button";
@@ -66,25 +65,20 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
         return <ErrorScreen errors={errors} />
     }
 
-    return <div className="flex flex-col mx-auto w-full h-full">
-        <BasicHeader
-            title={intl.formatMessage({ id: 'jobs.menu.jobs' })}
-            actions={[<div key="workspace-header-operations" className="flex space-x-1">
-            </div>]}
-        />
-        <div className="flex flex-row space-x-2 my-4">
+    return <>
+        <div className="flex flex-row space-x-2">
             <ScopeSelector className="w-[150px]" value={filter.scope || 'all'} onChange={newValue => setFilter(prev => ({
                 ...prev,
                 scope: newValue !== 'all' ? newValue as JobScope : undefined,
                 page: 0
-            }))}  disabled={progress} />
+            }))} disabled={progress} />
             <StatusSelector className="w-[220px]" value={filter.status || 'all'} onChange={newValue => setFilter(prev => ({
                 ...prev,
                 status: newValue !== 'all' ? newValue as JobStatus : undefined,
                 page: 0
             }))} disabled={progress} />
         </div>
-        {(data?.totalCount === 0) && <NoJobs className="w-full h-min-screen my-4" workspaceId={workspaceId} />}
+        {(data?.totalCount === 0) && <NoJobs className="w-full h-full" workspaceId={workspaceId} />}
         <LoadingContainer className="w-full h-min-screen m-auto mt-4" loading={progress}>
             {(!data || data.totalCount > 0) &&
                 <div className="flex flex-col">
@@ -110,6 +104,5 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
                 </div>
             }
         </LoadingContainer>
-
-    </div>
+    </>
 }

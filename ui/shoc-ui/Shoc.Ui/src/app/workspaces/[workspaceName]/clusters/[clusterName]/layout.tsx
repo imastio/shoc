@@ -4,7 +4,17 @@ import { getClusterByName, getClusterPermissionsByName } from "../cached-cluster
 import ErrorScreen from "@/components/error/error-screen";
 import ClusterAccessProvider from "@/providers/cluster-access/cluster-access-provider";
 
-export default async function SingleClusterLayoutLayout({ params: { workspaceName, clusterName }, children }: { children: ReactNode, params: any }) {
+export default async function SingleClusterLayoutLayout(props: { children: ReactNode, params: Promise<any> }) {
+    const params = await props.params;
+
+    const {
+        workspaceName,
+        clusterName
+    } = params;
+
+    const {
+        children
+    } = props;
 
     const { data: workspace } = await getByName(workspaceName);
 

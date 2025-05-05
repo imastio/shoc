@@ -35,7 +35,7 @@ export default function WorkspaceClustersClientPage({ workspaceId, workspaceName
     }, []);
 
     useEffect(() => {
-        if(!workspaceId){
+        if (!workspaceId) {
             return;
         }
 
@@ -47,12 +47,7 @@ export default function WorkspaceClustersClientPage({ workspaceId, workspaceName
     }
 
     return <div className="flex flex-col mx-auto w-full h-full">
-        <BasicHeader 
-            title={intl.formatMessage({id: 'workspaces.clusters.page.title'})}
-            actions={[<div key="workspace-header-operations" className="flex space-x-1">
-                {items.length > 0 && <ClusterAddDialogButton key="add-cluster" workspaceId={workspaceId} disabled={progress} onSuccess={() => load(workspaceId)} />}
-            </div>]}
-        />
+        {items.length > 0 && <div><ClusterAddDialogButton key="add-cluster" workspaceId={workspaceId} disabled={progress} onSuccess={() => load(workspaceId)} /></div>}
         {(progress || items.length > 0) && <ClusterCardList workspaceId={workspaceId} workspaceName={workspaceName} items={items} progress={progress} />}
         {(!progress && items.length === 0) && <div className="py-4 h-full"><NoClusters workspaceId={workspaceId} onCreated={() => load(workspaceId)} /></div>}
     </div>

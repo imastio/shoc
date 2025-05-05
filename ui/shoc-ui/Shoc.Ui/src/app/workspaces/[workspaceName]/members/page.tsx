@@ -3,10 +3,17 @@ import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
 import { getByName } from "../cached-workspace-actions";
 import WorkspaceMembersTable from "./_components/workspace-members-table";
+import WorkspacePageHeader from "@/components/general/workspace-page-header";
+import WorkspacePageWrapper from "../_components/workspace-page-wrapper";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params: { workspaceName } }: { params: any }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<any> }): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    workspaceName
+  } = params;
 
   const intl = await getIntl();
   const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.members' });
@@ -17,7 +24,12 @@ export async function generateMetadata({ params: { workspaceName } }: { params: 
   }
 }
 
-export default async function WorkspaceMembersPage({ params: { workspaceName } }: any) {
+export default async function WorkspaceMembersPage(props: any) {
+  const params = await props.params;
+
+  const {
+    workspaceName
+  } = params;
 
   const { data: workspace, errors: workspaceErrors } = await getByName(workspaceName);
   const intl = await getIntl();
@@ -26,10 +38,9 @@ export default async function WorkspaceMembersPage({ params: { workspaceName } }
     return <ErrorScreen errors={workspaceErrors} />
   }
 
-  return <>
-    <div className="items-center">
-      <h1 className="text-lg truncate font-semibold md:text-2xl">{intl.formatMessage({id: 'workspaces.sidebar.members'})}</h1>
-    </div>
-    <WorkspaceMembersTable className="mt-4" workspaceId={workspace.id} />
-  </>
+  return <WorkspacePageWrapper header={
+      <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.members.menu.members' })} />
+  }>
+      <WorkspaceMembersTable workspaceId={workspace.id} />
+  </WorkspacePageWrapper>
 }
