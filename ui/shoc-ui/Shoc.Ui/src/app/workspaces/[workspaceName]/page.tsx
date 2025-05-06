@@ -32,7 +32,7 @@ export default async function WorkspaceDashboardPage(props: any) {
   } = params;
   const intl = await getIntl();
 
-  const { data, errors } = await getByName(workspaceName)
+  const { errors } = await getByName(workspaceName)
 
   if (errors) {
     return <ErrorScreen errors={errors} />
@@ -41,7 +41,7 @@ export default async function WorkspaceDashboardPage(props: any) {
   return <WorkspacePageWrapper header={
     <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.sidebar.dashboard' })} />
     }>
-        <DashboardClientPage workspaceId={data.id} workspaceName={data.name} />
+        <DashboardClientPage />
     </WorkspacePageWrapper>
     
 }
