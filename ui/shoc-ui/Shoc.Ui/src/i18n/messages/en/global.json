@@ -16,6 +16,7 @@
     "global.actions.view": "View",
     "global.actions.test": "Test",
     "global.actions.more": "More",
+    "global.actions.seeAll": "See all",
     "global.navigation.next": "Next",
     "global.navigation.prev": "Prev",
     "global.labels.name": "Name",

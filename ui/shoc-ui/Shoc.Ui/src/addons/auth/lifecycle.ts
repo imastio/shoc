@@ -17,6 +17,7 @@ export const codeGrant = new AuthorizationCodeGrant({
 export function getProfileUser(profile: Profile): Awaitable<User>{
     return {
         id: profile.sub || undefined,
+        userId: profile.sub || undefined,
         name: profile.name,
         email: profile.email,
         emailVerified: Boolean(profile.emailVerified),
@@ -26,7 +27,6 @@ export function getProfileUser(profile: Profile): Awaitable<User>{
 }
 
 export function sessionCallback({ session, token }: { session: Session, token: JWT }): Session {
-
     return {
         ...session,
         user: token?.error ? null : token.user,
@@ -34,7 +34,7 @@ export function sessionCallback({ session, token }: { session: Session, token: J
     }
 }
 
-export async function jwtCallback({ token, account, user } : { token: JWT, account: Account | null, user: User | AdapterUser }): Promise<JWT> {
+export async function jwtCallback({ token, account, user } : { token: JWT, account?: Account | null, user: User | AdapterUser }): Promise<JWT> {
     // on the first call when account is available based on OIDC response save the tokens
     if (account) {  
         const sid = crypto.randomUUID();

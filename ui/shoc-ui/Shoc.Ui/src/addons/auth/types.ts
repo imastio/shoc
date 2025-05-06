@@ -10,6 +10,7 @@ declare module "next-auth" {
 
 declare module "@auth/core/types" {
     interface User {
+        userId?: string,
         emailVerified?: boolean | Date | null,
         username?: string | null,
         userType?: string | null

@@ -6,6 +6,7 @@ import WorkspaceContext from "./workspace-context";
 export default function WorkspaceProvider({ children, workspace } : { children: React.ReactNode, workspace: any }){
     
     const value = useMemo(() => ({
+        id: workspace.id,
         name: workspace.name,
         type: workspace.type,
         role: workspace.role

@@ -9,18 +9,11 @@ import JobsTable from "./jobs-table";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingContainer from "@/components/general/loading-container";
-import { JobScope, JobStatus } from "./types";
+import { FilterOptions, JobScope, JobStatus } from "./types";
 import ScopeSelector from "./scope-selector";
 import StatusSelector from "./status-selector";
 
 const DEFAULT_PAGE_SIZE = 10;
-
-interface FilterOptions {
-    scope?: JobScope
-    status?: JobStatus
-    page: number
-    size: number
-}
 
 export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: any) {
 
@@ -78,8 +71,8 @@ export default function WorkspaceJobsClientPage({ workspaceId, workspaceName }: 
                 page: 0
             }))} disabled={progress} />
         </div>
+        <LoadingContainer className="w-full h-full m-auto mt-4" loading={progress}>
         {(data?.totalCount === 0) && <NoJobs className="w-full h-full" workspaceId={workspaceId} />}
-        <LoadingContainer className="w-full h-min-screen m-auto mt-4" loading={progress}>
             {(!data || data.totalCount > 0) &&
                 <div className="flex flex-col">
                     <JobsTable className="mt-4" workspaceName={workspaceName} items={data?.items || []} />

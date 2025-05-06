@@ -29,3 +29,11 @@ export type Job = {
 export type JobStatus = 'created' | 'pending' | 'running' | 'partially_succeeded' | 'succeeded' | 'failed' | 'cancelled';
 
 export type JobScope = 'user' | 'workspace';
+
+export interface FilterOptions {
+    scope?: JobScope
+    status?: JobStatus
+    userId?: string
+    page: number
+    size: number
+}
