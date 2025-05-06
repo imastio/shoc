@@ -27,7 +27,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useIntl } from "react-intl"
-import { FilterOptions, Job, JobStatus } from "../jobs/_components/types"
+import { FilterOptions, Job } from "../jobs/_components/types"
 import JobStatusBadge from "../jobs/_components/job-status-badge"
 import { useSession } from "next-auth/react"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -36,7 +36,6 @@ import useWorkspace from "@/providers/workspace/use-workspace"
 import { User } from "@auth/core/types"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { durationBetween } from "@/extended/format"
 
 
@@ -47,14 +46,15 @@ export default function DashboardJobsCard() {
     const [errors, setErrors] = useState<any[]>([]);
     const [data, setData] = useState<any>(null);
     const { id: workspaceId, name: workspaceName } = useWorkspace();
+    const userId = (session?.data?.user as User)?.userId;
 
     const filter = useMemo<FilterOptions>(() => ({
         scope: undefined,
         status: undefined,
-        userId: (session?.data?.user as User)?.userId,
+        userId: userId,
         page: 0,
         size: 10
-    }), [(session?.data?.user as User)?.userId]);
+    }), [userId]);
 
     const columns: ColumnDef<Job>[] = useMemo(() => [
         {
@@ -93,7 +93,7 @@ export default function DashboardJobsCard() {
             header: intl.formatMessage({ id: 'jobs.labels.running' }),
             cell: ({ row }) => row.original.runningAt ? durationBetween(row.original.runningAt, row.original.completedAt) : "N/A",
         },
-    ], [intl])
+    ], [intl, workspaceName])
 
 
     const load = useCallback(async (workspaceId: string, filter: FilterOptions) => {

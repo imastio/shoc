@@ -5,8 +5,15 @@ import {
     AlertTitle,
 } from "@/components/ui/alert"
 import { useIntl } from "react-intl";
+import { IntlMessageId } from "@/i18n/sources";
 
-export default function ErrorAlert({ title = '', errors = [], className = '' }) {
+interface ErrorAlertProps {
+    title?: string, 
+    errors: any[], 
+    className?: string
+} 
+
+export default function ErrorAlert({ title = '', errors = [], className = '' } : ErrorAlertProps) {
 
     const intl = useIntl();
 
@@ -14,7 +21,7 @@ export default function ErrorAlert({ title = '', errors = [], className = '' }) 
         return false;
     }
 
-    const effectiveTitle = title || intl.formatMessage({id: 'errors.' + errors[0].code});
+    const effectiveTitle = title || intl.formatMessage({id: ('errors.' + errors[0].code) as IntlMessageId});
     const descriptionErrors = title ? errors : errors.slice(1);
 
     return <Alert className={className} variant="destructive">
@@ -23,9 +30,9 @@ export default function ErrorAlert({ title = '', errors = [], className = '' }) 
             {effectiveTitle}
         </AlertTitle>
         {descriptionErrors.length > 0 && <AlertDescription className="mt-1">
-            {descriptionErrors.length === 1 && intl.formatMessage({ id: 'errors.' + errors[0].code })}
+            {descriptionErrors.length === 1 && intl.formatMessage({ id: ('errors.' + errors[0].code) as IntlMessageId })}
             {descriptionErrors.length > 1 && <ul>
-                {descriptionErrors.map((error, index) => <li key={index}>{intl.formatMessage({ id: 'errors.' + error.code })}</li>)}
+                {descriptionErrors.map((error, index) => <li key={index}>{intl.formatMessage({ id: ('errors.' + error.code) as IntlMessageId })}</li>)}
             </ul>}
         </AlertDescription>
         }
