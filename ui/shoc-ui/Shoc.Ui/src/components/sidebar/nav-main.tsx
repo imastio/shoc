@@ -37,7 +37,7 @@ export default function NavMain({
         {
           items.map((item) => (item.items || []).length === 0 ? <SidebarMenuItem key={item.path}>
             <SidebarMenuButton asChild>
-              <Link href={item.path}>
+              <Link prefetch={false} href={item.path}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </Link>
@@ -62,7 +62,7 @@ export default function NavMain({
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.path}>
                         <SidebarMenuSubButton asChild>
-                          <Link href={subItem.path}>
+                          <Link prefetch={false} href={subItem.path}>
                             <span>{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>

@@ -190,7 +190,7 @@ export default function DashboardJobsCard() {
                                             colSpan={columns.length}
                                             className="h-24 text-center"
                                         >
-                                            No results.
+                                            {intl.formatMessage({ id: 'jobs.dashboard.noJobs' })}
                                         </TableCell>
                                     </TableRow>
                                 )}

@@ -13,7 +13,7 @@ export default function MainNav() {
 
   return (
     <div className="mr-4 flex  w-full">
-      <Link href="/" className="mr-6 flex items-center space-x-2 h-[40px]">
+      <Link prefetch={false} href="/" className="mr-6 flex items-center space-x-2 h-[40px]">
         <h1>Shoc Platform</h1>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium hidden md:flex">

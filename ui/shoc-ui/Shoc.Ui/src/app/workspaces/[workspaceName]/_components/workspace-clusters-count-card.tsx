@@ -45,7 +45,7 @@ export default function WorkspaceClustersCountCard({ workspaceId, workspaceName 
                 <div className="text-2xl font-bold">{data?.count || "N/A"}</div>
             </CardContent>
             <CardFooter>
-                <Link href={`/workspaces/${workspaceName}/clusters`}>
+                <Link prefetch={false} href={`/workspaces/${workspaceName}/clusters`}>
                     <Button variant="link" className="px-0">
                         {intl.formatMessage({id: 'global.actions.more'})}
                     </Button>
