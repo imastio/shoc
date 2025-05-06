@@ -41,5 +41,6 @@
     "global.builtBy": "Build by",
     "global.footer.sourceNotice": "The source code is available on",
     "global.sponsor": "Sponsor",
+    "global.notice.loading": "Loading...",
     "navigation.about": "About"
 }

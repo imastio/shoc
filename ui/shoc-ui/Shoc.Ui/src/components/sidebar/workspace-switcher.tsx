@@ -27,7 +27,7 @@ import { workspaceRolesMap } from "@/app/workspaces/(chooser)/_components/well-k
 
 export default function WorkspaceSwitcher() {
   const { isMobile } = useSidebar()
-  const [items, setItems] = useState<{name: string, type: string}[]>([]);
+  const [items, setItems] = useState<{ name: string, type: string }[]>([]);
   const [progress, setProgress] = useState(true);
   const intl = useIntl();
   const router = useRouter();
@@ -62,9 +62,9 @@ export default function WorkspaceSwitcher() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                
-              {workspace.type === 'organization' && <OrganizationIcon className="size-4 " />}
-              {workspace.type === 'individual' && <UsersIcon className="size-4" />}
+
+                {workspace.type === 'organization' && <OrganizationIcon className="size-4 " />}
+                {workspace.type === 'individual' && <UsersIcon className="size-4" />}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
@@ -90,6 +90,7 @@ export default function WorkspaceSwitcher() {
               <DropdownMenuItem
                 key={item.name}
                 onClick={() => router.push(`/workspaces/${item.name}`)}
+                disabled={progress}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
@@ -100,7 +101,7 @@ export default function WorkspaceSwitcher() {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem className="gap-2 p-2" disabled={progress} onClick={() => router.push(`/workspaces`)}>
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <MoreHorizontalIcon className="size-4" />
               </div>

@@ -4,7 +4,7 @@
     "jobs.noJobs": "You have no jobs yet",
     "jobs.dashboard.subtitle": "The jobs you recently run.",
     "jobs.dashboard.footnote": "Showing {count} of your {total} jobs.",
-    "jobs.dashboard.noJobs": "Looks like you did not run any jobs yet!",
+    "jobs.dashboard.noJobs": "Looks like you did not run any jobs yet ✨",
     "jobs.noJobs.note": "Your jobs will appear here whenever you submit them with CLI.",
     "jobs.statuses.created": "Created",
     "jobs.statuses.pending": "Pending",
