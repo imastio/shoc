@@ -3,7 +3,7 @@ import CircleUserIcon from "@/components/icons/circle-user-icon";
 import { Button } from "@/components/ui/button";
 
 export default function AppHeaderRightUser() {
-    return <DropdownMenu>
+    return <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUserIcon className="h-5 w-5" />

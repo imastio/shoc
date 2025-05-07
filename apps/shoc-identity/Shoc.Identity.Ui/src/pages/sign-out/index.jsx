@@ -12,16 +12,6 @@ export default function SignOutPage() {
   const session = useSession();
   const intl = useIntl();
 
-  useEffect(() => {
-    if(!session.authenticated){
-      navigate('/sign-in', { replace: true })
-    }
-  }, [session.authenticated, navigate])
-
-  if (!session.authenticated) {
-    return false;
-  }
-
   return (
     <>
       <Helmet title={intl.formatMessage({id: 'auth.signOut'})} />

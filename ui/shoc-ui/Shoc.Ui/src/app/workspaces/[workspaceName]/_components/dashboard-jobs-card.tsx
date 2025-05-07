@@ -4,9 +4,6 @@ import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -19,7 +16,6 @@ import {
 } from "@/components/ui/card"
 
 import {
-    Table,
     TableBody,
     TableCell,
     TableHead,
@@ -50,8 +46,6 @@ export default function DashboardJobsCard() {
     const userId = (session?.data?.user as User)?.userId;
 
     const filter = useMemo<FilterOptions>(() => ({
-        scope: undefined,
-        status: undefined,
         userId: userId,
         page: 0,
         size: 10
@@ -123,13 +117,12 @@ export default function DashboardJobsCard() {
 
     }, [workspaceId, load, filter])
 
+    const rows = useMemo(() => data?.items || [], [data?.items]) 
+
     const table = useReactTable({
-        data: data?.items || [],
+        data: rows,
         columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+        getCoreRowModel: getCoreRowModel()
     })
 
     return (
@@ -140,6 +133,7 @@ export default function DashboardJobsCard() {
             </CardHeader>
             <CardContent>
                 <LoadingContainer loading={progress}>
+                    
                     <div className="rounded-md border">
                         <div className="max-h-[250px] overflow-x-auto">
                             <table
@@ -174,7 +168,7 @@ export default function DashboardJobsCard() {
                                                 key={row.id}
                                                 data-state={row.getIsSelected() && "selected"}
                                             >
-                                                {row.getVisibleCells().map((cell) => (
+                                                {row.getAllCells().map((cell) => (
                                                     <TableCell
                                                         key={cell.id}
                                                         className="[&:has([role=checkbox])]:pl-3"
@@ -208,7 +202,7 @@ export default function DashboardJobsCard() {
                             {intl.formatMessage(
                                 { id: 'jobs.dashboard.footnote' },
                                 {
-                                    count: table.getFilteredRowModel().rows.length,
+                                    count: data?.items?.length ?? 0,
                                     total: data?.totalCount ?? 0
                                 }
                             )}

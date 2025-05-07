@@ -55,7 +55,7 @@ export default function WorkspaceSwitcher() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild disabled={progress}>
             <SidebarMenuButton
               size="lg"

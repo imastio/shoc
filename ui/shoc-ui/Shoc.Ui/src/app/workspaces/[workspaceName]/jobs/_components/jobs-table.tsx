@@ -86,7 +86,7 @@ export default function JobsTable({ items, workspaceName, className }: { items: 
                         { item.runningAt ? durationBetween(item.runningAt, item.completedAt) : "N/A" }
                     </TableCell>
                     <TableCell className="text-right">
-                        <DropdownMenu>
+                        <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                                     <span className="sr-only">Open menu</span>

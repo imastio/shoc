@@ -30,15 +30,19 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useSession } from "next-auth/react"
+import { rpc } from "@/server-actions/rpc"
+import { useRouter } from "next/navigation"
+import { getBaseUrl } from "@/addons/auth/config"
 
 export default function NavUser() {
   const { isMobile } = useSidebar()
   const session = useSession();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               disabled={!session || session.status !== 'authenticated'}
@@ -97,7 +101,14 @@ export default function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={async () => {
+                const { errors, data } = await rpc('auth/signleSignOut', { postLogoutRedirectUri: `${getBaseUrl()}/signed-out` })
+                if(errors || !data){
+                  return;
+                }
+                console.log('redirecting to ', data.redirectUri)
+                document.location.href = data.redirectUri
+            }}>
               <LogOut />
               Log out
             </DropdownMenuItem>

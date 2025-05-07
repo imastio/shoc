@@ -128,7 +128,7 @@ export default function SecretsTable({ workspaceId, className }: { workspaceId: 
       ),
       cell: function Cell({ row }) {
         return (<>
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <MoreHorizontal className="h-4 w-4" />
