@@ -1,12 +1,8 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
@@ -17,7 +13,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -31,13 +26,12 @@ import {
 } from "@/components/ui/sidebar"
 import { useSession } from "next-auth/react"
 import { rpc } from "@/server-actions/rpc"
-import { useRouter } from "next/navigation"
-import { getBaseUrl } from "@/addons/auth/config"
+import { useIntl } from "react-intl"
 
 export default function NavUser() {
   const { isMobile } = useSidebar()
   const session = useSession();
-  const router = useRouter();
+  const intl = useIntl();
 
   return (
     <SidebarMenu>
@@ -79,30 +73,8 @@ export default function NavUser() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={async () => {
-                const { errors, data } = await rpc('auth/signleSignOut', { postLogoutRedirectUri: `${getBaseUrl()}/signed-out` })
+                const { errors, data } = await rpc('auth/signleSignOut', { postLogoutRedirectUri: `${window.location.origin}/signed-out` })
                 if(errors || !data){
                   return;
                 }
@@ -110,7 +82,7 @@ export default function NavUser() {
                 document.location.href = data.redirectUri
             }}>
               <LogOut />
-              Log out
+              {intl.formatMessage({id: 'logout'})}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

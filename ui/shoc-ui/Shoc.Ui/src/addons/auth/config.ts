@@ -1,3 +1,4 @@
+import 'server-only'
 
 export function getClientId(){
     return process.env.SHOC_AUTH_UI_CLIENT_ID || '';

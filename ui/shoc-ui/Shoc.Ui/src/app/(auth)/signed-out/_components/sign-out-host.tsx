@@ -12,7 +12,6 @@ export default function SignOutHost(){
 
     const processSignOut = useCallback(async () => {
         if(authenticated){
-            console.log('signing out....')
             await signOut()
         }
         router.replace('/')
