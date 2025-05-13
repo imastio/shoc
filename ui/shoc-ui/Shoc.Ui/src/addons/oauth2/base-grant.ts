@@ -31,19 +31,19 @@ export default class BaseGrant {
         const request = {
             grant_type: 'refresh_token',
             client_id: this.config.clientId,
-            client_secret: this.config.clientSecret,
-            refresh_token: token.refreshToken,
-            access_token: token.accessToken,
+            client_secret: this.config.clientSecret ?? '',
+            refresh_token: token.refreshToken ?? '',
+            access_token: token.accessToken ?? '',
         };
 
         const response = await fetch(tokenEndpoint, {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: new URLSearchParams(request),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
-
-        return TokenResult.fromResponse(await response.json());
+        const responseJson = await response.json();
+        return TokenResult.fromResponse(responseJson);
     }
 }
