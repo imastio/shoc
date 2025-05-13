@@ -5,6 +5,7 @@ import { getByName } from "../cached-workspace-actions";
 import WorkspaceMembersTable from "./_components/workspace-members-table";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
 import WorkspacePageWrapper from "../_components/workspace-page-wrapper";
+import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,9 @@ export default async function WorkspaceMembersPage(props: any) {
   }
 
   return <WorkspacePageWrapper header={
-      <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.members.menu.members' })} />
+      <WorkspacePageHeader breadcrumb={
+        <WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'workspaces.members.menu.members' })} />
+      } />
   }>
       <WorkspaceMembersTable workspaceId={workspace.id} />
   </WorkspacePageWrapper>

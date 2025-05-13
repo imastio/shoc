@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import { OAuth2ServerConfig, RefreshTokenParams, TokenEndpointResponse, TokenRequestHints } from "./types";
 import TokenResult from "./token-result";
 
@@ -15,7 +14,8 @@ export default class BaseGrant {
         end_session_endpoint: string
     }> {
         const wellKnown = `${this.config.authority}/.well-known/openid-configuration`
-        return (await axios.get(wellKnown)).data;
+        const result = await fetch(wellKnown)
+        return await result.json();
     }
 
     public async refreshToken(token: RefreshTokenParams, hints?: TokenRequestHints): Promise<TokenResult> {
@@ -36,15 +36,14 @@ export default class BaseGrant {
             access_token: token.accessToken,
         };
 
-        const response: TokenEndpointResponse = (await axios.post<any, AxiosResponse<TokenEndpointResponse>>(
-            tokenEndpoint,
-            request,
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
+        const response = await fetch(tokenEndpoint, {
+            method: 'POST',
+            body: JSON.stringify(request),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-        )).data;
-        return TokenResult.fromResponse(response);
+        });
+
+        return TokenResult.fromResponse(await response.json());
     }
 }

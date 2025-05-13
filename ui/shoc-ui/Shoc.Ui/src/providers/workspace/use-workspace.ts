@@ -1,3 +1,4 @@
+"use client"
 import { useContext } from "react";
 import WorkspaceContext, { WorkspaceContextValueType } from "./workspace-context";
 

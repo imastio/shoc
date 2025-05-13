@@ -3,6 +3,10 @@ import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
 import { getByName } from "../../cached-workspace-actions";
 import { getClusterByName } from "../cached-cluster-actions";
+import WorkspacePageWrapper from "../../_components/workspace-page-wrapper";
+import WorkspacePageHeader from "@/components/general/workspace-page-header";
+import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
+import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
 
 export const dynamic = 'force-dynamic';
 
@@ -43,9 +47,16 @@ export default async function WorkspaceClustersPage(props: any) {
     return <ErrorScreen errors={clusterErrors} />
   }
 
-  return <>
-    <div className="flex flex-col h-full">
+  return <WorkspacePageWrapper header={
+    <WorkspacePageHeader breadcrumb={
+      <WorkspacePageBreadcrumbs crumbs={[
+        <BreadcrumbLink key="clusters" href={`/workspaces/${cluster.workspaceName}/clusters`}>{intl.formatMessage({ id: 'workspaces.sidebar.clusters' })}</BreadcrumbLink>
+      ]}
+        title={cluster.name} />}
+    />
+  }>
+    <pre>
       {JSON.stringify(cluster, null, 4)}
-    </div>
-  </>
+    </pre>
+  </WorkspacePageWrapper>
 }

@@ -5,6 +5,7 @@ import { getByName } from "./cached-workspace-actions";
 import DashboardClientPage from "./_components/dashboard-client-page";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
 import WorkspacePageWrapper from "./_components/workspace-page-wrapper";
+import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,7 @@ export default async function WorkspaceDashboardPage(props: any) {
   }
 
   return <WorkspacePageWrapper header={
-    <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.sidebar.dashboard' })} />
+    <WorkspacePageHeader breadcrumb={<WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'workspaces.sidebar.dashboard' })} />} />
     }>
         <DashboardClientPage />
     </WorkspacePageWrapper>

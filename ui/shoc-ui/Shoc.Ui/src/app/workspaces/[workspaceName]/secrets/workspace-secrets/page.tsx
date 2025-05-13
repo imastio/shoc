@@ -5,6 +5,7 @@ import { getByName } from "../../cached-workspace-actions";
 import SecretsTable from "./_components/secrets-table";
 import WorkspacePageWrapper from "../../_components/workspace-page-wrapper";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
+import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,9 @@ export default async function WorkspaceUserSecretsPage(props: any) {
   }
 
   return <WorkspacePageWrapper header={
-    <WorkspacePageHeader title={intl.formatMessage({ id: 'secrets.menu.workspaceSecrets' })} />
+    <WorkspacePageHeader breadcrumb={
+      <WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'secrets.menu.workspaceSecrets' })} />
+    } />
   }>
     <SecretsTable className="mt-4" workspaceId={workspace.id} />
   </WorkspacePageWrapper>

@@ -5,6 +5,7 @@ import { getByName } from "../cached-workspace-actions";
 import WorkspaceClustersClientPage from "./_components/workspace-clusters-client-page";
 import WorkspacePageWrapper from "../_components/workspace-page-wrapper";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
+import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,7 @@ export default async function WorkspaceClustersPage(props: any) {
   }
 
   return <WorkspacePageWrapper header={
-    <WorkspacePageHeader title={intl.formatMessage({ id: 'workspaces.clusters.page.title' })} />
+    <WorkspacePageHeader breadcrumb={<WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'workspaces.clusters.page.title' })} />} />
   }>
     <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
   </WorkspacePageWrapper>

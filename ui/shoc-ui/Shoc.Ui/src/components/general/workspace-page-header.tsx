@@ -2,18 +2,19 @@
 
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { ReactNode } from "react"
 
-export default function WorkspacePageHeader({ title }: { title: string }) {
+export default function WorkspacePageHeader({ breadcrumb, actions }: { breadcrumb: ReactNode, actions?: ReactNode }) {
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        {title}
-      </div>
-    </header>
+    <header className="flex h-14 shrink-0 items-center gap-2">
+          <div className="flex flex-1 items-center gap-2 px-3">
+            <SidebarTrigger />
+            <Separator orientation="vertical" className="mr-2 !h-4" />
+            {breadcrumb}
+          </div>
+          {actions && <div className="ml-auto px-3">
+            {actions}
+          </div>}
+        </header>
   )
 }
