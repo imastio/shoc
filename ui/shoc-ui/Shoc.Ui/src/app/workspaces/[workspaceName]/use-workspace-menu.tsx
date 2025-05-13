@@ -15,7 +15,7 @@ export default function useWorkspaceMenu(){
     const intl = useIntl();
     const pathname = usePathname();
     const { hasAny } = useWorkspaceAccess();
-    const { name } = useWorkspace();
+    const { value: { name } } = useWorkspace();
 
     const all = useMemo(() => [
         { 

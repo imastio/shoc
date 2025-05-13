@@ -1,22 +1,54 @@
 "use client"
 
-import { useMemo } from "react";
-import ClusterContext from "./cluster-context";
+import { useCallback, useMemo, useState } from "react";
+import ClusterContext, { ClusterValueType } from "./cluster-context";
+import { rpc } from "@/server-actions/rpc";
 
-export default function ClusterProvider({ children, cluster } : { children: React.ReactNode, cluster: any }){
-    
+const mapper = (value: any): ClusterValueType => {
+    return {
+        id: value.id,
+        workspaceId: value.workspaceId,
+        workspaceName: value.workspaceName,
+        name: value.name,
+        description: value.description,
+        type: value.type,
+        status: value.status,
+        created: value.created,
+        updated: value.updated
+    }
+}
+
+export default function ClusterProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
+
+    const [progress, setProgress] = useState<boolean>(false)
+    const [data, setData] = useState(initialValue);
+    const [errors, setErrors] = useState<any[]>([]);
+
+    const load = useCallback(async () => {
+        setProgress(true);
+
+        const { data, errors } = await rpc('cluster/workspace-clusters/getByName', { name: initialValue.name })
+
+        if (errors) {
+            setErrors(errors);
+            setData(null);
+        } else {
+            setErrors([])
+            setData(data)
+        }
+
+        setProgress(false);
+
+    }, [initialValue.name])
+
     const value = useMemo(() => ({
-        id: cluster.id,
-        workspaceId: cluster.workspaceId,
-        workspaceName: cluster.workspaceName,
-        name: cluster.name,
-        description: cluster.description,
-        type: cluster.type,
-        status: cluster.status,
-        created: cluster.created,
-        updated: cluster.updated
-    }), [cluster])
-
+        initialValue: mapper(initialValue),
+        value: mapper(data ?? initialValue),
+        load,
+        loading: progress,
+        errors: errors
+    }), [data, initialValue, load, progress, errors])
+    
     return <ClusterContext.Provider value={value}>
         {children}
     </ClusterContext.Provider>

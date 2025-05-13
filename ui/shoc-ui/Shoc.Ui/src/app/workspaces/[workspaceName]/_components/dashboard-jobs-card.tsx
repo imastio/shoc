@@ -42,7 +42,7 @@ export default function DashboardJobsCard() {
     const [progress, setProgress] = useState<boolean>(true);
     const [_, setErrors] = useState<any[]>([]);
     const [data, setData] = useState<any>(null);
-    const { id: workspaceId, name: workspaceName } = useWorkspace();
+    const { value: { id: workspaceId, name: workspaceName } } = useWorkspace();
     const userId = (session?.data?.user as User)?.userId;
 
     const filter = useMemo<FilterOptions>(() => ({

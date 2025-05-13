@@ -1,16 +1,48 @@
 "use client"
 
-import { useMemo } from "react";
-import WorkspaceContext from "./workspace-context";
+import { useCallback, useMemo, useState } from "react";
+import WorkspaceContext, { WorkspaceValueType } from "./workspace-context";
+import { rpc } from "@/server-actions/rpc";
 
-export default function WorkspaceProvider({ children, workspace } : { children: React.ReactNode, workspace: any }){
-    
+const mapper = (value: any): WorkspaceValueType => {
+    return {
+        id: value.id,
+        name: value.name,
+        type: value.type,
+        role: value.role
+    }
+}
+
+export default function WorkspaceProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
+
+    const [progress, setProgress] = useState<boolean>(false)
+    const [data, setData] = useState(initialValue);
+    const [errors, setErrors] = useState<any[]>([]);
+
+    const load = useCallback(async () => {
+        setProgress(true);
+
+        const { data, errors } = await rpc('workspace/user-workspaces/getByName', { name: initialValue.name })
+
+        if (errors) {
+            setErrors(errors);
+            setData(null);
+        } else {
+            setErrors([])
+            setData(data)
+        }
+
+        setProgress(false);
+
+    }, [initialValue.name])
+
     const value = useMemo(() => ({
-        id: workspace.id,
-        name: workspace.name,
-        type: workspace.type,
-        role: workspace.role
-    }), [workspace])
+        initialValue: mapper(initialValue),
+        value: mapper(data ?? initialValue),
+        load,
+        loading: progress,
+        errors: errors
+    }), [data, initialValue, load, progress, errors])
 
     return <WorkspaceContext.Provider value={value}>
         {children}

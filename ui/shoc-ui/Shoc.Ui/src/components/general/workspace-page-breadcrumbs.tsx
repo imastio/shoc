@@ -5,7 +5,7 @@ import React, { ReactNode } from "react";
 
 export default function WorkspacePageBreadcrumbs({ className, hideHome, crumbs, title }: { className?: string, hideHome?: boolean, crumbs?: ReactNode[], title: string }) {
 
-    const workspace = useWorkspace()
+    const { value: workspace } = useWorkspace()
 
     return <Breadcrumb className={className}>
         <BreadcrumbList>

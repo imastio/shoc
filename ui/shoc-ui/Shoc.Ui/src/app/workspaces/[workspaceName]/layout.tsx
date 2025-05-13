@@ -38,7 +38,7 @@ export default async function SingleWorkspaceLayout(props: { children: ReactNode
         return <ErrorScreen errors={workspace.errors || permissions.errors} />
     }
 
-    return <WorkspaceProvider workspace={workspace.data}>
+    return <WorkspaceProvider initialValue={workspace.data}>
         <WorkspaceAccessProvider permissions={permissions.data || []}>
             <SidebarProvider>
                 <WorkspaceSidebar variant="inset" />

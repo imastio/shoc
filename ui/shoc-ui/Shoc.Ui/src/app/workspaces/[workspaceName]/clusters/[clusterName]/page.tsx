@@ -6,7 +6,9 @@ import { getClusterByName } from "../cached-cluster-actions";
 import WorkspacePageWrapper from "../../_components/workspace-page-wrapper";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
 import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
-import { BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
+import { BreadcrumbLink } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +54,10 @@ export default async function WorkspaceClustersPage(props: any) {
       <WorkspacePageBreadcrumbs crumbs={[
         <BreadcrumbLink key="clusters" href={`/workspaces/${cluster.workspaceName}/clusters`}>{intl.formatMessage({ id: 'workspaces.sidebar.clusters' })}</BreadcrumbLink>
       ]}
-        title={cluster.name} />}
+        title={cluster.name} />
+    } actions={
+      <Button size="sm" variant="outline"><ReloadIcon className="w-4 h-4" /></Button>
+    }
     />
   }>
     <pre>

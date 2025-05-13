@@ -31,7 +31,7 @@ export default function WorkspaceSwitcher() {
   const [progress, setProgress] = useState(true);
   const intl = useIntl();
   const router = useRouter();
-  const workspace = useWorkspace();
+  const { value: workspace } = useWorkspace();
 
   const load = useCallback(async () => {
 

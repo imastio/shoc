@@ -29,7 +29,7 @@ export default async function SingleClusterLayoutLayout(props: { children: React
         return <ErrorScreen errors={cluster.errors || permissions.errors} />
     }
 
-    return <ClusterProvider cluster={cluster.data}>
+    return <ClusterProvider initialValue={cluster.data}>
         <ClusterAccessProvider permissions={permissions.data || []}>
             {children}
         </ClusterAccessProvider>
