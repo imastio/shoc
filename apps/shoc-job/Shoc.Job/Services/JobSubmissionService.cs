@@ -7,6 +7,7 @@ using k8s.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Quartz;
 using Shoc.Core;
+using Shoc.Core.Kubernetes;
 using Shoc.Job.Data;
 using Shoc.Job.K8s;
 using Shoc.Job.K8s.Model;

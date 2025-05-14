@@ -13,6 +13,7 @@ using Shoc.ApiCore.ObjectAccess;
 using Shoc.Cluster.Config;
 using Shoc.Cluster.Grpc;
 using Shoc.Cluster.Services;
+using Shoc.Core.Kubernetes;
 
 // start building web application
 var builder = WebApplication.CreateBuilder(args);
@@ -31,11 +32,14 @@ builder.Services.AddAuthenticationClient(builder.Configuration);
 builder.Services.AddGrpcClients();
 builder.Services.AddObjectAccessEssentials();
 builder.Services.AddGrpcEssentials();
+builder.Services.AddSingleton<ResourceParser>();
+builder.Services.AddSingleton<K8sService>();
 builder.Services.AddSingleton<ClusterGrpcMapper>();
 builder.Services.AddSingleton<ConfigurationProtectionProvider>();
 builder.Services.AddSingleton<ClusterService>();
+builder.Services.AddSingleton<ClusterInstanceService>();
 builder.Services.AddSingleton<WorkspaceClusterService>();
-builder.Services.AddSingleton<K8sService>();
+builder.Services.AddSingleton<WorkspaceClusterInstanceService>();
 builder.Services.AddAnyOriginCors(ApiDefaults.DEFAULT_CORS);
 builder.Services.AddControllers();
 

@@ -40,7 +40,7 @@ export default async function WorkspaceClustersPage(props: any) {
   }
 
   return <WorkspacePageWrapper header={
-    <WorkspacePageHeader breadcrumb={<WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'workspaces.clusters.page.title' })} />} />
+    <WorkspacePageHeader breadcrumb={<WorkspacePageBreadcrumbs title={intl.formatMessage({ id: 'clusters' })} />} />
   }>
     <WorkspaceClustersClientPage workspaceId={workspace.id} workspaceName={workspaceName} />
   </WorkspacePageWrapper>

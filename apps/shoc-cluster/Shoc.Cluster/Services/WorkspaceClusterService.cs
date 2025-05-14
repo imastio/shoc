@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shoc.Cluster.Model.Cluster;
 using Shoc.Cluster.Model.WorkspaceCluster;
-using Shoc.Core.Kubernetes;
 using Shoc.ObjectAccess.Cluster;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
@@ -16,20 +15,13 @@ namespace Shoc.Cluster.Services;
 public class WorkspaceClusterService : WorkspaceClusterServiceBase
 {
     /// <summary>
-    /// The k8s service
-    /// </summary>
-    private readonly K8sService k8SService;
-
-    /// <summary>
     /// Creates new instance of the service
     /// </summary>
     /// <param name="clusterService">The cluster service</param>
     /// <param name="workspaceAccessEvaluator">The workspace access evaluator</param>
-    /// <param name="k8sService">The k8s service</param>
     /// <param name="clusterAccessEvaluator">The cluster access evaluator</param>
-    public WorkspaceClusterService(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator, K8sService k8sService) : base(clusterService, workspaceAccessEvaluator, clusterAccessEvaluator)
+    public WorkspaceClusterService(ClusterService clusterService, IWorkspaceAccessEvaluator workspaceAccessEvaluator, IClusterAccessEvaluator clusterAccessEvaluator) : base(clusterService, workspaceAccessEvaluator, clusterAccessEvaluator)
     {
-        this.k8SService = k8sService;
     }
     
     /// <summary>
@@ -129,28 +121,6 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         {
             Id = result.Id,
             WorkspaceId = result.WorkspaceId
-        };
-    }
-    
-    /// <summary>
-    /// Perform a dry test of configuration for a new object
-    /// </summary>
-    /// <returns></returns>
-    public async Task<WorkspaceClusterConnectionTestedModel> Ping(string userId, string workspaceId, WorkspaceClusterConnectionTestModel input)
-    {
-        // ensure have required access
-        await this.workspaceAccessEvaluator.Ensure(
-            userId,
-            workspaceId,
-            WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
-
-        // perform the test and return the result
-        var result = await this.k8SService.GetNodesCount(new KubeContext{ Config = input.Configuration});
-        
-        // return existing object
-        return new WorkspaceClusterConnectionTestedModel
-        {
-            NodesCount = result
         };
     }
 }

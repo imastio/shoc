@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Shoc.Core;
-using Shoc.Job.Model;
 
-namespace Shoc.Job.Services;
+namespace Shoc.Core.Kubernetes;
 
 /// <summary>
 /// The resource parser service
@@ -78,7 +76,7 @@ public class ResourceParser
         }
         
         // could not be successfully parsed
-        throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, $"The {cpu} is not valid value for CPU").AsException();
+        throw ErrorDefinition.Validation(Errors.VALIDATION_ERROR, $"The {cpu} is not valid value for CPU").AsException();
     }
     
     /// <summary>
@@ -145,6 +143,6 @@ public class ResourceParser
         }
 
         // the value is not valid to parse
-        throw ErrorDefinition.Validation(JobErrors.INVALID_JOB_RESOURCES, $"The {gpu} is not valid value for GPU").AsException();
+        throw ErrorDefinition.Validation(Errors.VALIDATION_ERROR, $"The {gpu} is not valid value for GPU").AsException();
     }
 }

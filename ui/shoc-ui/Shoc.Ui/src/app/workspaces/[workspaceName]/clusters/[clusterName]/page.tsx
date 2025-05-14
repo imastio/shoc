@@ -2,13 +2,14 @@ import getIntl from "@/i18n/get-intl";
 import { Metadata } from "next";
 import ErrorScreen from "@/components/error/error-screen";
 import { getByName } from "../../cached-workspace-actions";
-import { getClusterByName } from "../cached-cluster-actions";
+import { getClusterByName, getClusterConnectivityById } from "../cached-cluster-actions";
 import WorkspacePageWrapper from "../../_components/workspace-page-wrapper";
 import WorkspacePageHeader from "@/components/general/workspace-page-header";
 import WorkspacePageBreadcrumbs from "@/components/general/workspace-page-breadcrumbs";
 import { BreadcrumbLink } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import SingleClusterClientPage from "./_components/single-cluster-client-page";
+import React from "react";
+import ClusterConnectivityBadge from "./_components/cluster-connectivity-badge";
 
 export const dynamic = 'force-dynamic';
 
@@ -16,12 +17,13 @@ export async function generateMetadata(props: { params: Promise<any> }): Promise
   const params = await props.params;
 
   const {
-    workspaceName
+    workspaceName,
+    clusterName
   } = params;
 
   const intl = await getIntl();
-  const defaultTitle = intl.formatMessage({ id: 'workspaces.sidebar.clusters' });
-  const title = workspaceName ? `${defaultTitle} - ${workspaceName}` : defaultTitle;
+  const defaultTitle = intl.formatMessage({ id: 'clusters' });
+  const title = clusterName ? `${clusterName} - ${intl.formatMessage({ id: 'clusters' })}` : defaultTitle;
 
   return {
     title
@@ -49,19 +51,18 @@ export default async function WorkspaceClustersPage(props: any) {
     return <ErrorScreen errors={clusterErrors} />
   }
 
+  const { data: connectivity, errors: connectivityErrors } = await getClusterConnectivityById(cluster.workspaceId, cluster.id)
+  console.log(connectivityErrors)
+
   return <WorkspacePageWrapper header={
     <WorkspacePageHeader breadcrumb={
       <WorkspacePageBreadcrumbs crumbs={[
         <BreadcrumbLink key="clusters" href={`/workspaces/${cluster.workspaceName}/clusters`}>{intl.formatMessage({ id: 'workspaces.sidebar.clusters' })}</BreadcrumbLink>
       ]}
-        title={cluster.name} />
-    } actions={
-      <Button size="sm" variant="outline"><ReloadIcon className="w-4 h-4" /></Button>
+        title={cluster.name} titleAddon={<ClusterConnectivityBadge connectivity={connectivity} />} />
     }
     />
   }>
-    <pre>
-      {JSON.stringify(cluster, null, 4)}
-    </pre>
+    <SingleClusterClientPage />
   </WorkspacePageWrapper>
 }

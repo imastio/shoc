@@ -5,6 +5,7 @@ using Shoc.Access.Model;
 using Shoc.ApiCore;
 using Shoc.ApiCore.Access;
 using Shoc.ApiCore.Auth;
+using Shoc.Cluster.Model.Cluster;
 using Shoc.Cluster.Model.WorkspaceCluster;
 using Shoc.Cluster.Services;
 
@@ -25,12 +26,19 @@ public class WorkspaceClustersController : ControllerBase
     private readonly WorkspaceClusterService clusterService;
 
     /// <summary>
+    /// The cluster details service
+    /// </summary>
+    private readonly WorkspaceClusterInstanceService clusterInstanceService;
+
+    /// <summary>
     /// Creates new instance of controller
     /// </summary>
     /// <param name="clusterService">The reference to service</param>
-    public WorkspaceClustersController(WorkspaceClusterService clusterService)
+    /// <param name="clusterInstanceService">The cluster details service</param>
+    public WorkspaceClustersController(WorkspaceClusterService clusterService, WorkspaceClusterInstanceService clusterInstanceService)
     {
         this.clusterService = clusterService;
+        this.clusterInstanceService = clusterInstanceService;
     }
 
     /// <summary>
@@ -99,9 +107,9 @@ public class WorkspaceClustersController : ControllerBase
     /// <param name="input">The test input</param>
     /// <returns></returns>
     [HttpPost("ping")]
-    public Task<WorkspaceClusterConnectionTestedModel> Ping(string workspaceId, [FromBody] WorkspaceClusterConnectionTestModel input)
+    public Task<ClusterConnectionTestedModel> Ping(string workspaceId, [FromBody] ClusterConnectionTestModel input)
     {
-        return this.clusterService.Ping(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+        return this.clusterInstanceService.Ping(this.HttpContext.GetPrincipal().Id, workspaceId, input);
     }
 }
 

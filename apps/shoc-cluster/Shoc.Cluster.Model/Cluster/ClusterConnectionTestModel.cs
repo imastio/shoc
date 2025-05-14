@@ -1,9 +1,9 @@
-namespace Shoc.Cluster.Model.WorkspaceCluster;
+namespace Shoc.Cluster.Model.Cluster;
 
 /// <summary>
-/// Workspace cluster connection test model
+/// Cluster connection test model
 /// </summary>
-public class WorkspaceClusterConnectionTestModel
+public class ClusterConnectionTestModel
 {
     /// <summary>
     /// The configuration to test

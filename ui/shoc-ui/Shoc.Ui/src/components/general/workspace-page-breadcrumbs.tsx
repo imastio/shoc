@@ -3,7 +3,7 @@ import useWorkspace from "@/providers/workspace/use-workspace";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../ui/breadcrumb";
 import React, { ReactNode } from "react";
 
-export default function WorkspacePageBreadcrumbs({ className, hideHome, crumbs, title }: { className?: string, hideHome?: boolean, crumbs?: ReactNode[], title: string }) {
+export default function WorkspacePageBreadcrumbs({ className, hideHome, crumbs, title, titleAddon }: { className?: string, hideHome?: boolean, crumbs?: ReactNode[], title: string | ReactNode, titleAddon?: ReactNode }) {
 
     const { value: workspace } = useWorkspace()
 
@@ -26,6 +26,7 @@ export default function WorkspacePageBreadcrumbs({ className, hideHome, crumbs, 
             <BreadcrumbItem key="bc-title">
                 <BreadcrumbPage>{title}</BreadcrumbPage>
             </BreadcrumbItem>
+            {titleAddon}
         </BreadcrumbList>
     </Breadcrumb>
 }

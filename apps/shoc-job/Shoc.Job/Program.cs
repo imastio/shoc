@@ -10,6 +10,7 @@ using Shoc.ApiCore.DataProtection;
 using Shoc.ApiCore.Discovery;
 using Shoc.ApiCore.ObjectAccess;
 using Shoc.ApiCore.Quartz;
+using Shoc.Core.Kubernetes;
 using Shoc.Job.Config;
 using Shoc.Job.K8s;
 using Shoc.Job.Services;
