@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { IntlMessageId } from "@/i18n/sources";
+import useClusterConnectivity from "@/providers/cluster-connectivity/use-cluster-connectivity";
 import { useIntl } from "react-intl";
 
 const badgeVariants = {
@@ -17,8 +18,9 @@ const badgeVariants = {
     }
 }
 
-export default function ClusterConnectivityBadge({ connectivity }: { connectivity: any }) {
+export default function ClusterConnectivityBadge() {
 
+    const { value: connectivity } = useClusterConnectivity();
     const variantName = connectivity?.connected ? 'connected' : 'disconnected';
     const variant = badgeVariants[variantName];
     const intl = useIntl();

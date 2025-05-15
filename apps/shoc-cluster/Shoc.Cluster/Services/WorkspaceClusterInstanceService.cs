@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shoc.Cluster.Model.Cluster;
 using Shoc.ObjectAccess.Cluster;
@@ -69,5 +70,31 @@ public class WorkspaceClusterInstanceService : WorkspaceClusterServiceBase
 
         // return the result
         return await this.clusterInstanceService.GetConnectivityById(workspaceId, id);
+    }
+
+    /// <summary>
+    /// Gets the connectivity info by id
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<ClusterNodeModel>> GetNodesById(string userId, string workspaceId, string id)
+    {
+        // ensure have required workspace access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+        
+        // ensure have required cluster access
+        await this.clusterAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            id,
+            ClusterPermissions.CLUSTER_VIEW);
+
+        // return the result
+        return await this.clusterInstanceService.GetNodesById(workspaceId, id);
     }
 }

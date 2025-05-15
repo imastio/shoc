@@ -1,24 +1,22 @@
 "use client"
 
 import { useCallback, useMemo, useState } from "react";
-import ClusterContext, { ClusterValueType } from "./cluster-context";
+import ClusterConnectivityContext, { ClusterConnectivityValueType } from "./cluster-connectivity-context";
 import { rpc } from "@/server-actions/rpc";
 
-const mapper = (value: any): ClusterValueType => {
+const mapper = (value: any): ClusterConnectivityValueType => {
     return {
         id: value.id,
         workspaceId: value.workspaceId,
-        workspaceName: value.workspaceName,
-        name: value.name,
-        description: value.description,
-        type: value.type,
-        status: value.status,
-        created: value.created,
+        configured: value.configured,
+        connected: value.connected,
+        message: value.message,
+        nodesCount: value.nodesCount,
         updated: value.updated
     }
 }
 
-export default function ClusterProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
+export default function ClusterConnectivityProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
 
     const [progress, setProgress] = useState<boolean>(false)
     const [data, setData] = useState(initialValue);
@@ -27,7 +25,7 @@ export default function ClusterProvider({ children, initialValue }: { children: 
     const load = useCallback(async () => {
         setProgress(true);
 
-        const { data, errors } = await rpc('cluster/workspace-clusters/getByName', { workspaceId: initialValue.workspaceId, name: initialValue.name })
+        const { data, errors } = await rpc('cluster/workspace-cluster-instance/getConnectivityById', { workspaceId: initialValue.workspaceId, id: initialValue.id })
 
         if (errors) {
             setErrors(errors);
@@ -39,7 +37,7 @@ export default function ClusterProvider({ children, initialValue }: { children: 
 
         setProgress(false);
 
-    }, [initialValue.workspaceId, initialValue.name])
+    }, [initialValue.workspaceId, initialValue.id])
 
     const value = useMemo(() => ({
         initialValue: mapper(initialValue),
@@ -49,7 +47,7 @@ export default function ClusterProvider({ children, initialValue }: { children: 
         errors: errors
     }), [data, initialValue, load, progress, errors])
     
-    return <ClusterContext.Provider value={value}>
+    return <ClusterConnectivityContext.Provider value={value}>
         {children}
-    </ClusterContext.Provider>
+    </ClusterConnectivityContext.Provider>
 }

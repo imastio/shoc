@@ -18,6 +18,11 @@ public class ClusterConnectivityModel
     public string WorkspaceId { get; set; }
     
     /// <summary>
+    /// The configuration is given
+    /// </summary>
+    public bool Configured { get; set; }
+    
+    /// <summary>
     /// Indicates if successfully established the connection
     /// </summary>
     public bool Connected { get; set; }
@@ -26,6 +31,11 @@ public class ClusterConnectivityModel
     /// The message of connectivity
     /// </summary>
     public string Message { get; set; }
+    
+    /// <summary>
+    /// The nodes count
+    /// </summary>
+    public long? NodesCount { get; set; }
     
     /// <summary>
     /// The update time

@@ -1,9 +1,12 @@
 import { ReactNode } from "react";
 import { getByName } from "../../cached-workspace-actions";
-import { getClusterByName, getClusterPermissionsByName } from "../cached-cluster-actions";
+import { getClusterByName, getClusterConnectivityById, getClusterPermissionsByName } from "../cached-cluster-actions";
 import ErrorScreen from "@/components/error/error-screen";
 import ClusterAccessProvider from "@/providers/cluster-access/cluster-access-provider";
 import ClusterProvider from "@/providers/cluster/cluster-provider";
+import ClusterConnectivityContext from "@/providers/cluster-connectivity/cluster-connectivity-context";
+import ClusterConnectivityProvider from "@/providers/cluster-connectivity/cluster-connectivity-provider";
+import ClusterNodesProvider from "./_providers/cluster-nodes/cluster-nodes-provider";
 
 export default async function SingleClusterLayoutLayout(props: { children: ReactNode, params: Promise<any> }) {
     const params = await props.params;
@@ -17,21 +20,32 @@ export default async function SingleClusterLayoutLayout(props: { children: React
         children
     } = props;
 
-    const { data: workspace } = await getByName(workspaceName);
+    const workspace = await getByName(workspaceName);
 
     if (workspace.errors) {
         return <ErrorScreen errors={workspace.errors} />
     }
 
-    const [cluster, permissions] = await Promise.all([getClusterByName(workspace.id, clusterName), getClusterPermissionsByName(workspace.id, clusterName)])
+    const [cluster, permissions] = await Promise.all([getClusterByName(workspace.data.id, clusterName), getClusterPermissionsByName(workspace.data.id, clusterName)])
 
     if (cluster.errors || permissions.errors) {
         return <ErrorScreen errors={cluster.errors || permissions.errors} />
     }
 
+    const connectivity = await getClusterConnectivityById(cluster.data.workspaceId, cluster.data.id)
+
+    if (connectivity.errors) {
+        return <ErrorScreen errors={connectivity.errors} />
+    }
+
     return <ClusterProvider initialValue={cluster.data}>
-        <ClusterAccessProvider permissions={permissions.data || []}>
-            {children}
-        </ClusterAccessProvider>
+        <ClusterConnectivityProvider initialValue={connectivity.data}>
+            <ClusterAccessProvider permissions={permissions.data || []}>
+                <ClusterNodesProvider workspaceId={workspace.data.id} id={cluster.data.id} preload={connectivity.data.connected}>
+            
+                    {children}
+                </ClusterNodesProvider>
+            </ClusterAccessProvider>
+        </ClusterConnectivityProvider>
     </ClusterProvider>
 }

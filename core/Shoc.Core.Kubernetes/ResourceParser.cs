@@ -64,11 +64,31 @@ public class ResourceParser
         {
             return (long)Math.Round(fractionalCores * 1000);
         }
+        
+        // handle nanocores (n) - most precise, from metrics server
+        if (cpu.EndsWith("n", StringComparison.OrdinalIgnoreCase))
+        {
+            // input ends with 'n', parse as nanocores and turn into millicores
+            if (long.TryParse(cpu[..^1], out var nanocores))
+            {
+                return nanocores / 1_000_000; 
+            }
+        }
+        
+        // handle microseconds (u) - sometimes used in metrics
+        if (cpu.EndsWith("u", StringComparison.OrdinalIgnoreCase))
+        {
+            // input ends with 'u', parse as microseconds (1000 millicores is 1 microsecond)
+            if (long.TryParse(cpu[..^1], out var microseconds))
+            {
+                return microseconds / 1_000;
+            }
+        }
 
         // if value is given in millicores handle separately
         if (cpu.EndsWith("m", StringComparison.OrdinalIgnoreCase))
         {
-            // Input ends with 'm', parse as millicores
+            // input ends with 'm', parse as millicores
             if (long.TryParse(cpu[..^1], out var millicores))
             {
                 return millicores;

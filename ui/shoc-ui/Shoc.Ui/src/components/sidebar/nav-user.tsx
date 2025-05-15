@@ -78,7 +78,6 @@ export default function NavUser() {
                 if(errors || !data){
                   return;
                 }
-                console.log('redirecting to ', data.redirectUri)
                 document.location.href = data.redirectUri
             }}>
               <LogOut />

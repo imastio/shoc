@@ -10,6 +10,7 @@ import { BreadcrumbLink } from "@/components/ui/breadcrumb";
 import SingleClusterClientPage from "./_components/single-cluster-client-page";
 import React from "react";
 import ClusterConnectivityBadge from "./_components/cluster-connectivity-badge";
+import ClusterNodesProvider from "./_providers/cluster-nodes/cluster-nodes-provider";
 
 export const dynamic = 'force-dynamic';
 
@@ -51,18 +52,15 @@ export default async function WorkspaceClustersPage(props: any) {
     return <ErrorScreen errors={clusterErrors} />
   }
 
-  const { data: connectivity, errors: connectivityErrors } = await getClusterConnectivityById(cluster.workspaceId, cluster.id)
-  console.log(connectivityErrors)
-
   return <WorkspacePageWrapper header={
     <WorkspacePageHeader breadcrumb={
       <WorkspacePageBreadcrumbs crumbs={[
         <BreadcrumbLink key="clusters" href={`/workspaces/${cluster.workspaceName}/clusters`}>{intl.formatMessage({ id: 'workspaces.sidebar.clusters' })}</BreadcrumbLink>
       ]}
-        title={cluster.name} titleAddon={<ClusterConnectivityBadge connectivity={connectivity} />} />
+        title={cluster.name} titleAddon={<ClusterConnectivityBadge />} />
     }
     />
   }>
-    <SingleClusterClientPage />
+      <SingleClusterClientPage />
   </WorkspacePageWrapper>
 }
