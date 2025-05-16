@@ -41,7 +41,7 @@ export default function SingleClusterClientPage() {
           <ReloadIcon />
         </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="flex flex-col">
           <CardHeader className="items-center pb-0">
             <CardTitle>Nodes in cluster</CardTitle>
@@ -60,8 +60,8 @@ export default function SingleClusterClientPage() {
             </div>
           </CardFooter>
         </Card>
-      </div>
       <NodesCpuSummaryCard />
+      </div>
     </div>
   </LoadingContainer>
 }

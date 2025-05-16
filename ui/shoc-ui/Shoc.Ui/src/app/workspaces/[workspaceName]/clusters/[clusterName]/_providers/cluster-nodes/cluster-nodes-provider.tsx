@@ -3,18 +3,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { rpc } from "@/server-actions/rpc";
 import ClusterNodesContext from "./cluster-nodes-context";
+import useClusterConnectivity from "@/providers/cluster-connectivity/use-cluster-connectivity";
 
+export default function ClusterNodesProvider({  children }: { children: React.ReactNode }) {
 
-export default function ClusterNodesProvider({ workspaceId, id, preload, children }: { workspaceId: string, id: string, preload: boolean, children: React.ReactNode }) {
-
-    const [progress, setProgress] = useState<boolean>(false)
+    const { value: connectivity } = useClusterConnectivity();
+    const [progress, setProgress] = useState<boolean>(connectivity?.connected)
     const [data, setData] = useState(null);
     const [errors, setErrors] = useState<any[]>([]);
 
     const load = useCallback(async () => {
         setProgress(true);
 
-        const { data, errors } = await rpc('cluster/workspace-cluster-instance/getNodesById', { workspaceId, id })
+        const { data, errors } = await rpc('cluster/workspace-cluster-instance/getNodesById', { 
+            workspaceId: connectivity.workspaceId,
+            id: connectivity.id
+        })
 
         if (errors) {
             setErrors(errors);
@@ -26,13 +30,13 @@ export default function ClusterNodesProvider({ workspaceId, id, preload, childre
 
         setProgress(false);
 
-    }, [workspaceId, id])
+    }, [connectivity.workspaceId, connectivity.id])
 
     useEffect(() => {
-        if(preload){
+        if(connectivity?.connected){
             load()
         }
-    }, [load, preload])
+    }, [load, connectivity.connected])
 
     const value = useMemo(() => ({
         value: data,

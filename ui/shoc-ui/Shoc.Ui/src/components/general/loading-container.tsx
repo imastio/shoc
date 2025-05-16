@@ -5,12 +5,10 @@ import { cn } from '@/lib/utils';
 export default function LoadingContainer({ loading, children, className }: { loading?: boolean, children: ReactNode, className?: string }) {
   return (
     <div className={cn("relative", className, loading ? 'opacity-50 pointer-events-none' : '')}>
-      {/* <div className={`${loading ? 'opacity-50 pointer-events-none' : ''}`}> */}
-        {children}
-      {/* </div> */}
+      {children}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">
-            <SpinnerIcon className="animate-spin h-5 w-5" />
+          <SpinnerIcon className="animate-spin h-5 w-5" />
         </div>
       )}
     </div>
