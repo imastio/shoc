@@ -25,9 +25,6 @@ export default function SingleClusterClientPage() {
 
   return <LoadingContainer loading={loading}>
     <div className="space-y-4">
-      <pre>
-
-      </pre>
       <div className="flex items-center justify-between space-y-2">
         <div className="flex flex-col">
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -42,7 +39,7 @@ export default function SingleClusterClientPage() {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="flex flex-col">
+        {/* <Card className="flex flex-col">
           <CardHeader className="items-center pb-0">
             <CardTitle>Nodes in cluster</CardTitle>
           </CardHeader>
@@ -59,7 +56,7 @@ export default function SingleClusterClientPage() {
               Showing total visitors for the last 6 months
             </div>
           </CardFooter>
-        </Card>
+        </Card> */}
       <NodesCpuSummaryCard />
       </div>
     </div>

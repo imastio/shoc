@@ -20,7 +20,7 @@ export default function NodesCpuSummaryCard() {
   const intl = useIntl();
   const { value: cluster, loading: clusterLoading } = useCluster();
   const { value: connectivity, loading: connectivityLoading } = useClusterConnectivity();
-  const { value: nodes, loading: nodesLoading } = useClusterNodes();
+  const { value: nodes, summary, loading: nodesLoading } = useClusterNodes();
 
   return <LoadingContainer className="" loading={nodesLoading}>
     <Card>
@@ -32,15 +32,15 @@ export default function NodesCpuSummaryCard() {
         <div className={cn("flex flex-row gap-4", connectivity.connected ? "" : "hidden")}>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">Usage</span>
-            <span className="text-lg font-semibold leading-none sm:text-3xl">1500 <span className="text-muted-foreground font-normal text-sm">15%</span></span>
+            <span className="text-lg font-semibold leading-none sm:text-3xl">{summary?.cpu?.used ?? 'N/A'} <span className="text-muted-foreground font-normal text-sm"> { summary?.cpu?.allocatable ? (summary.cpu.used ?? 0) * 100 / summary.cpu.allocatable : 'N/A' } </span></span>
           </div>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">Allocatable</span>
-            <span className="text-lg font-semibold leading-none sm:text-3xl">25,010</span>
+            <span className="text-lg font-semibold leading-none sm:text-3xl">{summary?.cpu?.allocatable ?? 'N/A'}</span>
           </div>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">Capacity</span>
-            <span className="text-lg font-semibold leading-none sm:text-3xl">25,010</span>
+            <span className="text-lg font-semibold leading-none sm:text-3xl">{summary?.cpu?.capacity ?? 'N/A'}</span>
           </div>
         </div>
         <div className={cn("flex flex-1 justify-center", !connectivity.connected ? "" : "hidden")}>
