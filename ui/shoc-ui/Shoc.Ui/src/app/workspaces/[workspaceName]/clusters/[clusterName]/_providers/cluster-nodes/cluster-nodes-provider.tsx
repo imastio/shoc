@@ -85,7 +85,7 @@ export default function ClusterNodesProvider({  children }: { children: React.Re
         load,
         loading: progress,
         errors: errors
-    }), [data, load, progress, errors])
+    }), [data, summary, load, progress, errors])
 
     
     return <ClusterNodesContext.Provider value={value}>

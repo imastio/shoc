@@ -41,7 +41,7 @@ export default async function SingleClusterLayoutLayout(props: { children: React
     return <ClusterProvider initialValue={cluster.data}>
         <ClusterConnectivityProvider initialValue={connectivity.data}>
             <ClusterAccessProvider permissions={permissions.data || []}>
-                <ClusterNodesProvider workspaceId={workspace.data.id} id={cluster.data.id} preload={connectivity.data.connected}>
+                <ClusterNodesProvider>
             
                     {children}
                 </ClusterNodesProvider>
