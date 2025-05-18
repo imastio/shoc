@@ -20,7 +20,7 @@ export default function NodesMemorySummaryCard() {
 
   const intl = useIntl();
   const { loading: clusterLoading } = useCluster();
-  const { value: connectivity, loading: connectivityLoading } = useClusterConnectivity();
+  const { loading: connectivityLoading } = useClusterConnectivity();
   const { summary, loading: nodesLoading } = useClusterNodes();
 
   return <LoadingContainer className="" loading={nodesLoading || clusterLoading || connectivityLoading}>
@@ -30,7 +30,7 @@ export default function NodesMemorySummaryCard() {
         <CardDescription>{intl.formatMessage({ id: 'clusters.resources.memory.description' })}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-grow pb-0">
-        <div className={cn("flex flex-row gap-4", connectivity.connected ? "" : "hidden")}>
+        <div className={cn("flex flex-row gap-4")}>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.usage' })}</span>
             <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.memory?.used ? bytesToSize(summary?.memory?.used) : 'N/A'} <span className="text-muted-foreground font-normal text-sm"> {summary?.memory?.allocatable ? Math.round(((summary.memory.used ?? 0) * 100 / summary.memory.allocatable + Number.EPSILON) * 100) / 100 : 'N/A'}%</span></span>
@@ -43,11 +43,6 @@ export default function NodesMemorySummaryCard() {
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.capacity' })}</span>
             <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.memory?.capacity ? bytesToSize(summary?.memory?.capacity) : 'N/A'}</span>
           </div>
-        </div>
-        <div className={cn("flex flex-1 justify-center", !connectivity.connected ? "" : "hidden")}>
-          <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight lg:text-3xl text-center">
-            {intl.formatMessage({ id: 'clusters.connectivity.disconnected.notice' })}
-          </h1>
         </div>
       </CardContent>
     </Card>

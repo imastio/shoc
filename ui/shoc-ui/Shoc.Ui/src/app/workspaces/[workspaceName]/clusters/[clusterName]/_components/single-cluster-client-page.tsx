@@ -10,6 +10,9 @@ import useClusterNodes from "../_providers/cluster-nodes/use-cluster-nodes";
 import NodesCpuSummaryCard from "./nodes-cpu-summary-card";
 import NodesMemorySummaryCard from "./nodes-memory-summary-card";
 import NodesGpuSummaryCard from "./nodes-gpu-summary-card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
+import ClusterConfigurationAlert from "./cluster-configuration-alert";
 
 export default function SingleClusterClientPage() {
 
@@ -32,9 +35,9 @@ export default function SingleClusterClientPage() {
             {cluster.description}
           </p>
         </div>
-        <Button variant='outline'>
-          <ReloadIcon />
-        </Button>
+      </div>
+      <div>
+        <ClusterConfigurationAlert />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
         <NodesCpuSummaryCard />

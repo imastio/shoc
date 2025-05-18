@@ -144,6 +144,7 @@ public class ClusterInstanceService : ClusterServiceBase
             Id = result.Id,
             WorkspaceId = result.WorkspaceId,
             Connected = connected,
+            Configured = true,
             Message = message,
             NodesCount = nodesCount,
             Updated = DateTime.Now
