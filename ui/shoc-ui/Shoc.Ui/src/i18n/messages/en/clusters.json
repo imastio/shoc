@@ -2,5 +2,15 @@
     "clusters": "Clusters",
     "clusters.cluster": "Cluster",
     "clusters.connectivity.connected": "Connected",
-    "clusters.connectivity.disconnected": "Disconnected"
+    "clusters.connectivity.disconnected": "Disconnected",
+    "clusters.connectivity.disconnected.notice": "Not connected",
+    "clusters.resources.cpu.title": "CPU Availability",
+    "clusters.resources.cpu.description": "Showing CPU availability across all nodes",
+    "clusters.resources.memory.title": "Memory Availability",
+    "clusters.resources.memory.description": "Showing memory availability across all nodes",
+    "clusters.resources.nvidiaGpu.title": "Nvidia GPUs Availability",
+    "clusters.resources.nvidiaGpu.description": "Showing Nvidia GPU slots across all nodes",
+    "clusters.resources.types.allocatable": "Allocatable",
+    "clusters.resources.types.capacity": "Capacity",
+    "clusters.resources.types.usage": "Usage"
 }

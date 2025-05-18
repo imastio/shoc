@@ -4,7 +4,6 @@ import { getClusterByName, getClusterConnectivityById, getClusterPermissionsByNa
 import ErrorScreen from "@/components/error/error-screen";
 import ClusterAccessProvider from "@/providers/cluster-access/cluster-access-provider";
 import ClusterProvider from "@/providers/cluster/cluster-provider";
-import ClusterConnectivityContext from "@/providers/cluster-connectivity/cluster-connectivity-context";
 import ClusterConnectivityProvider from "@/providers/cluster-connectivity/cluster-connectivity-provider";
 import ClusterNodesProvider from "./_providers/cluster-nodes/cluster-nodes-provider";
 
