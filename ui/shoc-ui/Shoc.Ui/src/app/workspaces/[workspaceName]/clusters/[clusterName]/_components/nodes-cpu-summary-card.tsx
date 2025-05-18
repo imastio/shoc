@@ -32,7 +32,7 @@ export default function NodesCpuSummaryCard() {
         <div className={cn("flex flex-row gap-4")}>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.usage' })}</span>
-            <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.cpu?.used ?? 'N/A'} <span className="text-muted-foreground font-normal text-sm"> {summary?.cpu?.allocatable ? Math.round(((summary.cpu.used ?? 0) * 100 / summary.cpu.allocatable + Number.EPSILON) * 100) / 100 : 'N/A'}% </span></span>
+            <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.cpu?.used ?? 'N/A'} <span className="text-muted-foreground font-normal text-sm"> {summary?.cpu?.allocatable ? Math.round((summary.cpu.used ?? 0) * 100 / summary.cpu.allocatable) : 'N/A'}% </span></span>
           </div>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.allocatable' })}</span>

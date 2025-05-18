@@ -13,6 +13,7 @@ import NodesGpuSummaryCard from "./nodes-gpu-summary-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import ClusterConfigurationAlert from "./cluster-configuration-alert";
+import NodesTableCard from "./nodes-table-card";
 
 export default function SingleClusterClientPage() {
 
@@ -36,13 +37,14 @@ export default function SingleClusterClientPage() {
           </p>
         </div>
       </div>
-      <div>
-        <ClusterConfigurationAlert />
-      </div>
+      <ClusterConfigurationAlert />
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
         <NodesCpuSummaryCard />
         <NodesMemorySummaryCard />
         <NodesGpuSummaryCard />
+      </div>
+      <div className="grid grid-cols-1">
+        <NodesTableCard />
       </div>
     </div>
   </LoadingContainer>

@@ -7,7 +7,7 @@
     "clusters.connectivity.offline": "Offline",
     "clusters.connectivity.disconnected.notice": "Not connected",
     "clusters.connectivity.conditions.configured_connected.title": "The cluster is online!",
-    "clusters.connectivity.conditions.configured_connected.description": "We've success connected to your cluster {name}. You can use it for running jobs!",
+    "clusters.connectivity.conditions.configured_connected.description": "We've successfully connected to your cluster {name}. You can use it for running jobs!",
     "clusters.connectivity.conditions.configured_disconnected.title": "Cluster could not be reached!",
     "clusters.connectivity.conditions.configured_disconnected.description": "Looks like you have configured your cluster, however it's not reachable!",
     "clusters.connectivity.conditions.unconfigured.title": "Almost there!",
@@ -20,5 +20,16 @@
     "clusters.resources.nvidiaGpu.description": "Showing Nvidia GPU slots across all nodes",
     "clusters.resources.types.allocatable": "Allocatable",
     "clusters.resources.types.capacity": "Capacity",
-    "clusters.resources.types.usage": "Usage"
+    "clusters.resources.types.usage": "Usage",
+    "clusters.nodes": "Nodes",
+    "clusters.nodes.subtitle": "Showing the nodes in your Kubernetes cluster",
+    "clusters.nodes.noNodes": "There are no nodes to show this time. Make sure your configuration is valid!",
+    "clusters.labels.allocatableCpu": "Allocatable CPU",
+    "clusters.labels.capacityCpu": "Capacity CPU",
+    "clusters.labels.usedCpu": "Used CPU",
+    "clusters.labels.allocatableMemory": "Allocatable Memory",
+    "clusters.labels.capacityMemory": "Capacity Memory",
+    "clusters.labels.usedMemory": "Used Memory",
+    "clusters.labels.allocatableNvidiaGpu": "Allocatable GPU",
+    "clusters.labels.capacityNvidiaGpu": "Capacity GPU"
 }

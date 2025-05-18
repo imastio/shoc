@@ -33,7 +33,7 @@ export default function NodesMemorySummaryCard() {
         <div className={cn("flex flex-row gap-4")}>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.usage' })}</span>
-            <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.memory?.used ? bytesToSize(summary?.memory?.used) : 'N/A'} <span className="text-muted-foreground font-normal text-sm"> {summary?.memory?.allocatable ? Math.round(((summary.memory.used ?? 0) * 100 / summary.memory.allocatable + Number.EPSILON) * 100) / 100 : 'N/A'}%</span></span>
+            <span className="text-lg font-semibold leading-none xl:text-2xl">{summary?.memory?.used ? bytesToSize(summary?.memory?.used) : 'N/A'} <span className="text-muted-foreground font-normal text-sm"> {summary?.memory?.allocatable ? Math.round((summary.memory.used ?? 0) * 100 / summary.memory.allocatable) : 'N/A'}%</span></span>
           </div>
           <div className="border-l pl-2 flex flex-col justify-center text-left">
             <span className="text-xs text-muted-foreground">{intl.formatMessage({ id: 'clusters.resources.types.allocatable' })}</span>
