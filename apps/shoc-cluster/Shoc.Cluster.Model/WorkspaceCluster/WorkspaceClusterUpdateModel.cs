@@ -29,4 +29,9 @@ public class WorkspaceClusterUpdateModel
     /// The type of the cluster
     /// </summary>
     public string Type { get; set; }
+    
+    /// <summary>
+    /// The status of the cluster
+    /// </summary>
+    public string Status { get; set; }
 }

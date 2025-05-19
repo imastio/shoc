@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Shoc.Cluster.Model.Cluster;
 using Shoc.Cluster.Model.WorkspaceCluster;
 using Shoc.ObjectAccess.Cluster;
+using Shoc.ObjectAccess.Model.Cluster;
 using Shoc.ObjectAccess.Model.Workspace;
 using Shoc.ObjectAccess.Workspace;
 
@@ -118,6 +119,103 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         
         // return existing object
         return new WorkspaceClusterCreatedModel
+        {
+            Id = result.Id,
+            WorkspaceId = result.WorkspaceId
+        };
+    }
+    
+    /// <summary>
+    /// Updates the object by id
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <param name="input">The update input</param>
+    /// <returns></returns>
+    public async Task<WorkspaceClusterUpdatedModel> UpdateById(string userId, string workspaceId, string id, WorkspaceClusterUpdateModel input)
+    {
+        // get existing object
+        await this.RequireById(workspaceId, id);
+
+        // ensure have required workspace access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+        
+        // ensure have required cluster access
+        await this.clusterAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            id,
+            ClusterPermissions.CLUSTER_VIEW, 
+            ClusterPermissions.CLUSTER_UPDATE);
+        
+        // ensure referring to the correct object
+        input.Id = id;
+        input.WorkspaceId = workspaceId;
+
+        // update the object
+        var result = await this.clusterService.UpdateById(workspaceId, id, new ClusterUpdateModel
+        {
+            Id = input.Id,
+            WorkspaceId = input.WorkspaceId,
+            Name = input.Name,
+            Description = input.Description,
+            Type = input.Type,
+            Status = input.Status
+        });
+        
+        // return existing object
+        return new WorkspaceClusterUpdatedModel
+        {
+            Id = result.Id,
+            WorkspaceId = result.WorkspaceId
+        };
+    }
+
+    /// <summary>
+    /// Updates the object configuration by id
+    /// </summary>
+    /// <param name="userId">The user id</param>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The record id</param>
+    /// <param name="input">The update input</param>
+    /// <returns></returns>
+    public async Task<WorkspaceClusterUpdatedModel> UpdateConfigurationById(string userId, string workspaceId, string id, WorkspaceClusterConfigurationUpdateModel input)
+    {
+        // get existing object
+        await this.RequireById(workspaceId, id);
+
+        // ensure have required workspace access
+        await this.workspaceAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            WorkspacePermissions.WORKSPACE_LIST_CLUSTERS);
+
+        // ensure have required cluster access
+        await this.clusterAccessEvaluator.Ensure(
+            userId,
+            workspaceId,
+            id,
+            ClusterPermissions.CLUSTER_VIEW,
+            ClusterPermissions.CLUSTER_UPDATE);
+        
+        // ensure referring to the correct object
+        input.Id = id;
+        input.WorkspaceId = workspaceId;
+
+        // update the object
+        var result = await this.clusterService.UpdateConfigurationById(workspaceId, id, new ClusterConfigurationUpdateModel
+        {
+            Id = input.Id,
+            WorkspaceId = input.WorkspaceId,
+            Configuration = input.Configuration
+        });
+        
+        // return existing object
+        return new WorkspaceClusterUpdatedModel
         {
             Id = result.Id,
             WorkspaceId = result.WorkspaceId

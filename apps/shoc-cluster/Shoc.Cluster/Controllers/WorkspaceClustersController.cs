@@ -70,7 +70,6 @@ public class WorkspaceClustersController : ControllerBase
     /// <param name="workspaceId">The workspace id</param>
     /// <param name="name">The name of object</param>
     /// <returns></returns>
-    [AuthorizeMinUserType(KnownUserTypes.EXTERNAL)]
     [HttpGet("by-name/{name}/permissions")]
     public Task<ISet<string>> GetPermissionsByName(string workspaceId, string name)
     {
@@ -87,6 +86,18 @@ public class WorkspaceClustersController : ControllerBase
     {
         return this.clusterService.CountAll(this.HttpContext.GetPrincipal().Id, workspaceId);
     }
+    
+    /// <summary>
+    /// Test a configuration for a new object
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="input">The test input</param>
+    /// <returns></returns>
+    [HttpPost("ping")]
+    public Task<ClusterConnectionTestedModel> Ping(string workspaceId, [FromBody] ClusterConnectionTestModel input)
+    {
+        return this.clusterInstanceService.Ping(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+    }
 
     /// <summary>
     /// Creates a new object
@@ -99,17 +110,31 @@ public class WorkspaceClustersController : ControllerBase
     {
         return this.clusterService.Create(this.HttpContext.GetPrincipal().Id, workspaceId, input);
     }
-    
+
     /// <summary>
-    /// Test a configuration for a new object
+    /// Updates the object by id
     /// </summary>
     /// <param name="workspaceId">The workspace id</param>
-    /// <param name="input">The test input</param>
+    /// <param name="id">The object id</param>
+    /// <param name="input">The creation input</param>
     /// <returns></returns>
-    [HttpPost("ping")]
-    public Task<ClusterConnectionTestedModel> Ping(string workspaceId, [FromBody] ClusterConnectionTestModel input)
+    [HttpPut("{id}")]
+    public Task<WorkspaceClusterUpdatedModel> UpdateById(string workspaceId, string id, [FromBody] WorkspaceClusterUpdateModel input)
     {
-        return this.clusterInstanceService.Ping(this.HttpContext.GetPrincipal().Id, workspaceId, input);
+        return this.clusterService.UpdateById(this.HttpContext.GetPrincipal().Id, workspaceId, id, input);
+    }
+    
+    /// <summary>
+    /// Updates the object configuration by id
+    /// </summary>
+    /// <param name="workspaceId">The workspace id</param>
+    /// <param name="id">The object id</param>
+    /// <param name="input">The creation input</param>
+    /// <returns></returns>
+    [HttpPut("{id}/configuration")]
+    public Task<WorkspaceClusterUpdatedModel> UpdateConfigurationById(string workspaceId, string id, [FromBody] WorkspaceClusterConfigurationUpdateModel input)
+    {
+        return this.clusterService.UpdateConfigurationById(this.HttpContext.GetPrincipal().Id, workspaceId, id, input);
     }
 }
 

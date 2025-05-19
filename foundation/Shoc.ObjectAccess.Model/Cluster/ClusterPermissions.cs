@@ -20,6 +20,16 @@ public class ClusterPermissions
     public const string CLUSTER_USE = "cluster_use";
     
     /// <summary>
+    /// Edit the workspace
+    /// </summary>
+    public const string CLUSTER_UPDATE = "workspace_update";
+    
+    /// <summary>
+    /// Delete the cluster
+    /// </summary>
+    public const string CLUSTER_DELETE = "workspace_delete";
+    
+    /// <summary>
     /// Get and initialize all the constants
     /// </summary>
     public static readonly ISet<string> ALL = GetAll();
