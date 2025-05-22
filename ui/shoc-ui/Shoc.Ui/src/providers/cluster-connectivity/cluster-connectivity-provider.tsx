@@ -19,8 +19,7 @@ const mapper = (value: any): ClusterConnectivityValueType => {
 export default function ClusterConnectivityProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
 
     const [progress, setProgress] = useState<boolean>(false)
-    const [data, setData] = useState(initialValue);
-    const [errors, setErrors] = useState<any[]>([]);
+    const [result, setResult] = useState<{ data: any, errors: any[] }>({ data: initialValue, errors: [] })
 
     const load = useCallback(async () => {
         setProgress(true);
@@ -28,24 +27,25 @@ export default function ClusterConnectivityProvider({ children, initialValue }: 
         const { data, errors } = await rpc('cluster/workspace-cluster-instance/getConnectivityById', { workspaceId: initialValue.workspaceId, id: initialValue.id })
 
         if (errors) {
-            setErrors(errors);
-            setData(null);
+            setResult({ data: null, errors })
         } else {
-            setErrors([])
-            setData(data)
+            setResult({ data: data, errors: [] })
         }
 
         setProgress(false);
 
     }, [initialValue.workspaceId, initialValue.id])
 
+    const initialValueMapped = useMemo(() => mapper(initialValue), [initialValue]);
+    const valueMapped = useMemo(() => mapper(result.data ?? initialValue), [result.data, initialValue])
+
     const value = useMemo(() => ({
-        initialValue: mapper(initialValue),
-        value: mapper(data ?? initialValue),
+        initialValue: initialValueMapped,
+        value: valueMapped,
         load,
         loading: progress,
-        errors: errors
-    }), [data, initialValue, load, progress, errors])
+        errors: result.errors
+    }), [valueMapped, initialValueMapped, load, progress, result.errors])
     
     return <ClusterConnectivityContext.Provider value={value}>
         {children}

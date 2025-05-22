@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import useClusterConnectivity from "@/providers/cluster-connectivity/use-cluster-connectivity";
 import useCluster from "@/providers/cluster/use-cluster";
-import { Check, ServerCrash, Wand } from "lucide-react";
+import { Check, ServerCrash, Wand2 } from "lucide-react";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
@@ -28,7 +28,7 @@ export default function ClusterConfigurationAlert() {
             description: intl.formatMessage({ id: 'clusters.connectivity.conditions.configured_disconnected.description' })
         },
         'unconfigured': {
-            logo: Wand,
+            logo: Wand2,
             className: 'text-violet-800 rounded-lg bg-violet-50 dark:bg-gray-800 dark:text-violet-400',
             title: intl.formatMessage({ id: 'clusters.connectivity.conditions.unconfigured.title' }),
             description: intl.formatMessage({ id: 'clusters.connectivity.conditions.unconfigured.description' })

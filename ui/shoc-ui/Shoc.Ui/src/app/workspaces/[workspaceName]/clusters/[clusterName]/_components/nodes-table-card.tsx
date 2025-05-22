@@ -17,7 +17,6 @@ export default function NodesTableCard() {
     const { value: nodes, loading: nodesLoading } = useClusterNodes();
 
     const progress = connectivityloading || nodesLoading;
-    console.log("nodes", nodes)
     const columns: ColumnDef<ClusterNodeValueType>[] = useMemo(() => [
         {
             accessorKey: "name",

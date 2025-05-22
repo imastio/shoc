@@ -9,8 +9,7 @@ export default function ClusterNodesProvider({  children }: { children: React.Re
 
     const { value: connectivity } = useClusterConnectivity();
     const [progress, setProgress] = useState<boolean>(connectivity?.connected)
-    const [data, setData] = useState(null);
-    const [errors, setErrors] = useState<any[]>([]);
+    const [result, setResult] = useState<{ data: any, errors: any[] }>({ data: null, errors: [] })
 
     const load = useCallback(async () => {
         setProgress(true);
@@ -21,27 +20,24 @@ export default function ClusterNodesProvider({  children }: { children: React.Re
         })
 
         if (errors) {
-            setErrors(errors);
-            setData(null);
+            setResult({ data: null, errors })
         } else {
-            setErrors([])
-            setData(data)
+            setResult({ data: data, errors: [] })
         }
 
         setProgress(false);
-
     }, [connectivity.workspaceId, connectivity.id])
 
     useEffect(() => {
+        
         if(connectivity?.connected){
             load()
         }
-    }, [load, connectivity.connected])
+    }, [load, connectivity])
 
     
     const summary: ClusterNodesSummary | null = useMemo(() => {
-        
-        const nodes = data as ClusterNodeValueType[] | null;
+        const nodes = result.data as ClusterNodeValueType[] | null;
         if(!nodes){
             return null
         }
@@ -77,15 +73,15 @@ export default function ClusterNodesProvider({  children }: { children: React.Re
             amdGpu
         }
 
-    }, [data])
+    }, [result.data])
 
     const value = useMemo(() => ({
-        value: data,
+        value: result.data,
         summary,
         load,
         loading: progress,
-        errors: errors
-    }), [data, summary, load, progress, errors])
+        errors: result.errors
+    }), [summary, load, progress, result.data, result.errors])
 
     
     return <ClusterNodesContext.Provider value={value}>

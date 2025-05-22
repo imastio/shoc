@@ -21,8 +21,7 @@ const mapper = (value: any): ClusterValueType => {
 export default function ClusterProvider({ children, initialValue }: { children: React.ReactNode, initialValue: any }) {
 
     const [progress, setProgress] = useState<boolean>(false)
-    const [data, setData] = useState(initialValue);
-    const [errors, setErrors] = useState<any[]>([]);
+    const [result, setResult] = useState<{ data: any, errors: any[] }>({ data: initialValue, errors: [] })
 
     const load = useCallback(async () => {
         setProgress(true);
@@ -30,24 +29,25 @@ export default function ClusterProvider({ children, initialValue }: { children: 
         const { data, errors } = await rpc('cluster/workspace-clusters/getByName', { workspaceId: initialValue.workspaceId, name: initialValue.name })
 
         if (errors) {
-            setErrors(errors);
-            setData(null);
+            setResult({ data: null, errors })
         } else {
-            setErrors([])
-            setData(data)
+            setResult({ data: data, errors: [] })
         }
 
         setProgress(false);
 
     }, [initialValue.workspaceId, initialValue.name])
 
+    const initialValueMapped = useMemo(() => mapper(initialValue), [initialValue]);
+    const valueMapped = useMemo(() => mapper(result.data ?? initialValue), [result.data, initialValue])
+
     const value = useMemo(() => ({
-        initialValue: mapper(initialValue),
-        value: mapper(data ?? initialValue),
+        initialValue: initialValueMapped,
+        value: valueMapped,
         load,
         loading: progress,
-        errors: errors
-    }), [data, initialValue, load, progress, errors])
+        errors: result.errors
+    }), [initialValueMapped, valueMapped, load, progress, result.errors])
     
     return <ClusterContext.Provider value={value}>
         {children}
