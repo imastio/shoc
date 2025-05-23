@@ -10,7 +10,7 @@ import ClusterSkeletonCard from "./cluster-skeleton-card";
 const DEFAULT_PAGE_SIZE = 12;
 const SKELETON_PAGE_SIZE = 12;
 
-export default function ClusterCardList({ workspaceId, workspaceName, items, progress }: { workspaceId: string, workspaceName: string, items: any[], progress: boolean }) {
+export default function ClusterCardList({ workspaceName, items, progress }: { workspaceId: string, workspaceName: string, items: any[], progress: boolean }) {
 
     const intl = useIntl();
     const [page, setPage] = useState<number>(0);

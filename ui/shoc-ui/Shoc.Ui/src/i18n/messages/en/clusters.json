@@ -5,6 +5,8 @@
     "clusters.connectivity.disconnected": "Disconnected",
     "clusters.connectivity.online": "Online",
     "clusters.connectivity.offline": "Offline",
+    "clusters.alerts.archived.title": "The cluster is archived!",
+    "clusters.alerts.archived.description": "This cluster is archived so it's no longer available to submit jobs. You can always make it active to continue using!",
     "clusters.connectivity.disconnected.notice": "Not connected",
     "clusters.connectivity.conditions.configured_connected.title": "The cluster is online!",
     "clusters.connectivity.conditions.configured_connected.description": "We've successfully connected to your cluster {name}. You can use it for running jobs!",
@@ -60,5 +62,4 @@
     "clusters.configure.title": "Configure the cluster",
     "clusters.configure.notice": "The updated configuration will be applied only for newly submitted jobs",
     "clusters.configure.error": "Could not configure the cluster."
-
 }

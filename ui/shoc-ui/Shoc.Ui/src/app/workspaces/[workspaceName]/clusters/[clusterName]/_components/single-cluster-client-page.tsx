@@ -19,6 +19,8 @@ import useClusterAccess from "@/providers/cluster-access/use-cluster-access";
 import ClusterUpdateDialog from "./cluster-update-dialog";
 import { useRouter } from "next/navigation";
 import ClusterConfigurationUpdateDialog from "./cluster-configuration-update-dialog";
+import ClusterStatusBadge from "../../_components/cluster-status-badge";
+import ClusterArchivedAlert from "./cluster-archived-alert";
 
 export default function SingleClusterClientPage() {
 
@@ -67,12 +69,16 @@ export default function SingleClusterClientPage() {
       }}
     />
     <LoadingContainer loading={loading}>
-      <div className="flex items-center justify-between space-y-2">
+      <div className="flex items-center justify-between space-y-4">
         <div className="flex flex-col">
-          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-            {cluster.name}
-          </h3>
-          <p className="text-muted-foreground">
+          <div className="flex flex-row space-x-2 items-center">
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+              {cluster.name}
+            </h3>
+            <ClusterStatusBadge status={cluster.status} />
+          </div>
+
+          <p className="text-muted-foreground text-balanced">
             {cluster.description}
           </p>
         </div>
@@ -84,7 +90,11 @@ export default function SingleClusterClientPage() {
           <ClusterActionsDropdown disabled={loading} onSelect={onActionSelected} />
         </div>
       </div>
-      <ClusterConfigurationAlert />
+      <div className="flex flex-col space-y-4">
+        <ClusterArchivedAlert />
+        <ClusterConfigurationAlert />
+      </div>
+
     </LoadingContainer>
 
     <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">

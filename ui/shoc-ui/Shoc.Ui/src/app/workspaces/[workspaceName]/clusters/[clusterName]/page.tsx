@@ -11,6 +11,7 @@ import SingleClusterClientPage from "./_components/single-cluster-client-page";
 import React from "react";
 import ClusterConnectivityBadge from "./_components/cluster-connectivity-badge";
 import ClusterNodesProvider from "./_providers/cluster-nodes/cluster-nodes-provider";
+import ClusterStatusBadge from "../_components/cluster-status-badge";
 
 export const dynamic = 'force-dynamic';
 
@@ -57,7 +58,9 @@ export default async function WorkspaceClustersPage(props: any) {
       <WorkspacePageBreadcrumbs crumbs={[
         <BreadcrumbLink key="clusters" href={`/workspaces/${cluster.workspaceName}/clusters`}>{intl.formatMessage({ id: 'workspaces.sidebar.clusters' })}</BreadcrumbLink>
       ]}
-        title={cluster.name} titleAddon={<ClusterConnectivityBadge />} />
+        title={cluster.name} titleAddon={<div className="flex flex-row space-x-2 items-center justify-center">
+          <ClusterConnectivityBadge />
+          </div>} />
     }
     />
   }>

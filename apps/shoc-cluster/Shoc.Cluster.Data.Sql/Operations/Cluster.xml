@@ -13,7 +13,7 @@
         SELECT * FROM `clstr_clusters`
         WHERE 1=1
         {if:ByWorkspace {and `WorkspaceId` = @WorkspaceId} else {}}
-        ORDER BY `Name` ASC;
+        ORDER BY `Updated` DESC;
       </TextCommand>
     </SqlOperation>
 
@@ -27,7 +27,7 @@
         ON c.WorkspaceId = w.Id
         WHERE 1=1
         {if:ByWorkspace {and c.`WorkspaceId` = @WorkspaceId} else {}}
-        ORDER BY c.`Name` ASC;
+        ORDER BY c.`Updated` DESC;
       </TextCommand>
     </SqlOperation>
 

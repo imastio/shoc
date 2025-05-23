@@ -9,7 +9,7 @@ export type ClusterValueType = {
     name: string,
     description: string,
     type: string,
-    status: string,
+    status: 'active' | 'archived',
     created: string,
     updated: string
 }
