@@ -19,11 +19,9 @@ import { MemoryStickIcon } from "lucide-react";
 export default function NodesMemorySummaryCard() {
 
   const intl = useIntl();
-  const { loading: clusterLoading } = useCluster();
-  const { loading: connectivityLoading } = useClusterConnectivity();
   const { summary, loading: nodesLoading } = useClusterNodes();
 
-  return <LoadingContainer className="" loading={nodesLoading || clusterLoading || connectivityLoading}>
+  return <LoadingContainer className="" loading={nodesLoading}>
     <Card className="h-full">
       <CardHeader>
         <CardTitle><span className="flex"><MemoryStickIcon className="w-5 h-5 mr-2" /> {intl.formatMessage({ id: 'clusters.resources.memory.title' })}</span></CardTitle>

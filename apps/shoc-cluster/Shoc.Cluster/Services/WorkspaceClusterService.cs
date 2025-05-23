@@ -121,7 +121,8 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         return new WorkspaceClusterCreatedModel
         {
             Id = result.Id,
-            WorkspaceId = result.WorkspaceId
+            WorkspaceId = result.WorkspaceId,
+            Name = result.Name
         };
     }
     
@@ -171,7 +172,8 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         return new WorkspaceClusterUpdatedModel
         {
             Id = result.Id,
-            WorkspaceId = result.WorkspaceId
+            WorkspaceId = result.WorkspaceId,
+            Name = result.Name
         };
     }
 
@@ -218,7 +220,8 @@ public class WorkspaceClusterService : WorkspaceClusterServiceBase
         return new WorkspaceClusterUpdatedModel
         {
             Id = result.Id,
-            WorkspaceId = result.WorkspaceId
+            WorkspaceId = result.WorkspaceId,
+            Name = result.Name
         };
     }
 }

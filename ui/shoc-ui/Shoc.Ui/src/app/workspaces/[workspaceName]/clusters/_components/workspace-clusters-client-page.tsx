@@ -3,18 +3,17 @@
 import { useCallback, useEffect, useState } from "react"
 import ErrorScreen from "@/components/error/error-screen";
 import { rpc } from "@/server-actions/rpc";
-import { useIntl } from "react-intl";
-import BasicHeader from "@/components/general/basic-header";
 import ClusterCardList from "./cluster-card-list";
 import NoClusters from "./no-clusters";
 import ClusterAddDialogButton from "./cluster-add-dialog-button";
+import { useRouter } from "next/navigation";
 
 export default function WorkspaceClustersClientPage({ workspaceId, workspaceName }: any) {
 
     const [progress, setProgress] = useState(true);
     const [items, setItems] = useState<any[]>([]);
     const [errors, setErrors] = useState<any[]>([]);
-    const intl = useIntl();
+    const router = useRouter();
 
     const load = useCallback(async (workspaceId: string) => {
 
@@ -47,8 +46,12 @@ export default function WorkspaceClustersClientPage({ workspaceId, workspaceName
     }
 
     return <div className="flex flex-col mx-auto w-full h-full">
-        {items.length > 0 && <div><ClusterAddDialogButton key="add-cluster" workspaceId={workspaceId} disabled={progress} onSuccess={() => load(workspaceId)} /></div>}
+        {items.length > 0 && <div><ClusterAddDialogButton key="add-cluster" workspaceId={workspaceId} disabled={progress} onSuccess={({ name }) => {
+            load(workspaceId).then(() => router.push(`/workspaces/${workspaceName}/clusters/${name}`))
+        }} /></div>}
         {(progress || items.length > 0) && <ClusterCardList workspaceId={workspaceId} workspaceName={workspaceName} items={items} progress={progress} />}
-        {(!progress && items.length === 0) && <div className="py-4 h-full"><NoClusters workspaceId={workspaceId} onCreated={() => load(workspaceId)} /></div>}
+        {(!progress && items.length === 0) && <div className="py-4 h-full"><NoClusters workspaceId={workspaceId} onCreated={({ name }) => {
+            load(workspaceId).then(() => router.push(`/workspaces/${workspaceName}/clusters/${name}`))
+        }} /></div>}
     </div>
 }

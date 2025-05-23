@@ -14,4 +14,9 @@ public class WorkspaceClusterCreatedModel
     /// The workspace associated with the cluster
     /// </summary>
     public string WorkspaceId { get; set; }
+    
+    /// <summary>
+    /// The cluster name
+    /// </summary>
+    public string Name { get; set; }
 }

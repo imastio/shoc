@@ -27,12 +27,12 @@ export default function ClusterCard({ workspaceName, cluster, className }: { wor
           <h2 className="text-lg font-semibold truncate">{name}</h2>
         </div>
         <Badge variant={status === 'active' ? 'outline' : 'secondary'} className="ml-2">
-          {intl.formatMessage({id: `workspaces.clusters.statuses.${status}`})}
+          {intl.formatMessage({id: `clusters.statuses.${status}`})}
         </Badge>
       </CardHeader>
       <CardContent>
         <p className={cn("text-sm text-muted-foreground text-balance", description ? "" : "italic")}>
-          { description || intl.formatMessage({id: 'workspaces.clusters.noDescription'}) }
+          { description || intl.formatMessage({id: 'clusters.noDescription'}) }
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">

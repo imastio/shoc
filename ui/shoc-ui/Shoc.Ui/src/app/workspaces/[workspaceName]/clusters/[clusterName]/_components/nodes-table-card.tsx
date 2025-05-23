@@ -13,10 +13,9 @@ import { bytesToSize } from "@/extended/format";
 export default function NodesTableCard() {
 
     const intl = useIntl();
-    const { loading: connectivityloading } = useClusterConnectivity();
     const { value: nodes, loading: nodesLoading } = useClusterNodes();
 
-    const progress = connectivityloading || nodesLoading;
+    const progress = nodesLoading;
     const columns: ColumnDef<ClusterNodeValueType>[] = useMemo(() => [
         {
             accessorKey: "name",

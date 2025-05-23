@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ClusterSkeletonCard from "./cluster-skeleton-card";
 
-const DEFAULT_PAGE_SIZE = 6;
-const SKELETON_PAGE_SIZE = 6;
+const DEFAULT_PAGE_SIZE = 12;
+const SKELETON_PAGE_SIZE = 12;
 
 export default function ClusterCardList({ workspaceId, workspaceName, items, progress }: { workspaceId: string, workspaceName: string, items: any[], progress: boolean }) {
 

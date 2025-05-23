@@ -21,25 +21,23 @@ import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import SpinnerIcon from "@/components/icons/spinner-icon"
 import { rpc } from "@/server-actions/rpc"
-import { useRouter } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { PlusIcon } from "@radix-ui/react-icons"
 
-export default function ClusterAddDialogButton({ workspaceId, className, disabled = false, onSuccess }: { workspaceId: string, className?: string, disabled?: boolean, onSuccess?: (result: any) => {} }) {
+export default function ClusterAddDialogButton({ workspaceId, className, disabled = false, onSuccess }: { workspaceId: string, className?: string, disabled?: boolean, onSuccess?: (result: any) => any }) {
 
   const intl = useIntl();
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState<any[]>([]);
   const [progress, setProgress] = useState(false);
   const [testing, setTesting] = useState(false);
-  const router = useRouter();
 
   const formSchema = z.object({
-    name: z.string().regex(clusterNamePattern, intl.formatMessage({ id: 'workspaces.clusters.validation.invalidName' })),
-    description: z.string().min(2, intl.formatMessage({ id: 'workspaces.clusters.validation.invalidDescription' })),
-    type: z.custom(type => clusterTypesMap[type], intl.formatMessage({ id: 'workspaces.clusters.validation.invalidType' })),
+    name: z.string().regex(clusterNamePattern, intl.formatMessage({ id: 'clusters.validation.invalidName' })),
+    description: z.string().min(2, intl.formatMessage({ id: 'clusters.validation.invalidDescription' })),
+    type: z.custom(type => clusterTypesMap[type], intl.formatMessage({ id: 'clusters.validation.invalidType' })),
     configuration: z.string().optional()
   });
 
@@ -70,7 +68,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
 
     form.reset();
     setOpen(false);
-    toast(intl.formatMessage({ id: 'workspaces.clusters.messages.created' }))
+    toast(intl.formatMessage({ id: 'clusters.messages.created' }))
 
     if(onSuccess){
       onSuccess(data)
@@ -82,7 +80,8 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
     await submit({
       name: values.name,
       description: values.description,
-      type: values.type
+      type: values.type,
+      configuration: values.configuration
     });
   }
 
@@ -101,28 +100,28 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
     setTesting(false);
 
     if (errors || !data) {
-      toast.error(intl.formatMessage({ id: 'workspaces.clusters.messages.testFailed' }))
+      toast.error(intl.formatMessage({ id: 'clusters.messages.testFailed' }))
       return;
     }
     
-    toast(intl.formatMessage({ id: 'workspaces.clusters.messages.testSuccess' }, { nodesCount: data.nodesCount }))
+    toast(intl.formatMessage({ id: 'clusters.messages.testSuccess' }, { nodesCount: data.nodesCount }))
   }, [form, intl, workspaceId]);
 
   return <Dialog open={open} onOpenChange={onOpenChangeWrapper} modal>
     <DialogTrigger asChild>
       <Button variant="outline" className={className} disabled={disabled}>
         <PlusIcon className="w-4 h-4 mr-2" />
-        {intl.formatMessage({ id: 'workspaces.clusters.add' })}
+        {intl.formatMessage({ id: 'clusters.add' })}
       </Button>
     </DialogTrigger>
     <DialogContent className="w-4/5 md:w-1/2">
       <DialogHeader>
-        <DialogTitle>{intl.formatMessage({ id: 'workspaces.clusters.add' })}</DialogTitle>
+        <DialogTitle>{intl.formatMessage({ id: 'clusters.add' })}</DialogTitle>
         <DialogDescription>
-          {intl.formatMessage({ id: 'workspaces.clusters.create.notice' })}
+          {intl.formatMessage({ id: 'clusters.create.notice' })}
         </DialogDescription>
       </DialogHeader>
-      <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'workspaces.clusters.create.error' })} />
+      <ErrorAlert errors={errors} title={intl.formatMessage({ id: 'clusters.create.error' })} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2">
@@ -136,7 +135,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
                     <FormControl>
                       <Input
                         autoFocus
-                        placeholder={intl.formatMessage({id: 'workspaces.clusters.placeholders.name'})}
+                        placeholder={intl.formatMessage({id: 'clusters.placeholders.name'})}
                         type="text"
                         autoCapitalize="none"
                         autoComplete="off"
@@ -161,7 +160,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
                     <Select disabled={progress} onValueChange={fieldNoRef.onChange} {...fieldNoRef}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder={intl.formatMessage({ id: 'workspaces.clusters.placeholders.type' })} />
+                          <SelectValue placeholder={intl.formatMessage({ id: 'clusters.placeholders.type' })} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -181,7 +180,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
                     <FormLabel>{intl.formatMessage({ id: 'global.labels.description' })}</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder={intl.formatMessage({ id: 'workspaces.clusters.placeholders.description' })}
+                        placeholder={intl.formatMessage({ id: 'clusters.placeholders.description' })}
                         disabled={progress}
                         {...field}
                       />
@@ -201,7 +200,7 @@ export default function ClusterAddDialogButton({ workspaceId, className, disable
                     <FormControl>
                       <Textarea
                         className="min-h-[85px]"
-                        placeholder={intl.formatMessage({ id: 'workspaces.clusters.placeholders.configuration' })}
+                        placeholder={intl.formatMessage({ id: 'clusters.placeholders.configuration' })}
                         disabled={progress}
                         {...field}
                       />

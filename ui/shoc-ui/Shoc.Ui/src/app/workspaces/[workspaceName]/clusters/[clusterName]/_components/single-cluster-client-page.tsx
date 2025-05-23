@@ -14,15 +14,22 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
 import { useIntl } from "react-intl";
+import { ClusterPermissions } from "@/well-known/cluster-permissions";
+import useClusterAccess from "@/providers/cluster-access/use-cluster-access";
+import ClusterUpdateDialog from "./cluster-update-dialog";
+import { useRouter } from "next/navigation";
+import ClusterConfigurationUpdateDialog from "./cluster-configuration-update-dialog";
 
 export default function SingleClusterClientPage() {
-  
+
   const intl = useIntl();
+  const router = useRouter();
   const { loading: workspaceLoading } = useWorkspace();
   const { value: cluster, load: loadCluster, loading: clusterLoading } = useCluster();
   const { value: connectivity, loading: connectivityLoading, load: loadConnectivity } = useClusterConnectivity();
-  const [updating, setUpdating] = useState(false)
-  const [configuring, setConfiguring] = useState(false)
+  const { hasAll } = useClusterAccess();
+  const [updatingItem, setUpdatingItem] = useState<any>(null)
+  const [configuringItem, setConfiguringItem] = useState<any>(null)
 
   const loading = workspaceLoading || clusterLoading || connectivityLoading;
 
@@ -34,17 +41,32 @@ export default function SingleClusterClientPage() {
     }
 
     if (action === 'update') {
-      setUpdating(true)
+      setUpdatingItem(cluster)
     }
 
     if (action === 'configure') {
-      setConfiguring(true)
+      setConfiguringItem(cluster)
     }
-
   }
 
-  return <LoadingContainer loading={loading}>
-    <div className="space-y-4">
+  return <div className="space-y-4">
+    <ClusterUpdateDialog
+      workspaceId={cluster.workspaceId}
+      item={updatingItem}
+      open={updatingItem}
+      onClose={() => setUpdatingItem(null)} onSuccess={({ name }) => {
+        loadCluster().then(() => router.replace(`/workspaces/${cluster.workspaceName}/clusters/${name}`))
+      }}
+    />
+    <ClusterConfigurationUpdateDialog
+      workspaceId={cluster.workspaceId}
+      item={configuringItem}
+      open={configuringItem}
+      onClose={() => setConfiguringItem(null)} onSuccess={() => {
+        loadConnectivity()
+      }}
+    />
+    <LoadingContainer loading={loading}>
       <div className="flex items-center justify-between space-y-2">
         <div className="flex flex-col">
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -55,7 +77,7 @@ export default function SingleClusterClientPage() {
           </p>
         </div>
         <div className="space-x-2">
-          { !connectivity.configured &&  <Button disabled={loading} onClick={() => onActionSelected('configure')}>
+          {!connectivity.configured && <Button disabled={loading || !hasAll([ClusterPermissions.CLUSTER_UPDATE])} onClick={() => onActionSelected('configure')}>
             <Wand2 />
             <span className="sm:inline hidden">{intl.formatMessage({ id: 'global.actions.configure' })}</span>
           </Button>}
@@ -63,14 +85,15 @@ export default function SingleClusterClientPage() {
         </div>
       </div>
       <ClusterConfigurationAlert />
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-        <NodesCpuSummaryCard />
-        <NodesMemorySummaryCard />
-        <NodesGpuSummaryCard />
-      </div>
-      <div className="grid grid-cols-1">
-        <NodesTableCard />
-      </div>
+    </LoadingContainer>
+
+    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
+      <NodesCpuSummaryCard />
+      <NodesMemorySummaryCard />
+      <NodesGpuSummaryCard />
     </div>
-  </LoadingContainer>
+    <div className="grid grid-cols-1">
+      <NodesTableCard />
+    </div>
+  </div>
 }

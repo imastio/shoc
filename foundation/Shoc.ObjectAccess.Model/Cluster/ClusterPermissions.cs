@@ -22,12 +22,12 @@ public class ClusterPermissions
     /// <summary>
     /// Edit the workspace
     /// </summary>
-    public const string CLUSTER_UPDATE = "workspace_update";
+    public const string CLUSTER_UPDATE = "cluster_update";
     
     /// <summary>
     /// Delete the cluster
     /// </summary>
-    public const string CLUSTER_DELETE = "workspace_delete";
+    public const string CLUSTER_DELETE = "cluster_delete";
     
     /// <summary>
     /// Get and initialize all the constants

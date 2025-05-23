@@ -22,12 +22,20 @@ export const countAll = defineServerAction(({ workspaceId }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).countAll(token, workspaceId)));
 });
 
+export const ping = defineServerAction(({ workspaceId, input }) => {
+    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).ping(token, workspaceId, input)));
+});
+
 export const create = defineServerAction(({ workspaceId, input }) => {
     return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).create(token, workspaceId, input)));
 });
 
-export const ping = defineServerAction(({ workspaceId, input }) => {
-    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).ping(token, workspaceId, input)));
+export const updateById = defineServerAction(({ workspaceId, id, input }) => {
+    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).updateById(token, workspaceId, id, input)));
+});
+
+export const updateConfigurationById = defineServerAction(({ workspaceId, id, input }) => {
+    return authenticatedUser(token => clientGuard(() => shocClient(WorkspaceClustersClient).updateConfigurationById(token, workspaceId, id, input)));
 });
 
 export const serverActions = {
@@ -35,6 +43,8 @@ export const serverActions = {
     'cluster/workspace-clusters/getByName': getByName,
     'cluster/workspace-clusters/getPermissionsByName': getPermissionsByName,
     'cluster/workspace-clusters/countAll': countAll,
+    'cluster/workspace-clusters/ping': ping,
     'cluster/workspace-clusters/create': create,
-    'cluster/workspace-clusters/ping': ping
+    'cluster/workspace-clusters/updateById': updateById,
+    'cluster/workspace-clusters/updateConfigurationById': updateConfigurationById,
 }

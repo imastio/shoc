@@ -32,6 +32,9 @@ export default function ClusterNodesProvider({  children }: { children: React.Re
         
         if(connectivity?.connected){
             load()
+        } 
+        else if(connectivity && !connectivity.connected) {
+            setResult({ data: null, errors: [] })
         }
     }, [load, connectivity])
 

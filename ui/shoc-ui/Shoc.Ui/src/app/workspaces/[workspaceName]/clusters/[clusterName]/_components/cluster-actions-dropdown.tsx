@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import useClusterAccess from "@/providers/cluster-access/use-cluster-access";
+import { ClusterPermissions } from "@/well-known/cluster-permissions";
 import { Edit, MoreHorizontal, RefreshCcw, Wand2 } from "lucide-react";
 import { useIntl } from "react-intl";
 
@@ -13,6 +15,7 @@ type ClusterActionsDropdownProps = {
 export default function ClusterActionsDropdown({ onSelect, disabled }: ClusterActionsDropdownProps) {
 
     const intl = useIntl();
+    const { hasAll } = useClusterAccess();
 
     return <DropdownMenu>
         <DropdownMenuTrigger asChild disabled={disabled}>
@@ -30,11 +33,11 @@ export default function ClusterActionsDropdown({ onSelect, disabled }: ClusterAc
                 <RefreshCcw />
                 {intl.formatMessage({ id: 'global.actions.refresh' })}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onSelect('update')}>
+            <DropdownMenuItem onClick={() => onSelect('update')} disabled={!hasAll([ClusterPermissions.CLUSTER_UPDATE])}>
                 <Edit />
                 {intl.formatMessage({ id: 'global.actions.update' })}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onSelect('update')}>
+            <DropdownMenuItem onClick={() => onSelect('configure')} disabled={!hasAll([ClusterPermissions.CLUSTER_UPDATE])}>
                 <Wand2 />
                 {intl.formatMessage({ id: 'global.actions.configure' })}
             </DropdownMenuItem>

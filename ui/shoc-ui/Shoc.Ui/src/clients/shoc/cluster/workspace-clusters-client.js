@@ -61,6 +61,18 @@ export default class WorkspaceClustersClient extends BaseAxiosClient {
     });
   }
 
+  ping(token, workspaceId, input) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/workspace-clusters/ping`
+    });
+    
+    return this.webClient.post(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
   create(token, workspaceId, input) {
     const url = this.urlify({
       api: `api/workspaces/${workspaceId}/workspace-clusters`
@@ -73,12 +85,24 @@ export default class WorkspaceClustersClient extends BaseAxiosClient {
     });
   }
 
-  ping(token, workspaceId, input) {
+  updateById(token, workspaceId, id, input) {
     const url = this.urlify({
-      api: `api/workspaces/${workspaceId}/workspace-clusters/ping`
+      api: `api/workspaces/${workspaceId}/workspace-clusters/${id}`
     });
     
-    return this.webClient.post(url, input, {
+    return this.webClient.put(url, input, {
+      headers: {
+        ...this.authBearer(token)
+      }
+    });
+  }
+
+  updateConfigurationById(token, workspaceId, id, input) {
+    const url = this.urlify({
+      api: `api/workspaces/${workspaceId}/workspace-clusters/${id}/configuration`
+    });
+    
+    return this.webClient.put(url, input, {
       headers: {
         ...this.authBearer(token)
       }
